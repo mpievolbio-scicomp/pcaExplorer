@@ -11,278 +11,16 @@ library("genefilter")
 # load("goEnrichs.RData")
 library("shiny")
 load("/Volumes/users$/marinif/linuxHome/F07-schubert/seb_dds_rld.RData")
-pca_d5 <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
-                    pcX = 1, pcY = 2,text_labels=TRUE,point_size=3,scale=FALSE,center=TRUE) # customized principal components
-{
-  library("DESeq2")
-  library("genefilter")
-  library("ggplot2")
-  rv <- rowVars(assay(x))
-  select <- order(rv, decreasing = TRUE)[seq_len(min(ntop,length(rv)))]
-  pca <- prcomp(t(assay(x)[select, ]),scale=scale,center=center)
-
-  percentVar <- pca$sdev^2/sum(pca$sdev^2)
-
-  if (!all(intgroup %in% names(colData(x)))) {
-    stop("the argument 'intgroup' should specify columns of colData(dds)")
-  }
-  intgroup.df <- as.data.frame(colData(x)[, intgroup, drop = FALSE])
-  group <- factor(apply(intgroup.df, 1, paste, collapse = " : "))
-  d <- data.frame(PC1 = pca$x[, pcX], PC2 = pca$x[, pcY], group = group,
-                  intgroup.df, names = colnames(x))
-  colnames(d)[1] <- paste0("PC",pcX)
-  colnames(d)[2] <- paste0("PC",pcY)
-
-  if (returnData) {
-    attr(d, "percentVar") <- percentVar[1:2]
-    return(d)
-  }
-
-  # clever way of positioning the labels
-  d$hjust = ifelse((sign(d[,paste0("PC",pcX)])==1),0.9,0.1)# (1 + varname.adjust * sign(PC1))/2)
-
-  g <- ggplot(data = d, aes_string(x = paste0("PC",pcX), y = paste0("PC",pcY), color = "group")) +
-    geom_point(size = point_size) +
-    xlab(paste0("PC",pcX,": ", round(percentVar[pcX] * 100,digits = 2), "% variance")) +
-    ylab(paste0("PC",pcY,": ", round(percentVar[pcY] * 100,digits = 2), "% variance"))
-
-  if(text_labels) g <- g + geom_text(mapping = aes(label=names,hjust=hjust, vjust=-0.5), show.legend = F)
-  if(!is.null(title)) g <- g + ggtitle(title)
-  g
-}
-
-ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
-                          obs.scale = 1 - scale, var.scale = scale, groups = NULL,
-                          ellipse = FALSE, ellipse.prob = 0.68, labels = NULL, labels.size = 3,
-                          alpha = 1, var.axes = TRUE, circle = FALSE, circle.prob = 0.69,
-                          varname.size = 4, varname.adjust = 1.5, varname.abbrev = FALSE,
-                          arrowColors = NULL, returnData=F,coordEqual=F, scaleArrow = 1,
-                          useRownamesAsLabels=TRUE, point_size=2,
-                          ...)
-{
-  library(ggplot2)
-  library(plyr)
-  library(scales)
-  library(grid)
-  stopifnot(length(choices) == 2)
-  if (inherits(pcobj, "prcomp")) {
-    nobs.factor <- sqrt(nrow(pcobj$x) - 1)
-    d <- pcobj$sdev
-    u <- sweep(pcobj$x, 2, 1/(d * nobs.factor), FUN = "*")
-    v <- pcobj$rotation
-  }
-  #   else if (inherits(pcobj, "princomp")) {
-  #     nobs.factor <- sqrt(pcobj$n.obs)
-  #     d <- pcobj$sdev
-  #     u <- sweep(pcobj$scores, 2, 1/(d * nobs.factor), FUN = "*")
-  #     v <- pcobj$loadings
-  #   }
-  #   else if (inherits(pcobj, "PCA")) {
-  #     nobs.factor <- sqrt(nrow(pcobj$call$X))
-  #     d <- unlist(sqrt(pcobj$eig)[1])
-  #     u <- sweep(pcobj$ind$coord, 2, 1/(d * nobs.factor), FUN = "*")
-  #     v <- sweep(pcobj$var$coord, 2, sqrt(pcobj$eig[1:ncol(pcobj$var$coord),
-  #                                                   1]), FUN = "/")
-  #   }
-  #   else if (inherits(pcobj, "lda")) {
-  #     nobs.factor <- sqrt(pcobj$N)
-  #     d <- pcobj$svd
-  #     u <- predict(pcobj)$x/nobs.factor
-  #     v <- pcobj$scaling
-  #     d.total <- sum(d^2)
-  #   }
-  #   else {
-  #     stop("Expected a object of class prcomp, princomp, PCA, or lda")
-  #   }
-  choices <- pmin(choices, ncol(u))
-  df.u <- as.data.frame(sweep(u[, choices], 2, d[choices]^obs.scale,
-                              FUN = "*"))
-  v <- sweep(v, 2, d^var.scale, FUN = "*")
-  df.v <- as.data.frame(v[, choices])
-  names(df.u) <- c("xvar", "yvar")
-  names(df.v) <- names(df.u)
-  if (pc.biplot) {
-    df.u <- df.u * nobs.factor
-  }
 
 
-  r <- sqrt(qchisq(circle.prob, df = 2)) * prod(colMeans(df.u^2))^(1/4)
-  v.scale <- rowSums(v^2)
-  df.v <- r * df.v/sqrt(max(v.scale))
-  if (obs.scale == 0) {
-    u.axis.labs <- paste("standardized PC", choices, sep = "")
-  } else {
-    u.axis.labs <- paste("PC", choices, sep = "")
-  }
-  u.axis.labs <- paste(u.axis.labs, sprintf("(%0.1f%% explained var.)",
-                                            100 * pcobj$sdev[choices]^2/sum(pcobj$sdev^2)))
-  if (!is.null(labels)) {
-    df.u$labels <- labels
-  }
-  if (!is.null(groups)) {
-    df.u$groups <- groups
-  }
-
-  # additionally...
-  df.u$ids <- rownames(df.u)
-  df.u$geneNames <- cm2$fromgtf[match(df.u$ids,rownames(cm2))]
-
-  if (varname.abbrev) {
-    df.v$varname <- abbreviate(rownames(v))
-  } else {
-    df.v$varname <- rownames(v)
-  }
-  df.v$angle <- with(df.v, (180/pi) * atan(yvar/xvar))
-  df.v$hjust = with(df.v, (1 - varname.adjust * sign(xvar))/2)
-
-  if(returnData){
-    return(df.u)
-  }
-
-  g <- ggplot(data = df.u, aes(x = xvar, y = yvar)) + xlab(u.axis.labs[1]) +
-    ylab(u.axis.labs[2]) # + coord_equal() # REMOVED OTHERWISE BRUSH DOES NOT WORK PROPERLY
-  if(coordEqual) g <- g + coord_equal()
-
-  if (!is.null(df.u$labels)) {
-    if (!is.null(df.u$groups)) {
-      g <- g + geom_text(aes(label = labels, color = groups),
-                         size = labels.size)
-    } else {
-      g <- g + geom_text(aes(label = labels), size = labels.size)
-    }
-  } else {
-    if (!is.null(df.u$groups)) {
-      g <- g + geom_point(aes(color = groups), size= point_size,alpha = alpha)
-    } else {
-      g <- g + geom_point(size=point_size,alpha = alpha)
-    }
-  }
-
-  if(useRownamesAsLabels) {
-
-    g <- g + geom_text(aes(label = geneNames), size = labels.size,hjust=0.25, vjust=-0.75)
-  }
-
-  if (!is.null(df.u$groups) && ellipse) {
-    theta <- c(seq(-pi, pi, length = 50), seq(pi, -pi, length = 50))
-    circle <- cbind(cos(theta), sin(theta))
-    ell <- ddply(df.u, "groups", function(x) {
-      if (nrow(x) <= 2) {
-        return(NULL)
-      }
-      sigma <- var(cbind(x$xvar, x$yvar))
-      mu <- c(mean(x$xvar), mean(x$yvar))
-      ed <- sqrt(qchisq(ellipse.prob, df = 2))
-      data.frame(sweep(circle %*% chol(sigma) * ed, 2,
-                       mu, FUN = "+"), groups = x$groups[1])
-    })
-    names(ell)[1:2] <- c("xvar", "yvar")
-    g <- g + geom_path(data = ell, aes(color = groups, group = groups))
-  }
-  # moved down to have the arrows drawn on top of the points and not vice versa
-  if (var.axes) {
-    if (circle) {
-      theta <- c(seq(-pi, pi, length = 50), seq(pi, -pi,
-                                                length = 50))
-      circle <- data.frame(xvar = r * cos(theta), yvar = r *
-                             sin(theta))
-      g <- g + geom_path(data = circle, color = muted("white"),
-                         size = 1/2, alpha = 1/3)
-    }
-    df.v$scaleArrow <- scaleArrow # quick fix for mapping scaling of the arrows
-    g <- g + geom_segment(data = df.v, aes(x = 0, y = 0, xend = scaleArrow*xvar, yend = scaleArrow*yvar),
-                          arrow = arrow(length = unit(1/2, "picas")), color = arrowColors)
-  }
-
-  if (var.axes) {
-    g <- g + geom_text(data = df.v, aes(label = varname,
-                                        x = scaleArrow*xvar, y = scaleArrow*yvar,# angle = angle,
-                                        hjust = hjust),
-                       color = arrowColors, size = varname.size)
-  }
-  g <- g + theme_bw()
-  return(g)
-}
-
-
-genepca <- function(x,ntop,choices=c(1,2),arrowColors = muted("green"), biplot=FALSE,...) {
-  # intgroup <- c("condition","tissue")
-
-  rv <- rowVars(assay(x))
-  select <- order(rv, decreasing = TRUE)[seq_len(min(ntop,length(rv)))]
-  pca <- prcomp((assay(x)[select, ]))
-  #ggbiplot(pca,choices = c(1,2))
-  percentVar <- pca$sdev^2/sum(pca$sdev^2)
-  # if (!all(intgroup %in% names(colData(x)))) {
-  # stop("the argument 'intgroup' should specify columns of colData(dds)")
-  # }
-  # intgroup.df <- as.data.frame(colData(x)[, intgroup, drop = FALSE])
-  # group <- factor(apply(intgroup.df, 1, paste, collapse = " : "))
-  if(biplot){
-    ggbiplotFede(pca,arrowColors = arrowColors,choices=choices,...)
-  } else {
-    nobs.factor <- sqrt(nrow(pca$x) - 1)
-    devs <- pca$sdev
-    pcast <- pca
-    pcast$x <- sweep(pca$x, 2, 1/(devs * nobs.factor), FUN = "*") * nobs.factor
-    d <- data.frame(PC1 = pcast$x[, choices[1]], PC2 = pcast$x[, choices[2]],
-                    # group = group,
-                    # intgroup.df,
-                    names = rownames((assay(x)[select, ])))
-
-    # if (returnData) {
-    #   attr(d, "percentVar") <- percentVar[1:2]
-    #   return(d)
-    # }
-
-    ggplot(data = d, aes_string(x = "PC1", y = "PC2")) +
-      geom_point(size = 3) +
-      xlab(paste0("PC",choices[1],": ", round(percentVar[choices[1]] * 100), "% variance")) +
-      ylab(paste0("PC",choices[2],": ", round(percentVar[choices[2]] * 100), "% variance")) +
-      # geom_text(aes(label=names),hjust=0.25, vjust=-0.5, show.legend = F) +
-      ggtitle("title") + theme_bw()
-  }
-}
 library(ggvis)
 library(shinythemes)
-
-scree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
-{
-  type <- match.arg(type)
-  d <- obj$sdev^2
-  yvar <- switch(type, pev = d/sum(d), cev = cumsum(d)/sum(d))
-  yvar.lab <- switch(type, pev = "proportion of explained variance",
-                     cev = "cumulative proportion of explained variance")
-  # df <- data.frame(PC = 1:length(d), yvar = yvar)
-
-  if (!is.null(pc_nr)) {
-    colsize <- pc_nr
-    yvar <- yvar[1:pc_nr]
-  } else {
-    colsize <- length(d)
-    yvar <- yvar[1:length(d)]
-  }
-
-  pc_df <- data.frame(PC_count = 1:colsize, var = yvar)
-
-  if(type=="pev"){
-    p <- ggplot(pc_df, aes(x = PC_count, y = var)) + geom_bar(stat = "identity")
-    p <- p + scale_x_continuous(breaks = 1:length(d))
-    p <- p + ylab(yvar.lab) + xlab("principal components")
-    # p
-  } else {
-    p <- ggplot(pc_df, aes(x = PC_count, y = var)) + geom_point() + geom_path() + scale_x_continuous(breaks = 1:length(d))
-    p <- p + ylab(yvar.lab) + xlab("principal components")
-    # p
-  }
-  if(!is.null(title)) p <- p + ggtitle(title)
-  p
-}
 
 
 library("DT")
 library("pheatmap")
 library("d3heatmap")
+library(shinydashboard)
 
 pca_SUPALIVE4 <- function(obj,obj2){
   # stopifnot( is(obj, 'SummarizedExperiment') )
@@ -291,7 +29,7 @@ pca_SUPALIVE4 <- function(obj,obj2){
          install.packages('shiny')")
   }
 
-  #   poss_covars <- dplyr::setdiff(
+#   poss_covars <- dplyr::setdiff(
   #     colnames(obj$sample_to_covariates),
   #     'sample')
   #   samp_names <- obj$sample_to_covariates[['sample']]
@@ -306,6 +44,279 @@ pca_SUPALIVE4 <- function(obj,obj2){
   # rng <- range(variable, na.rm = TRUE)
   # sliderInput(id, label, rng[1], rng[2], rng)
   # }
+
+  newuiui <-
+    shinydashboard::dashboardPage(
+      dashboardHeader(
+        title = paste0("pcaExplorer - Interactive exploration of Principal Components",
+                       "of Samples and Genes in RNA-seq data - version ",
+                       packageVersion("pcaExplorer")),
+        titleWidth = 900),
+
+      dashboardSidebar(
+        width = 350,
+        menuItem("Settings",icon = icon("cogs"),
+                 selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8,
+                             selected = 1)
+                 ),
+        menuItem("Plot settings", icon = icon("paint-brush"),
+                 numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
+                 numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2)
+                 )
+                       ),
+
+      dashboardBody(
+
+      ),
+
+      skin="blue"
+
+
+
+
+
+
+
+
+    )
+
+  newserver <- function(input, output) { }
+  shinyApp(ui = newuiui, server = newserver)
+
+
+
+  uiui <- (
+    # var_range <- function(id, label, variable) {
+    #   rng <- range(variable, na.rm = TRUE)
+    #   sliderInput(id, label, rng[1], rng[2], rng)
+    # }
+
+    navbarPage(theme = shinytheme("journal"),"PCALIVE - beta version",
+
+               tabPanel("Overview",
+                        fluidRow(
+                          div(h3('pcaLive'), align = 'center')
+                        ),
+                        fluidRow("A Shiny application for exploring expression data in different conditions and experimental factors.\nUse the widgets below to setup general parameters for exporting produced plots"),
+                        fluidRow(
+                          numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
+                          numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2)
+                        )
+               ),
+               navbarMenu("Analysis on...",
+                          tabPanel('Samples',
+                                   fluidRow(
+                                     column(12,
+                                            p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components.")
+                                     ),
+                                     offset = 1),
+
+                                   fluidRow(
+                                     column(2,
+                                            selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8,
+                                                        selected = 1)
+                                     ),
+                                     column(2,
+                                            selectInput('pc_y', label = 'y-axis PC: ', choices = 1:8,
+                                                        selected = 2)
+                                     ),
+                                     column(3,
+                                            selectInput('color_by', label = 'color by: ',
+                                                        choices = c(NULL, poss_covars), selected = NULL,multiple = T)
+                                     ),
+                                     #                                      column(2,
+                                     #                                             numericInput('pca_point_alpha', label = 'Point alpha:', value = 1,min = 0,max = 1,step = 0.01)),
+                                     column(2,
+                                            numericInput('pca_point_size', label = 'Point size:', value = 3,min = 1,max = 8)),
+
+                                     column(2,
+                                            numericInput('pca_nrgenes', label = 'Nr of (most variant) genes:', value = 300,min = 50,max = 20000))
+                                   ),
+                                   fluidRow(
+                                     column(3,
+                                            checkboxInput("sample_labels","Display sample labels",value = TRUE))),
+                                   fluidRow(
+                                     column(6,
+                                            plotOutput('pca_plt',brush = "pca_brush"),
+                                            div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                                                downloadButton("download_samplesPca", "Download Plot"),
+                                                textInput("filename_samplesPca",label = "Save as...",value = "samplesPca.pdf"))),
+                                     column(6,
+                                            plotOutput("scree"),
+                                            div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                                                downloadButton("download_samplesScree", "Download Plot"),
+                                                textInput("filename_samplesScree",label = "Save as...",value = "samplesScree.pdf")),
+                                            fluidRow(
+                                              column(6,
+                                                     radioButtons("scree_type","Scree plot type:",choices=list("Proportion of explained variance"="pev","Cumulative proportion of explained variance"="cev"),"pev")),
+                                              column(6,
+                                                     numericInput("scree_pcnr","Number of PCs to display",value=8,min=2))
+                                            )
+                                     )
+                                   ),
+                                   fluidRow(
+                                     column(6,
+                                            plotOutput("pca_pltZoom"
+                                            )
+                                     ))
+                                   # )obj
+                          ),
+                          tabPanel("Genes",
+                                   fluidRow(
+                                     column(12,
+                                            p(h3('principal component analysis'), "PCA projections of gene abundances onto any pair of components.")
+                                     ),
+                                     offset = 1),
+                                   fluidRow(
+                                     column(2,
+                                            selectInput('pc_x_G', label = 'x-axis PC: ', choices = 1:8,
+                                                        selected = 1)
+                                     ),
+                                     column(2,
+                                            selectInput('pc_y_G', label = 'y-axis PC: ', choices = 1:8,
+                                                        selected = 2)
+                                     ),
+                                     column(1,
+                                            selectInput('color_by_G', label = 'color by: ',
+                                                        choices = c(NULL, poss_covars), selected = NULL,multiple = T)
+                                     ),
+                                     column(1,
+                                            numericInput('pca_nrgenes_G', label = 'nr of genes: ', value = 300,min = 50,max = 20000)),
+                                     column(1,
+                                            numericInput('pca_point_alpha_G', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01)),
+                                     column(1,
+                                            numericInput('pca_label_size_G', label = 'Labels size: ', value = 2,min = 1,max = 8)),
+                                     column(1,
+                                            numericInput('pca_point_size_G', label = 'Points size: ', value = 2,min = 1,max = 8)),
+                                     column(1,
+                                            numericInput('pca_varname_size_G', label = 'Varname size: ', value = 4,min = 1,max = 8)),
+                                     column(1,
+                                            numericInput('pca_scale_arrow_G', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10)),
+                                     column(1,
+                                            checkboxInput("variable_labels","Display variable labels",value = TRUE))
+
+
+                                   ),
+                                   fluidRow(verbatimTextOutput('x4')),
+                                   fluidRow(verbatimTextOutput('x5')),
+                                   fluidRow(verbatimTextOutput('x6')),fluidRow(verbatimTextOutput('x8')),
+                                   fluidRow(column(4,
+                                                   h4("Main Plot - interact!"),
+                                                   plotOutput('pca_plt_G',brush = 'pcagenes_brush',click="pcagenes_click"),
+                                                   div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                                                       downloadButton("download_genesPca", "Download Plot"),
+                                                       textInput("filename_genesPca",label = "Save as...",value = "genesPca.pdf"))),
+                                            #                           fluidRow(textOutput('debug'))),
+                                            column(4,
+                                                   h4("Zoomed window"),
+                                                   plotOutput("testzoom",click="pcagenes_zoom_click"),
+                                                   div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                                                       downloadButton("download_genesZoom", "Download Plot"),
+                                                       textInput("filename_genesZoom",label = "Save as...",value = "genesPca_zoomed.pdf"))),
+                                            column(4,
+                                                   h4("Boxplot of selected gene"),
+                                                   plotOutput("genePlot"))
+
+                                   ),
+                                   fluidRow(h4("genefinder"),
+                                            textInput("searchgene",label = "type in the name of the gene to search"),
+                                            verbatimTextOutput("searchresult"),
+                                            verbatimTextOutput("debuggene"),
+                                            checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
+                                            plotOutput("searchgenePlot")),
+                                   fluidRow(column(6,
+                                                   h4("Zoomed heatmap"),
+                                                   plotOutput("heatzoom"),
+                                                   div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                                                       downloadButton("download_genesHeatmap","Download Plot"),
+                                                       textInput("filename_genesHeatmap",label = "Save as...",value = "genesHeatmap.pdf"))
+                                   ),
+                                   column(6,
+                                          h4("Zoomed interactive heatmap"),
+                                          fluidRow(radioButtons("heatmap_colv","Cluster samples",choices = list("Yes"=TRUE,"No"=FALSE),selected = TRUE)),
+                                          fluidRow(d3heatmapOutput("heatzoomd3")))),
+                                   # verbatimTextOutput("plot_brushinfo"),
+                                   # dataTableOutput("restab"),
+                                   fluidRow(column(6,
+                                                   h4("Points selected by brushing - clicking and dragging:"),
+                                                   downloadButton('downloadData_brush', 'Download brushed points'),
+                                                   textInput("brushedPoints_filename","File name..."),
+                                                   dataTableOutput("pca_brush_out")),
+                                            column(6,
+                                                   h4("Points selected by clicking:"),
+                                                   downloadButton('downloadData_click', 'Download clicked (or nearby) points'),
+                                                   textInput("clickedPoints_filename","File name..."),
+                                                   dataTableOutput("pca_click_out"))
+                                   )
+                                   # fluidRow(plotOutput("testzoom"))
+                          )
+
+               ),
+               tabPanel("interactive genes",headerPanel("Zooming demo"),
+                        sidebarPanel(
+                          # sliderInput("ngenes_sh","Number of genes to include", 30, nrow(assay(obj)), 500)
+                          sliderInput("ngenes_sh","Number of genes to include", 30, 20000, 500)
+                          #                  var_range("y_domain", "Y", mtcars$mpg)
+                        ),
+                        mainPanel(
+                          ggvisOutput("p")
+                        )),
+
+               tabPanel("pca2go",
+                        h2("Functions enriched in the genes with high loadings on the selected principal components"),
+                        fluidRow(
+                          column(2,
+                                 selectInput('pc_x_go', label = 'x-axis PC: ', choices = 1:8,
+                                             selected = 1)
+                          ),
+                          column(2,
+                                 selectInput('pc_y_go', label = 'y-axis PC: ', choices = 1:8,
+                                             selected = 2)
+                          )),
+                        verbatimTextOutput("enrichinfo"),
+                        fluidRow(dataTableOutput("dt_pcver_pos")),
+                        fluidRow(
+                          column(4,
+                                 dataTableOutput("dt_pchor_neg")),
+                          column(4,
+                                 plotOutput("pca2go")),
+                          column(4,
+                                 dataTableOutput("dt_pchor_pos")
+                          )),
+                        fluidRow(dataTableOutput("dt_pcver_neg"))),
+
+               tabPanel("Multifactor exploration",
+
+
+                        fluidRow(
+                          column(4,
+                                 selectInput('pc_x_ruf', label = 'x-axis PC: ', choices = 1:8,
+                                             selected = 2)
+                          ),
+                          column(4,
+                                 selectInput('pc_y_ruf', label = 'y-axis PC: ', choices = 1:8,
+                                             selected = 3)
+                          )),
+
+                        # fluidRow(verbatimTextOutput("rufdebug")),
+
+                        fluidRow(
+                          column(6,
+                                 plotOutput('pcaruf',brush = 'pcaruf_brush')),
+                          column(6,
+                                 plotOutput("rufzoom"))
+                        ),
+                        fluidRow(downloadButton('downloadData_brush_ruf', 'Download brushed points'),
+                                 textInput("brushedPoints_filename_ruf","File name..."),
+                                 dataTableOutput('pcaruf_out'))
+
+
+               )
+
+    )
+  )
+
+
 
 
 
@@ -356,7 +367,7 @@ pca_SUPALIVE4 <- function(obj,obj2){
       output$debug <- reactive({      cat(paste(input$pca_x_G,input$pca_y_G))    })
 
       output$pca_plt <- renderPlot({
-        res <- pca_d5(obj,intgroup = input$color_by,
+        res <- pcaplot(obj,intgroup = input$color_by,
                       ntop = input$pca_nrgenes,pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),text_labels = input$sample_labels,
                       point_size = input$pca_point_size, title="PCA on the samples"
 
@@ -368,7 +379,7 @@ pca_SUPALIVE4 <- function(obj,obj2){
 
       output$pca_pltZoom <- renderPlot({
         if(is.null(input$pca_brush)) return(ggplot() + annotate("text",label="zoom in by brushing",0,0) + theme_bw())
-        res <- pca_d5(obj,intgroup = input$color_by,
+        res <- pcaplot(obj,intgroup = input$color_by,
                       ntop = input$pca_nrgenes,pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),text_labels = input$sample_labels,
                       point_size = input$pca_point_size, title="PCA on the samples"
 
@@ -385,7 +396,7 @@ pca_SUPALIVE4 <- function(obj,obj2){
         select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
         pca <- prcomp(t(assay(obj)[select, ]))
 
-        res <- scree(pca,type = input$scree_type, pc_nr = input$scree_pcnr, title="Scree plot for the samples PCA")
+        res <- pcascree(pca,type = input$scree_type, pc_nr = input$scree_pcnr, title="Scree plot for the samples PCA")
         res <- res + theme_bw()
         exportPlots$samplesScree <- res
         res
@@ -668,7 +679,7 @@ pca_SUPALIVE4 <- function(obj,obj2){
 
 
       output$pca2go <- renderPlot({
-        res <- pca_d5(obj,intgroup = input$color_by,
+        res <- pcaplot(obj,intgroup = input$color_by,
                       ntop = input$pca_nrgenes,pcX = as.integer(input$pc_x_go),pcY = as.integer(input$pc_y_go),text_labels = input$sample_labels,
                       point_size = input$pca_point_size, title="PCA on the samples"
 
@@ -1092,236 +1103,7 @@ pca_SUPALIVE4 <- function(obj,obj2){
 
     })
 
-  uiui <- (
-    # var_range <- function(id, label, variable) {
-    #   rng <- range(variable, na.rm = TRUE)
-    #   sliderInput(id, label, rng[1], rng[2], rng)
-    # }
 
-    navbarPage(theme = shinytheme("journal"),"PCALIVE - beta version",
-
-               tabPanel("Overview",
-                        fluidRow(
-                          div(h3('pcaLive'), align = 'center')
-                        ),
-                        fluidRow("A Shiny application for exploring expression data in different conditions and experimental factors.\nUse the widgets below to setup general parameters for exporting produced plots"),
-                        fluidRow(
-                          numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
-                          numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2)
-                        )
-               ),
-               navbarMenu("Analysis on...",
-                          tabPanel('Samples',
-                                   fluidRow(
-                                     column(12,
-                                            p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components.")
-                                     ),
-                                     offset = 1),
-
-                                   fluidRow(
-                                     column(2,
-                                            selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8,
-                                                        selected = 1)
-                                     ),
-                                     column(2,
-                                            selectInput('pc_y', label = 'y-axis PC: ', choices = 1:8,
-                                                        selected = 2)
-                                     ),
-                                     column(3,
-                                            selectInput('color_by', label = 'color by: ',
-                                                        choices = c(NULL, poss_covars), selected = NULL,multiple = T)
-                                     ),
-                                     #                                      column(2,
-                                     #                                             numericInput('pca_point_alpha', label = 'Point alpha:', value = 1,min = 0,max = 1,step = 0.01)),
-                                     column(2,
-                                            numericInput('pca_point_size', label = 'Point size:', value = 3,min = 1,max = 8)),
-
-                                     column(2,
-                                            numericInput('pca_nrgenes', label = 'Nr of (most variant) genes:', value = 300,min = 50,max = 20000))
-                                   ),
-                                   fluidRow(
-                                     column(3,
-                                            checkboxInput("sample_labels","Display sample labels",value = TRUE))),
-                                   fluidRow(
-                                     column(6,
-                                            plotOutput('pca_plt',brush = "pca_brush"),
-                                            div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                                                downloadButton("download_samplesPca", "Download Plot"),
-                                                textInput("filename_samplesPca",label = "Save as...",value = "samplesPca.pdf"))),
-                                     column(6,
-                                            plotOutput("scree"),
-                                            div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                                                downloadButton("download_samplesScree", "Download Plot"),
-                                                textInput("filename_samplesScree",label = "Save as...",value = "samplesScree.pdf")),
-                                            fluidRow(
-                                              column(6,
-                                                     radioButtons("scree_type","Scree plot type:",choices=list("Proportion of explained variance"="pev","Cumulative proportion of explained variance"="cev"),"pev")),
-                                              column(6,
-                                                     numericInput("scree_pcnr","Number of PCs to display",value=8,min=2))
-                                            )
-                                     )
-                                   ),
-                                   fluidRow(
-                                     column(6,
-                                            plotOutput("pca_pltZoom"
-                                            )
-                                     ))
-                                   # )obj
-                          ),
-                          tabPanel("Genes",
-                                   fluidRow(
-                                     column(12,
-                                            p(h3('principal component analysis'), "PCA projections of gene abundances onto any pair of components.")
-                                     ),
-                                     offset = 1),
-                                   fluidRow(
-                                     column(2,
-                                            selectInput('pc_x_G', label = 'x-axis PC: ', choices = 1:8,
-                                                        selected = 1)
-                                     ),
-                                     column(2,
-                                            selectInput('pc_y_G', label = 'y-axis PC: ', choices = 1:8,
-                                                        selected = 2)
-                                     ),
-                                     column(1,
-                                            selectInput('color_by_G', label = 'color by: ',
-                                                        choices = c(NULL, poss_covars), selected = NULL,multiple = T)
-                                     ),
-                                     column(1,
-                                            numericInput('pca_nrgenes_G', label = 'nr of genes: ', value = 300,min = 50,max = 20000)),
-                                     column(1,
-                                            numericInput('pca_point_alpha_G', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01)),
-                                     column(1,
-                                            numericInput('pca_label_size_G', label = 'Labels size: ', value = 2,min = 1,max = 8)),
-                                     column(1,
-                                            numericInput('pca_point_size_G', label = 'Points size: ', value = 2,min = 1,max = 8)),
-                                     column(1,
-                                            numericInput('pca_varname_size_G', label = 'Varname size: ', value = 4,min = 1,max = 8)),
-                                     column(1,
-                                            numericInput('pca_scale_arrow_G', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10)),
-                                     column(1,
-                                            checkboxInput("variable_labels","Display variable labels",value = TRUE))
-
-
-                                   ),
-                                   fluidRow(verbatimTextOutput('x4')),
-                                   fluidRow(verbatimTextOutput('x5')),
-                                   fluidRow(verbatimTextOutput('x6')),fluidRow(verbatimTextOutput('x8')),
-                                   fluidRow(column(4,
-                                                   h4("Main Plot - interact!"),
-                                                   plotOutput('pca_plt_G',brush = 'pcagenes_brush',click="pcagenes_click"),
-                                                   div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                                                       downloadButton("download_genesPca", "Download Plot"),
-                                                       textInput("filename_genesPca",label = "Save as...",value = "genesPca.pdf"))),
-                                            #                           fluidRow(textOutput('debug'))),
-                                            column(4,
-                                                   h4("Zoomed window"),
-                                                   plotOutput("testzoom",click="pcagenes_zoom_click"),
-                                                   div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                                                       downloadButton("download_genesZoom", "Download Plot"),
-                                                       textInput("filename_genesZoom",label = "Save as...",value = "genesPca_zoomed.pdf"))),
-                                            column(4,
-                                                   h4("Boxplot of selected gene"),
-                                                   plotOutput("genePlot"))
-
-                                   ),
-                                   fluidRow(h4("genefinder"),
-                                            textInput("searchgene",label = "type in the name of the gene to search"),
-                                            verbatimTextOutput("searchresult"),
-                                            verbatimTextOutput("debuggene"),
-                                            checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
-                                            plotOutput("searchgenePlot")),
-                                   fluidRow(column(6,
-                                                   h4("Zoomed heatmap"),
-                                                   plotOutput("heatzoom"),
-                                                   div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                                                       downloadButton("download_genesHeatmap","Download Plot"),
-                                                       textInput("filename_genesHeatmap",label = "Save as...",value = "genesHeatmap.pdf"))
-                                   ),
-                                   column(6,
-                                          h4("Zoomed interactive heatmap"),
-                                          fluidRow(radioButtons("heatmap_colv","Cluster samples",choices = list("Yes"=TRUE,"No"=FALSE),selected = TRUE)),
-                                          fluidRow(d3heatmapOutput("heatzoomd3")))),
-                                   # verbatimTextOutput("plot_brushinfo"),
-                                   # dataTableOutput("restab"),
-                                   fluidRow(column(6,
-                                                   h4("Points selected by brushing - clicking and dragging:"),
-                                                   downloadButton('downloadData_brush', 'Download brushed points'),
-                                                   textInput("brushedPoints_filename","File name..."),
-                                                   dataTableOutput("pca_brush_out")),
-                                            column(6,
-                                                   h4("Points selected by clicking:"),
-                                                   downloadButton('downloadData_click', 'Download clicked (or nearby) points'),
-                                                   textInput("clickedPoints_filename","File name..."),
-                                                   dataTableOutput("pca_click_out"))
-                                   )
-                                   # fluidRow(plotOutput("testzoom"))
-                          )
-
-               ),
-               tabPanel("interactive genes",headerPanel("Zooming demo"),
-                        sidebarPanel(
-                          # sliderInput("ngenes_sh","Number of genes to include", 30, nrow(assay(obj)), 500)
-                          sliderInput("ngenes_sh","Number of genes to include", 30, 20000, 500)
-                          #                  var_range("y_domain", "Y", mtcars$mpg)
-                        ),
-                        mainPanel(
-                          ggvisOutput("p")
-                        )),
-
-               tabPanel("pca2go",
-                        h2("Functions enriched in the genes with high loadings on the selected principal components"),
-                        fluidRow(
-                          column(2,
-                                 selectInput('pc_x_go', label = 'x-axis PC: ', choices = 1:8,
-                                             selected = 1)
-                          ),
-                          column(2,
-                                 selectInput('pc_y_go', label = 'y-axis PC: ', choices = 1:8,
-                                             selected = 2)
-                          )),
-                        verbatimTextOutput("enrichinfo"),
-                        fluidRow(dataTableOutput("dt_pcver_pos")),
-                        fluidRow(
-                          column(4,
-                                 dataTableOutput("dt_pchor_neg")),
-                          column(4,
-                                 plotOutput("pca2go")),
-                          column(4,
-                                 dataTableOutput("dt_pchor_pos")
-                          )),
-                        fluidRow(dataTableOutput("dt_pcver_neg"))),
-
-               tabPanel("Multifactor exploration",
-
-
-                        fluidRow(
-                          column(4,
-                                 selectInput('pc_x_ruf', label = 'x-axis PC: ', choices = 1:8,
-                                             selected = 2)
-                          ),
-                          column(4,
-                                 selectInput('pc_y_ruf', label = 'y-axis PC: ', choices = 1:8,
-                                             selected = 3)
-                          )),
-
-                        # fluidRow(verbatimTextOutput("rufdebug")),
-
-                        fluidRow(
-                          column(6,
-                                 plotOutput('pcaruf',brush = 'pcaruf_brush')),
-                          column(6,
-                                 plotOutput("rufzoom"))
-                        ),
-                        fluidRow(downloadButton('downloadData_brush_ruf', 'Download brushed points'),
-                                 textInput("brushedPoints_filename_ruf","File name..."),
-                                 dataTableOutput('pcaruf_out'))
-
-
-               )
-
-    )
-  )
 
   shinyApp(ui = uiui, server = serser)
   }
