@@ -49,6 +49,8 @@ pca_SUPALIVE4 <- function(obj,obj2){
   ##                          Define UI                                 ##
   ## ------------------------------------------------------------------ ##
 
+  # poss_covars <- names(colData(obj))
+  poss_covars <- NULL
   newuiui <-
     shinydashboard::dashboardPage(
       dashboardHeader(
@@ -60,13 +62,47 @@ pca_SUPALIVE4 <- function(obj,obj2){
       dashboardSidebar(
         width = 350,
         menuItem("App settings",icon = icon("cogs"),
-                 selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8,
-                             selected = 1)
+                 selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8, selected = 1),
+                 selectInput('pc_y', label = 'y-axis PC: ', choices = 1:8, selected = 2),
+                 selectInput('color_by', label = 'color by: ',
+                             choices = c(NULL, poss_covars), selected = NULL,multiple = T),
+                 numericInput('pca_nrgenes', label = 'Nr of (most variant) genes:', value = 300,min = 50,max = 20000),
+                 radioButtons("scree_type","Scree plot type:",choices=list("Proportion of explained variance"="pev","Cumulative proportion of explained variance"="cev"),"pev"),
+
+
+
+                 selectInput('pc_x_G', label = 'x-axis PC: ', choices = 1:8, selected = 1),
+                 selectInput('pc_y_G', label = 'y-axis PC: ', choices = 1:8, selected = 2),
+                 selectInput('color_by_G', label = 'color by: ',
+                             choices = c(NULL, poss_covars), selected = NULL,multiple = T),
+                 numericInput('pca_nrgenes_G', label = 'nr of genes: ', value = 300,min = 50,max = 20000),
+                 numericInput('pca_point_alpha_G', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01),
+                 numericInput('pca_label_size_G', label = 'Labels size: ', value = 2,min = 1,max = 8),
+                 numericInput('pca_point_size_G', label = 'Points size: ', value = 2,min = 1,max = 8),
+                 numericInput('pca_varname_size_G', label = 'Varname size: ', value = 4,min = 1,max = 8),
+                 numericInput('pca_scale_arrow_G', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10),
+                 checkboxInput("variable_labels","Display variable labels",value = TRUE),
+
+
+
+                 selectInput('pc_x_go', label = 'x-axis PC: ', choices = 1:8, selected = 1),
+                 selectInput('pc_y_go', label = 'y-axis PC: ', choices = 1:8, selected = 2)
+
+
+
+
+
+
                  ),
         menuItem("Plot settings", icon = icon("paint-brush"),
                  # bstooltip: Use the widgets below to setup general parameters for exporting produced plots
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
                  numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
+
+
+                 numericInput('pca_point_size', label = 'Point size:', value = 3,min = 1,max = 8),
+                 checkboxInput("sample_labels","Display sample labels",value = TRUE),
+
 
                  # tooltips explanation to have less crowded ui and still good docu
                  shinyBS::bsTooltip(
@@ -90,7 +126,8 @@ pca_SUPALIVE4 <- function(obj,obj2){
           tabPanel("Data Preview",
                    h1("Here will go some head of the count dataset, the samples design/covariates and so")),
 
-          tabPanel("Samples View"),
+          tabPanel("Samples View",
+                   p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components.")),
 
           tabPanel("Genes View"),
 
@@ -121,6 +158,12 @@ pca_SUPALIVE4 <- function(obj,obj2){
 
 
 
+
+
+
+
+
+
   uiui <- (
     # var_range <- function(id, label, variable) {
     #   rng <- range(variable, na.rm = TRUE)
@@ -129,48 +172,9 @@ pca_SUPALIVE4 <- function(obj,obj2){
 
     navbarPage(theme = shinytheme("journal"),"PCALIVE - beta version",
 
-               tabPanel("Overview",
-                        fluidRow(
-                          div(h3('pcaLive'), align = 'center')
-                        ),
-                        fluidRow("A Shiny application for exploring expression data in different conditions and experimental factors.\nUse the widgets below to setup general parameters for exporting produced plots"),
-                        fluidRow(
-                          numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
-                          numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2)
-                        )
-               ),
-               navbarMenu("Analysis on...",
-                          tabPanel('Samples',
-                                   fluidRow(
-                                     column(12,
-                                            p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components.")
-                                     ),
-                                     offset = 1),
 
-                                   fluidRow(
-                                     column(2,
-                                            selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8,
-                                                        selected = 1)
-                                     ),
-                                     column(2,
-                                            selectInput('pc_y', label = 'y-axis PC: ', choices = 1:8,
-                                                        selected = 2)
-                                     ),
-                                     column(3,
-                                            selectInput('color_by', label = 'color by: ',
-                                                        choices = c(NULL, poss_covars), selected = NULL,multiple = T)
-                                     ),
-                                     #                                      column(2,
-                                     #                                             numericInput('pca_point_alpha', label = 'Point alpha:', value = 1,min = 0,max = 1,step = 0.01)),
-                                     column(2,
-                                            numericInput('pca_point_size', label = 'Point size:', value = 3,min = 1,max = 8)),
 
-                                     column(2,
-                                            numericInput('pca_nrgenes', label = 'Nr of (most variant) genes:', value = 300,min = 50,max = 20000))
-                                   ),
-                                   fluidRow(
-                                     column(3,
-                                            checkboxInput("sample_labels","Display sample labels",value = TRUE))),
+
                                    fluidRow(
                                      column(6,
                                             plotOutput('pca_plt',brush = "pca_brush"),
@@ -184,7 +188,7 @@ pca_SUPALIVE4 <- function(obj,obj2){
                                                 textInput("filename_samplesScree",label = "Save as...",value = "samplesScree.pdf")),
                                             fluidRow(
                                               column(6,
-                                                     radioButtons("scree_type","Scree plot type:",choices=list("Proportion of explained variance"="pev","Cumulative proportion of explained variance"="cev"),"pev")),
+                                                     ),
                                               column(6,
                                                      numericInput("scree_pcnr","Number of PCs to display",value=8,min=2))
                                             )
@@ -203,33 +207,6 @@ pca_SUPALIVE4 <- function(obj,obj2){
                                             p(h3('principal component analysis'), "PCA projections of gene abundances onto any pair of components.")
                                      ),
                                      offset = 1),
-                                   fluidRow(
-                                     column(2,
-                                            selectInput('pc_x_G', label = 'x-axis PC: ', choices = 1:8,
-                                                        selected = 1)
-                                     ),
-                                     column(2,
-                                            selectInput('pc_y_G', label = 'y-axis PC: ', choices = 1:8,
-                                                        selected = 2)
-                                     ),
-                                     column(1,
-                                            selectInput('color_by_G', label = 'color by: ',
-                                                        choices = c(NULL, poss_covars), selected = NULL,multiple = T)
-                                     ),
-                                     column(1,
-                                            numericInput('pca_nrgenes_G', label = 'nr of genes: ', value = 300,min = 50,max = 20000)),
-                                     column(1,
-                                            numericInput('pca_point_alpha_G', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01)),
-                                     column(1,
-                                            numericInput('pca_label_size_G', label = 'Labels size: ', value = 2,min = 1,max = 8)),
-                                     column(1,
-                                            numericInput('pca_point_size_G', label = 'Points size: ', value = 2,min = 1,max = 8)),
-                                     column(1,
-                                            numericInput('pca_varname_size_G', label = 'Varname size: ', value = 4,min = 1,max = 8)),
-                                     column(1,
-                                            numericInput('pca_scale_arrow_G', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10)),
-                                     column(1,
-                                            checkboxInput("variable_labels","Display variable labels",value = TRUE))
 
 
                                    ),
@@ -288,26 +265,16 @@ pca_SUPALIVE4 <- function(obj,obj2){
                           )
 
                ),
-               tabPanel("interactive genes",headerPanel("Zooming demo"),
-                        sidebarPanel(
-                          # sliderInput("ngenes_sh","Number of genes to include", 30, nrow(assay(obj)), 500)
-                          sliderInput("ngenes_sh","Number of genes to include", 30, 20000, 500)
-                          #                  var_range("y_domain", "Y", mtcars$mpg)
-                        ),
-                        mainPanel(
-                          ggvisOutput("p")
-                        )),
+
 
                tabPanel("pca2go",
                         h2("Functions enriched in the genes with high loadings on the selected principal components"),
                         fluidRow(
                           column(2,
-                                 selectInput('pc_x_go', label = 'x-axis PC: ', choices = 1:8,
-                                             selected = 1)
+
                           ),
                           column(2,
-                                 selectInput('pc_y_go', label = 'y-axis PC: ', choices = 1:8,
-                                             selected = 2)
+
                           )),
                         verbatimTextOutput("enrichinfo"),
                         fluidRow(dataTableOutput("dt_pcver_pos")),
@@ -321,33 +288,7 @@ pca_SUPALIVE4 <- function(obj,obj2){
                           )),
                         fluidRow(dataTableOutput("dt_pcver_neg"))),
 
-               tabPanel("Multifactor exploration",
 
-
-                        fluidRow(
-                          column(4,
-                                 selectInput('pc_x_ruf', label = 'x-axis PC: ', choices = 1:8,
-                                             selected = 2)
-                          ),
-                          column(4,
-                                 selectInput('pc_y_ruf', label = 'y-axis PC: ', choices = 1:8,
-                                             selected = 3)
-                          )),
-
-                        # fluidRow(verbatimTextOutput("rufdebug")),
-
-                        fluidRow(
-                          column(6,
-                                 plotOutput('pcaruf',brush = 'pcaruf_brush')),
-                          column(6,
-                                 plotOutput("rufzoom"))
-                        ),
-                        fluidRow(downloadButton('downloadData_brush_ruf', 'Download brushed points'),
-                                 textInput("brushedPoints_filename_ruf","File name..."),
-                                 dataTableOutput('pcaruf_out'))
-
-
-               )
 
     )
   )
