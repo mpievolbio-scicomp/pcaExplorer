@@ -45,6 +45,10 @@ pca_SUPALIVE4 <- function(obj,obj2){
   # sliderInput(id, label, rng[1], rng[2], rng)
   # }
 
+  ## ------------------------------------------------------------------ ##
+  ##                          Define UI                                 ##
+  ## ------------------------------------------------------------------ ##
+
   newuiui <-
     shinydashboard::dashboardPage(
       dashboardHeader(
@@ -55,17 +59,45 @@ pca_SUPALIVE4 <- function(obj,obj2){
 
       dashboardSidebar(
         width = 350,
-        menuItem("Settings",icon = icon("cogs"),
+        menuItem("App settings",icon = icon("cogs"),
                  selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8,
                              selected = 1)
                  ),
         menuItem("Plot settings", icon = icon("paint-brush"),
+                 # bstooltip: Use the widgets below to setup general parameters for exporting produced plots
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
-                 numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2)
+                 numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
+
+                 # tooltips explanation to have less crowded ui and still good docu
+                 shinyBS::bsTooltip(
+                   "export_width",
+                   paste0("Use the widgets below to setup general parameters for exporting produced plots"),
+                   "right", options = list(container = "body"))
+
                  )
-                       ),
+      ),
 
       dashboardBody(
+        tabBox(
+          width=12,
+
+          tabPanel("About",
+                   includeMarkdown(system.file("extdata", "about.md",package = "pcaExplorer"))),
+
+          tabPanel("Instructions",
+                   includeMarkdown(system.file("extdata", "instructions.md",package = "pcaExplorer"))),
+
+          tabPanel("Data Preview",
+                   h1("Here will go some head of the count dataset, the samples design/covariates and so")),
+
+          tabPanel("Samples View"),
+
+          tabPanel("Genes View"),
+
+          tabPanel("Gene finder"),
+
+          tabPanel("PCA2GO")
+        )
 
       ),
 
@@ -79,6 +111,10 @@ pca_SUPALIVE4 <- function(obj,obj2){
 
 
     )
+
+  ## ------------------------------------------------------------------ ##
+  ##                          Define server                             ##
+  ## ------------------------------------------------------------------ ##
 
   newserver <- function(input, output) { }
   shinyApp(ui = newuiui, server = newserver)
