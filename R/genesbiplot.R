@@ -48,7 +48,7 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
                           alpha = 1, var.axes = TRUE, circle = FALSE, circle.prob = 0.69,
                           varname.size = 4, varname.adjust = 1.5, varname.abbrev = FALSE,
                           arrowColors = NULL, returnData=F,coordEqual=F, scaleArrow = 1,
-                          useRownamesAsLabels=TRUE, point_size=2,
+                          useRownamesAsLabels=TRUE, point_size=2,annotation = NULL,
                           ...)
 {
   library(ggplot2)
@@ -116,8 +116,11 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
 
   # additionally...
   df.u$ids <- rownames(df.u)
-  df.u$geneNames <- cm2$fromgtf[match(df.u$ids,rownames(cm2))]
-
+  if(!is.null(annotation)) {
+    df.u$geneNames <- annotation$gene_name[match(df.u$ids,rownames(annotation))]
+  } else {
+    df.u$geneNames <- df.u$ids
+  }
   if (varname.abbrev) {
     df.v$varname <- abbreviate(rownames(v))
   } else {
