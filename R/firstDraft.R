@@ -228,16 +228,30 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
             h1("Functions enriched in the genes with high loadings on the selected principal components"),
             verbatimTextOutput("enrichinfo"),
             checkboxInput("compact_pca2go","Display compact tables",value=TRUE),
-            fluidRow(dataTableOutput("dt_pcver_pos")),
+            fluidRow(
+              column(width = 3),
+              column(
+                width = 6,
+                dataTableOutput("dt_pcver_pos")),
+              column(width = 3)
+            ),
+
             fluidRow(
               column(4,
                      dataTableOutput("dt_pchor_neg")),
               column(4,
                      plotOutput("pca2go")),
               column(4,
-                     dataTableOutput("dt_pchor_pos")
-              )),
-            fluidRow(dataTableOutput("dt_pcver_neg")))
+                     dataTableOutput("dt_pchor_pos"))
+              ),
+            fluidRow(
+              column(width = 3),
+              column(
+                width = 6,
+                dataTableOutput("dt_pcver_neg")),
+              column(width = 3)
+            )
+          )
         )
 
       ),
@@ -571,7 +585,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     output$dt_pchor_pos <- renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
-      goe <- goEnrichs[[paste0("PC",input$pc_x_go)]][["posLoad"]]
+      goe <- pca2go[[paste0("PC",input$pc_x_go)]][["posLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
       datatable(goe)
@@ -579,7 +593,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     output$dt_pchor_neg <- renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
-      goe <- goEnrichs[[paste0("PC",input$pc_x_go)]][["negLoad"]]
+      goe <- pca2go[[paste0("PC",input$pc_x_go)]][["negLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
       datatable(goe)
@@ -587,7 +601,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     output$dt_pcver_pos <- renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
-      goe <- goEnrichs[[paste0("PC",input$pc_y_go)]][["posLoad"]]
+      goe <- pca2go[[paste0("PC",input$pc_y_go)]][["posLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
       datatable(goe)
@@ -595,7 +609,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     output$dt_pcver_neg <- renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
-      goe <- goEnrichs[[paste0("PC",input$pc_y_go)]][["negLoad"]]
+      goe <- pca2go[[paste0("PC",input$pc_y_go)]][["negLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
       datatable(goe)
@@ -605,8 +619,8 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       cat("enrich info:\n")
       # str(goEnrichs)
       class(input$pc_x)
-      head(goEnrichs[[paste0("PC",input$pc_x)]][["posLoad"]])
-      class(datatable(goEnrichs[[paste0("PC",input$pc_x)]][["posLoad"]]))
+      head(pca2go[[paste0("PC",input$pc_x)]][["posLoad"]])
+      class(datatable(pca2go[[paste0("PC",input$pc_x)]][["posLoad"]]))
     })
 
 
