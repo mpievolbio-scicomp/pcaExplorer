@@ -251,7 +251,38 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
                 dataTableOutput("dt_pcver_neg")),
               column(width = 3)
             )
+          ),
+
+
+
+          tabPanel("Multifactor exploration",
+
+
+                   fluidRow(
+                     column(4,
+                            selectInput('pc_x_ruf', label = 'x-axis PC: ', choices = 1:8,
+                                        selected = 2)
+                     ),
+                     column(4,
+                            selectInput('pc_y_ruf', label = 'y-axis PC: ', choices = 1:8,
+                                        selected = 3)
+                     )),
+
+                   # fluidRow(verbatimTextOutput("rufdebug")),
+
+                   fluidRow(
+                     column(6,
+                            plotOutput('pcaruf',brush = 'pcaruf_brush')),
+                     column(6,
+                            plotOutput("rufzoom"))
+                   ),
+                   fluidRow(downloadButton('downloadData_brush_ruf', 'Download brushed points'),
+                            textInput("brushedPoints_filename_ruf","File name..."),
+                            dataTableOutput('pcaruf_out'))
+
+
           )
+
         )
 
       ),
@@ -622,6 +653,309 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       head(pca2go[[paste0("PC",input$pc_x)]][["posLoad"]])
       class(datatable(pca2go[[paste0("PC",input$pc_x)]][["posLoad"]]))
     })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ## from here on, RUF APP
+    load("../presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_ruf.RData")
+    ddsmf_clean
+    rld_global
+
+    load("../presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_kleinert.RData")
+
+    kldds <- updateObject(dds_kl)
+    klrld <- updateObject(rld_kl)
+
+    ddsobj <- updateObject(ddsmf_clean)
+    rldobj <- updateObject(rld_global)
+
+
+    obj3 <- reactive({
+      # preliminary on the object to morph into obj3
+      exprmat <- t(assay(rldobj))
+
+
+      # removing non expressed genes in advance?
+      # expressed <- counts(ddsmf_global)#...
+      (rowSums(counts(ddsobj) > 5)>2) %>% sum
+      (rowSums(counts(ddsobj) > 3)>1) %>% sum
+      (rowSums(counts(ddsobj) > 3)>2) %>% sum
+      (rowSums(counts(ddsobj) > 5)>1) %>% sum
+      (rowSums(counts(ddsobj) > 5)>3) %>% sum
+      sum(rowSums(counts(ddsobj))>0)
+
+      exprmat <- exprmat[,rowSums(counts(ddsobj) > 5)>2]
+
+
+      ## original
+      pcmat <- cbind(exprmat[c("WT_macro_R1","WT_macro_R2","WT_macro_R3","WT_macro_R4",
+                               "WT_endo_R1","WT_endo_R2","WT_endo_R3","WT_endo_R4",
+                               "WT_CD11b_R1","WT_CD11b_R2","WT_CD11b_R3","WT_CD11b_R4",
+                               "WT_CD8_R1","WT_CD8_R2","WT_CD8_R3","WT_CD8_R4"),],
+                     exprmat[c("G37I_macro_R1","G37I_macro_R2","G37I_macro_R3","G37I_macro_R4",
+                               "G37I_endo_R1","G37I_endo_R2","G37I_endo_R3","G37I_endo_R4",
+                               "G37I_CD11b_R1","G37I_CD11b_R2","G37I_CD11b_R5","G37I_CD11b_R4",
+                               "G37I_CD8_R1","G37I_CD8_R3","G37I_CD8_R3","G37I_CD8_R4"),])
+      ## to check whether it is robust
+      #         pcmat <- cbind(exprmat[c("WT_macro_R1","WT_macro_R2","WT_macro_R3","WT_macro_R4",
+      #                                  "WT_endo_R1","WT_endo_R2","WT_endo_R3","WT_endo_R4",
+      #                                  "WT_CD11b_R1","WT_CD11b_R2","WT_CD11b_R5","WT_CD11b_R4",
+      #                                  "WT_CD8_R1","WT_CD8_R2","WT_CD8_R3","WT_CD8_R4"),],
+      #                        exprmat[c("G37I_macro_R3","G37I_macro_R2","G37I_macro_R4","G37I_macro_R1",
+      #                                  "G37I_endo_R4","G37I_endo_R3","G37I_endo_R1","G37I_endo_R2",
+      #                                  "G37I_CD11b_R2","G37I_CD11b_R3","G37I_CD11b_R1","G37I_CD11b_R4",
+      #                                  "G37I_CD8_R1","G37I_CD8_R4","G37I_CD8_R2","G37I_CD8_R3"),])
+
+
+      library(scales)
+      aval <- 0.3
+
+
+      max.type <- apply(pcmat[,1:ncol(exprmat)],2,which.max)
+      tcol.justMax <- ifelse(max.type <= 4,alpha("green",aval),ifelse(max.type <= 8,alpha("red",aval),ifelse(max.type <= 12,alpha("blue",aval),alpha("orange",aval))))
+      max.type2 <- apply(pcmat[,(ncol(exprmat)+1):ncol(pcmat)],2,which.max)
+      tcol2.justMax <- ifelse(max.type2 <= 4,alpha("green",aval),ifelse(max.type2 <= 8,alpha("red",aval),ifelse(max.type2 <= 12,alpha("blue",aval),alpha("orange",aval))))
+
+      # using the median across replicates
+      celltypes <- gsub("_R.","",rownames(pcmat))
+
+      # attach this to the matrix to split accordingly
+      # pcmat2 <- data.frame(pcmat,celltypes=celltypes,stringsAsFactors = F)
+
+
+      # minipcmat <- pcmat[1:16,1:10]
+      # pcmat2 <- data.frame(minipcmat,celltypes=celltypes,stringsAsFactors = F)
+      # pcmat3 <- gather(as.data.frame(pcmat2),id,exprvalue,-celltypes)
+
+      # brutal way, with for loop...
+      #         mediansByReps <- matrix(NA,4,ncol(pcmat))
+      #         minipcmat <- pcmat[1:16,1:5]
+      #         # mediansByReps <- matrix(NA,4,ncol(minipcmat))
+      #
+      #         starts <- c(1,5,9,13)
+      #         for(j in 1:ncol(mediansByReps)){
+      #           for(i in 1:4){
+      #             tmp <- pcmat[(starts[i]:(starts[i]+3)),j]
+      #             # cat(paste(tmp,collapse=","))
+      #             res <- median(tmp)
+      #             mediansByReps[i,j] <- res
+      #           }
+      #           # print(j)
+      #         }
+      #
+      #         max.median.type <- apply(mediansByReps[,1:ncol(exprmat)],2,which.max)
+      #         max.median.type2 <- apply(mediansByReps[,(ncol(exprmat)+1):ncol(mediansByReps)],2,which.max)
+      #         tcol.median <- c(alpha("green",aval),alpha("red",aval),alpha("blue",aval),alpha("orange",aval))[max.median.type]
+      #         tcol2.median <- c(alpha("green",aval),alpha("red",aval),alpha("blue",aval),alpha("orange",aval))[max.median.type2]
+      #
+      #         # optional step, in the end, to see if the median across replicates delivers different stuff
+      #         tcol <- tcol.median
+      #         tcol2 <- tcol2.median
+
+      tcol <- tcol.justMax
+      tcol2 <- tcol2.justMax
+      # pcmat
+      return(list(pcmat,tcol,tcol2))
+    })
+
+
+    output$pcaruf <- renderPlot({
+      pcmat <- obj3()[[1]]
+      tcol <- obj3()[[2]]
+      tcol2 <- obj3()[[3]]
+      pres <- prcomp(t(pcmat),scale=FALSE)
+
+      plot.index <- c(as.integer(input$pc_x_ruf),as.integer(input$pc_y_ruf))
+      offset <- ncol(pcmat)/2
+      gene.no <- offset
+      pcx <- pres$x
+      # set.seed(11)
+      # for (i in 1:ncol(pcx)) {
+      #   pcx[,i] <- pcx[,i] + rnorm(nrow(pcx),sd=diff(range(pcx[,i]))/100)
+      # }
+      plot(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],xlim=range(pcx[,plot.index[1]]),ylim=range(pcx[,plot.index[2]]),pch=20,col=tcol,cex=0.3)#,type="n")
+      #plot(0,type="n",xlim=range(pres$x[,plot.index]),ylim=range(pres$x[,plot.index]))
+      lcol <- ifelse(tcol != tcol2,"black","grey")
+      for (i in 1:gene.no) {
+        lines(pcx[c(i,offset+i),plot.index[1]],pcx[c(i,offset+i),plot.index[2]],col=lcol[i])
+      }
+      points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
+      points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)
+
+
+      ## ## ##
+      #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[1]],
+      #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[2]],
+      #                pch=20,col="darkviolet",cex=2)
+      #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[1]],
+      #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[2]],
+      #                pch=20,col="steelblue",cex=2)
+      #         # legend("topleft",fill = c("darkviolet","steelblue"),legend=c("galon Macro","galon CD8"))
+      mgenes_extended <- c("Tnf","Mmp12","Adam8","Mrc1","Cd36","Cd83","Itgam","Lyz1","Slamf8","Clec12a","Clec10a","Pdc","Cd274")
+      mgenes_extended_ENS <- rownames(cm2)[match(mgenes_extended,cm2$fromgtf)]
+      points(pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[1]],
+             pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[2]],
+             pch=20,col="salmon",cex=2)
+      ## ## ##
+    })
+
+    output$rufdebug <- renderPrint({
+      str(obj3())
+    })
+
+
+    output$rufzoom <- renderPlot({
+      if(is.null(input$pcaruf_brush)) return(NULL)
+      pcmat <- obj3()[[1]]
+      tcol <- obj3()[[2]]
+      tcol2 <- obj3()[[3]]
+      pres <- prcomp(t(pcmat),scale=FALSE)
+
+      plot.index <- c(as.integer(input$pc_x_ruf),as.integer(input$pc_y_ruf))
+      offset <- ncol(pcmat)/2
+      gene.no <- offset
+      pcx <- pres$x
+      # set.seed(11)
+      # for (i in 1:ncol(pcx)) {
+      #   pcx[,i] <- pcx[,i] + rnorm(nrow(pcx),sd=diff(range(pcx[,i]))/100)
+      # }
+      plot(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],
+           pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],
+           xlim=c(input$pcaruf_brush$xmin,input$pcaruf_brush$xmax),
+           ylim=c(input$pcaruf_brush$ymin,input$pcaruf_brush$ymax),
+           pch=20,col=tcol,cex=0.3)#,type="n")
+      #plot(0,type="n",xlim=range(pres$x[,plot.index]),ylim=range(pres$x[,plot.index]))
+      lcol <- ifelse(tcol != tcol2,"black","grey")
+      for (i in 1:gene.no) {
+        lines(pcx[c(i,offset+i),plot.index[1]],pcx[c(i,offset+i),plot.index[2]],col=lcol[i])
+      }
+      points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
+      points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)
+      #
+      #         ## ## ##
+      #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[1]],
+      #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[2]],
+      #                pch=20,col="darkviolet",cex=2)
+      #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[1]],
+      #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[2]],
+      #                pch=20,col="steelblue",cex=2)
+      #         # legend("topleft",fill = c("darkviolet","steelblue"),legend=c("galon Macro","galon CD8"))
+      mgenes_extended <- c("Tnf","Mmp12","Adam8","Mrc1","Cd36","Cd83","Itgam","Lyz1","Slamf8","Clec12a","Clec10a","Pdc","Cd274")
+      mgenes_extended_ENS <- rownames(cm2)[match(mgenes_extended,cm2$fromgtf)]
+      points(pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[1]],
+             pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[2]],
+             pch=20,col="salmon",cex=2)
+      ## ## ##
+
+    })
+
+    # output$debug <- reactive({      cat(paste(input$pca_x_G,input$pca_y_G))    })
+
+
+    #       output$plot_brushinfo <- renderPrint({
+    #         cat("input$pcagenes_brush:\n")
+    #         str(input$pcagenes_brush)
+    #       })
+
+    curData_brush_ruf <- reactive({
+      pcmat <- obj3()[[1]]
+      tcol <- obj3()[[2]]
+      tcol2 <- obj3()[[3]]
+
+      pres <- prcomp(t(pcmat),scale=FALSE)
+
+      plot.index <- c(as.integer(input$pc_x_ruf),as.integer(input$pc_y_ruf))
+      offset <- ncol(pcmat)/2
+      gene.no <- offset
+      pcx <- pres$x
+      # set.seed(11)
+      # for (i in 1:ncol(pcx)) {
+      #   pcx[,i] <- pcx[,i] + rnorm(nrow(pcx),sd=diff(range(pcx[,i]))/100)
+      # }
+
+      firstPCselected <- c(
+        pcx[1:offset,plot.index[1]][1:gene.no],
+        pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no])
+
+      # pcx[1:offset,plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],
+
+      secondPCselected <- c(
+        pcx[1:offset,plot.index[2]][1:gene.no],
+        pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no]
+      )
+
+      # pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no]
+      pcspcs <- data.frame(firstPC=firstPCselected,secondPC=secondPCselected,geneID=colnames(pcmat))
+      rownames(pcspcs) <- c(paste0(colnames(pcmat)[1:gene.no],"_WT"),
+                            paste0(colnames(pcmat)[(gene.no+1):(2*gene.no)],"_G37"))
+
+      pcspcs$geneName <- cm2$fromgtf[match(pcspcs$geneID,rownames(cm2))]
+
+
+      res <- brushedPoints(pcspcs, input$pcaruf_brush,xvar="firstPC",yvar="secondPC",)
+      res
+    })
+
+
+
+    output$pcaruf_out <- DT::renderDataTable({
+      datatable(curData_brush_ruf())
+
+
+    }) # IDEALLY HERE?,options = list(lengthMenu = c(25, 50, 100), pageLength = 100)
+    #
+    #
+    #
+    #
+    output$downloadData_brush_ruf <- downloadHandler(
+      filename = function() { paste(input$brushedPoints_filename_ruf, '.csv', sep='') },
+      content = function(file) {
+        if(length(input$pcaruf_out_rows_selected)){
+          data <- curData_brush_ruf()[input$pcaruf_out_rows_selected,]
+        } else {
+          data <- curData_brush_ruf()
+        }
+        write.csv(data, file, quote=FALSE)
+      }
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

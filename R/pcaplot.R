@@ -83,7 +83,7 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
     # p
   } else {
     p <- ggplot(pc_df, aes(x = PC_count, y = var)) + geom_point() + geom_path() + scale_x_continuous(breaks = 1:length(d))
-    p <- p + ylab(yvar.lab) + xlab("principal components")
+    p <- p + ylab(yvar.lab) + xlab("principal components") + ylim(0,max(pc_df$var))
     # p
   }
   if(!is.null(title)) p <- p + ggtitle(title)
