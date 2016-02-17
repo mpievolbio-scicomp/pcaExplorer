@@ -24,6 +24,25 @@ library(shinydashboard)
 
 # annotation <- data.frame(gene_id=rownames(cm2),gene_name=cm2$fromgtf,stringsAsFactors = FALSE,row.names = rownames(cm2))
 
+
+footer<-function(){
+  tags$div(
+    class = "footer",
+    style = "text-align:center",
+    tags$div(class = "foot-inner",
+             list(
+               hr(),
+               "pcaExplorer is a project developed by Federico Marini in the Bioinformatics division of the ",
+               tags$a(href="http://www.unimedizin-mainz.de/imbei","IMBEI"),
+               ". ",br(),
+               "Development of the pcaExplorer package is on ",
+               tags$a(href="https://github.com/federicomarini/pcaExplorer", "GitHub")
+             )
+
+    )
+  )
+}
+
 pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
   # stopifnot( is(obj, 'SummarizedExperiment') )
   ## plenty of tests on the selected object(s)
@@ -49,7 +68,7 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 #   ddd <- colData(dds_deplall)
 #   write.table(ddd,file="minicoldata.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
   # write.table(counts(dds_deplall),file="fullcm.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
-
+  # write.table(annotation,file="anno_mouseEns.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
   ## ------------------------------------------------------------------ ##
   ##                          Define UI                                 ##
   ## ------------------------------------------------------------------ ##
@@ -66,7 +85,7 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
       dashboardSidebar(
         width = 250,
-        menuItem("App settings",icon = icon("cogs"),
+        menuItem("Data upload",icon = icon("upload"),
                  uiOutput("upload_count_matrix"),
                  shinyBS::bsTooltip(
                    "uploadfile", paste0("Select file containing the count matrix"),
@@ -74,9 +93,8 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
                  uiOutput("upload_metadata"),
                  shinyBS::bsTooltip(
                    "uploadfile", paste0("Select file containing the samples metadata"),
-                   "right", options = list(container = "body")),
-
-
+                   "right", options = list(container = "body"))),
+        menuItem("App settings",icon = icon("cogs"),
                  selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8, selected = 1),
                  selectInput('pc_y', label = 'y-axis PC: ', choices = 1:8, selected = 2),
                  uiOutput("color_by"),
@@ -116,7 +134,8 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
             shiny::verbatimTextOutput("showuploaded1"),
             shiny::verbatimTextOutput("showuploaded2"),
             shiny::verbatimTextOutput("showuploaded3"),
-            shiny::verbatimTextOutput("showuploaded4")
+            shiny::verbatimTextOutput("showuploaded4"),
+            footer()
             ),
 
           tabPanel(
@@ -135,12 +154,11 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
             h3("Number of million of reads per sample"),
             plotOutput("reads_barplot"),
             h3("Basic summary for the counts"),
-            verbatimTextOutput("reads_summary")
+            verbatimTextOutput("reads_summary"),
 
 
 
-
-
+            footer()
 
             ),
 
@@ -413,11 +431,12 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
                  {
                    values$mycountmatrix <- readCountmatrix()
                    if(!is.null(values$mymetadata)){
+                     withProgress(message="Computing the objects...",value = 0,{
 
                      values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
                                                             colData = values$mymetadata,
                                                             design=~1)
-                     values$myrlt <- rlogTransformation(values$mydds)
+                     values$myrlt <- rlogTransformation(values$mydds)})
                    }
                  })
 
@@ -425,11 +444,12 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
                  {
                    values$mymetadata <- readMetadata()
                    if(!is.null(values$mycountmatrix)){
+                     withProgress(message="Computing the objects...",value = 0,{
 
                      values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
                                                             colData = values$mymetadata,
                                                             design=~1)
-                     values$myrlt <- rlogTransformation(values$mydds)
+                     values$myrlt <- rlogTransformation(values$mydds)})
                    }
                  })
 
