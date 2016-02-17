@@ -34,11 +34,11 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
   # here something like, if provided as a countmatrix, create dds and rld
 
-  if(!is.null(obj)){
-    poss_covars <- names(colData(obj))[] # exclude the size factor, not really required?
-  } else {
-    poss_covars <- c()
-  }
+#   if(!is.null(obj)){
+#     poss_covars <- names(colData(obj))[] # exclude the size factor, not really required?
+#   } else {
+#     poss_covars <- c()
+#   }
   ## TODO: colselection also passed as a palette?
   colSelection <- c("navyblue","steelblue","skyblue","darkred","coral3","darksalmon","green4","greenyellow","orange","gold")
 
@@ -79,8 +79,9 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
                  selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8, selected = 1),
                  selectInput('pc_y', label = 'y-axis PC: ', choices = 1:8, selected = 2),
-                 selectInput('color_by', label = 'color by: ',
-                             choices = c(NULL, poss_covars), selected = NULL,multiple = T),
+                 uiOutput("color_by"),
+#                  selectInput('color_by', label = 'color by: ',
+#                              choices = c(NULL, poss_covars()), selected = NULL,multiple = T),
                  numericInput('pca_nrgenes', label = 'Nr of (most variant) genes:', value = 300,min = 50,max = 20000),
                  numericInput('pca_point_alpha', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01),
                  numericInput('pca_label_size', label = 'Labels size: ', value = 2,min = 1,max = 8),
@@ -333,13 +334,28 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
     )
 
     values <- reactiveValues()
-    values$caca <- "haha"
     values$mydds <- obj2
     values$myrlt <- obj
     values$mycountmatrix <- NULL
     values$mymetadata <- NULL
 
     user_settings <- reactiveValues(save_width = 45, save_height = 11)
+
+
+    output$color_by <- renderUI({
+      if(is.null(values$mydds))
+        return(NULL)
+      poss_covars <- names(colData(values$mydds))
+      selectInput('color_by', label = 'color by: ',
+                  choices = c(NULL, poss_covars), selected = NULL,multiple = T)
+    })
+
+#     poss_covars <- reactive({
+#       names(colData(values$mydds))
+    # })[] # exclude the size factor, not really required?
+#     } else {
+#       poss_covars <- c()
+#     }
 
 
 
