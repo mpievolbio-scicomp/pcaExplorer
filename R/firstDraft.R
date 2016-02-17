@@ -61,36 +61,17 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
                  selectInput('color_by', label = 'color by: ',
                              choices = c(NULL, poss_covars), selected = NULL,multiple = T),
                  numericInput('pca_nrgenes', label = 'Nr of (most variant) genes:', value = 300,min = 50,max = 20000),
-
-
-
-
-                 # selectInput('pc_x_G', label = 'x-axis PC: ', choices = 1:8, selected = 1),
-                 # selectInput('pc_y_G', label = 'y-axis PC: ', choices = 1:8, selected = 2),
-                 # selectInput('color_by_G', label = 'color by: ',
-                             # choices = c(NULL, poss_covars), selected = NULL,multiple = T),
-                 # numericInput('pca_nrgenes_G', label = 'nr of genes: ', value = 300,min = 50,max = 20000),
                  numericInput('pca_point_alpha', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01),
                  numericInput('pca_label_size', label = 'Labels size: ', value = 2,min = 1,max = 8),
                  numericInput('pca_point_size', label = 'Points size: ', value = 2,min = 1,max = 8),
                  numericInput('pca_varname_size', label = 'Varname size: ', value = 4,min = 1,max = 8),
-                 numericInput('pca_scale_arrow', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10),
-                 checkboxInput("variable_labels","Display variable labels",value = TRUE)
-
-
-
-                 # selectInput('pc_x_go', label = 'x-axis PC: ', choices = 1:8, selected = 1),
-                 # selectInput('pc_y_go', label = 'y-axis PC: ', choices = 1:8, selected = 2)
+                 numericInput('pca_scale_arrow', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10)
 
                  ),
         menuItem("Plot settings", icon = icon("paint-brush"),
                  # bstooltip: Use the widgets below to setup general parameters for exporting produced plots
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
                  numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
-
-
-                 numericInput('pca_point_size', label = 'Point size:', value = 3,min = 1,max = 8),
-                 checkboxInput("sample_labels","Display sample labels",value = TRUE),
 
 
                  # tooltips explanation to have less crowded ui and still good docu
@@ -124,6 +105,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
           tabPanel(
             "Samples View",
             p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components."),
+            fluidRow(checkboxInput("sample_labels","Display sample labels",value = TRUE)),
             fluidRow(
               column(
                 width = 6,
@@ -162,6 +144,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
             "Genes View",
             p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components."),
 
+            fluidRow(checkboxInput("variable_labels","Display variable labels",value = TRUE)),
             fluidRow(
               column(
                 width = 4,
