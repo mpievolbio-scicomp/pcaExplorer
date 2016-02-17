@@ -476,6 +476,12 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
                    }
                  })
 
+    observeEvent(input$uploadannotationfile,
+                 {
+                   values$myannotation <- readAnnotation()
+                 })
+
+
 
     output$showuploaded1 <- renderPrint({
       head(values$mycountmatrix)
@@ -540,7 +546,7 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
       if(is.null(input$pca_brush))
         return(ggplot() + annotate("text",label="zoom in by brushing",0,0) + theme_bw())
 
-      res <- pcaplot(obj,intgroup = input$color_by,ntop = input$pca_nrgenes,
+      res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
                      text_labels = input$sample_labels,
                      point_size = input$pca_point_size, title="Samples PCA - zoom in"
@@ -552,9 +558,9 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
     })
 
     output$samples_scree <- renderPlot({
-      rv <- rowVars(assay(obj))
+      rv <- rowVars(assay(values$myrlt))
       select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
-      pca <- prcomp(t(assay(obj)[select, ]))
+      pca <- prcomp(t(assay(values$myrlt)[select, ]))
 
       res <- pcascree(pca,type = input$scree_type, pc_nr = input$scree_pcnr, title="Scree plot for the samples PCA")
       res <- res + theme_bw()
@@ -569,19 +575,19 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
     output$genes_biplot <- renderPlot({
       if(!is.null(input$color_by)) {
-        expgroups <- colData(obj)[input$color_by][[1]]
+        expgroups <- colData(values$myrlt)[input$color_by][[1]]
       } else {
-        expgroups <- colnames(obj)
+        expgroups <- colnames(values$myrlt)
       }
       colGroups <- colSelection[factor(expgroups)]
 
-      res <- genepca(obj,
+      res <- genepca(values$myrlt,
                      ntop = input$pca_nrgenes,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      arrowColors = factor(colGroups),
                      alpha=input$pca_point_alpha,coordEqual=F,useRownamesAsLabels=FALSE,labels.size=input$pca_label_size,
-                     point_size=input$pca_point_size,varname.size=input$pca_varname_size, scaleArrow = input$pca_scale_arrow,annotation=annotation)
+                     point_size=input$pca_point_size,varname.size=input$pca_varname_size, scaleArrow = input$pca_scale_arrow,annotation=values$myannotation)
       exportPlots$genesPca <- res
       res
     })
@@ -590,13 +596,13 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
     output$genes_biplot_zoom <- renderPlot({
       if(is.null(input$pcagenes_brush)) return(ggplot() + annotate("text",label="zoom in by brushing",0,0) + theme_bw())
       if(!is.null(input$color_by)) {
-        expgroups <- colData(obj)[input$color_by][[1]]
+        expgroups <- colData(values$myrlt)[input$color_by][[1]]
       } else {
-        expgroups <- colnames(obj)
+        expgroups <- colnames(values$myrlt)
       }
       colGroups <- colSelection[factor(expgroups)]
 
-      res <- genepca(obj,
+      res <- genepca(values$myrlt,
                      ntop = input$pca_nrgenes,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
@@ -604,7 +610,7 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
                      alpha=input$pca_point_alpha,coordEqual=F,
                      var.axes=input$variable_labels, # workaround for a ggplot2 bug/missing thing: here details: https://github.com/hadley/ggplot2/issues/905
                      labels.size=input$pca_label_size,varname.size=input$pca_varname_size,
-                     scaleArrow = input$pca_scale_arrow,point_size=input$pca_point_size,annotation=annotation)
+                     scaleArrow = input$pca_scale_arrow,point_size=input$pca_point_size,annotation=values$myannotation)
 
       res <- res +
         xlim(input$pcagenes_brush$xmin,input$pcagenes_brush$xmax) +
@@ -619,9 +625,9 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
       if(is.null(input$pcagenes_zoom_click)) return(ggplot() + annotate("text",label="click to generate the boxplot\nfor the selected gene",0,0) + theme_bw())
 
       selectedGene <- curData_zoomClick()$ids
-      selectedGeneSymbol <- annotation$gene_name[match(selectedGene,rownames(annotation))]
+      selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
       # plotCounts(dds_cleaner,)
-      genedata <- plotCounts(obj2,gene=selectedGene,intgroup = input$color_by,returnData = T)
+      genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = T)
 
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
@@ -639,28 +645,28 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
     # for reading in the brushed/clicked points
     curData_brush <- reactive({
-      df2 <- genepca(obj,
+      df2 <- genepca(values$myrlt,
                      ntop = input$pca_nrgenes,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      # arrowColors = colGroups,
                      alpha=input$pca_point_alpha,
-                     returnData=T,annotation=annotation)
-      df2$geneName <- annotation$gene_name[match(rownames(df2),rownames(annotation))]
+                     returnData=T,annotation=values$myannotation)
+      df2$geneName <- values$myannotation$gene_name[match(rownames(df2),rownames(values$myannotation))]
       res <- brushedPoints(df2, input$pcagenes_brush,xvar="xvar",yvar="yvar",)
       res
     })
 
 
     curData_click <- reactive({
-      df2 <- genepca(obj,
+      df2 <- genepca(values$myrlt,
                      ntop = input$pca_nrgenes,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      # arrowColors = colGroups,
                      alpha=input$pca_point_alpha,
-                     returnData=T,annotation=annotation)
-      df2$geneName <- annotation$gene_name[match(rownames(df2),rownames(annotation))]
+                     returnData=T,annotation=values$myannotation)
+      df2$geneName <- values$myannotation$gene_name[match(rownames(df2),rownames(values$myannotation))]
       res <- nearPoints(df2, input$pcagenes_click,
                         threshold = 20, maxpoints = 3,
                         addDist = TRUE)
@@ -670,14 +676,14 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
 
     curData_zoomClick <- reactive({
-      df2 <- genepca(obj,
+      df2 <- genepca(values$myrlt,
                      ntop = input$pca_nrgenes,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      # arrowColors = colGroups,
                      alpha=input$pca_point_alpha,
-                     returnData=T,annotation=annotation)
-      df2$geneName <- annotation$gene_name[match(rownames(df2),rownames(annotation))]
+                     returnData=T,annotation=values$myannotation)
+      df2$geneName <- values$myannotation$gene_name[match(rownames(df2),rownames(values$myannotation))]
       res <- nearPoints(df2, input$pcagenes_zoom_click,
                         threshold = 20, maxpoints = 1,
                         addDist = TRUE)
@@ -703,8 +709,8 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
       brushedObject <- curData_brush()
       selectedGenes <- brushedObject$ids
-      toplot <- assay(obj)[selectedGenes,]
-      rownames(toplot) <- annotation$gene_name[match(rownames(toplot),rownames(annotation))]
+      toplot <- assay(values$myrlt)[selectedGenes,]
+      rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
 
       mycolss <- c("#313695","#4575b4","#74add1","#abd9e9","#e0f3f8","#fee090","#fdae61","#f46d43","#d73027","#a50026") # to be consistent with red/blue usual coding
 
@@ -717,8 +723,8 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
       brushedObject <- curData_brush()
       selectedGenes <- brushedObject$ids
-      toplot <- assay(obj)[selectedGenes,]
-      rownames(toplot) <- annotation$gene_name[match(rownames(toplot),rownames(annotation))]
+      toplot <- assay(values$myrlt)[selectedGenes,]
+      rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
       # pheatmap(toplot,cluster_cols = as.logical(input$heatmap_colv))
       NMF::aheatmap(toplot,Colv = as.logical(input$heatmap_colv))
       ## aheatmap is actually consistent in displaying the clusters with most of other heatmap packages
@@ -738,33 +744,33 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
       if(is.null(input$genefinder))
         return("Type in the gene name/id you want to plot")
 
-      foundGeneID <- input$genefinder %in% rownames(obj)
-      foundGeneName <- input$genefinder %in% annotation$gene_name
+      foundGeneID <- input$genefinder %in% rownames(values$myrlt)
+      foundGeneName <- input$genefinder %in% values$myannotation$gene_name
       if(!foundGeneID){
-        foundGeneID <- toupper(input$genefinder) %in% toupper(rownames(obj))
+        foundGeneID <- toupper(input$genefinder) %in% toupper(rownames(values$myrlt))
         if(foundGeneID){
           return(paste0("Maybe you mis-spelled the name of your gene. Did you mean ",
-                        unique(rownames(annotation)[which(toupper(input$genefinder)==toupper(rownames(annotation)))]),"?"))
+                        unique(rownames(values$myannotation)[which(toupper(input$genefinder)==toupper(rownames(values$myannotation)))]),"?"))
         } else {
-          foundGeneNAME <- input$genefinder %in% annotation$gene_name
+          foundGeneNAME <- input$genefinder %in% values$myannotation$gene_name
           if(!foundGeneNAME){
-            foundGeneNAME <- toupper(input$genefinder) %in% toupper(annotation$gene_name)
+            foundGeneNAME <- toupper(input$genefinder) %in% toupper(values$myannotation$gene_name)
             if(foundGeneNAME){
               return(paste0("Maybe you mis-spelled the name of your gene. Did you mean ",
-                            unique(annotation$gene_name[which(toupper(input$genefinder)==toupper(annotation$gene_name))]),"?"))
+                            unique(values$myannotation$gene_name[which(toupper(input$genefinder)==toupper(values$myannotation$gene_name))]),"?"))
             } else {return("Could not find the gene you typed!")}
           } else {
-            fgn <- annotation$gene_name[which(annotation$gene_name==input$genefinder)]
+            fgn <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
             if (length(fgn) > 1) return(paste0("Found more than one gene with the selected gene name. Select one of the following: ",paste(selectedGene,collapse=", ")))
-            selectedGene <- rownames(annotation)[which(annotation$gene_name==input$genefinder)]
+            selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
 
-            fg <- rownames(annotation)[match(fgn,annotation$gene_name)]
-            return(paste0("I found the gene! Plotting ", fg, " - ", annotation$gene_name[match(fg,rownames(annotation))],"..."))
+            fg <- rownames(values$myannotation)[match(fgn,values$myannotation$gene_name)]
+            return(paste0("I found the gene! Plotting ", fg, " - ", values$myannotation$gene_name[match(fg,rownames(values$myannotation))],"..."))
 
           }}
       } else {
-        fg <- rownames(annotation)[match(input$genefinder,rownames(obj))]
-        return(paste0("I found the gene! Plotting ", fg, " - ", annotation$gene_name[match(fg,rownames(annotation))],"..."))
+        fg <- rownames(values$myannotation)[match(input$genefinder,rownames(values$myrlt))]
+        return(paste0("I found the gene! Plotting ", fg, " - ", values$myannotation$gene_name[match(fg,rownames(values$myannotation))],"..."))
 
       }
     })
@@ -774,8 +780,8 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
 
     output$genefinder_plot <- renderPlot({
-      anno_id <- rownames(annotation)
-      anno_gene <- annotation$gene_name
+      anno_id <- rownames(values$myannotation)
+      anno_gene <- values$myannotation$gene_name
 
       if(is.null(input$color_by))
         return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
@@ -785,15 +791,15 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
         return(ggplot() + annotate("text",label="gene not found...",0,0) + theme_bw())
 
       if (input$genefinder %in% anno_id) {
-        selectedGene <- rownames(obj)[match(input$genefinder,rownames(obj))]
-        selectedGeneSymbol <- annotation$gene_name[match(selectedGene,rownames(annotation))]
+        selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+        selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
       }
       if (input$genefinder %in% anno_gene) {
-        selectedGeneSymbol <- annotation$gene_name[which(annotation$gene_name==input$genefinder)]
+        selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
         if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
-        selectedGene <- rownames(annotation)[which(annotation$gene_name==input$genefinder)]
+        selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
       }
-      genedata <- plotCounts(obj2,gene=selectedGene,intgroup = input$color_by,returnData = T)
+      genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = T)
 
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
@@ -819,7 +825,7 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
     output$pca2go <- renderPlot({
       if(is.null(pca2go))
         return(ggplot() + annotate("text",label="Provide a pca2go object to the app",0,0) + theme_bw())
-      res <- pcaplot(obj,intgroup = input$color_by,
+      res <- pcaplot(values$myrlt,intgroup = input$color_by,
                      ntop = attr(pca2go,"n_genesforpca"),
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),text_labels = input$sample_labels,
                      point_size = input$pca_point_size, title=paste0("PCA on the samples - ",attr(pca2go,"n_genesforpca"), " genes used")
@@ -1231,8 +1237,8 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
         brushedObject <- curData_brush()
 
         selectedGenes <- brushedObject$ids
-        toplot <- assay(obj)[selectedGenes,]
-        rownames(toplot) <- annotation$gene_name[match(rownames(toplot),rownames(annotation))]
+        toplot <- assay(values$myrlt)[selectedGenes,]
+        rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
         pheatmap(toplot,cluster_cols = as.logical(input$heatmap_colv))
         dev.off()
       }
