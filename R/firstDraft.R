@@ -24,7 +24,7 @@ library(shinydashboard)
 
 # annotation <- data.frame(gene_id=rownames(cm2),gene_name=cm2$fromgtf,stringsAsFactors = FALSE,row.names = rownames(cm2))
 
-pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
+pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
   # stopifnot( is(obj, 'SummarizedExperiment') )
   ## plenty of tests on the selected object(s)
   if ( !require('shiny') ) {
@@ -34,7 +34,11 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
   # here something like, if provided as a countmatrix, create dds and rld
 
-  poss_covars <- names(colData(obj))[] # exclude the size factor, not really required?
+  if(!is.null(obj)){
+    poss_covars <- names(colData(obj))[] # exclude the size factor, not really required?
+  } else {
+    poss_covars <- c()
+  }
   ## TODO: colselection also passed as a palette?
   colSelection <- c("navyblue","steelblue","skyblue","darkred","coral3","darksalmon","green4","greenyellow","orange","gold")
 
