@@ -337,13 +337,6 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       summary(colSums(counts(obj2))/1e6)
     })
 
-    output$showdata <- renderPrint({
-      obj2
-    })
-
-    output$showdata <- renderPrint({
-      obj2
-    })
 
 
 
