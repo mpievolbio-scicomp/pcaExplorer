@@ -88,11 +88,15 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
         menuItem("Data upload",icon = icon("upload"),
                  uiOutput("upload_count_matrix"),
                  shinyBS::bsTooltip(
-                   "uploadfile", paste0("Select file containing the count matrix"),
+                   "upload_count_matrix", paste0("Select file containing the count matrix"),
                    "right", options = list(container = "body")),
                  uiOutput("upload_metadata"),
                  shinyBS::bsTooltip(
-                   "uploadfile", paste0("Select file containing the samples metadata"),
+                   "upload_metadata", paste0("Select file containing the samples metadata"),
+                   "right", options = list(container = "body")),
+                 uiOutput("upload_annotation"),
+                 shinyBS::bsTooltip(
+                   "upload_annotation", paste0("Select file containing the annotation data"),
                    "right", options = list(container = "body"))),
         menuItem("App settings",icon = icon("cogs"),
                  selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8, selected = 1),
@@ -356,6 +360,8 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
     values$myrlt <- obj
     values$mycountmatrix <- NULL
     values$mymetadata <- NULL
+    values$mypca2go <- pca2go
+    values$myannotation <- annotation
 
     user_settings <- reactiveValues(save_width = 45, save_height = 11)
 
@@ -367,13 +373,6 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
       selectInput('color_by', label = 'color by: ',
                   choices = c(NULL, poss_covars), selected = NULL,multiple = T)
     })
-
-#     poss_covars <- reactive({
-#       names(colData(values$mydds))
-    # })[] # exclude the size factor, not really required?
-#     } else {
-#       poss_covars <- c()
-#     }
 
 
 
@@ -390,6 +389,18 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
       }
     })
 
+    readCountmatrix <- reactive({
+      if (is.null(input$uploadcmfile))
+        return(NULL)
+      cm <- utils::read.delim(input$uploadcmfile$datapath, header = TRUE,
+                              as.is = TRUE, sep = "\t", quote = "",
+                              check.names = FALSE)
+
+      return(cm)
+    })
+
+
+
 
     output$upload_metadata <- renderUI({
       if (!is.null(obj2) & !is.null(obj)) {
@@ -403,18 +414,6 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
       }
     })
 
-
-    readCountmatrix <- reactive({
-      if (is.null(input$uploadcmfile))
-        return(NULL)
-      cm <- utils::read.delim(input$uploadcmfile$datapath, header = TRUE,
-                              as.is = TRUE, sep = "\t", quote = "",
-                              check.names = FALSE)
-
-      return(cm)
-    })
-
-
     readMetadata <- reactive({
       if (is.null(input$uploadmetadatafile))
         return(NULL)
@@ -424,6 +423,30 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
       return(coldata)
     })
+
+
+    output$upload_annotation <- renderUI({
+      if (!is.null(annotation)) {
+        NULL
+      } else {
+        return(fileInput(inputId = "uploadannotationfile",
+                         label = "Upload an annotation file",
+                         accept = c("text/csv", "text/comma-separated-values",
+                                    "text/tab-separated-values", "text/plain",
+                                    ".csv", ".tsv"), multiple = FALSE))
+      }
+    })
+
+    readAnnotation <- reactive({
+      if (is.null(input$uploadannotationfile))
+        return(NULL)
+      annodata <- utils::read.delim(input$uploadannotationfile$datapath, header = TRUE,
+                                   as.is = TRUE, sep = "\t", quote = "",
+                                   check.names = FALSE)
+
+      return(annodata)
+    })
+
 
 
     # as in http://stackoverflow.com/questions/29716868/r-shiny-how-to-get-an-reactive-data-frame-updated-each-time-pressing-an-actionb

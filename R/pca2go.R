@@ -17,7 +17,7 @@ pca2go <- function(se,
 
   annopkg <- paste0("org.",organism,".eg.db")
   if (!require(annopkg,character.only=T)) {
-    stop("The package",annopkg, "is not installed/available.")
+    stop("The package",annopkg, "is not installed/available. Try installing it with biocLite() ?")
   }
   exprsData <- assay(se)
 
