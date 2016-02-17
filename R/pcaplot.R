@@ -55,7 +55,7 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
   g
 }
 
-
+library(topGO)
 
 pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
 {

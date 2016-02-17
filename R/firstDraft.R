@@ -11,7 +11,7 @@ library("genefilter")
 # load("goEnrichs.RData")
 library("shiny")
 load("/Volumes/users$/marinif/linuxHome/F07-schubert/seb_dds_rld.RData")
-
+load("../../linuxHome/F07-schubert/goEnrichs_rld_deplall.RData")
 
 # library(ggvis)
 # library(shinythemes)
@@ -22,7 +22,7 @@ library("pheatmap")
 library("d3heatmap")
 library(shinydashboard)
 
-annotation <- data.frame(gene_id=rownames(cm2),gene_name=cm2$fromgtf,stringsAsFactors = FALSE,row.names = rownames(cm2))
+# annotation <- data.frame(gene_id=rownames(cm2),gene_name=cm2$fromgtf,stringsAsFactors = FALSE,row.names = rownames(cm2))
 
 pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
   # stopifnot( is(obj, 'SummarizedExperiment') )
@@ -54,7 +54,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
         titleWidth = 900),
 
       dashboardSidebar(
-        width = 350,
+        width = 250,
         menuItem("App settings",icon = icon("cogs"),
                  selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8, selected = 1),
                  selectInput('pc_y', label = 'y-axis PC: ', choices = 1:8, selected = 2),
@@ -66,6 +66,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
                  numericInput('pca_point_size', label = 'Points size: ', value = 2,min = 1,max = 8),
                  numericInput('pca_varname_size', label = 'Varname size: ', value = 4,min = 1,max = 8),
                  numericInput('pca_scale_arrow', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10)
+                 # TODO custom color palette? see icobra's proposal
 
                  ),
         menuItem("Plot settings", icon = icon("paint-brush"),
@@ -99,7 +100,22 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
           tabPanel(
             "Data Preview",
-            h1("Here will go some head of the count dataset, the samples design/covariates and so")
+            h1("Here will go some head of the count dataset, the samples design/covariates and so"),
+
+            h3("General information on the provided SummarizedExperiment/DESeqDataSet"),
+            shiny::verbatimTextOutput("showdata"),
+            h3("Available metadata"),
+            DT::dataTableOutput("showcoldata"),
+            h3("Number of million of reads per sample"),
+            plotOutput("reads_barplot"),
+            h3("Basic summary for the counts"),
+            verbatimTextOutput("reads_summary")
+
+
+
+
+
+
             ),
 
           tabPanel(
@@ -292,6 +308,47 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
     )
 
     user_settings <- reactiveValues(save_width = 45, save_height = 11)
+
+
+
+
+    output$showdata <- renderPrint({
+      obj2
+    })
+
+    output$showcoldata <- DT::renderDataTable({
+      datatable(as.data.frame(colData(obj2)))
+    })
+
+    output$reads_barplot <- renderPlot({
+      rr <- colSums(counts(obj2))/1e6
+      rrdf <- data.frame(Reads=rr,Sample=names(rr),stringsAsFactors = F)
+      if (!is.null(input$color_by)) {
+        rrdf$Group <- colData(obj2)[input$color_by][[1]]
+        p <- ggplot(rrdf,aes(Sample,weight=Reads)) + geom_bar(aes(fill=Group))
+        p
+      } else {
+        p <- ggplot(rrdf,aes(Sample,weight=Reads)) + geom_bar()
+        p
+      }
+    })
+
+    output$reads_summary <- renderPrint({
+      summary(colSums(counts(obj2))/1e6)
+    })
+
+    output$showdata <- renderPrint({
+      obj2
+    })
+
+    output$showdata <- renderPrint({
+      obj2
+    })
+
+
+
+
+
 
 
     output$samples_pca <- renderPlot({
