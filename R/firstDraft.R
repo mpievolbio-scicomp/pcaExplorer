@@ -43,6 +43,13 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
   colSelection <- c("navyblue","steelblue","skyblue","darkred","coral3","darksalmon","green4","greenyellow","orange","gold")
 
 
+
+#   cmcm <- counts(dds_deplall)[1:10,]
+#   write.table(cmcm,file="minicm.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
+#   ddd <- colData(dds_deplall)
+#   write.table(ddd,file="minicoldata.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
+  # write.table(counts(dds_deplall),file="fullcm.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
+
   ## ------------------------------------------------------------------ ##
   ##                          Define UI                                 ##
   ## ------------------------------------------------------------------ ##
@@ -60,6 +67,16 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
       dashboardSidebar(
         width = 250,
         menuItem("App settings",icon = icon("cogs"),
+                 uiOutput("upload_count_matrix"),
+                 shinyBS::bsTooltip(
+                   "uploadfile", paste0("Select file containing the count matrix"),
+                   "right", options = list(container = "body")),
+                 uiOutput("upload_metadata"),
+                 shinyBS::bsTooltip(
+                   "uploadfile", paste0("Select file containing the samples metadata"),
+                   "right", options = list(container = "body")),
+
+
                  selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8, selected = 1),
                  selectInput('pc_y', label = 'y-axis PC: ', choices = 1:8, selected = 2),
                  selectInput('color_by', label = 'color by: ',
@@ -94,7 +111,11 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
           tabPanel(
             "About",
-            includeMarkdown(system.file("extdata", "about.md",package = "pcaExplorer"))
+            includeMarkdown(system.file("extdata", "about.md",package = "pcaExplorer")),
+            shiny::verbatimTextOutput("showuploaded1"),
+            shiny::verbatimTextOutput("showuploaded2"),
+            shiny::verbatimTextOutput("showuploaded3"),
+            shiny::verbatimTextOutput("showuploaded4")
             ),
 
           tabPanel(
@@ -311,24 +332,121 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
       genefinder=NULL
     )
 
+    values <- reactiveValues()
+    values$caca <- "haha"
+    values$mydds <- obj2
+    values$myrlt <- obj
+    values$mycountmatrix <- NULL
+    values$mymetadata <- NULL
+
     user_settings <- reactiveValues(save_width = 45, save_height = 11)
+
+
+
+    ## Render the UI element to upload the count matrix
+    output$upload_count_matrix <- renderUI({
+      if (!is.null(obj2) & !is.null(obj)) {
+        NULL
+      } else {
+        return(fileInput(inputId = "uploadcmfile",
+                         label = "Upload a count matrix file",
+                         accept = c("text/csv", "text/comma-separated-values",
+                                    "text/tab-separated-values", "text/plain",
+                                    ".csv", ".tsv"), multiple = FALSE))
+      }
+    })
+
+
+    output$upload_metadata <- renderUI({
+      if (!is.null(obj2) & !is.null(obj)) {
+        NULL
+      } else {
+        return(fileInput(inputId = "uploadmetadatafile",
+                         label = "Upload a sample metadata matrix file",
+                         accept = c("text/csv", "text/comma-separated-values",
+                                    "text/tab-separated-values", "text/plain",
+                                    ".csv", ".tsv"), multiple = FALSE))
+      }
+    })
+
+
+    readCountmatrix <- reactive({
+      if (is.null(input$uploadcmfile))
+        return(NULL)
+      cm <- utils::read.delim(input$uploadcmfile$datapath, header = TRUE,
+                              as.is = TRUE, sep = "\t", quote = "",
+                              check.names = FALSE)
+
+      return(cm)
+    })
+
+
+    readMetadata <- reactive({
+      if (is.null(input$uploadmetadatafile))
+        return(NULL)
+      coldata <- utils::read.delim(input$uploadmetadatafile$datapath, header = TRUE,
+                              as.is = TRUE, sep = "\t", quote = "",
+                              check.names = FALSE)
+
+      return(coldata)
+    })
+
+
+    # as in http://stackoverflow.com/questions/29716868/r-shiny-how-to-get-an-reactive-data-frame-updated-each-time-pressing-an-actionb
+    observeEvent(input$uploadcmfile,
+                 {
+                   values$mycountmatrix <- readCountmatrix()
+                   if(!is.null(values$mymetadata)){
+
+                     values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
+                                                            colData = values$mymetadata,
+                                                            design=~1)
+                     values$myrlt <- rlogTransformation(values$mydds)
+                   }
+                 })
+
+    observeEvent(input$uploadmetadatafile,
+                 {
+                   values$mymetadata <- readMetadata()
+                   if(!is.null(values$mycountmatrix)){
+
+                     values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
+                                                            colData = values$mymetadata,
+                                                            design=~1)
+                     values$myrlt <- rlogTransformation(values$mydds)
+                   }
+                 })
+
+
+    output$showuploaded1 <- renderPrint({
+      head(values$mycountmatrix)
+    })
+    output$showuploaded2 <- renderPrint({
+      values$mymetadata
+    })
+    output$showuploaded3 <- renderPrint({
+      values$mydds
+    })
+    output$showuploaded4 <- renderPrint({
+      values$myrlt
+    })
 
 
 
 
     output$showdata <- renderPrint({
-      obj2
+      values$mydds
     })
 
     output$showcoldata <- DT::renderDataTable({
-      datatable(as.data.frame(colData(obj2)))
+      datatable(as.data.frame(colData(values$mydds)))
     })
 
     output$reads_barplot <- renderPlot({
-      rr <- colSums(counts(obj2))/1e6
+      rr <- colSums(counts(values$mydds))/1e6
       rrdf <- data.frame(Reads=rr,Sample=names(rr),stringsAsFactors = F)
       if (!is.null(input$color_by)) {
-        rrdf$Group <- colData(obj2)[input$color_by][[1]]
+        rrdf$Group <- colData(values$mydds)[input$color_by][[1]]
         p <- ggplot(rrdf,aes(Sample,weight=Reads)) + geom_bar(aes(fill=Group))
         p
       } else {
@@ -338,7 +456,7 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
     })
 
     output$reads_summary <- renderPrint({
-      summary(colSums(counts(obj2))/1e6)
+      summary(colSums(counts(values$mydds))/1e6)
     })
 
 
@@ -349,7 +467,7 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
 
     output$samples_pca <- renderPlot({
-      res <- pcaplot(obj,intgroup = input$color_by,ntop = input$pca_nrgenes,
+      res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
                      text_labels = input$sample_labels,
                      point_size = input$pca_point_size, title="Samples PCA"
