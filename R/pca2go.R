@@ -86,6 +86,8 @@ pca2go <- function(se,
   )
   print("Extracting functional categories enriched in the gene subsets ... done!")
 
+  attr(goEnrichs,"n_genesforpca") <- pca_ngenes
+
   return(goEnrichs)
 }
 

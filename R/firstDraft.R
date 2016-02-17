@@ -200,13 +200,13 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
               column(
                 width = 6,
                 h4("Points selected by brushing - clicking and dragging:"),
-                dataTableOutput("pca_brush_out"),
+                DT::dataTableOutput("pca_brush_out"),
                 downloadButton('downloadData_brush', 'Download brushed points'),
                 textInput("brushedPoints_filename","File name...")),
               column(
                 width = 6,
                 h4("Points selected by clicking:"),
-                dataTableOutput("pca_click_out"),
+                DT::dataTableOutput("pca_click_out"),
                 textInput("clickedPoints_filename","File name..."),
                 downloadButton('downloadData_click', 'Download clicked (or nearby) points'))
               )
@@ -232,23 +232,23 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
               column(width = 3),
               column(
                 width = 6,
-                dataTableOutput("dt_pcver_pos")),
+                DT::dataTableOutput("dt_pcver_pos")),
               column(width = 3)
             ),
 
             fluidRow(
               column(4,
-                     dataTableOutput("dt_pchor_neg")),
+                     DT::dataTableOutput("dt_pchor_neg")),
               column(4,
                      plotOutput("pca2go")),
               column(4,
-                     dataTableOutput("dt_pchor_pos"))
+                     DT::dataTableOutput("dt_pchor_pos"))
               ),
             fluidRow(
               column(width = 3),
               column(
                 width = 6,
-                dataTableOutput("dt_pcver_neg")),
+                DT::dataTableOutput("dt_pcver_neg")),
               column(width = 3)
             )
           ),
@@ -278,7 +278,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
                    ),
                    fluidRow(downloadButton('downloadData_brush_ruf', 'Download brushed points'),
                             textInput("brushedPoints_filename_ruf","File name..."),
-                            dataTableOutput('pcaruf_out'))
+                            DT::dataTableOutput('pcaruf_out'))
 
 
           )
@@ -477,7 +477,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       datatable(curData_brush(),options = list(pageLength = 50))
     })
 
-    output$pca_click_out <- renderDataTable({
+    output$pca_click_out <- DT::renderDataTable({
       datatable(curData_click(),options = list(pageLength = 50))
     })
 
@@ -606,15 +606,16 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       if(is.null(pca2go))
         return(ggplot() + annotate("text",label="Provide a pca2go object to the app",0,0) + theme_bw())
       res <- pcaplot(obj,intgroup = input$color_by,
-                     ntop = input$pca_nrgenes,pcX = as.integer(input$pc_x_go),pcY = as.integer(input$pc_y_go),text_labels = input$sample_labels,
-                     point_size = input$pca_point_size, title="PCA on the samples"
+                     ntop = attr(pca2go,"n_genesforpca"),
+                     pcX = as.integer(input$pc_x_go),pcY = as.integer(input$pc_y_go),text_labels = input$sample_labels,
+                     point_size = input$pca_point_size, title=paste0("PCA on the samples - ",attr(pca2go,"n_genesforpca"), " genes used")
 
       )
       res
     })
 
 
-    output$dt_pchor_pos <- renderDataTable({
+    output$dt_pchor_pos <- DT::renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
       goe <- pca2go[[paste0("PC",input$pc_x_go)]][["posLoad"]]
       if(input$compact_pca2go)
@@ -622,7 +623,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       datatable(goe)
     })
 
-    output$dt_pchor_neg <- renderDataTable({
+    output$dt_pchor_neg <- DT::renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
       goe <- pca2go[[paste0("PC",input$pc_x_go)]][["negLoad"]]
       if(input$compact_pca2go)
@@ -630,7 +631,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       datatable(goe)
     })
 
-    output$dt_pcver_pos <- renderDataTable({
+    output$dt_pcver_pos <- DT::renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
       goe <- pca2go[[paste0("PC",input$pc_y_go)]][["posLoad"]]
       if(input$compact_pca2go)
@@ -638,7 +639,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       datatable(goe)
     })
 
-    output$dt_pcver_neg <- renderDataTable({
+    output$dt_pcver_neg <- DT::renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
       goe <- pca2go[[paste0("PC",input$pc_y_go)]][["negLoad"]]
       if(input$compact_pca2go)
