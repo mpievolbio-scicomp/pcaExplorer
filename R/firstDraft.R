@@ -65,22 +65,22 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
 
 
-                 selectInput('pc_x_G', label = 'x-axis PC: ', choices = 1:8, selected = 1),
-                 selectInput('pc_y_G', label = 'y-axis PC: ', choices = 1:8, selected = 2),
-                 selectInput('color_by_G', label = 'color by: ',
-                             choices = c(NULL, poss_covars), selected = NULL,multiple = T),
-                 numericInput('pca_nrgenes_G', label = 'nr of genes: ', value = 300,min = 50,max = 20000),
-                 numericInput('pca_point_alpha_G', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01),
-                 numericInput('pca_label_size_G', label = 'Labels size: ', value = 2,min = 1,max = 8),
-                 numericInput('pca_point_size_G', label = 'Points size: ', value = 2,min = 1,max = 8),
-                 numericInput('pca_varname_size_G', label = 'Varname size: ', value = 4,min = 1,max = 8),
-                 numericInput('pca_scale_arrow_G', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10),
-                 checkboxInput("variable_labels","Display variable labels",value = TRUE),
+                 # selectInput('pc_x_G', label = 'x-axis PC: ', choices = 1:8, selected = 1),
+                 # selectInput('pc_y_G', label = 'y-axis PC: ', choices = 1:8, selected = 2),
+                 # selectInput('color_by_G', label = 'color by: ',
+                             # choices = c(NULL, poss_covars), selected = NULL,multiple = T),
+                 # numericInput('pca_nrgenes_G', label = 'nr of genes: ', value = 300,min = 50,max = 20000),
+                 numericInput('pca_point_alpha', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01),
+                 numericInput('pca_label_size', label = 'Labels size: ', value = 2,min = 1,max = 8),
+                 numericInput('pca_point_size', label = 'Points size: ', value = 2,min = 1,max = 8),
+                 numericInput('pca_varname_size', label = 'Varname size: ', value = 4,min = 1,max = 8),
+                 numericInput('pca_scale_arrow', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10),
+                 checkboxInput("variable_labels","Display variable labels",value = TRUE)
 
 
 
-                 selectInput('pc_x_go', label = 'x-axis PC: ', choices = 1:8, selected = 1),
-                 selectInput('pc_y_go', label = 'y-axis PC: ', choices = 1:8, selected = 2)
+                 # selectInput('pc_x_go', label = 'x-axis PC: ', choices = 1:8, selected = 1),
+                 # selectInput('pc_y_go', label = 'y-axis PC: ', choices = 1:8, selected = 2)
 
                  ),
         menuItem("Plot settings", icon = icon("paint-brush"),
@@ -362,12 +362,12 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       colGroups <- colSelection[factor(expgroups)]
 
       res <- genepca(obj,
-                     ntop = input$pca_nrgenes_G,
-                     choices = c(as.integer(input$pc_x_G),as.integer(input$pc_y_G)),
+                     ntop = input$pca_nrgenes,
+                     choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      arrowColors = factor(colGroups),
-                     alpha=input$pca_point_alpha_G,coordEqual=F,useRownamesAsLabels=FALSE,labels.size=input$pca_label_size_G,
-                     point_size=input$pca_point_size_G,varname.size=input$pca_varname_size_G, scaleArrow = input$pca_scale_arrow_G,annotation=annotation)
+                     alpha=input$pca_point_alpha,coordEqual=F,useRownamesAsLabels=FALSE,labels.size=input$pca_label_size,
+                     point_size=input$pca_point_size,varname.size=input$pca_varname_size, scaleArrow = input$pca_scale_arrow,annotation=annotation)
       exportPlots$genesPca <- res
       res
     })
@@ -383,14 +383,14 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       colGroups <- colSelection[factor(expgroups)]
 
       res <- genepca(obj,
-                     ntop = input$pca_nrgenes_G,
-                     choices = c(as.integer(input$pc_x_G),as.integer(input$pc_y_G)),
+                     ntop = input$pca_nrgenes,
+                     choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      arrowColors = factor(colGroups),
-                     alpha=input$pca_point_alpha_G,coordEqual=F,
+                     alpha=input$pca_point_alpha,coordEqual=F,
                      var.axes=input$variable_labels, # workaround for a ggplot2 bug/missing thing: here details: https://github.com/hadley/ggplot2/issues/905
-                     labels.size=input$pca_label_size_G,varname.size=input$pca_varname_size_G,
-                     scaleArrow = input$pca_scale_arrow_G,point_size=input$pca_point_size_G,annotation=annotation)
+                     labels.size=input$pca_label_size,varname.size=input$pca_varname_size,
+                     scaleArrow = input$pca_scale_arrow,point_size=input$pca_point_size,annotation=annotation)
 
       res <- res +
         xlim(input$pcagenes_brush$xmin,input$pcagenes_brush$xmax) +
@@ -401,15 +401,15 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
 
     output$genes_biplot_boxplot <- renderPlot({
-      if(length(input$color_by_G)==0) return(ggplot() + annotate("text",label="select an experimental factor",0,0) + theme_bw())
+      if(length(input$color_by)==0) return(ggplot() + annotate("text",label="select an experimental factor",0,0) + theme_bw())
       if(is.null(input$pcagenes_zoom_click)) return(ggplot() + annotate("text",label="click to generate the boxplot\nfor the selected gene",0,0) + theme_bw())
 
       selectedGene <- curData_zoomClick()$ids
       selectedGeneSymbol <- annotation$gene_name[match(selectedGene,rownames(annotation))]
       # plotCounts(dds_cleaner,)
-      genedata <- plotCounts(obj2,gene=selectedGene,intgroup = input$color_by_G,returnData = T)
+      genedata <- plotCounts(obj2,gene=selectedGene,intgroup = input$color_by,returnData = T)
 
-      onlyfactors <- genedata[,match(input$color_by_G,colnames(genedata))]
+      onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
 
       res <- ggplot(genedata,aes(x=plotby,y=count,fill=plotby)) +
@@ -426,11 +426,11 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
     # for reading in the brushed/clicked points
     curData_brush <- reactive({
       df2 <- genepca(obj,
-                     ntop = input$pca_nrgenes_G,
-                     choices = c(as.integer(input$pc_x_G),as.integer(input$pc_y_G)),
+                     ntop = input$pca_nrgenes,
+                     choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      # arrowColors = colGroups,
-                     alpha=input$pca_point_alpha_G,
+                     alpha=input$pca_point_alpha,
                      returnData=T,annotation=annotation)
       df2$geneName <- annotation$gene_name[match(rownames(df2),rownames(annotation))]
       res <- brushedPoints(df2, input$pcagenes_brush,xvar="xvar",yvar="yvar",)
@@ -440,11 +440,11 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     curData_click <- reactive({
       df2 <- genepca(obj,
-                     ntop = input$pca_nrgenes_G,
-                     choices = c(as.integer(input$pc_x_G),as.integer(input$pc_y_G)),
+                     ntop = input$pca_nrgenes,
+                     choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      # arrowColors = colGroups,
-                     alpha=input$pca_point_alpha_G,
+                     alpha=input$pca_point_alpha,
                      returnData=T,annotation=annotation)
       df2$geneName <- annotation$gene_name[match(rownames(df2),rownames(annotation))]
       res <- nearPoints(df2, input$pcagenes_click,
@@ -457,11 +457,11 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     curData_zoomClick <- reactive({
       df2 <- genepca(obj,
-                     ntop = input$pca_nrgenes_G,
-                     choices = c(as.integer(input$pc_x_G),as.integer(input$pc_y_G)),
+                     ntop = input$pca_nrgenes,
+                     choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      # arrowColors = colGroups,
-                     alpha=input$pca_point_alpha_G,
+                     alpha=input$pca_point_alpha,
                      returnData=T,annotation=annotation)
       df2$geneName <- annotation$gene_name[match(rownames(df2),rownames(annotation))]
       res <- nearPoints(df2, input$pcagenes_zoom_click,
@@ -520,7 +520,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     output$searchresult <- renderPrint({
 
-      if(is.null(input$color_by_G)) return("Select a factor to plot your gene")
+      if(is.null(input$color_by)) return("Select a factor to plot your gene")
       if(is.null(input$genefinder))
         return("Type in the gene name/id you want to plot")
 
@@ -563,7 +563,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
       anno_id <- rownames(annotation)
       anno_gene <- annotation$gene_name
 
-      if(is.null(input$color_by_G))
+      if(is.null(input$color_by))
         return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
       if(is.null(input$genefinder))
         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
@@ -579,9 +579,9 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
         if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
         selectedGene <- rownames(annotation)[which(annotation$gene_name==input$genefinder)]
       }
-      genedata <- plotCounts(obj2,gene=selectedGene,intgroup = input$color_by_G,returnData = T)
+      genedata <- plotCounts(obj2,gene=selectedGene,intgroup = input$color_by,returnData = T)
 
-      onlyfactors <- genedata[,match(input$color_by_G,colnames(genedata))]
+      onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
 
       p <- ggplot(genedata,aes(x=plotby,y=count,fill=plotby)) + geom_boxplot() + labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +  scale_x_discrete(name="") + geom_jitter(aes(x=plotby,y=count),position = position_jitter(width = 0.1)) + scale_fill_discrete(name="Experimental\nconditions")
@@ -607,7 +607,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
         return(ggplot() + annotate("text",label="Provide a pca2go object to the app",0,0) + theme_bw())
       res <- pcaplot(obj,intgroup = input$color_by,
                      ntop = attr(pca2go,"n_genesforpca"),
-                     pcX = as.integer(input$pc_x_go),pcY = as.integer(input$pc_y_go),text_labels = input$sample_labels,
+                     pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),text_labels = input$sample_labels,
                      point_size = input$pca_point_size, title=paste0("PCA on the samples - ",attr(pca2go,"n_genesforpca"), " genes used")
 
       )
@@ -617,7 +617,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     output$dt_pchor_pos <- DT::renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
-      goe <- pca2go[[paste0("PC",input$pc_x_go)]][["posLoad"]]
+      goe <- pca2go[[paste0("PC",input$pc_x)]][["posLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
       datatable(goe)
@@ -625,7 +625,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     output$dt_pchor_neg <- DT::renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
-      goe <- pca2go[[paste0("PC",input$pc_x_go)]][["negLoad"]]
+      goe <- pca2go[[paste0("PC",input$pc_x)]][["negLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
       datatable(goe)
@@ -633,7 +633,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     output$dt_pcver_pos <- DT::renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
-      goe <- pca2go[[paste0("PC",input$pc_y_go)]][["posLoad"]]
+      goe <- pca2go[[paste0("PC",input$pc_y)]][["posLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
       datatable(goe)
@@ -641,7 +641,7 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     output$dt_pcver_neg <- DT::renderDataTable({
       if(is.null(pca2go)) return(datatable(NULL))
-      goe <- pca2go[[paste0("PC",input$pc_y_go)]][["negLoad"]]
+      goe <- pca2go[[paste0("PC",input$pc_y)]][["negLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
       datatable(goe)
@@ -861,7 +861,6 @@ pcaExplorer <- function(obj,obj2,pca2go=NULL,annotation=NULL){
 
     })
 
-    # output$debug <- reactive({      cat(paste(input$pca_x_G,input$pca_y_G))    })
 
 
     #       output$plot_brushinfo <- renderPrint({
