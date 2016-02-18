@@ -48,9 +48,9 @@ pca2go <- function(se,
   message("After subsetting/filtering for invariant genes, working on a ",nrow(exprsData),"x",ncol(exprsData)," expression matrix\n")
 
   p <- prcomp(t(exprsData), scale=scale, center=TRUE)
-  pcaobj <- list(scores=p$x, loadings=p$rotation, pov=p$sdev^2/sum(p$sdev^2),
-                 expressionData=NA)
-  class(pcaobj) <- "pca" # to view it eventually with pcaGoPromoter
+  # pcaobj <- list(scores=p$x, loadings=p$rotation, pov=p$sdev^2/sum(p$sdev^2),
+                 # expressionData=NA)
+  # class(pcaobj) <- "pca" # to view it eventually with pcaGoPromoter
   # res
 
   # library("pcaGoPromoter")
@@ -59,14 +59,14 @@ pca2go <- function(se,
 
   print("Ranking genes by the loadings ...")
   # library("pcaGoPromoter")
-  probesPC1pos <- rankedGeneLoadings(pcaobj, pc=1,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC1neg <- rankedGeneLoadings(pcaobj, pc=1,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC2pos <- rankedGeneLoadings(pcaobj, pc=2,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC2neg <- rankedGeneLoadings(pcaobj, pc=2,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC3pos <- rankedGeneLoadings(pcaobj, pc=3,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC3neg <- rankedGeneLoadings(pcaobj, pc=3,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC4pos <- rankedGeneLoadings(pcaobj, pc=4,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC4neg <- rankedGeneLoadings(pcaobj, pc=4,decreasing=FALSE)[1:loadings_ngenes]
+  probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
+  probesPC1neg <- rankedGeneLoadings(p, pc=1,decreasing=FALSE)[1:loadings_ngenes]
+  probesPC2pos <- rankedGeneLoadings(p, pc=2,decreasing=TRUE)[1:loadings_ngenes]
+  probesPC2neg <- rankedGeneLoadings(p, pc=2,decreasing=FALSE)[1:loadings_ngenes]
+  probesPC3pos <- rankedGeneLoadings(p, pc=3,decreasing=TRUE)[1:loadings_ngenes]
+  probesPC3neg <- rankedGeneLoadings(p, pc=3,decreasing=FALSE)[1:loadings_ngenes]
+  probesPC4pos <- rankedGeneLoadings(p, pc=4,decreasing=TRUE)[1:loadings_ngenes]
+  probesPC4neg <- rankedGeneLoadings(p, pc=4,decreasing=FALSE)[1:loadings_ngenes]
 
 
 
@@ -99,7 +99,8 @@ pca2go <- function(se,
 
 rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 {
-  return(rownames(x$loadings)[order(x$loadings[, pc], decreasing = decreasing)])
+  # works directly on the prcomp object
+  return(rownames(x$rotation)[order(x$rotation[, pc], decreasing = decreasing)])
 }
 
 
