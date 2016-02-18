@@ -5,6 +5,8 @@ genepca <- function(x,ntop,choices=c(1,2),arrowColors = muted("green"), biplot=F
   rv <- rowVars(assay(x))
   select <- order(rv, decreasing = TRUE)[seq_len(min(ntop,length(rv)))]
   pca <- prcomp((assay(x)[select, ]))
+
+
   #ggbiplot(pca,choices = c(1,2))
   percentVar <- pca$sdev^2/sum(pca$sdev^2)
   # if (!all(intgroup %in% names(colData(x)))) {
