@@ -383,7 +383,7 @@ pcaExplorer <- function(obj=NULL,
 
     ## Render the UI element to upload the count matrix
     output$upload_count_matrix <- renderUI({
-      if (!is.null(obj2) & !is.null(obj)) {
+      if ((!is.null(obj2) & !is.null(obj)) | !is.null(countmatrix)) {
         NULL
       } else {
         return(fileInput(inputId = "uploadcmfile",
@@ -408,7 +408,7 @@ pcaExplorer <- function(obj=NULL,
 
 
     output$upload_metadata <- renderUI({
-      if (!is.null(obj2) & !is.null(obj)) {
+      if ((!is.null(obj2) & !is.null(obj)) | !is.null(coldata)) {
         NULL
       } else {
         return(fileInput(inputId = "uploadmetadatafile",
