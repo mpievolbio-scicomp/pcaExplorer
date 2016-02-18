@@ -43,7 +43,12 @@ footer<-function(){
   )
 }
 
-pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
+pcaExplorer <- function(obj=NULL,
+                        obj2=NULL,
+                        countmatrix=NULL,
+                        coldata=NULL,
+                        pca2go=NULL,
+                        annotation=NULL){
   # stopifnot( is(obj, 'SummarizedExperiment') )
   ## plenty of tests on the selected object(s)
   if ( !require('shiny') ) {
@@ -358,8 +363,8 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
     values <- reactiveValues()
     values$mydds <- obj2
     values$myrlt <- obj
-    values$mycountmatrix <- NULL
-    values$mymetadata <- NULL
+    values$mycountmatrix <- countmatrix
+    values$mymetadata <- coldata
     values$mypca2go <- pca2go
     values$myannotation <- annotation
 
@@ -446,6 +451,44 @@ pcaExplorer <- function(obj=NULL,obj2=NULL,pca2go=NULL,annotation=NULL){
 
       return(annodata)
     })
+
+
+    createDDS <- reactive({
+      if(is.null(countmatrix) | is.null(coldata))
+        return(NULL)
+
+      dds <- DESeqDataSetFromMatrix(countData = countmatrix,
+                                             colData = coldata,
+                                             design=~1)
+
+      return(dds)
+
+
+    })
+
+    createRLT <- reactive({
+      if(is.null(countmatrix) | is.null(coldata))
+        return(NULL)
+
+      rlt <- rlogTransformation(values$mydds)
+
+      return(rlt)
+
+
+    })
+
+    observeEvent(createDDS,
+                 {
+                   if(!is.null(values$mycountmatrix) & !is.null(values$mymetadata))
+                     values$mydds <- createDDS()
+                 })
+
+    observeEvent(createRLT,
+                 {
+                   if(!is.null(values$mycountmatrix) & !is.null(values$mymetadata))
+                     values$myrlt <- createRLT()
+                 })
+
 
 
 
