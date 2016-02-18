@@ -42,8 +42,6 @@ genepca <- function(x,ntop,choices=c(1,2),arrowColors = muted("green"), biplot=F
 
 
 
-
-
 ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
                           obs.scale = 1 - scale, var.scale = scale, groups = NULL,
                           ellipse = FALSE, ellipse.prob = 0.68, labels = NULL, labels.size = 3,
@@ -53,10 +51,11 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
                           useRownamesAsLabels=TRUE, point_size=2,annotation = NULL,
                           ...)
 {
-  library(ggplot2)
-  library(plyr)
-  library(scales)
-  library(grid)
+  library("ggplot2")
+  library("plyr")
+  library("scales")
+  library("grid")
+
   stopifnot(length(choices) == 2)
   if (inherits(pcobj, "prcomp")) {
     nobs.factor <- sqrt(nrow(pcobj$x) - 1)
