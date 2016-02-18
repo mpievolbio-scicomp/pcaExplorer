@@ -12,10 +12,21 @@ LazyData: TRUE
 Depends:
     R (>= 3.2)
 Imports:
+	DESeq2,
+	genefilter,
+	pheatmap,
+	d3heatmap,
+	scales,
+	NMF,
+	plyr,
+	grid,
+	topGO,
+	GO.db,
     shiny (>= 0.9.1.9008),
     shinydashboard,
     shinyBS,
-    ggplot2,
+    ggplot2 (>= 2.0.0),
+    ggrepel,
     DT,
     methods
 Suggests:

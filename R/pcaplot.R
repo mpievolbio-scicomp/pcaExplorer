@@ -57,6 +57,17 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
 
 library(topGO)
 
+#' Title
+#'
+#' @param obj
+#' @param type
+#' @param pc_nr
+#' @param title
+#'
+#' @return
+#' @export
+#'
+#' @examples
 pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
 {
   type <- match.arg(type)

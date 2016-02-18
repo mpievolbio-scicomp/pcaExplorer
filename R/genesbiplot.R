@@ -1,4 +1,17 @@
 
+#' Title
+#'
+#' @param x
+#' @param ntop
+#' @param choices
+#' @param arrowColors
+#' @param biplot
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 genepca <- function(x,ntop,choices=c(1,2),arrowColors = muted("green"), biplot=FALSE,...) {
   # intgroup <- c("condition","tissue")
 
@@ -42,6 +55,39 @@ genepca <- function(x,ntop,choices=c(1,2),arrowColors = muted("green"), biplot=F
 
 
 
+#' Title
+#'
+#' @param pcobj
+#' @param choices
+#' @param scale
+#' @param pc.biplot
+#' @param obs.scale
+#' @param var.scale
+#' @param groups
+#' @param ellipse
+#' @param ellipse.prob
+#' @param labels
+#' @param labels.size
+#' @param alpha
+#' @param var.axes
+#' @param circle
+#' @param circle.prob
+#' @param varname.size
+#' @param varname.adjust
+#' @param varname.abbrev
+#' @param arrowColors
+#' @param returnData
+#' @param coordEqual
+#' @param scaleArrow
+#' @param useRownamesAsLabels
+#' @param point_size
+#' @param annotation
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
                           obs.scale = 1 - scale, var.scale = scale, groups = NULL,
                           ellipse = FALSE, ellipse.prob = 0.68, labels = NULL, labels.size = 3,

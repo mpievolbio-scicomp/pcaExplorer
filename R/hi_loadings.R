@@ -1,11 +1,24 @@
 
-x <- rld_deplall
-rv <- rowVars(assay(x))
-select <- order(rv, decreasing = TRUE)[seq_len(min(nrow(x),length(rv)))]
-pcaobj <- prcomp(t(assay(x)[select, ]),scale = F, center = T)
+# x <- rld_deplall
+# rv <- rowVars(assay(x))
+# select <- order(rv, decreasing = TRUE)[seq_len(min(nrow(x),length(rv)))]
+# pcaobj <- prcomp(t(assay(x)[select, ]),scale = F, center = T)
 
 
 
+#' Title
+#'
+#' @param pcaobj
+#' @param whichpc
+#' @param topN
+#' @param exprTable
+#' @param annotation
+#' @param title
+#'
+#' @return
+#' @export
+#'
+#' @examples
 hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
                         annotation = NULL, title="Top/bottom loadings - "){
 
@@ -28,22 +41,3 @@ hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
 
 
 
-
-#     par(mfrow=c(3,1))
-#   for(i in 1:3){
-#     load <- p$rotation[,i][order(p$rotation[,i])]
-#     extreme <- c(tail(load), head(load))
-#     extreme.ensg <- names(extreme)
-#     ensembl = useMart("ensembl", dataset = "hsapiens_gene_ensembl") #select the ensembl database
-#     extreme.symbols <- getBM(attributes=c("ensembl_gene_id", "hgnc_symbol"),
-#                              filters = "ensembl_gene_id",
-#                              values=extreme.ensg,
-#                              mart=ensembl)
-#     q <- extreme.symbols[,2]
-#     names(q) <- extreme.symbols[,1]
-#     fpkm <- cbind(q[extreme.ensg],fpkm.table[extreme.ensg,])
-#     names(fpkm)[names(fpkm) == 'q[extreme.ensg]'] <- 'Gene Symbol'
-#     barplot(extreme, names.arg=q[extreme.ensg],las=2,main=paste0(caption, ", PC", i))
-#     print(fpkm)
-#   }
-# }

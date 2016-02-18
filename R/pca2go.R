@@ -4,6 +4,23 @@
 # bbgg <- rownames(dds_deplall)[rowSums(counts(dds_deplall))>0]
 # seb_pca2go_unscaled <- pca2go(rld_deplall,annotation=annotation,ensToGeneSymbol = T,scale=F,background_genes=bbgg)
 # seb_pca2go_scaled <- pca2go(rld_deplall,annotation=annotation,ensToGeneSymbol = T,scale=T,background_genes=bbgg)
+#' Title
+#'
+#' @param se
+#' @param pca_ngenes
+#' @param annotation
+#' @param inputType
+#' @param organism
+#' @param ensToGeneSymbol
+#' @param loadings_ngenes
+#' @param background_genes
+#' @param scale
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 pca2go <- function(se,
                    pca_ngenes = 10000,
                    annotation = NULL,
