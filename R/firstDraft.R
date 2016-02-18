@@ -140,6 +140,7 @@ pcaExplorer <- function(obj=NULL,
           tabPanel(
             "About",
             includeMarkdown(system.file("extdata", "about.md",package = "pcaExplorer")),
+            br(),
             shiny::verbatimTextOutput("showuploaded1"),
             shiny::verbatimTextOutput("showuploaded2"),
             shiny::verbatimTextOutput("showuploaded3"),
@@ -164,6 +165,8 @@ pcaExplorer <- function(obj=NULL,
             plotOutput("reads_barplot"),
             h3("Basic summary for the counts"),
             verbatimTextOutput("reads_summary"),
+
+
 
 
 
@@ -247,7 +250,7 @@ pcaExplorer <- function(obj=NULL,
               h4("Zoomed interactive heatmap"),
               fluidRow(radioButtons("heatmap_colv","Cluster samples",choices = list("Yes"=TRUE,"No"=FALSE),selected = TRUE)),
               fluidRow(d3heatmapOutput("heatzoomd3")))),
-
+            br(),
             fluidRow(
               column(
                 width = 6,
@@ -268,7 +271,7 @@ pcaExplorer <- function(obj=NULL,
             "Gene finder",
             fluidRow(
               h1("GeneFinder"),
-              textInput("genefinder",label = "type in the name of the gene to search"),
+              textInput("genefinder",label = "type in the name of the gene to search",value = NULL),
               verbatimTextOutput("searchresult"),
               verbatimTextOutput("debuggene"),
               checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
@@ -784,7 +787,7 @@ pcaExplorer <- function(obj=NULL,
     output$searchresult <- renderPrint({
 
       if(is.null(input$color_by)) return("Select a factor to plot your gene")
-      if(is.null(input$genefinder))
+      if(input$genefinder=="")
         return("Type in the gene name/id you want to plot")
 
       foundGeneID <- input$genefinder %in% rownames(values$myrlt)
@@ -826,9 +829,11 @@ pcaExplorer <- function(obj=NULL,
       anno_id <- rownames(values$myannotation)
       anno_gene <- values$myannotation$gene_name
 
-      if(is.null(input$color_by))
+      if(is.null(input$color_by) & input$genefinder!="")
         return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
-      if(is.null(input$genefinder))
+      if(is.null(input$color_by) & input$genefinder=="")
+        return(ggplot() + annotate("text",label="Select a gene and a factor to plot gene",0,0) + theme_bw())
+      if(input$genefinder=="")
         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
       if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
         return(ggplot() + annotate("text",label="gene not found...",0,0) + theme_bw())
