@@ -29,21 +29,21 @@ hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
 
 
 
-    par(mfrow=c(3,1))
-  for(i in 1:3){
-    load <- p$rotation[,i][order(p$rotation[,i])]
-    extreme <- c(tail(load), head(load))
-    extreme.ensg <- names(extreme)
-    ensembl = useMart("ensembl", dataset = "hsapiens_gene_ensembl") #select the ensembl database
-    extreme.symbols <- getBM(attributes=c("ensembl_gene_id", "hgnc_symbol"),
-                             filters = "ensembl_gene_id",
-                             values=extreme.ensg,
-                             mart=ensembl)
-    q <- extreme.symbols[,2]
-    names(q) <- extreme.symbols[,1]
-    fpkm <- cbind(q[extreme.ensg],fpkm.table[extreme.ensg,])
-    names(fpkm)[names(fpkm) == 'q[extreme.ensg]'] <- 'Gene Symbol'
-    barplot(extreme, names.arg=q[extreme.ensg],las=2,main=paste0(caption, ", PC", i))
-    print(fpkm)
-  }
-}
+#     par(mfrow=c(3,1))
+#   for(i in 1:3){
+#     load <- p$rotation[,i][order(p$rotation[,i])]
+#     extreme <- c(tail(load), head(load))
+#     extreme.ensg <- names(extreme)
+#     ensembl = useMart("ensembl", dataset = "hsapiens_gene_ensembl") #select the ensembl database
+#     extreme.symbols <- getBM(attributes=c("ensembl_gene_id", "hgnc_symbol"),
+#                              filters = "ensembl_gene_id",
+#                              values=extreme.ensg,
+#                              mart=ensembl)
+#     q <- extreme.symbols[,2]
+#     names(q) <- extreme.symbols[,1]
+#     fpkm <- cbind(q[extreme.ensg],fpkm.table[extreme.ensg,])
+#     names(fpkm)[names(fpkm) == 'q[extreme.ensg]'] <- 'Gene Symbol'
+#     barplot(extreme, names.arg=q[extreme.ensg],las=2,main=paste0(caption, ", PC", i))
+#     print(fpkm)
+#   }
+# }

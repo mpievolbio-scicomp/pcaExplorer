@@ -204,13 +204,19 @@ pcaExplorer <- function(obj=NULL,
                   )
               )
             ),
+            br(),
             fluidRow(
               column(
                 width = 6,
                 plotOutput("samples_pca_zoom")
-                )
+              ),
+              column(
+                width = 6,
+                numericInput("ntophiload", "Nr of genes to display (top & bottom)",value = 10, min = 1, max=40),
+                plotOutput("geneshiload")
               )
-            ),
+            )
+          ),
 
           tabPanel(
             "Genes View",
@@ -612,6 +618,18 @@ pcaExplorer <- function(obj=NULL,
       res <- res + theme_bw()
       exportPlots$samplesScree <- res
       res
+    })
+
+
+    output$geneshiload <- renderPlot({
+      rv <- rowVars(assay(values$myrlt))
+      select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
+      pca <- prcomp(t(assay(values$myrlt)[select, ]))
+
+      par(mfrow=c(2,1))
+      hi_loadings(pcaobj,whichpc = as.integer(input$pc_x),topN = input$ntophiload,annotation = values$myannotation)
+      hi_loadings(pcaobj,whichpc = as.integer(input$pc_y),topN = input$ntophiload,annotation = values$myannotation)
+
     })
 
 
