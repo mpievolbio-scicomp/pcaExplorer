@@ -1,8 +1,9 @@
 ## interpreting PCA.--..
 
 # groups <- colData(dds_cleaner)$condition
-
-
+# bbgg <- rownames(dds_deplall)[rowSums(counts(dds_deplall))>0]
+# seb_pca2go_unscaled <- pca2go(rld_deplall,annotation=annotation,ensToGeneSymbol = T,scale=F,background_genes=bbgg)
+# seb_pca2go_scaled <- pca2go(rld_deplall,annotation=annotation,ensToGeneSymbol = T,scale=T,background_genes=bbgg)
 pca2go <- function(se,
                    pca_ngenes = 10000,
                    annotation = NULL,
@@ -11,6 +12,7 @@ pca2go <- function(se,
                    ensToGeneSymbol = FALSE,
                    loadings_ngenes = 500,
                    background_genes = NULL,
+                   scale = F,
                    ... # further parameters to be passed to the topgo routine
 
                    ) {
@@ -22,7 +24,7 @@ pca2go <- function(se,
   exprsData <- assay(se)
 
   if(is.null(background_genes)) {
-    BGids <- rownames(se)[rowSums(counts(se))>0]
+    BGids <- rownames(se)[rowSums(counts(se))>0] # TODO: at best some other way of doing it - maybe passing additionally the DDS? or if nothing provided, then use all rownames...
   } else {
     BGids <- background_genes
   }
@@ -45,7 +47,7 @@ pca2go <- function(se,
 
   message("After subsetting/filtering for invariant genes, working on a ",nrow(exprsData),"x",ncol(exprsData)," expression matrix\n")
 
-  p <- prcomp(t(exprsData), scale=TRUE, center=TRUE)
+  p <- prcomp(t(exprsData), scale=scale, center=TRUE)
   pcaobj <- list(scores=p$x, loadings=p$rotation, pov=p$sdev^2/sum(p$sdev^2),
                  expressionData=NA)
   class(pcaobj) <- "pca" # to view it eventually with pcaGoPromoter
