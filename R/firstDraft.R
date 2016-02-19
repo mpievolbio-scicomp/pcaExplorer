@@ -11,7 +11,7 @@ library("genefilter")
 # load("goEnrichs.RData")
 library("shiny")
 load("/Volumes/users$/marinif/linuxHome/F07-schubert/seb_dds_rld.RData")
-load("../../linuxHome/F07-schubert/goEnrichs_rld_deplall.RData")
+load("/Volumes/users$/marinif/linuxHome/F07-schubert/goEnrichs_rld_deplall.RData")
 
 # library(ggvis)
 # library(shinythemes)
@@ -140,7 +140,7 @@ pcaExplorer <- function(obj=NULL,
           tabPanel(
             "About",
             includeMarkdown(system.file("extdata", "about.md",package = "pcaExplorer")),
-            br(),
+            hr(),
             shiny::verbatimTextOutput("showuploaded1"),
             shiny::verbatimTextOutput("showuploaded2"),
             shiny::verbatimTextOutput("showuploaded3"),
@@ -204,7 +204,7 @@ pcaExplorer <- function(obj=NULL,
                   )
               )
             ),
-            br(),
+            hr(),
             fluidRow(
               column(
                 width = 6,
@@ -256,7 +256,7 @@ pcaExplorer <- function(obj=NULL,
               h4("Zoomed interactive heatmap"),
               fluidRow(radioButtons("heatmap_colv","Cluster samples",choices = list("Yes"=TRUE,"No"=FALSE),selected = TRUE)),
               fluidRow(d3heatmapOutput("heatzoomd3")))),
-            br(),
+            hr(),
             fluidRow(
               column(
                 width = 6,
@@ -379,6 +379,14 @@ pcaExplorer <- function(obj=NULL,
 
     user_settings <- reactiveValues(save_width = 45, save_height = 11)
 
+    # compute only rlt if dds is provided but not cm&coldata
+    if(!is.null(obj2) & (is.null(countmatrix) & is.null(coldata)))
+      withProgress(message = "computing rlog transformed values...",
+                   value = 0,
+                   {
+                     values$myrlt <- rlogTransformation(obj2)
+                   })
+
 
     output$color_by <- renderUI({
       if(is.null(values$mydds))
@@ -392,7 +400,7 @@ pcaExplorer <- function(obj=NULL,
 
     ## Render the UI element to upload the count matrix
     output$upload_count_matrix <- renderUI({
-      if ((!is.null(obj2) & !is.null(obj)) | !is.null(countmatrix)) {
+      if (!is.null(obj2) | !is.null(countmatrix)) {
         NULL
       } else {
         return(fileInput(inputId = "uploadcmfile",
@@ -417,7 +425,7 @@ pcaExplorer <- function(obj=NULL,
 
 
     output$upload_metadata <- renderUI({
-      if ((!is.null(obj2) & !is.null(obj)) | !is.null(coldata)) {
+      if (!is.null(obj2) | !is.null(coldata)) {
         NULL
       } else {
         return(fileInput(inputId = "uploadmetadatafile",
@@ -955,11 +963,11 @@ pcaExplorer <- function(obj=NULL,
 
 
     ## from here on, RUF APP
-    load("../presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_ruf.RData")
+    load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_ruf.RData")
     ddsmf_clean
     rld_global
 
-    load("../presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_kleinert.RData")
+    load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_kleinert.RData")
 
     kldds <- updateObject(dds_kl)
     klrld <- updateObject(rld_kl)

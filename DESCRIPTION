@@ -12,16 +12,16 @@ LazyData: TRUE
 Depends:
     R (>= 3.2)
 Imports:
-	DESeq2,
-	genefilter,
-	pheatmap,
-	d3heatmap,
-	scales,
-	NMF,
-	plyr,
-	grid,
-	topGO,
-	GO.db,
+    DESeq2,
+    genefilter,
+    pheatmap,
+    d3heatmap,
+    scales,
+    NMF,
+    plyr,
+    grid,
+    topGO,
+    GO.db,
     shiny (>= 0.9.1.9008),
     shinydashboard,
     shinyBS,
@@ -33,3 +33,4 @@ Suggests:
     knitr,
     testthat
 VignetteBuilder: knitr
+RoxygenNote: 5.0.1
