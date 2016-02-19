@@ -135,20 +135,20 @@ pcaExplorer <- function(obj=NULL,
       ),
 
       dashboardBody(
+
+        ## Define output size of error messages
+        tags$head(
+          tags$style(HTML("
+                          .shiny-output-error-validation {
+                          font-size: 15px;
+                          color: forestgreen;
+                          text-align: center;
+                          }
+                          "))
+          ),
+
         tabBox(
           width=12,
-
-
-          ## Define output size of error messages
-          tags$head(
-            tags$style(HTML("
-                            .shiny-output-error-validation {
-                            font-size: 15px;
-                            color: forestgreen;
-                            }
-                            "))
-            ),
-
 
           tabPanel(
             "About",
@@ -616,8 +616,14 @@ pcaExplorer <- function(obj=NULL,
     })
 
     output$samples_pca_zoom <- renderPlot({
-      if(is.null(input$pca_brush))
-        return(ggplot() + annotate("text",label="zoom in by brushing",0,0) + theme_bw())
+
+      shiny::validate(
+        need(!is.null(input$pca_brush),
+             "Zoom in by brushing in the main plot panel above"
+        )
+      )
+      # if(is.null(input$pca_brush))
+        # return(ggplot() + annotate("text",label="zoom in by brushing",0,0) + theme_bw())
 
       res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
