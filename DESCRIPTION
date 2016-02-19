@@ -22,7 +22,7 @@ Imports:
     grid,
     topGO,
     GO.db,
-    shiny (>= 0.9.1.9008),
+    shiny (>= 0.12.0),
     shinydashboard,
     shinyBS,
     ggplot2 (>= 2.0.0),
