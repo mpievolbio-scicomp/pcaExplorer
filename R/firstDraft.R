@@ -685,7 +685,15 @@ pcaExplorer <- function(obj=NULL,
 
 
     output$genes_biplot_zoom <- renderPlot({
-      if(is.null(input$pcagenes_brush)) return(ggplot() + annotate("text",label="zoom in by brushing",0,0) + theme_bw())
+      # if(is.null(input$pcagenes_brush)) return(ggplot() + annotate("text",label="zoom in by brushing",0,0) + theme_bw())
+
+      shiny::validate(
+        need(
+          !is.null(input$pcagenes_brush),
+          "Zoom in by brushing in the main panel - this will also allow displaying the gene names"
+        )
+      )
+
       if(!is.null(input$color_by)) {
         expgroups <- colData(values$myrlt)[input$color_by][[1]]
       } else {
@@ -712,8 +720,21 @@ pcaExplorer <- function(obj=NULL,
 
 
     output$genes_biplot_boxplot <- renderPlot({
-      if(length(input$color_by)==0) return(ggplot() + annotate("text",label="select an experimental factor",0,0) + theme_bw())
-      if(is.null(input$pcagenes_zoom_click)) return(ggplot() + annotate("text",label="click to generate the boxplot\nfor the selected gene",0,0) + theme_bw())
+      # if(length(input$color_by)==0) return(ggplot() + annotate("text",label="select an experimental factor",0,0) + theme_bw())
+      # if(is.null(input$pcagenes_zoom_click)) return(ggplot() + annotate("text",label="click to generate the boxplot\nfor the selected gene",0,0) + theme_bw())
+
+      shiny::validate(
+        need(
+          length(input$color_by)>0,
+          "Select an experimental factor"
+        )
+      )
+      shiny::validate(
+        need(
+          !is.null(input$pcagenes_zoom_click),
+          "Click to generate the boxplot for the selected gene"
+        )
+      )
 
       selectedGene <- curData_zoomClick()$ids
       selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
@@ -802,9 +823,23 @@ pcaExplorer <- function(obj=NULL,
 
 
     output$heatzoomd3 <- renderD3heatmap({
-      if(is.null(input$pcagenes_brush)) return(NULL)
+      shiny::validate(
+        need(
+          !is.null(input$pcagenes_brush),
+          "Brush the main panel above to generate a heatmap"
+        )
+      )
+
+      # if(is.null(input$pcagenes_brush)) return(NULL)
 
       brushedObject <- curData_brush()
+      shiny::validate(
+        need(
+          nrow(brushedObject) > 1,
+          "Brush to include at least two genes"
+        )
+      )
+
       selectedGenes <- brushedObject$ids
       toplot <- assay(values$myrlt)[selectedGenes,]
       rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
@@ -816,9 +851,21 @@ pcaExplorer <- function(obj=NULL,
 
 
     output$heatzoom <- renderPlot({
-      if(is.null(input$pcagenes_brush)) return(NULL)
+      # if(is.null(input$pcagenes_brush)) return(NULL)
+      shiny::validate(
+        need(
+          !is.null(input$pcagenes_brush),
+          "Brush the main panel above to generate a heatmap"
+        )
+      )
 
       brushedObject <- curData_brush()
+      shiny::validate(
+        need(
+          nrow(brushedObject) > 1,
+          "Brush to include at least two genes"
+        )
+      )
       selectedGenes <- brushedObject$ids
       toplot <- assay(values$myrlt)[selectedGenes,]
       rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
@@ -887,7 +934,7 @@ pcaExplorer <- function(obj=NULL,
       if(input$genefinder=="")
         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
       if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
-        return(ggplot() + annotate("text",label="gene not found...",0,0) + theme_bw())
+        return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
 
       if (input$genefinder %in% anno_id) {
         selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
@@ -922,8 +969,14 @@ pcaExplorer <- function(obj=NULL,
 
 
     output$pca2go <- renderPlot({
-      if(is.null(pca2go))
-        return(ggplot() + annotate("text",label="Provide a pca2go object to the app",0,0) + theme_bw())
+      shiny::validate(
+        need(
+          !is.null(pca2go),
+          "Please provide a pca2go object to the app"
+        )
+      )
+      # if(is.null(pca2go))
+        # return(ggplot() + annotate("text",label="Provide a pca2go object to the app",0,0) + theme_bw())
       res <- pcaplot(values$myrlt,intgroup = input$color_by,
                      ntop = attr(pca2go,"n_genesforpca"),
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),text_labels = input$sample_labels,
