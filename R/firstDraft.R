@@ -515,7 +515,7 @@ pcaExplorer <- function(obj=NULL,
 
 
     createDDS <- reactive({
-      if(is.null(countmatrix) | is.null(coldata))
+      if(is.null(countmatrix) | is.null(coldata))
         return(NULL)
 
       dds <- DESeqDataSetFromMatrix(countData = countmatrix,
@@ -528,7 +528,7 @@ pcaExplorer <- function(obj=NULL,
     })
 
     createRLT <- reactive({
-      if(is.null(countmatrix) | is.null(coldata))
+      if(is.null(countmatrix) | is.null(coldata))
         return(NULL)
 
       rlt <- rlogTransformation(values$mydds)
