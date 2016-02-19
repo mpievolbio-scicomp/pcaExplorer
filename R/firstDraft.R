@@ -689,8 +689,8 @@ pcaExplorer <- function(obj=NULL,
       pca <- prcomp(t(assay(values$myrlt)[select, ]))
 
       par(mfrow=c(2,1))
-      hi_loadings(pcaobj,whichpc = as.integer(input$pc_x),topN = input$ntophiload,annotation = values$myannotation)
-      hi_loadings(pcaobj,whichpc = as.integer(input$pc_y),topN = input$ntophiload,annotation = values$myannotation)
+      hi_loadings(pca,whichpc = as.integer(input$pc_x),topN = input$ntophiload,annotation = values$myannotation)
+      hi_loadings(pca,whichpc = as.integer(input$pc_y),topN = input$ntophiload,annotation = values$myannotation)
 
     })
 
