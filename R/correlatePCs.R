@@ -62,7 +62,9 @@ plotPCcorrs <- function(pccorrs,pc=1,logp=TRUE) {
 
   if(logp) pvals <- -log10(pvals)
 
-  barplot(pvals,las=2,main=paste0("Correlations PC ",pc," vs covariates"),ylab=ifelse(logp,"-log10(pval)","pval"))
+  barplot(pvals,las=2, col="steelblue",
+          main=paste0("Correlations PC ",pc," vs covariates"),
+          ylab=ifelse(logp,"-log10(pval)","pval"))
 }
 
 
