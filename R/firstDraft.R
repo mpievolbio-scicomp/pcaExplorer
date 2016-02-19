@@ -1,8 +1,8 @@
 ## TODOS
-# parameters instead of fixed values
-# some other tweaks
-# try one run from the scratch
-# list whatever is required on top of the pca_SUPALIVE function
+# parameters instead of fixed values - MOSTLY DONE
+# some other tweaks - DOING THEM; DONE MANY
+# try one run from the scratch - DONE
+# list whatever is required on top of the pca_SUPALIVE function - GUESS WE'RE DONE
 ### EMBED THIS INTO INTERACTIVE HTML REPORTS? e.g. a la maplots!!!!
 
 library("DESeq2")
@@ -43,6 +43,37 @@ footer<-function(){
   )
 }
 
+#' Title
+#'
+#' @param obj
+#' @param obj2
+#' @param countmatrix
+#' @param coldata
+#' @param pca2go
+#' @param annotation
+#'
+#' @import DESeq2
+#' @import genefilter
+#' @import pheatmap
+#' @import d3heatmap
+#' @import scales
+#' @import NMF
+#' @import plyr
+#' @import grid
+#' @import topGO
+#' @import GO.db
+#' @import shiny
+#' @import shinydashboard
+#' @import shinyBS
+#' @import ggplot2
+#' @import ggrepel
+#' @import DT
+#' @import methods
+#'
+#' @return
+#' @export
+#'
+#' @examples
 pcaExplorer <- function(obj=NULL,
                         obj2=NULL,
                         countmatrix=NULL,
