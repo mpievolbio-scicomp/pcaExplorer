@@ -21,6 +21,10 @@
 #' @examples
 hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
                         annotation = NULL, title="Top/bottom loadings - "){
+  if(whichpc < 0)
+    stop("Use a positive integer value for the principal component to select")
+  if(whichpc > nrow(pcaobj$x))
+    stop("You can not explore a principal component that is not in the data")
 
   geneloadings_sorted <- sort(pcaobj$rotation[,whichpc])
   geneloadings_extreme <- c(tail(geneloadings_sorted,topN),head(geneloadings_sorted,topN))
