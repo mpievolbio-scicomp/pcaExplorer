@@ -7,11 +7,15 @@
 
 library("DESeq2")
 library("genefilter")
+library("shiny")
+
 # load("/Volumes/users$/marinif/linuxHome/032-ruf-macrophages/cm2.RData")
 # load("goEnrichs.RData")
-library("shiny")
-load("/Volumes/users$/marinif/linuxHome/F07-schubert/seb_dds_rld.RData")
-load("/Volumes/users$/marinif/linuxHome/F07-schubert/goEnrichs_rld_deplall.RData")
+# load("/Volumes/users$/marinif/linuxHome/F07-schubert/seb_dds_rld.RData")
+# load("/Volumes/users$/marinif/linuxHome/F07-schubert/goEnrichs_rld_deplall.RData")
+# load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_ruf.RData")
+# load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_kleinert.RData")
+
 
 # library(ggvis)
 # library(shinythemes)
@@ -1072,11 +1076,10 @@ pcaExplorer <- function(obj=NULL,
 
 
     ## from here on, RUF APP
-    load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_ruf.RData")
     ddsmf_clean
     rld_global
 
-    load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_kleinert.RData")
+
 
     kldds <- updateObject(dds_kl)
     klrld <- updateObject(rld_kl)
