@@ -13,6 +13,7 @@ Depends:
     R (>= 3.2)
 Imports:
     DESeq2,
+    SummarizedExperiment,
     genefilter,
     pheatmap,
     d3heatmap,
