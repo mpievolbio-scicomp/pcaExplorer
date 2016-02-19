@@ -130,12 +130,25 @@ pcaExplorer <- function(obj=NULL,
                    paste0("Use the widgets below to setup general parameters for exporting produced plots"),
                    "right", options = list(container = "body"))
 
+
                  )
       ),
 
       dashboardBody(
         tabBox(
           width=12,
+
+
+          ## Define output size of error messages
+          tags$head(
+            tags$style(HTML("
+                            .shiny-output-error-validation {
+                            font-size: 15px;
+                            color: forestgreen;
+                            }
+                            "))
+            ),
+
 
           tabPanel(
             "About",
@@ -380,7 +393,7 @@ pcaExplorer <- function(obj=NULL,
     user_settings <- reactiveValues(save_width = 45, save_height = 11)
 
     # compute only rlt if dds is provided but not cm&coldata
-    if(!is.null(obj2) & (is.null(countmatrix) & is.null(coldata)))
+    if(!is.null(obj2) & (is.null(countmatrix) & is.null(coldata)) & is.null(obj))
       withProgress(message = "computing rlog transformed values...",
                    value = 0,
                    {
@@ -699,6 +712,12 @@ pcaExplorer <- function(obj=NULL,
       selectedGene <- curData_zoomClick()$ids
       selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
       # plotCounts(dds_cleaner,)
+
+      shiny::validate(
+        need(nrow(curData_zoomClick()) >0,message = "Click closer to a gene to get the boxplot")
+
+        )
+
       genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = T)
 
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
