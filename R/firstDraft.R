@@ -102,6 +102,9 @@ pcaExplorer <- function(obj=NULL,
 #   }
   ## TODO: colselection also passed as a palette?
   colSelection <- c("navyblue","steelblue","skyblue","darkred","coral3","darksalmon","green4","greenyellow","orange","gold")
+  # alternative to evaluate: use other palettes, eg hue_pal
+  ## place it in the server to be reactive on the ncol of the object!
+
 
 
 
@@ -607,6 +610,11 @@ pcaExplorer <- function(obj=NULL,
     })
 
 
+    colSel <- reactive({
+      hue_pal()(ncol(values$myrlt)/2) # or somewhat other way
+    })
+
+
 
 
     output$showdata <- renderPrint({
@@ -710,7 +718,7 @@ pcaExplorer <- function(obj=NULL,
       } else {
         expgroups <- colnames(values$myrlt)
       }
-      colGroups <- colSelection[factor(expgroups)]
+      colGroups <- colSel()[factor(expgroups)]
 
       res <- genepca(values$myrlt,
                      ntop = input$pca_nrgenes,
@@ -741,7 +749,7 @@ pcaExplorer <- function(obj=NULL,
       } else {
         expgroups <- colnames(values$myrlt)
       }
-      colGroups <- colSelection[factor(expgroups)]
+      colGroups <- colSel()[factor(expgroups)]
 
       res <- genepca(values$myrlt,
                      ntop = input$pca_nrgenes,
