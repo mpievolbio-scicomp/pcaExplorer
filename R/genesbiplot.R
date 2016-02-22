@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-genepca <- function(x,ntop,choices=c(1,2),arrowColors = muted("green"), biplot=FALSE,...) {
+genepca <- function(x,ntop,choices=c(1,2),arrowColors = muted("green"), groupNames="group", biplot=FALSE,...) {
   # intgroup <- c("condition","tissue")
 
   rv <- rowVars(assay(x))
@@ -28,7 +28,7 @@ genepca <- function(x,ntop,choices=c(1,2),arrowColors = muted("green"), biplot=F
   # intgroup.df <- as.data.frame(colData(x)[, intgroup, drop = FALSE])
   # group <- factor(apply(intgroup.df, 1, paste, collapse = " : "))
   if(biplot){
-    ggbiplotFede(pca,arrowColors = arrowColors,choices=choices,...)
+    ggbiplotFede(pca,arrowColors = arrowColors,choices=choices,groupNames=groupNames,...)
   } else {
     nobs.factor <- sqrt(nrow(pca$x) - 1)
     devs <- pca$sdev
@@ -93,7 +93,8 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
                           ellipse = FALSE, ellipse.prob = 0.68, labels = NULL, labels.size = 3,
                           alpha = 1, var.axes = TRUE, circle = FALSE, circle.prob = 0.69,
                           varname.size = 4, varname.adjust = 1.5, varname.abbrev = FALSE,
-                          arrowColors = NULL, returnData=FALSE,coordEqual=FALSE, scaleArrow = 1,
+                          arrowColors = NULL, groupNames="group",
+                          returnData=FALSE,coordEqual=FALSE, scaleArrow = 1,
                           useRownamesAsLabels=TRUE, point_size=2,annotation = NULL,
                           ...)
 {
@@ -231,8 +232,13 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
                          size = 1/2, alpha = 1/3)
     }
     df.v$scaleArrow <- scaleArrow # quick fix for mapping scaling of the arrows
-    g <- g + geom_segment(data = df.v, aes(x = 0, y = 0, xend = scaleArrow*xvar, yend = scaleArrow*yvar),
-                          arrow = arrow(length = unit(1/2, "picas")), color = arrowColors)
+    arrowColors <-  as.factor(arrowColors)
+    df.v$arrowColors <- arrowColors
+    df.v$groupNames <- groupNames
+    g <- g + geom_segment(data = df.v, aes(x = 0, y = 0, xend = scaleArrow*xvar, yend = scaleArrow*yvar, color = arrowColors),
+                          arrow = arrow(length = unit(1/2, "picas"))) +
+      scale_color_manual(values = levels(arrowColors),name="Group",labels=levels(groupNames))
+
   }
 
   if (var.axes) {

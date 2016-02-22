@@ -705,7 +705,8 @@ pcaExplorer <- function(obj=NULL,
 
     output$genes_biplot <- renderPlot({
       if(!is.null(input$color_by)) {
-        expgroups <- colData(values$myrlt)[input$color_by][[1]]
+        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        expgroups <- interaction(expgroups)
       } else {
         expgroups <- colnames(values$myrlt)
       }
@@ -716,6 +717,7 @@ pcaExplorer <- function(obj=NULL,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      arrowColors = factor(colGroups),
+                     groupNames = expgroups,
                      alpha=input$pca_point_alpha,coordEqual=FALSE,useRownamesAsLabels=FALSE,labels.size=input$pca_label_size,
                      point_size=input$pca_point_size,varname.size=input$pca_varname_size, scaleArrow = input$pca_scale_arrow,annotation=values$myannotation)
       exportPlots$genesPca <- res
@@ -734,7 +736,8 @@ pcaExplorer <- function(obj=NULL,
       )
 
       if(!is.null(input$color_by)) {
-        expgroups <- colData(values$myrlt)[input$color_by][[1]]
+        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        expgroups <- interaction(expgroups)
       } else {
         expgroups <- colnames(values$myrlt)
       }
@@ -745,6 +748,7 @@ pcaExplorer <- function(obj=NULL,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      arrowColors = factor(colGroups),
+                     groupNames = expgroups,
                      alpha=input$pca_point_alpha,coordEqual=FALSE,
                      var.axes=input$variable_labels, # workaround for a ggplot2 bug/missing thing: here details: https://github.com/hadley/ggplot2/issues/905
                      labels.size=input$pca_label_size,varname.size=input$pca_varname_size,
