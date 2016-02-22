@@ -1,13 +1,15 @@
 Package: pcaExplorer
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Interactive Visualization of RNA-seq Data Using a Principal Components Approach
 Version: 0.1.0
-Date: 2016-02-11
-Authors@R: person("Federico", "Marini", email = "marinif@uni-mainz.de",
-    role = c("aut", "cre"))
+Date: 2016-02-22
+Authors@R: c(person("Federico", "Marini", email = "marinif@uni-mainz.de",
+    role = c("aut", "cre")))
 Maintainer: Federico Marini <marinif@uni-mainz.de>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Description: This package provides functionality for interactive visualization of RNA-seq datasets
+	based on Principal Components Analysis. The methods provided allow for quick information 
+	extraction and effective data exploration. A Shiny application encapsulates the whole analysis. 
+License: GPL (>=2)
 LazyData: TRUE
 Depends:
     R (>= 3.2)
@@ -32,6 +34,12 @@ Imports:
     methods
 Suggests:
     knitr,
-    testthat
+    testthat,
+    BiocStyle,
+    rmarkdown,
+    airway
+URL: https://github.com/federicomarini/pcaExplorer
+BugReports: https://github.com/federicomarini/pcaExplorer/issues
+biocViews: Visualization, RNASeq, DimensionReduction, PrincipalComponent, QualityControl, GUI
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1

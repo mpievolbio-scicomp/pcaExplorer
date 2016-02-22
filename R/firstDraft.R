@@ -15,6 +15,7 @@ library("shiny")
 # load("/Volumes/users$/marinif/linuxHome/F07-schubert/goEnrichs_rld_deplall.RData")
 # load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_ruf.RData")
 # load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_kleinert.RData")
+# load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/goEnrichs_paired.RData")
 
 
 # library(ggvis)
@@ -1027,7 +1028,7 @@ pcaExplorer <- function(obj=NULL,
       if(is.null(pca2go)) return(datatable(NULL))
       goe <- pca2go[[paste0("PC",input$pc_x)]][["posLoad"]]
       if(input$compact_pca2go)
-        return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
+        return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")],options = list(pageLength = 5)))
       datatable(goe)
     })
 
@@ -1035,7 +1036,7 @@ pcaExplorer <- function(obj=NULL,
       if(is.null(pca2go)) return(datatable(NULL))
       goe <- pca2go[[paste0("PC",input$pc_x)]][["negLoad"]]
       if(input$compact_pca2go)
-        return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
+        return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")],options = list(pageLength = 5)))
       datatable(goe)
     })
 
@@ -1043,7 +1044,7 @@ pcaExplorer <- function(obj=NULL,
       if(is.null(pca2go)) return(datatable(NULL))
       goe <- pca2go[[paste0("PC",input$pc_y)]][["posLoad"]]
       if(input$compact_pca2go)
-        return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
+        return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")],options = list(pageLength = 5)))
       datatable(goe)
     })
 
@@ -1051,7 +1052,7 @@ pcaExplorer <- function(obj=NULL,
       if(is.null(pca2go)) return(datatable(NULL))
       goe <- pca2go[[paste0("PC",input$pc_y)]][["negLoad"]]
       if(input$compact_pca2go)
-        return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")]))
+        return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")],options = list(pageLength = 5)))
       datatable(goe)
     })
 

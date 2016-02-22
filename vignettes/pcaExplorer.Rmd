@@ -1,0 +1,59 @@
+---
+title: "pcaExplorer User Guide"
+author: "**Federico Marini** (marinif@uni-mainz.de) and **Harald Binder**</br>
+  Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz </br>
+  Center for Thrombosis and Hemostasis (CTH), Mainz"
+email: marinif@uni-mainz.de  
+date: "`r doc_date()`"
+package: "`r pkg_ver('pcaExplorer')`"
+abstract: >
+  `r Biocpkg("pcaExplorer")` provides functionality for interactive visualization of RNA-seq datasets
+  based on Principal Components Analysis. The methods provided allow for quick information 
+  extraction and effective data exploration. A Shiny application encapsulates the whole analysis. 
+output: 
+  BiocStyle::html_document:
+    fig_caption: TRUE
+vignette: >
+  %\VignetteIndexEntry{pcaExplorer User Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+  %\VignettePackage{pcaExplorer}
+  %\VignetteKeywords{Visualization, RNASeq, DimensionReduction, PrincipalComponent, QualityControl, GUI}
+---
+
+```{r style, echo = FALSE, results = 'asis'}
+BiocStyle::markdown()
+```
+
+```{r setup, echo=FALSE, warning=FALSE}
+library(knitr)
+set.seed(42)
+opts_chunk$set(comment=NA,
+               fig.align="center",
+               warning=FALSE)
+```
+
+# Getting started
+
+`r Biocpkg("pcaExplorer")` is an R package distributed as part of the [Bioconductor](http://bioconductor.org) project. To install the package, start R and enter:
+
+```{r installation, eval=FALSE}
+source("http://bioconductor.org/biocLite.R")
+biocLite("pcaExplorer")
+```
+
+Once `r Rpackage("pcaExplorer")` is installed, it can be loaded by the following command.
+
+```{r library, message=FALSE}
+library("pcaExplorer")
+```
+
+
+
+
+# Session info
+
+```{r}
+sessionInfo()
+```
+
