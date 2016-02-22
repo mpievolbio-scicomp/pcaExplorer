@@ -160,6 +160,9 @@ pcaExplorer <- function(obj=NULL,
                  ),
         menuItem("Plot settings", icon = icon("paint-brush"),
                  # bstooltip: Use the widgets below to setup general parameters for exporting produced plots
+
+                 # selectInput("col_palette","Color palette",choices = list("hue"=hue_pal()(10),"set1"=brewer_pal(palette = "Set1")(9),"rainbow"=rainbow(10)))  ## TODO: need to work on the palette selector: maybe use selectize? see other examples
+
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
                  numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
 
