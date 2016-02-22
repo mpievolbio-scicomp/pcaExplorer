@@ -50,7 +50,7 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
     ylab(paste0("PC",pcY,": ", round(percentVar[pcY] * 100,digits = 2), "% variance"))
 
   library("ggrepel")
-  if(text_labels) g <- g + geom_label_repel(mapping = aes(label=names,fill=group),color="white", show.legend = T) +theme_bw()
+  if(text_labels) g <- g + geom_label_repel(mapping = aes(label=names,fill=group),color="white", show.legend = TRUE) +theme_bw()
   if(!is.null(title)) g <- g + ggtitle(title)
   g
 }

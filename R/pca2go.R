@@ -29,13 +29,13 @@ pca2go <- function(se,
                    ensToGeneSymbol = FALSE,
                    loadings_ngenes = 500,
                    background_genes = NULL,
-                   scale = F,
+                   scale = FALSE,
                    ... # further parameters to be passed to the topgo routine
 
                    ) {
 
   annopkg <- paste0("org.",organism,".eg.db")
-  if (!require(annopkg,character.only=T)) {
+  if (!require(annopkg,character.only=TRUE)) {
     stop("The package",annopkg, "is not installed/available. Try installing it with biocLite() ?")
   }
   exprsData <- assay(se)
@@ -204,7 +204,7 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
   }
 
   # write all entries of the table
-  if(writeOutput) write.table(sTab,file=outputFile,sep="\t",quote=F,col.names=T,row.names=F)
+  if(writeOutput) write.table(sTab,file=outputFile,sep="\t",quote=FALSE,col.names=TRUE,row.names=FALSE)
   if(plotGraph) showSigOfNodes(GOdata,topGO::score(resultFisher),firstSigNodes=plotNodes, useInfo="all")
   #   if(outputToLatex) sTabSig <- xtable(apply(sTabSig[1:15,], 2, as.character)) # take a smaller subset
 

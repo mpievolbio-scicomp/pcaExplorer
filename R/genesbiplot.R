@@ -93,7 +93,7 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
                           ellipse = FALSE, ellipse.prob = 0.68, labels = NULL, labels.size = 3,
                           alpha = 1, var.axes = TRUE, circle = FALSE, circle.prob = 0.69,
                           varname.size = 4, varname.adjust = 1.5, varname.abbrev = FALSE,
-                          arrowColors = NULL, returnData=F,coordEqual=F, scaleArrow = 1,
+                          arrowColors = NULL, returnData=FALSE,coordEqual=FALSE, scaleArrow = 1,
                           useRownamesAsLabels=TRUE, point_size=2,annotation = NULL,
                           ...)
 {

@@ -25,7 +25,7 @@ correlatePCs <- function(pcaobj,coldata,pcs=1:4){
 
   res <- matrix(NA,nrow=length(pcs),ncol = ncol(coldata))
 
-  colnames(res) <- colnames(cd)
+  colnames(res) <- colnames(coldata)
   rownames(res) <- paste0("PC_",pcs)
 
   for (i in 1:ncol(res)){

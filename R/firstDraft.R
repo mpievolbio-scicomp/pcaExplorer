@@ -57,6 +57,7 @@ footer<-function(){
 #' @param annotation
 #'
 #' @import DESeq2
+#' @import SummarizedExperiment
 #' @import genefilter
 #' @import pheatmap
 #' @import d3heatmap
@@ -441,7 +442,7 @@ pcaExplorer <- function(obj=NULL,
         return(NULL)
       poss_covars <- names(colData(values$mydds))
       selectInput('color_by', label = 'color by: ',
-                  choices = c(NULL, poss_covars), selected = NULL,multiple = T)
+                  choices = c(NULL, poss_covars), selected = NULL,multiple = TRUE)
     })
 
 
@@ -617,7 +618,7 @@ pcaExplorer <- function(obj=NULL,
 
     output$reads_barplot <- renderPlot({
       rr <- colSums(counts(values$mydds))/1e6
-      rrdf <- data.frame(Reads=rr,Sample=names(rr),stringsAsFactors = F)
+      rrdf <- data.frame(Reads=rr,Sample=names(rr),stringsAsFactors = FALSE)
       if (!is.null(input$color_by)) {
         rrdf$Group <- colData(values$mydds)[input$color_by][[1]]
         p <- ggplot(rrdf,aes(Sample,weight=Reads)) + geom_bar(aes(fill=Group))
@@ -712,7 +713,7 @@ pcaExplorer <- function(obj=NULL,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      arrowColors = factor(colGroups),
-                     alpha=input$pca_point_alpha,coordEqual=F,useRownamesAsLabels=FALSE,labels.size=input$pca_label_size,
+                     alpha=input$pca_point_alpha,coordEqual=FALSE,useRownamesAsLabels=FALSE,labels.size=input$pca_label_size,
                      point_size=input$pca_point_size,varname.size=input$pca_varname_size, scaleArrow = input$pca_scale_arrow,annotation=values$myannotation)
       exportPlots$genesPca <- res
       res
@@ -741,7 +742,7 @@ pcaExplorer <- function(obj=NULL,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
                      arrowColors = factor(colGroups),
-                     alpha=input$pca_point_alpha,coordEqual=F,
+                     alpha=input$pca_point_alpha,coordEqual=FALSE,
                      var.axes=input$variable_labels, # workaround for a ggplot2 bug/missing thing: here details: https://github.com/hadley/ggplot2/issues/905
                      labels.size=input$pca_label_size,varname.size=input$pca_varname_size,
                      scaleArrow = input$pca_scale_arrow,point_size=input$pca_point_size,annotation=values$myannotation)
@@ -780,7 +781,7 @@ pcaExplorer <- function(obj=NULL,
 
         )
 
-      genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = T)
+      genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
 
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
@@ -804,7 +805,7 @@ pcaExplorer <- function(obj=NULL,
                      biplot = TRUE,
                      # arrowColors = colGroups,
                      alpha=input$pca_point_alpha,
-                     returnData=T,annotation=values$myannotation)
+                     returnData=TRUE,annotation=values$myannotation)
       df2$geneName <- values$myannotation$gene_name[match(rownames(df2),rownames(values$myannotation))]
       res <- brushedPoints(df2, input$pcagenes_brush,xvar="xvar",yvar="yvar",)
       res
@@ -818,7 +819,7 @@ pcaExplorer <- function(obj=NULL,
                      biplot = TRUE,
                      # arrowColors = colGroups,
                      alpha=input$pca_point_alpha,
-                     returnData=T,annotation=values$myannotation)
+                     returnData=TRUE,annotation=values$myannotation)
       df2$geneName <- values$myannotation$gene_name[match(rownames(df2),rownames(values$myannotation))]
       res <- nearPoints(df2, input$pcagenes_click,
                         threshold = 20, maxpoints = 3,
@@ -835,7 +836,7 @@ pcaExplorer <- function(obj=NULL,
                      biplot = TRUE,
                      # arrowColors = colGroups,
                      alpha=input$pca_point_alpha,
-                     returnData=T,annotation=values$myannotation)
+                     returnData=TRUE,annotation=values$myannotation)
       df2$geneName <- values$myannotation$gene_name[match(rownames(df2),rownames(values$myannotation))]
       res <- nearPoints(df2, input$pcagenes_zoom_click,
                         threshold = 20, maxpoints = 1,
@@ -980,7 +981,7 @@ pcaExplorer <- function(obj=NULL,
         if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
         selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
       }
-      genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = T)
+      genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
 
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
