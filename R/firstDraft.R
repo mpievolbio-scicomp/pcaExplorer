@@ -619,6 +619,8 @@ pcaExplorer <- function(obj=NULL,
 
     output$reads_barplot <- renderPlot({
       rr <- colSums(counts(values$mydds))/1e6
+      if(is.null(names(rr)))
+        names(rr) <- paste0("sample_",1:length(rr))
       rrdf <- data.frame(Reads=rr,Sample=names(rr),stringsAsFactors = FALSE)
       if (!is.null(input$color_by)) {
         rrdf$Group <- colData(values$mydds)[input$color_by][[1]]
