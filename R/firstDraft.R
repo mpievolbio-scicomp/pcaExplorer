@@ -1113,8 +1113,12 @@ pcaExplorer <- function(obj=NULL,
 
 
     obj3 <- reactive({
+
+      # check that I have at least two factors
+      length(colData(rldobj))
+
       # preliminary on the object to morph into obj3
-      exprmat <- t(assay(rldobj))
+      exprmat <- t(assay(rldobj)) >= 2 # (3 if we exclude the size Factor)
 
 
       # removing non expressed genes in advance?
@@ -1128,6 +1132,19 @@ pcaExplorer <- function(obj=NULL,
 
       exprmat <- exprmat[,rowSums(counts(ddsobj) > 5)>2]
 
+      fac1 <- "condition"
+      fac2 <- "tissue"
+
+      fac1_touse <- c("WT","G37I")
+      fac2_touse <- c("macro","endo","CD11b","CD8")
+
+      preselected_fac1 <- colnames(rldobj)[colData(rldobj)[[fac1]] %in% fac1_touse]
+      preselected_fac2 <- colnames(rldobj)[colData(rldobj)[[fac2]] %in% fac2_touse]
+      presel <- intersect(preselected_fac1,preselected_fac2)
+      coldata(rldobj)[presel,] # check that the repl are balanced
+
+
+      # here, let the user compose the matrix
 
       ## original
       pcmat <- cbind(exprmat[c("WT_macro_R1","WT_macro_R2","WT_macro_R3","WT_macro_R4",
