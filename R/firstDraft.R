@@ -1163,8 +1163,6 @@ pcaExplorer <- function(obj=NULL,
 
       presel1 <- colnames(values$myrlt)[(colData(values$myrlt)[[fac1]] %in% fac1_touse[1]) & colData(values$myrlt)[[fac2]] %in% fac2_touse]
 
-
-
       selectInput('picksamples1', label = 'combine these samples in the selected order: ',
                   choices = c(NULL, presel1), selected = NULL,multiple = TRUE)
     })
@@ -1191,9 +1189,6 @@ pcaExplorer <- function(obj=NULL,
 
       presel2 <- colnames(values$myrlt)[(colData(values$myrlt)[[fac1]] %in% fac1_touse[2]) & colData(values$myrlt)[[fac2]] %in% fac2_touse]
 
-
-
-
       selectInput('picksamples2', label = 'combine these samples in the selected order: ',
                   choices = c(NULL, presel2), selected = NULL,multiple = TRUE)
     })
@@ -1203,16 +1198,16 @@ pcaExplorer <- function(obj=NULL,
 
 
     # I WILL MODIFY HERE
-    ddsmf_clean
-    rld_global
-
-
-
-    kldds <- updateObject(dds_kl)
-    klrld <- updateObject(rld_kl)
-
-    ddsobj <- updateObject(ddsmf_clean)
-    rldobj <- updateObject(rld_global)
+#     ddsmf_clean
+#     rld_global
+#
+#
+#
+#     kldds <- updateObject(dds_kl)
+#     klrld <- updateObject(rld_kl)
+#
+#     ddsobj <- updateObject(ddsmf_clean)
+#     rldobj <- updateObject(rld_global)
 
 
     composedMat <- eventReactive( input$composemat, {
@@ -1295,9 +1290,9 @@ pcaExplorer <- function(obj=NULL,
 
 
 
-      max.type <- apply(pcmat[,1:ncol(exprmat)],2,which.max)
+      max.type <- apply(pcmat[,1:(ncol(pcmat)/2)],2,which.max)
       tcol.justMax <- ifelse(max.type <= 4,alpha("green",aval),ifelse(max.type <= 8,alpha("red",aval),ifelse(max.type <= 12,alpha("blue",aval),alpha("orange",aval))))
-      max.type2 <- apply(pcmat[,(ncol(exprmat)+1):ncol(pcmat)],2,which.max)
+      max.type2 <- apply(pcmat[,((ncol(pcmat)/2)+1):ncol(pcmat)],2,which.max)
       tcol2.justMax <- ifelse(max.type2 <= 4,alpha("green",aval),ifelse(max.type2 <= 8,alpha("red",aval),ifelse(max.type2 <= 12,alpha("blue",aval),alpha("orange",aval))))
 
       # using the median across replicates
