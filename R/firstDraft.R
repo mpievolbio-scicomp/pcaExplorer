@@ -92,7 +92,7 @@ pcaExplorer <- function(obj=NULL,
     stop("pca_SUPALIVE requires 'shiny'. Please install it using
          install.packages('shiny')")
   }
-  library("shinyURL")
+  # library("shinyURL")
   # here something like, if provided as a countmatrix, create dds and rld
 
 #   if(!is.null(obj)){
@@ -278,7 +278,7 @@ pcaExplorer <- function(obj=NULL,
             "Genes View",
             p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components."),
 
-            shinyURL.ui(),
+            # shinyURL.ui(),
 
             fluidRow(checkboxInput("variable_labels","Display variable labels",value = TRUE)),
             fluidRow(
@@ -477,7 +477,7 @@ pcaExplorer <- function(obj=NULL,
 
     user_settings <- reactiveValues(save_width = 45, save_height = 11)
 
-    shinyURL.server()
+    # shinyURL.server()
 
     # compute only rlt if dds is provided but not cm&coldata
     if(!is.null(obj2) & (is.null(countmatrix) & is.null(coldata)) & is.null(obj))
