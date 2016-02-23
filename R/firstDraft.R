@@ -386,6 +386,7 @@ pcaExplorer <- function(obj=NULL,
 
                    actionButton("composemat","Compose the matrix",icon=icon("spinner")),
 
+                   verbatimTextOutput("dd"),
 
                    fluidRow(
                      column(4,
@@ -1226,85 +1227,29 @@ pcaExplorer <- function(obj=NULL,
 
     obj3 <- reactive({
 
-#       # check that I have at least two factors
-#       length(colData(values$myrlt))
-#
-#       # preliminary on the object to morph into obj3
-#       exprmat <- t(assay(values$myrlt)) # >= 2 # (3 if we exclude the size Factor)
-#
-#
-#       # removing non expressed genes in advance?
-#       # expressed <- counts(ddsmf_global)#...
-#       (rowSums(counts(ddsobj) > 5)>2) %>% sum
-#       (rowSums(counts(ddsobj) > 3)>1) %>% sum
-#       (rowSums(counts(ddsobj) > 3)>2) %>% sum
-#       (rowSums(counts(ddsobj) > 5)>1) %>% sum
-#       (rowSums(counts(ddsobj) > 5)>3) %>% sum
-#       sum(rowSums(counts(ddsobj))>0)
-#
-#       exprmat <- exprmat[,rowSums(counts(values$mydds) > 5)>2]
-#
-# #       fac1 <- "condition"
-# #       fac2 <- "tissue"
-# #
-# #       fac1_touse <- c("WT","G37I")
-# #       fac2_touse <- c("macro","endo","CD11b","CD8")
-# #
-# #       preselected_fac1 <- colnames(rldobj)[colData(rldobj)[[fac1]] %in% fac1_touse]
-# #       preselected_fac2 <- colnames(rldobj)[colData(rldobj)[[fac2]] %in% fac2_touse]
-# #       presel <- intersect(preselected_fac1,preselected_fac2)
-# #       colData(rldobj)[presel,] # check that the repl are balanced
-#
-#
-#       # here, let the user compose the matrix
-#       pcmat <- cbind(exprmat[input$picksamples1,],
-#                      exprmat[input$picksamples2,])
-#                      # exprmat[c("G37I_macro_R1","G37I_macro_R2","G37I_macro_R3","G37I_macro_R4",
-#                                # "G37I_endo_R1","G37I_endo_R2","G37I_endo_R3","G37I_endo_R4",
-#                                # "G37I_CD11b_R1","G37I_CD11b_R2","G37I_CD11b_R5","G37I_CD11b_R4",
-#                                # "G37I_CD8_R1","G37I_CD8_R3","G37I_CD8_R3","G37I_CD8_R4"),])
-#
-#       ## original
-# #       pcmat <- cbind(exprmat[c("WT_macro_R1","WT_macro_R2","WT_macro_R3","WT_macro_R4",
-# #                                "WT_endo_R1","WT_endo_R2","WT_endo_R3","WT_endo_R4",
-# #                                "WT_CD11b_R1","WT_CD11b_R2","WT_CD11b_R3","WT_CD11b_R4",
-# #                                "WT_CD8_R1","WT_CD8_R2","WT_CD8_R3","WT_CD8_R4"),],
-# #                      exprmat[c("G37I_macro_R1","G37I_macro_R2","G37I_macro_R3","G37I_macro_R4",
-# #                                "G37I_endo_R1","G37I_endo_R2","G37I_endo_R3","G37I_endo_R4",
-# #                                "G37I_CD11b_R1","G37I_CD11b_R2","G37I_CD11b_R5","G37I_CD11b_R4",
-# #                                "G37I_CD8_R1","G37I_CD8_R3","G37I_CD8_R3","G37I_CD8_R4"),])
-#       ## to check whether it is robust
-#       #         pcmat <- cbind(exprmat[c("WT_macro_R1","WT_macro_R2","WT_macro_R3","WT_macro_R4",
-#       #                                  "WT_endo_R1","WT_endo_R2","WT_endo_R3","WT_endo_R4",
-#       #                                  "WT_CD11b_R1","WT_CD11b_R2","WT_CD11b_R5","WT_CD11b_R4",
-#       #                                  "WT_CD8_R1","WT_CD8_R2","WT_CD8_R3","WT_CD8_R4"),],
-#       #                        exprmat[c("G37I_macro_R3","G37I_macro_R2","G37I_macro_R4","G37I_macro_R1",
-#       #                                  "G37I_endo_R4","G37I_endo_R3","G37I_endo_R1","G37I_endo_R2",
-#       #                                  "G37I_CD11b_R2","G37I_CD11b_R3","G37I_CD11b_R1","G37I_CD11b_R4",
-#       #                                  "G37I_CD8_R1","G37I_CD8_R4","G37I_CD8_R2","G37I_CD8_R3"),])
       pcmat <- composedMat()
 
       library(scales)
       aval <- 0.3
+      fac2pal <- alpha(c("green","red","blue","orange","violet"),aval) # 5 are enough
 
-
-
-
+      # colData(values$myrlt)[input$covar2][rownames(pcmat),]
       max.type <- apply(pcmat[,1:(ncol(pcmat)/2)],2,which.max)
-      tcol.justMax <- ifelse(max.type <= 4,alpha("green",aval),ifelse(max.type <= 8,alpha("red",aval),ifelse(max.type <= 12,alpha("blue",aval),alpha("orange",aval))))
+
+      fac2_col <- factor(colData(values$myrlt)[input$covar2][rownames(pcmat),],
+                         levels=unique(as.character(colData(values$myrlt)[input$covar2][rownames(pcmat),])))
+      tcol.justMax <- fac2pal[fac2_col][max.type]
+      # tcol.justMax <- ifelse(max.type <= 4,"green",ifelse(max.type <= 8,"red",ifelse(max.type <= 12,"blue","orange")))
+
       max.type2 <- apply(pcmat[,((ncol(pcmat)/2)+1):ncol(pcmat)],2,which.max)
-      tcol2.justMax <- ifelse(max.type2 <= 4,alpha("green",aval),ifelse(max.type2 <= 8,alpha("red",aval),ifelse(max.type2 <= 12,alpha("blue",aval),alpha("orange",aval))))
+      # tcol2.justMax <- ifelse(max.type2 <= 4,alpha("green",aval),ifelse(max.type2 <= 8,alpha("red",aval),ifelse(max.type2 <= 12,alpha("blue",aval),alpha("orange",aval))))
+
+      tcol2.justMax <- fac2pal[fac2_col][max.type2]
+
+
 
       # using the median across replicates
       celltypes <- gsub("_R.","",rownames(pcmat))
-
-      # attach this to the matrix to split accordingly
-      # pcmat2 <- data.frame(pcmat,celltypes=celltypes,stringsAsFactors = F)
-
-
-      # minipcmat <- pcmat[1:16,1:10]
-      # pcmat2 <- data.frame(minipcmat,celltypes=celltypes,stringsAsFactors = F)
-      # pcmat3 <- gather(as.data.frame(pcmat2),id,exprvalue,-celltypes)
 
       # brutal way, with for loop...
       #         mediansByReps <- matrix(NA,4,ncol(pcmat))
@@ -1378,8 +1323,8 @@ pcaExplorer <- function(obj=NULL,
       ## ## ##
     })
 
-    output$rufdebug <- renderPrint({
-      str(obj3())
+    output$dd <- renderPrint({
+      input$picksamples1
     })
 
 
