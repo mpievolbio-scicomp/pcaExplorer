@@ -5,7 +5,7 @@
 \title{Title}
 \usage{
 genepca(x, ntop, choices = c(1, 2), arrowColors = muted("green"),
-  biplot = FALSE, ...)
+  groupNames = "group", biplot = FALSE, ...)
 }
 \arguments{
 \item{...}{}
