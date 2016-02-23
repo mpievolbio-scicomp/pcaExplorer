@@ -92,7 +92,7 @@ pcaExplorer <- function(obj=NULL,
     stop("pca_SUPALIVE requires 'shiny'. Please install it using
          install.packages('shiny')")
   }
-
+  library("shinyURL")
   # here something like, if provided as a countmatrix, create dds and rld
 
 #   if(!is.null(obj)){
@@ -278,6 +278,8 @@ pcaExplorer <- function(obj=NULL,
             "Genes View",
             p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components."),
 
+            shinyURL.ui(),
+
             fluidRow(checkboxInput("variable_labels","Display variable labels",value = TRUE)),
             fluidRow(
               column(
@@ -373,16 +375,43 @@ pcaExplorer <- function(obj=NULL,
 
 
           tabPanel("Multifactor exploration",
+                   fluidRow(
+                     column(
+                       width = 6,
+                       uiOutput("covar1")
+                     ),
+                     column(
+                       width = 6,
+                       uiOutput("covar2")
+                     )
+                   ),
+                   fluidRow(
+                     column(
+                       width = 6,
+                       uiOutput("c1levels")
+                     ),
+                     column(
+                       width = 6,
+                       uiOutput("c2levels")
+                     )
+                   ),
+                   fluidRow(
+                     column(
+                       width = 6,
+                       uiOutput("colnames1")
+                     ),
+                     column(
+                       width = 6,
+                       uiOutput("colnames2")
+                     )
+                   ),
 
-
-                   uiOutput("covar1"),
-                   uiOutput("covar2"),
-
-                   uiOutput("c1levels"),
-                   uiOutput("c2levels"),
-
-                   uiOutput("colnames1"),
-                   uiOutput("colnames2"),
+#
+#                    uiOutput("c1levels"),
+#                    uiOutput("c2levels"),
+#
+#                    uiOutput("colnames1"),
+#                    uiOutput("colnames2"),
 
                    actionButton("composemat","Compose the matrix",icon=icon("spinner")),
 
@@ -447,6 +476,8 @@ pcaExplorer <- function(obj=NULL,
     values$myannotation <- annotation
 
     user_settings <- reactiveValues(save_width = 45, save_height = 11)
+
+    shinyURL.server()
 
     # compute only rlt if dds is provided but not cm&coldata
     if(!is.null(obj2) & (is.null(countmatrix) & is.null(coldata)) & is.null(obj))
@@ -1306,20 +1337,19 @@ pcaExplorer <- function(obj=NULL,
       points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
       points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)
 
-
-      ## ## ##
-      #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[1]],
-      #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[2]],
-      #                pch=20,col="darkviolet",cex=2)
-      #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[1]],
-      #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[2]],
-      #                pch=20,col="steelblue",cex=2)
-      #         # legend("topleft",fill = c("darkviolet","steelblue"),legend=c("galon Macro","galon CD8"))
-      mgenes_extended <- c("Tnf","Mmp12","Adam8","Mrc1","Cd36","Cd83","Itgam","Lyz1","Slamf8","Clec12a","Clec10a","Pdc","Cd274")
-      mgenes_extended_ENS <- rownames(cm2)[match(mgenes_extended,cm2$fromgtf)]
-      points(pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[1]],
-             pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[2]],
-             pch=20,col="salmon",cex=2)
+#       ## ## ##
+#       #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[1]],
+#       #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[2]],
+#       #                pch=20,col="darkviolet",cex=2)
+#       #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[1]],
+#       #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[2]],
+#       #                pch=20,col="steelblue",cex=2)
+#       #         # legend("topleft",fill = c("darkviolet","steelblue"),legend=c("galon Macro","galon CD8"))
+#       mgenes_extended <- c("Tnf","Mmp12","Adam8","Mrc1","Cd36","Cd83","Itgam","Lyz1","Slamf8","Clec12a","Clec10a","Pdc","Cd274")
+#       mgenes_extended_ENS <- rownames(cm2)[match(mgenes_extended,cm2$fromgtf)]
+#       points(pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[1]],
+#              pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[2]],
+#              pch=20,col="salmon",cex=2)
       ## ## ##
     })
 
@@ -1355,20 +1385,20 @@ pcaExplorer <- function(obj=NULL,
       }
       points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
       points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)
-      #
-      #         ## ## ##
-      #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[1]],
-      #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[2]],
-      #                pch=20,col="darkviolet",cex=2)
-      #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[1]],
-      #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[2]],
-      #                pch=20,col="steelblue",cex=2)
-      #         # legend("topleft",fill = c("darkviolet","steelblue"),legend=c("galon Macro","galon CD8"))
-      mgenes_extended <- c("Tnf","Mmp12","Adam8","Mrc1","Cd36","Cd83","Itgam","Lyz1","Slamf8","Clec12a","Clec10a","Pdc","Cd274")
-      mgenes_extended_ENS <- rownames(cm2)[match(mgenes_extended,cm2$fromgtf)]
-      points(pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[1]],
-             pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[2]],
-             pch=20,col="salmon",cex=2)
+#       #
+#       #         ## ## ##
+#       #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[1]],
+#       #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[2]],
+#       #                pch=20,col="darkviolet",cex=2)
+#       #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[1]],
+#       #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[2]],
+#       #                pch=20,col="steelblue",cex=2)
+#       #         # legend("topleft",fill = c("darkviolet","steelblue"),legend=c("galon Macro","galon CD8"))
+#       mgenes_extended <- c("Tnf","Mmp12","Adam8","Mrc1","Cd36","Cd83","Itgam","Lyz1","Slamf8","Clec12a","Clec10a","Pdc","Cd274")
+#       mgenes_extended_ENS <- rownames(cm2)[match(mgenes_extended,cm2$fromgtf)]
+#       points(pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[1]],
+#              pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[2]],
+#              pch=20,col="salmon",cex=2)
       ## ## ##
 
     })
@@ -1412,7 +1442,8 @@ pcaExplorer <- function(obj=NULL,
       rownames(pcspcs) <- c(paste0(colnames(pcmat)[1:gene.no],"_WT"),
                             paste0(colnames(pcmat)[(gene.no+1):(2*gene.no)],"_G37"))
 
-      pcspcs$geneName <- cm2$fromgtf[match(pcspcs$geneID,rownames(cm2))]
+      if(!is.null(values$myannotation))
+        pcspcs$geneName <- values$myannotation$gene_name[match(pcspcs$geneID,rownames(values$myannotation))]
 
 
       res <- brushedPoints(pcspcs, input$pcaruf_brush,xvar="firstPC",yvar="secondPC",)
