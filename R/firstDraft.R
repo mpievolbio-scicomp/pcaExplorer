@@ -1162,7 +1162,7 @@ pcaExplorer <- function(obj=NULL,
 
 
 
-      selectInput('picksamples', label = 'combine these samples: ',
+      selectInput('picksamples', label = 'combine these samples in the selected order: ',
                   choices = c(NULL, presel), selected = NULL,multiple = TRUE)
     })
 
@@ -1188,7 +1188,7 @@ pcaExplorer <- function(obj=NULL,
       length(colData(rldobj))
 
       # preliminary on the object to morph into obj3
-      exprmat <- t(assay(rldobj)) >= 2 # (3 if we exclude the size Factor)
+      exprmat <- t(assay(rldobj)) # >= 2 # (3 if we exclude the size Factor)
 
 
       # removing non expressed genes in advance?
@@ -1291,7 +1291,7 @@ pcaExplorer <- function(obj=NULL,
 
 
     output$pcaruf <- renderPlot({
-      pcmat <- obj3()[[1]]
+    pcmat <- obj3()[[1]]
       tcol <- obj3()[[2]]
       tcol2 <- obj3()[[3]]
       pres <- prcomp(t(pcmat),scale=FALSE)
