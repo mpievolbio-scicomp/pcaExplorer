@@ -1146,7 +1146,7 @@ pcaExplorer <- function(obj=NULL,
         # return(NULL)
       poss_covars <- names(colData(values$mydds))
       selectInput('covar1', label = 'factor1: ',
-                  choices = c(NULL, poss_covars), selected = NULL,multiple = F)
+                  choices = c(NULL, poss_covars), selected = NULL,multiple = FALSE)
     })
 
     output$covar2 <- renderUI({
@@ -1154,7 +1154,7 @@ pcaExplorer <- function(obj=NULL,
       # return(NULL)
       poss_covars <- names(colData(values$mydds))
       selectInput('covar2', label = 'factor2: ',
-                  choices = c(NULL, poss_covars), selected = NULL,multiple = F)
+                  choices = c(NULL, poss_covars), selected = NULL,multiple = FALSE)
     })
 
 
@@ -1163,7 +1163,7 @@ pcaExplorer <- function(obj=NULL,
         return(NULL)
       fac1lev <- levels(colData(values$myrlt)[[input$covar1]])
       selectInput('covar1levels', label = 'factor1 levels: ',
-                  choices = c(NULL, fac1lev), selected = NULL,multiple = T) # actually 2
+                  choices = c(NULL, fac1lev), selected = NULL,multiple = TRUE) # actually 2
     })
 
     output$c2levels <- renderUI({
@@ -1171,7 +1171,7 @@ pcaExplorer <- function(obj=NULL,
         return(NULL)
       fac2lev <- levels(colData(values$myrlt)[[input$covar2]])
       selectInput('covar2levels', label = 'factor2 levels: ',
-                  choices = c(NULL, fac2lev), selected = NULL,multiple = T) # 2 or more are allowed!
+                  choices = c(NULL, fac2lev), selected = NULL,multiple = TRUE) # 2 or more are allowed!
     })
 
     output$colnames1 <- renderUI({
