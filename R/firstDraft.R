@@ -381,7 +381,10 @@ pcaExplorer <- function(obj=NULL,
                    uiOutput("c1levels"),
                    uiOutput("c2levels"),
 
-                   uiOutput("colnames"),
+                   uiOutput("colnames1"),
+                   uiOutput("colnames2"),
+
+                   actionButton("composemat","Compose the matrix",icon=icon("spinner")),
 
 
                    fluidRow(
@@ -1139,7 +1142,7 @@ pcaExplorer <- function(obj=NULL,
                   choices = c(NULL, fac2lev), selected = NULL,multiple = T) # 2 or more are allowed!
     })
 
-    output$colnames <- renderUI({
+    output$colnames1 <- renderUI({
       if(is.null(values$myrlt))
         return(NULL)
       if(is.null(input$covar1))
@@ -1158,13 +1161,43 @@ pcaExplorer <- function(obj=NULL,
       presel <- intersect(preselected_fac1,preselected_fac2)
       mysamples <- colData(values$myrlt)[presel,] # check that the repl are balanced
 
+      presel1 <- colnames(values$myrlt)[(colData(values$myrlt)[[fac1]] %in% fac1_touse[1]) & colData(values$myrlt)[[fac2]] %in% fac2_touse]
 
 
 
-
-      selectInput('picksamples', label = 'combine these samples in the selected order: ',
-                  choices = c(NULL, presel), selected = NULL,multiple = TRUE)
+      selectInput('picksamples1', label = 'combine these samples in the selected order: ',
+                  choices = c(NULL, presel1), selected = NULL,multiple = TRUE)
     })
+
+
+    output$colnames2 <- renderUI({
+      if(is.null(values$myrlt))
+        return(NULL)
+      if(is.null(input$covar1))
+        return(NULL)
+      if(is.null(input$covar2))
+        return(NULL)
+
+      fac1 <- input$covar1
+      fac2 <- input$covar2
+
+      fac1_touse <- input$covar1levels
+      fac2_touse <- input$covar2levels
+
+      preselected_fac1 <- colnames(values$myrlt)[colData(values$myrlt)[[fac1]] %in% fac1_touse]
+      preselected_fac2 <- colnames(values$myrlt)[colData(values$myrlt)[[fac2]] %in% fac2_touse]
+      presel <- intersect(preselected_fac1,preselected_fac2)
+      mysamples <- colData(values$myrlt)[presel,] # check that the repl are balanced
+
+      presel2 <- colnames(values$myrlt)[(colData(values$myrlt)[[fac1]] %in% fac1_touse[2]) & colData(values$myrlt)[[fac2]] %in% fac2_touse]
+
+
+
+
+      selectInput('picksamples2', label = 'combine these samples in the selected order: ',
+                  choices = c(NULL, presel2), selected = NULL,multiple = TRUE)
+    })
+
 
 
 
@@ -1182,59 +1215,79 @@ pcaExplorer <- function(obj=NULL,
     rldobj <- updateObject(rld_global)
 
 
+    composedMat <- eventReactive( input$composemat, {
+      exprmat <- t(assay(values$myrlt))
+      exprmat <- exprmat[,rowSums(counts(values$mydds) > 5)>2]
+
+      withProgress(message = "Composing the matrix...",
+                   value = 0,
+                   {
+                     pcmat <- cbind(exprmat[input$picksamples1,],
+                                    exprmat[input$picksamples2,])
+                   })
+      pcmat
+    })
+
+
     obj3 <- reactive({
 
-      # check that I have at least two factors
-      length(colData(rldobj))
-
-      # preliminary on the object to morph into obj3
-      exprmat <- t(assay(rldobj)) # >= 2 # (3 if we exclude the size Factor)
-
-
-      # removing non expressed genes in advance?
-      # expressed <- counts(ddsmf_global)#...
-      (rowSums(counts(ddsobj) > 5)>2) %>% sum
-      (rowSums(counts(ddsobj) > 3)>1) %>% sum
-      (rowSums(counts(ddsobj) > 3)>2) %>% sum
-      (rowSums(counts(ddsobj) > 5)>1) %>% sum
-      (rowSums(counts(ddsobj) > 5)>3) %>% sum
-      sum(rowSums(counts(ddsobj))>0)
-
-      exprmat <- exprmat[,rowSums(counts(ddsobj) > 5)>2]
-
-      fac1 <- "condition"
-      fac2 <- "tissue"
-
-      fac1_touse <- c("WT","G37I")
-      fac2_touse <- c("macro","endo","CD11b","CD8")
-
-      preselected_fac1 <- colnames(rldobj)[colData(rldobj)[[fac1]] %in% fac1_touse]
-      preselected_fac2 <- colnames(rldobj)[colData(rldobj)[[fac2]] %in% fac2_touse]
-      presel <- intersect(preselected_fac1,preselected_fac2)
-      colData(rldobj)[presel,] # check that the repl are balanced
-
-
-      # here, let the user compose the matrix
-
-      ## original
-      pcmat <- cbind(exprmat[c("WT_macro_R1","WT_macro_R2","WT_macro_R3","WT_macro_R4",
-                               "WT_endo_R1","WT_endo_R2","WT_endo_R3","WT_endo_R4",
-                               "WT_CD11b_R1","WT_CD11b_R2","WT_CD11b_R3","WT_CD11b_R4",
-                               "WT_CD8_R1","WT_CD8_R2","WT_CD8_R3","WT_CD8_R4"),],
-                     exprmat[c("G37I_macro_R1","G37I_macro_R2","G37I_macro_R3","G37I_macro_R4",
-                               "G37I_endo_R1","G37I_endo_R2","G37I_endo_R3","G37I_endo_R4",
-                               "G37I_CD11b_R1","G37I_CD11b_R2","G37I_CD11b_R5","G37I_CD11b_R4",
-                               "G37I_CD8_R1","G37I_CD8_R3","G37I_CD8_R3","G37I_CD8_R4"),])
-      ## to check whether it is robust
-      #         pcmat <- cbind(exprmat[c("WT_macro_R1","WT_macro_R2","WT_macro_R3","WT_macro_R4",
-      #                                  "WT_endo_R1","WT_endo_R2","WT_endo_R3","WT_endo_R4",
-      #                                  "WT_CD11b_R1","WT_CD11b_R2","WT_CD11b_R5","WT_CD11b_R4",
-      #                                  "WT_CD8_R1","WT_CD8_R2","WT_CD8_R3","WT_CD8_R4"),],
-      #                        exprmat[c("G37I_macro_R3","G37I_macro_R2","G37I_macro_R4","G37I_macro_R1",
-      #                                  "G37I_endo_R4","G37I_endo_R3","G37I_endo_R1","G37I_endo_R2",
-      #                                  "G37I_CD11b_R2","G37I_CD11b_R3","G37I_CD11b_R1","G37I_CD11b_R4",
-      #                                  "G37I_CD8_R1","G37I_CD8_R4","G37I_CD8_R2","G37I_CD8_R3"),])
-
+#       # check that I have at least two factors
+#       length(colData(values$myrlt))
+#
+#       # preliminary on the object to morph into obj3
+#       exprmat <- t(assay(values$myrlt)) # >= 2 # (3 if we exclude the size Factor)
+#
+#
+#       # removing non expressed genes in advance?
+#       # expressed <- counts(ddsmf_global)#...
+#       (rowSums(counts(ddsobj) > 5)>2) %>% sum
+#       (rowSums(counts(ddsobj) > 3)>1) %>% sum
+#       (rowSums(counts(ddsobj) > 3)>2) %>% sum
+#       (rowSums(counts(ddsobj) > 5)>1) %>% sum
+#       (rowSums(counts(ddsobj) > 5)>3) %>% sum
+#       sum(rowSums(counts(ddsobj))>0)
+#
+#       exprmat <- exprmat[,rowSums(counts(values$mydds) > 5)>2]
+#
+# #       fac1 <- "condition"
+# #       fac2 <- "tissue"
+# #
+# #       fac1_touse <- c("WT","G37I")
+# #       fac2_touse <- c("macro","endo","CD11b","CD8")
+# #
+# #       preselected_fac1 <- colnames(rldobj)[colData(rldobj)[[fac1]] %in% fac1_touse]
+# #       preselected_fac2 <- colnames(rldobj)[colData(rldobj)[[fac2]] %in% fac2_touse]
+# #       presel <- intersect(preselected_fac1,preselected_fac2)
+# #       colData(rldobj)[presel,] # check that the repl are balanced
+#
+#
+#       # here, let the user compose the matrix
+#       pcmat <- cbind(exprmat[input$picksamples1,],
+#                      exprmat[input$picksamples2,])
+#                      # exprmat[c("G37I_macro_R1","G37I_macro_R2","G37I_macro_R3","G37I_macro_R4",
+#                                # "G37I_endo_R1","G37I_endo_R2","G37I_endo_R3","G37I_endo_R4",
+#                                # "G37I_CD11b_R1","G37I_CD11b_R2","G37I_CD11b_R5","G37I_CD11b_R4",
+#                                # "G37I_CD8_R1","G37I_CD8_R3","G37I_CD8_R3","G37I_CD8_R4"),])
+#
+#       ## original
+# #       pcmat <- cbind(exprmat[c("WT_macro_R1","WT_macro_R2","WT_macro_R3","WT_macro_R4",
+# #                                "WT_endo_R1","WT_endo_R2","WT_endo_R3","WT_endo_R4",
+# #                                "WT_CD11b_R1","WT_CD11b_R2","WT_CD11b_R3","WT_CD11b_R4",
+# #                                "WT_CD8_R1","WT_CD8_R2","WT_CD8_R3","WT_CD8_R4"),],
+# #                      exprmat[c("G37I_macro_R1","G37I_macro_R2","G37I_macro_R3","G37I_macro_R4",
+# #                                "G37I_endo_R1","G37I_endo_R2","G37I_endo_R3","G37I_endo_R4",
+# #                                "G37I_CD11b_R1","G37I_CD11b_R2","G37I_CD11b_R5","G37I_CD11b_R4",
+# #                                "G37I_CD8_R1","G37I_CD8_R3","G37I_CD8_R3","G37I_CD8_R4"),])
+#       ## to check whether it is robust
+#       #         pcmat <- cbind(exprmat[c("WT_macro_R1","WT_macro_R2","WT_macro_R3","WT_macro_R4",
+#       #                                  "WT_endo_R1","WT_endo_R2","WT_endo_R3","WT_endo_R4",
+#       #                                  "WT_CD11b_R1","WT_CD11b_R2","WT_CD11b_R5","WT_CD11b_R4",
+#       #                                  "WT_CD8_R1","WT_CD8_R2","WT_CD8_R3","WT_CD8_R4"),],
+#       #                        exprmat[c("G37I_macro_R3","G37I_macro_R2","G37I_macro_R4","G37I_macro_R1",
+#       #                                  "G37I_endo_R4","G37I_endo_R3","G37I_endo_R1","G37I_endo_R2",
+#       #                                  "G37I_CD11b_R2","G37I_CD11b_R3","G37I_CD11b_R1","G37I_CD11b_R4",
+#       #                                  "G37I_CD8_R1","G37I_CD8_R4","G37I_CD8_R2","G37I_CD8_R3"),])
+      pcmat <- composedMat()
 
       library(scales)
       aval <- 0.3
