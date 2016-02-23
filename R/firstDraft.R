@@ -375,6 +375,15 @@ pcaExplorer <- function(obj=NULL,
           tabPanel("Multifactor exploration",
 
 
+                   uiOutput("covar1"),
+                   uiOutput("covar2"),
+
+                   uiOutput("c1levels"),
+                   uiOutput("c2levels"),
+
+                   uiOutput("colnames"),
+
+
                    fluidRow(
                      column(4,
                             selectInput('pc_x_ruf', label = 'x-axis PC: ', choices = 1:8,
@@ -1097,6 +1106,67 @@ pcaExplorer <- function(obj=NULL,
     ## from here on, RUF APP
 
 
+    output$covar1 <- renderUI({
+      # if(is.null(values$myrlt))
+        # return(NULL)
+      poss_covars <- names(colData(values$mydds))
+      selectInput('covar1', label = 'factor1: ',
+                  choices = c(NULL, poss_covars), selected = NULL,multiple = F)
+    })
+
+    output$covar2 <- renderUI({
+      # if(is.null(values$myrlt))
+      # return(NULL)
+      poss_covars <- names(colData(values$mydds))
+      selectInput('covar2', label = 'factor2: ',
+                  choices = c(NULL, poss_covars), selected = NULL,multiple = F)
+    })
+
+
+    output$c1levels <- renderUI({
+      if(is.null(input$covar1))
+        return(NULL)
+      fac1lev <- levels(colData(values$myrlt)[[input$covar1]])
+      selectInput('covar1levels', label = 'factor1 levels: ',
+                  choices = c(NULL, fac1lev), selected = NULL,multiple = T) # actually 2
+    })
+
+    output$c2levels <- renderUI({
+      if(is.null(input$covar2))
+        return(NULL)
+      fac2lev <- levels(colData(values$myrlt)[[input$covar2]])
+      selectInput('covar2levels', label = 'factor2 levels: ',
+                  choices = c(NULL, fac2lev), selected = NULL,multiple = T) # 2 or more are allowed!
+    })
+
+    output$colnames <- renderUI({
+      if(is.null(values$myrlt))
+        return(NULL)
+      if(is.null(input$covar1))
+        return(NULL)
+      if(is.null(input$covar2))
+        return(NULL)
+
+      fac1 <- input$covar1
+      fac2 <- input$covar2
+
+      fac1_touse <- input$covar1levels
+      fac2_touse <- input$covar2levels
+
+      preselected_fac1 <- colnames(values$myrlt)[colData(values$myrlt)[[fac1]] %in% fac1_touse]
+      preselected_fac2 <- colnames(values$myrlt)[colData(values$myrlt)[[fac2]] %in% fac2_touse]
+      presel <- intersect(preselected_fac1,preselected_fac2)
+      mysamples <- colData(values$myrlt)[presel,] # check that the repl are balanced
+
+
+
+
+
+      selectInput('picksamples', label = 'combine these samples: ',
+                  choices = c(NULL, presel), selected = NULL,multiple = TRUE)
+    })
+
+
 
 
     # I WILL MODIFY HERE
@@ -1141,7 +1211,7 @@ pcaExplorer <- function(obj=NULL,
       preselected_fac1 <- colnames(rldobj)[colData(rldobj)[[fac1]] %in% fac1_touse]
       preselected_fac2 <- colnames(rldobj)[colData(rldobj)[[fac2]] %in% fac2_touse]
       presel <- intersect(preselected_fac1,preselected_fac2)
-      coldata(rldobj)[presel,] # check that the repl are balanced
+      colData(rldobj)[presel,] # check that the repl are balanced
 
 
       # here, let the user compose the matrix
@@ -1168,6 +1238,8 @@ pcaExplorer <- function(obj=NULL,
 
       library(scales)
       aval <- 0.3
+
+
 
 
       max.type <- apply(pcmat[,1:ncol(exprmat)],2,which.max)
