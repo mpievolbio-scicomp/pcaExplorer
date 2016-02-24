@@ -17,9 +17,9 @@
 pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
                     pcX = 1, pcY = 2,text_labels=TRUE,point_size=3) # customized principal components
 {
-  library("DESeq2")
-  library("genefilter")
-  library("ggplot2")
+  # library("DESeq2")
+  # library("genefilter")
+  # library("ggplot2")
   rv <- rowVars(assay(x))
   select <- order(rv, decreasing = TRUE)[seq_len(min(ntop,length(rv)))]
   pca <- prcomp(t(assay(x)[select, ]))
@@ -49,13 +49,13 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
     xlab(paste0("PC",pcX,": ", round(percentVar[pcX] * 100,digits = 2), "% variance")) +
     ylab(paste0("PC",pcY,": ", round(percentVar[pcY] * 100,digits = 2), "% variance"))
 
-  library("ggrepel")
+  # library("ggrepel")
   if(text_labels) g <- g + geom_label_repel(mapping = aes(label=names,fill=group),color="white", show.legend = TRUE) +theme_bw()
   if(!is.null(title)) g <- g + ggtitle(title)
   g
 }
 
-library(topGO)
+# library(topGO)
 
 #' Title
 #'

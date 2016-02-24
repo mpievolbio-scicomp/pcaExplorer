@@ -5,9 +5,9 @@
 # list whatever is required on top of the pca_SUPALIVE function - GUESS WE'RE DONE
 ### EMBED THIS INTO INTERACTIVE HTML REPORTS? e.g. a la maplots!!!!
 
-library("DESeq2")
-library("genefilter")
-library("shiny")
+# library("DESeq2")
+# library("genefilter")
+# library("shiny")
 
 # load("/Volumes/users$/marinif/linuxHome/032-ruf-macrophages/cm2.RData")
 # load("goEnrichs.RData")
@@ -22,10 +22,10 @@ library("shiny")
 # library(shinythemes)
 
 
-library("DT")
-library("pheatmap")
-library("d3heatmap")
-library(shinydashboard)
+# library("DT")
+# library("pheatmap")
+# library("d3heatmap")
+# library(shinydashboard)
 
 # annotation <- data.frame(gene_id=rownames(cm2),gene_name=cm2$fromgtf,stringsAsFactors = FALSE,row.names = rownames(cm2))
 
@@ -60,10 +60,9 @@ footer<-function(){
 #' @import DESeq2
 #' @import SummarizedExperiment
 #' @import genefilter
-#' @import pheatmap
 #' @import d3heatmap
 #' @import scales
-#' @import NMF
+#' @importFrom NMF aheatmap
 #' @import plyr
 #' @import grid
 #' @import topGO
@@ -1260,7 +1259,7 @@ pcaExplorer <- function(obj=NULL,
 
       pcmat <- composedMat()
 
-      library(scales)
+      # library(scales)
       aval <- 0.3
       fac2pal <- alpha(c("green","red","blue","orange","violet"),aval) # 5 are enough
 

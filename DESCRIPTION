@@ -17,7 +17,6 @@ Imports:
     DESeq2,
     SummarizedExperiment,
     genefilter,
-    pheatmap,
     d3heatmap,
     scales,
     NMF,

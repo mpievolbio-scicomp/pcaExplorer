@@ -98,10 +98,10 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
                           useRownamesAsLabels=TRUE, point_size=2,annotation = NULL,
                           ...)
 {
-  library("ggplot2")
-  library("plyr")
-  library("scales")
-  library("grid")
+#   library("ggplot2")
+#   library("plyr")
+#   library("scales")
+#   library("grid")
 
   stopifnot(length(choices) == 2)
   if (inherits(pcobj, "prcomp")) {

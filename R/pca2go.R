@@ -185,7 +185,7 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
   sTabSig <- subset(sTab, as.numeric(p.value_elim) < maxP)
 
   if(fullNamesInRows){
-    library("GO.db")
+    # library("GO.db")
     sTab$Term <- sapply(sTab$GO.ID ,function(go) { Term(GOTERM[[go]])})
   }
 
