@@ -30,20 +30,20 @@
 # annotation <- data.frame(gene_id=rownames(cm2),gene_name=cm2$fromgtf,stringsAsFactors = FALSE,row.names = rownames(cm2))
 
 
-footer<-function(){
+footer <- function(){
   tags$div(
     class = "footer",
     style = "text-align:center",
-    tags$div(class = "foot-inner",
-             list(
-               hr(),
-               "pcaExplorer is a project developed by Federico Marini in the Bioinformatics division of the ",
-               tags$a(href="http://www.unimedizin-mainz.de/imbei","IMBEI"),
-               ". ",br(),
-               "Development of the pcaExplorer package is on ",
-               tags$a(href="https://github.com/federicomarini/pcaExplorer", "GitHub")
-             )
-
+    tags$div(
+      class = "foot-inner",
+      list(
+        hr(),
+        "pcaExplorer is a project developed by Federico Marini in the Bioinformatics division of the ",
+        tags$a(href="http://www.unimedizin-mainz.de/imbei","IMBEI"),
+        ". ",br(),
+        "Development of the pcaExplorer package is on ",
+        tags$a(href="https://github.com/federicomarini/pcaExplorer", "GitHub")
+      )
     )
   )
 }
@@ -160,7 +160,8 @@ pcaExplorer <- function(obj=NULL,
         menuItem("Plot settings", icon = icon("paint-brush"),
                  # bstooltip: Use the widgets below to setup general parameters for exporting produced plots
 
-                 # selectInput("col_palette","Color palette",choices = list("hue"=hue_pal()(10),"set1"=brewer_pal(palette = "Set1")(9),"rainbow"=rainbow(10)))  ## TODO: need to work on the palette selector: maybe use selectize? see other examples
+                 selectInput("col_palette","Color palette",choices = list("hue","set1","rainbow")),  ## TODO: need to work on the palette selector: maybe use selectize? see other examples
+                 numericInput("nrcol","Number of palette colors",value=8,min=2), ## see if it makes sense, or maybe just leave it with hue_pal
 
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
                  numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
@@ -659,6 +660,16 @@ pcaExplorer <- function(obj=NULL,
     colSel <- reactive({
       hue_pal()(ncol(values$myrlt)/2) # or somewhat other way
     })
+
+#       if(input$col_palette=="hue")
+#         hue_pal(input$nrcol)
+#         # hue_pal()(ncol(values$myrlt)/2) # or somewhat other way
+#       if(input$col_palette=="set1")
+#         brewer_pal(palette = "Set1")(input$nrcol)
+#       # (ncol(values$myrlt)/2) # or somewhat other way
+#       if(input$col_palette=="rainbow")
+#         rainbow(input$nrcol)
+#       })
 
 
 
