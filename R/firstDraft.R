@@ -1029,7 +1029,14 @@ pcaExplorer <- function(obj=NULL,
 
     # displayed by default, with possibility to select from gene id provided as row names of the objects
     output$ui_selectID <- renderUI({
-      selectInput("selectID",label = "Select ID",choices = c("",rownames(values$myrlt)),selected=NULL)
+      allIDs <- withProgress(message = "loading the names in the UI",value = 0,
+                             {
+                               rownames(values$myrlt)
+                             }
+
+
+      )
+      selectInput("selectID",label = "Select ID",choices = c("",allIDs),selected=NULL)
     })
     # additionally displayed if an annotation is provided
     output$ui_selectName <- renderUI({
@@ -1059,7 +1066,14 @@ pcaExplorer <- function(obj=NULL,
           selectedGeneName <- input$selectName
           selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$selectName)]
         } else {
-          return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+          if (input$selectID == "") {
+            return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+          } else {
+            selectedGene <- input$selectID
+            selectedGeneName <- ifelse(!is.null(values$myannotation),
+                                       values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))],
+                                       "")
+          }
         }
       } else if (input$selectID != ""){
         selectedGene <- input$selectID
