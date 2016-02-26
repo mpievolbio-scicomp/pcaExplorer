@@ -166,7 +166,6 @@ pcaExplorer <- function(obj=NULL,
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
                  numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
 
-
                  # tooltips explanation to have less crowded ui and still good docu
                  shinyBS::bsTooltip(
                    "export_width",
