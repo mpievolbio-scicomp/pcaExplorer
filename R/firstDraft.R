@@ -161,7 +161,7 @@ pcaExplorer <- function(obj=NULL,
                  # bstooltip: Use the widgets below to setup general parameters for exporting produced plots
 
                  selectInput("col_palette","Color palette",choices = list("hue","set1","rainbow")),  ## TODO: need to work on the palette selector: maybe use selectize? see other examples
-                 numericInput("nrcol","Number of palette colors",value=8,min=2), ## see if it makes sense, or maybe just leave it with hue_pal
+                 # numericInput("nrcol","Number of palette colors",value=8,min=2), ## see if it makes sense, or maybe just leave it with hue_pal # now it is context dependent!
 
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
                  numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
@@ -278,6 +278,7 @@ pcaExplorer <- function(obj=NULL,
             "Genes View",
             p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components."),
 
+            verbatimTextOutput("debudebu"),
             # shinyURL.ui(),
 
             fluidRow(checkboxInput("variable_labels","Display variable labels",value = TRUE)),
@@ -658,18 +659,43 @@ pcaExplorer <- function(obj=NULL,
 
 
     colSel <- reactive({
-      hue_pal()(ncol(values$myrlt)/2) # or somewhat other way
+      # find out how many colors to generate: if no factor is selected, either
+      # return all say steelblue or all different
+
+      if(!is.null(input$color_by)) {
+        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        expgroups <- interaction(expgroups)
+      } else {
+        expgroups <- factor(colnames(values$myrlt))
+        # return(rep("steelblue",ncol(values$myrlt))) # to return all same
+      }
+
+      nrgroups <- length(levels(expgroups))
+
+      # hue_pal()(ncol(values$myrlt)/6) # or somewhat other way
+
+      if(input$col_palette=="hue"){
+        return(hue_pal()(nrgroups))
+      }
+      # hue_pal()(ncol(values$myrlt)/2) # or somewhat other way
+      if(input$col_palette=="set1"){
+        if(nrgroups <= 9) { # max color nr allowed for set1
+          return(brewer_pal(palette = "Set1")(nrgroups))
+        } else {
+          return(hue_pal()(nrgroups)) # plus print message?
+        }
+      }
+      # (ncol(values$myrlt)/2) # or somewhat other way
+      if(input$col_palette=="rainbow"){
+        return(rainbow(nrgroups))
+      }
+      # hue_pal()(nrgroups) # or somewhat other way
     })
 
-#       if(input$col_palette=="hue")
-#         hue_pal(input$nrcol)
-#         # hue_pal()(ncol(values$myrlt)/2) # or somewhat other way
-#       if(input$col_palette=="set1")
-#         brewer_pal(palette = "Set1")(input$nrcol)
-#       # (ncol(values$myrlt)/2) # or somewhat other way
-#       if(input$col_palette=="rainbow")
-#         rainbow(input$nrcol)
-#       })
+
+    output$debudebu <- renderPrint({
+      colSel()
+    })
 
 
 
