@@ -1052,14 +1052,14 @@ pcaExplorer <- function(obj=NULL,
     output$newgenefinder_plot <- renderPlot({
       if (input$selectID == "")
         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-      if (input$selectName == "")
-        return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
 
 
       if(!is.null(values$myannotation)){
         if(input$selectName != "") {
           selectedGeneName <- input$selectName
           selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$selectName)]
+        } else {
+          return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
         }
       } else if (input$selectID != ""){
         selectedGene <- input$selectID
@@ -1169,7 +1169,7 @@ pcaExplorer <- function(obj=NULL,
 
 
     output$genefinder_plot <- renderPlot({
-      anno_id <- rownames(values$myannotation)
+      anno_id <- rownames(values$myrlt)
       anno_gene <- values$myannotation$gene_name
 
       if(is.null(input$color_by) & input$genefinder!="")
