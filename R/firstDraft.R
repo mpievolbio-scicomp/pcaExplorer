@@ -336,9 +336,24 @@ pcaExplorer <- function(obj=NULL,
             fluidRow(
               h1("GeneFinder"),
               textInput("genefinder",label = "type in the name of the gene to search",value = NULL),
+
+              fluidRow(
+                column(
+                  width = 6,
+                  uiOutput("ui_selectID")
+                ),
+                column(
+                  width = 6,
+                  uiOutput("ui_selectName")
+                )
+              ),
+              verbatimTextOutput("debugf"),
+
+
               verbatimTextOutput("searchresult"),
               verbatimTextOutput("debuggene"),
               checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
+              plotOutput("newgenefinder_plot"),
               plotOutput("genefinder_plot"))
             ),
 
@@ -1011,6 +1026,103 @@ pcaExplorer <- function(obj=NULL,
 
 
 
+
+    # displayed by default, with possibility to select from gene id provided as row names of the objects
+    output$ui_selectID <- renderUI({
+      selectInput("selectID",label = "Select ID",choices = c("",rownames(values$myrlt)),selected=NULL)
+    })
+    # additionally displayed if an annotation is provided
+    output$ui_selectName <- renderUI({
+      shiny::validate(
+        need(
+          !is.null(values$myannotation),
+          "If you provide an annotation table, you could search by the corresponding name/ID"
+        )
+      )
+
+      selectInput("selectName",label = "Select gene name",choices = c("",values$myannotation$gene_name),selected=NULL)
+      # selectInput("selectName")
+    })
+
+    output$debugf <- renderPrint({
+      input$selectID
+    })
+
+
+    output$newgenefinder_plot <- renderPlot({
+      if (input$selectID == "")
+        return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+      if (input$selectName == "")
+        return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+
+
+      if(!is.null(values$myannotation)){
+        if(input$selectName != "") {
+          selectedGeneName <- input$selectName
+          selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$selectName)]
+        }
+      } else if (input$selectID != ""){
+        selectedGene <- input$selectID
+        selectedGeneName <- ifelse(!is.null(values$myannotation),
+                                   values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))],
+                                   "")
+      } else {
+        return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+      }
+
+
+      anno_id <- rownames(values$myannotation)
+      anno_gene <- values$myannotation$gene_name
+
+      if(is.null(input$color_by))
+        return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
+#       if(is.null(input$color_by) & (input$selectName=="" | input$selectID ==""))
+#         return(ggplot() + annotate("text",label="Select a gene and a factor to plot gene",0,0) + theme_bw())
+#       if((input$selectName=="" | input$selectID ==""))
+#         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+      # if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
+        # return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
+
+#       if (input$genefinder %in% anno_id) {
+#         selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+#         selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
+#       }
+#       if (input$genefinder %in% anno_gene) {
+#         selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
+#         if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
+#         selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
+#       }
+
+
+
+
+
+      genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
+
+      onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
+      genedata$plotby <- interaction(onlyfactors)
+
+      p <- ggplot(genedata,aes(x=plotby,y=count,fill=plotby)) + geom_boxplot() + labs(title=paste0("Normalized counts for ",selectedGeneName," - ",selectedGene)) +  scale_x_discrete(name="") + geom_jitter(aes(x=plotby,y=count),position = position_jitter(width = 0.1)) + scale_fill_discrete(name="Experimental\nconditions")
+
+      if(input$ylimZero)
+      {
+        p <- p + scale_y_log10(name="Normalized counts - log10 scale",limits=c(1,max(genedata$count)))
+      } else {
+        p <- p + scale_y_log10(name="Normalized counts - log10 scale")
+      }
+      exportPlots$genefinder <- p
+
+      p
+
+
+
+
+
+
+
+
+
+    })
 
 
 
