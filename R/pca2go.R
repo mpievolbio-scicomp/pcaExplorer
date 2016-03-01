@@ -400,14 +400,14 @@ limmaquickpca2go <- function(se,
   #   summary(goResults)
 
   print("Extracting functional categories enriched in the gene subsets ...")
-  quickGOpc1pos <- limma::goana(probesPC1pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism)
-  quickGOpc1neg <- limma::goana(probesPC1neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism)
-  quickGOpc2pos <- limma::goana(probesPC2pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism)
-  quickGOpc2neg <- limma::goana(probesPC2neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism)
-  quickGOpc3pos <- limma::goana(probesPC3pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism)
-  quickGOpc3neg <- limma::goana(probesPC3neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism)
-  quickGOpc4pos <- limma::goana(probesPC4pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism)
-  quickGOpc4neg <- limma::goana(probesPC4neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism)
+  quickGOpc1pos <- limma::goana(probesPC1pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism);message("1")
+  quickGOpc1neg <- limma::goana(probesPC1neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism);message("2")
+  quickGOpc2pos <- limma::goana(probesPC2pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism);message("3")
+  quickGOpc2neg <- limma::goana(probesPC2neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism);message("4")
+  quickGOpc3pos <- limma::goana(probesPC3pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism);message("5")
+  quickGOpc3neg <- limma::goana(probesPC3neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism);message("6")
+  quickGOpc4pos <- limma::goana(probesPC4pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism);message("7")
+  quickGOpc4neg <- limma::goana(probesPC4neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism);message("8")
 
   goEnrichs <- list(PC1=list(posLoad=quickGOpc1pos,negLoad=quickGOpc1neg),
                     PC2=list(posLoad=quickGOpc2pos,negLoad=quickGOpc2neg),

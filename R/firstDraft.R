@@ -362,6 +362,9 @@ pcaExplorer <- function(obj=NULL,
             h1("Functions enriched in the genes with high loadings on the selected principal components"),
             verbatimTextOutput("enrichinfo"),
             checkboxInput("compact_pca2go","Display compact tables",value=TRUE),
+
+            uiOutput("ui_computePCA2GO"),
+
             fluidRow(
               column(width = 3),
               column(
@@ -1226,18 +1229,42 @@ pcaExplorer <- function(obj=NULL,
 
 
 
+    output$ui_computePCA2GO <- renderUI({
+      if(is.null(pca2go))
+        actionButton("computepca2go","Compute the PCA2GO object",icon=icon("spinner"))
+    })
+
+
+    computedPCA2GO <- eventReactive( input$computepca2go, {
+
+      withProgress(message = "Computing the PCA2GO object...",
+                   value = 0,
+                   {
+                     pcpc <- limmaquickpca2go(values$myrlt,background_genes = rownames(values$mydds))
+                   })
+      pcpc
+    })
+
+
+    observeEvent(input$computepca2go,
+                 {
+                   values$mypca2go <- computedPCA2GO()
+                 })
+
+
+
 
     output$pca2go <- renderPlot({
       shiny::validate(
         need(
-          !is.null(pca2go),
-          "Please provide a pca2go object to the app"
+          !is.null(values$mypca2go),
+          "Please provide a pca2go object to the app or alternatively click on the action button - could take some time to compute live!"
         )
       )
       # if(is.null(pca2go))
         # return(ggplot() + annotate("text",label="Provide a pca2go object to the app",0,0) + theme_bw())
       res <- pcaplot(values$myrlt,intgroup = input$color_by,
-                     ntop = attr(pca2go,"n_genesforpca"),
+                     ntop = attr(values$mypca2go,"n_genesforpca"),
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),text_labels = input$sample_labels,
                      point_size = input$pca_point_size, title=paste0("PCA on the samples - ",attr(pca2go,"n_genesforpca"), " genes used")
 
@@ -1247,32 +1274,32 @@ pcaExplorer <- function(obj=NULL,
 
 
     output$dt_pchor_pos <- DT::renderDataTable({
-      if(is.null(pca2go)) return(datatable(NULL))
-      goe <- pca2go[[paste0("PC",input$pc_x)]][["posLoad"]]
+      if(is.null(values$mypca2go)) return(datatable(NULL))
+      goe <- values$mypca2go[[paste0("PC",input$pc_x)]][["posLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")],options = list(pageLength = 5)))
       datatable(goe)
     })
 
     output$dt_pchor_neg <- DT::renderDataTable({
-      if(is.null(pca2go)) return(datatable(NULL))
-      goe <- pca2go[[paste0("PC",input$pc_x)]][["negLoad"]]
+      if(is.null(values$mypca2go)) return(datatable(NULL))
+      goe <- values$mypca2go[[paste0("PC",input$pc_x)]][["negLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")],options = list(pageLength = 5)))
       datatable(goe)
     })
 
     output$dt_pcver_pos <- DT::renderDataTable({
-      if(is.null(pca2go)) return(datatable(NULL))
-      goe <- pca2go[[paste0("PC",input$pc_y)]][["posLoad"]]
+      if(is.null(values$mypca2go)) return(datatable(NULL))
+      goe <- values$mypca2go[[paste0("PC",input$pc_y)]][["posLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")],options = list(pageLength = 5)))
       datatable(goe)
     })
 
     output$dt_pcver_neg <- DT::renderDataTable({
-      if(is.null(pca2go)) return(datatable(NULL))
-      goe <- pca2go[[paste0("PC",input$pc_y)]][["negLoad"]]
+      if(is.null(values$mypca2go)) return(datatable(NULL))
+      goe <- values$mypca2go[[paste0("PC",input$pc_y)]][["negLoad"]]
       if(input$compact_pca2go)
         return(datatable(goe[,c("GO.ID","Term","Significant","p.value_elim")],options = list(pageLength = 5)))
       datatable(goe)
@@ -1282,8 +1309,8 @@ pcaExplorer <- function(obj=NULL,
       cat("enrich info:\n")
       # str(goEnrichs)
       class(input$pc_x)
-      head(pca2go[[paste0("PC",input$pc_x)]][["posLoad"]])
-      class(datatable(pca2go[[paste0("PC",input$pc_x)]][["posLoad"]]))
+      head(values$mypca2go[[paste0("PC",input$pc_x)]][["posLoad"]])
+      class(datatable(values$mypca2go[[paste0("PC",input$pc_x)]][["posLoad"]]))
     })
 
 
