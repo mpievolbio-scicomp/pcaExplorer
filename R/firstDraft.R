@@ -66,6 +66,8 @@ footer <- function(){
 #' @import plyr
 #' @import grid
 #' @import topGO
+#' @import limma
+#' @import GOstats
 #' @import GO.db
 #' @import shiny
 #' @import shinydashboard
@@ -100,7 +102,7 @@ pcaExplorer <- function(obj=NULL,
 #     poss_covars <- c()
 #   }
   ## TODO: colselection also passed as a palette?
-  colSelection <- c("navyblue","steelblue","skyblue","darkred","coral3","darksalmon","green4","greenyellow","orange","gold")
+  ###### colSelection <- c("navyblue","steelblue","skyblue","darkred","coral3","darksalmon","green4","greenyellow","orange","gold")
   # alternative to evaluate: use other palettes, eg hue_pal
   ## place it in the server to be reactive on the ncol of the object!
 
@@ -128,7 +130,7 @@ pcaExplorer <- function(obj=NULL,
         titleWidth = 900),
 
       dashboardSidebar(
-        width = 250,
+        width = 280,
         menuItem("Data upload",icon = icon("upload"),
                  uiOutput("upload_count_matrix"),
                  shinyBS::bsTooltip(
