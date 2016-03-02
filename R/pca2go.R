@@ -16,7 +16,6 @@
 #' @param background_genes
 #' @param scale
 #' @param ...
-#'
 #' @return
 #' @export
 #'
@@ -142,6 +141,9 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #' @param writeOutput
 #' @param outputFile
 #' @param addGeneToTerms
+#'
+#'
+#' @import topGO
 #'
 #' @return A value
 #' @export
@@ -400,14 +402,14 @@ limmaquickpca2go <- function(se,
   #   summary(goResults)
 
   print("Extracting functional categories enriched in the gene subsets ...")
-  quickGOpc1pos <- limma::topGO(limma::goana(probesPC1pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("1")
-  quickGOpc1neg <- limma::topGO(limma::goana(probesPC1neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("2")
-  quickGOpc2pos <- limma::topGO(limma::goana(probesPC2pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("3")
-  quickGOpc2neg <- limma::topGO(limma::goana(probesPC2neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("4")
-  quickGOpc3pos <- limma::topGO(limma::goana(probesPC3pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("5")
-  quickGOpc3neg <- limma::topGO(limma::goana(probesPC3neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("6")
-  quickGOpc4pos <- limma::topGO(limma::goana(probesPC4pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("7")
-  quickGOpc4neg <- limma::topGO(limma::goana(probesPC4neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("8")
+  quickGOpc1pos <- topGO(limma::goana(probesPC1pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("1")
+  quickGOpc1neg <- topGO(limma::goana(probesPC1neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("2")
+  quickGOpc2pos <- topGO(limma::goana(probesPC2pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("3")
+  quickGOpc2neg <- topGO(limma::goana(probesPC2neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("4")
+  quickGOpc3pos <- topGO(limma::goana(probesPC3pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("5")
+  quickGOpc3neg <- topGO(limma::goana(probesPC3neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("6")
+  quickGOpc4pos <- topGO(limma::goana(probesPC4pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("7")
+  quickGOpc4neg <- topGO(limma::goana(probesPC4neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("8")
 
   goEnrichs <- list(PC1=list(posLoad=quickGOpc1pos,negLoad=quickGOpc1neg),
                     PC2=list(posLoad=quickGOpc2pos,negLoad=quickGOpc2neg),

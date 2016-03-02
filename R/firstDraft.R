@@ -59,14 +59,13 @@ footer <- function(){
 #'
 #' @import DESeq2
 #' @import SummarizedExperiment
-#' @import genefilter
+#' @importFrom genefilter rowVars
 #' @import d3heatmap
 #' @import scales
 #' @importFrom NMF aheatmap
 #' @import plyr
-#' @import grid
-#' @import topGO
-#' @import limma
+#' @importFrom limma goana
+#' @importFrom limma topGO
 #' @import GOstats
 #' @import GO.db
 #' @import shiny
@@ -74,7 +73,7 @@ footer <- function(){
 #' @import shinyBS
 #' @import ggplot2
 #' @import ggrepel
-#' @import DT
+#' @importFrom DT datatable
 #' @import methods
 #'
 #' @return

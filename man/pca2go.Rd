@@ -8,9 +8,6 @@ pca2go(se, pca_ngenes = 10000, annotation = NULL,
   inputType = "geneSymbol", organism = "Mm", ensToGeneSymbol = FALSE,
   loadings_ngenes = 500, background_genes = NULL, scale = FALSE, ...)
 }
-\arguments{
-\item{...}{}
-}
 \description{
 Title
 }
