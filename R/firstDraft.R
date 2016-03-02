@@ -66,7 +66,7 @@ footer <- function(){
 #' @import plyr
 #' @importFrom limma goana topGO
 #' @importFrom AnnotationDbi select
-#' @import GOstats
+#' @importMethodsFrom GOstats hyperGTest summary
 #' @import GO.db
 #' @import shiny
 #' @import shinydashboard
