@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-genepca <- function(x,ntop,choices=c(1,2),arrowColors = muted("green"), groupNames="group", biplot=FALSE,...) {
+genepca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames="group", biplot=FALSE,...) {
   # intgroup <- c("condition","tissue")
 
   rv <- rowVars(assay(x))
@@ -228,7 +228,7 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
                                                 length = 50))
       circle <- data.frame(xvar = r * cos(theta), yvar = r *
                              sin(theta))
-      g <- g + geom_path(data = circle, color = muted("white"),
+      g <- g + geom_path(data = circle, color = "steelblue",
                          size = 1/2, alpha = 1/3)
     }
     df.v$scaleArrow <- scaleArrow # quick fix for mapping scaling of the arrows

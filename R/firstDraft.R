@@ -61,11 +61,10 @@ footer <- function(){
 #' @import SummarizedExperiment
 #' @importFrom genefilter rowVars
 #' @import d3heatmap
-#' @import scales
+#' @importFrom scales brewer_pal hue_pal
 #' @importFrom NMF aheatmap
 #' @import plyr
-#' @importFrom limma goana
-#' @importFrom limma topGO
+#' @importFrom limma goana topGO
 #' @import GOstats
 #' @import GO.db
 #' @import shiny
