@@ -65,16 +65,16 @@ footer <- function(){
 #' @importFrom NMF aheatmap
 #' @import plyr
 #' @importFrom limma goana topGO
+#' @importFrom AnnotationDbi select
 #' @import GOstats
 #' @import GO.db
 #' @import shiny
 #' @import shinydashboard
-#' @import shinyBS
+#' @importFrom shinyBS bsTooltip
 #' @import ggplot2
 #' @import ggrepel
 #' @importFrom DT datatable
 #' @import methods
-#'
 #' @return
 #' @export
 #'
@@ -87,7 +87,7 @@ pcaExplorer <- function(obj=NULL,
                         annotation=NULL){
   # stopifnot( is(obj, 'SummarizedExperiment') )
   ## plenty of tests on the selected object(s)
-  if ( !require('shiny') ) {
+  if ( !requireNamespace('shiny',quietly = TRUE) ) {
     stop("pca_SUPALIVE requires 'shiny'. Please install it using
          install.packages('shiny')")
   }

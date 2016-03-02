@@ -193,9 +193,7 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 
   if(addGeneToTerms) {
     # adapted from an elegant one liner found here: https://support.bioconductor.org/p/65856/
-    # SignificantGenes <- genes with a score higher than 0.7 in ENTREZ ID!!
     SignificantGenes <- sigGenes(GOdata)
-    # goresults <- GenTable(...your stuff...)
     sTab$genes <- sapply(sTab$GO.ID, function(x)
     {
       genes<-genesInTerm(GOdata, x)
@@ -217,6 +215,22 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 
 
 
+#' Title
+#'
+#' @param se
+#' @param pca_ngenes
+#' @param annotation
+#' @param inputType
+#' @param organism
+#' @param loadings_ngenes
+#' @param background_genes
+#' @param scale
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 quickpca2go <- function(se,
                     pca_ngenes = 10000,
                     annotation = NULL,
@@ -325,6 +339,22 @@ GOenrich <- function(geneIds,universeGeneIds,annotation,ontology="BP",pvalueCuto
 
 
 
+#' Title
+#'
+#' @param se
+#' @param pca_ngenes
+#' @param annotation
+#' @param inputType
+#' @param organism
+#' @param loadings_ngenes
+#' @param background_genes
+#' @param scale
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 limmaquickpca2go <- function(se,
                         pca_ngenes = 10000,
                         annotation = NULL,

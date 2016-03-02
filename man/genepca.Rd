@@ -4,7 +4,7 @@
 \alias{genepca}
 \title{Title}
 \usage{
-genepca(x, ntop, choices = c(1, 2), arrowColors = muted("green"),
+genepca(x, ntop, choices = c(1, 2), arrowColors = "steelblue",
   groupNames = "group", biplot = FALSE, ...)
 }
 \arguments{
