@@ -2,15 +2,35 @@
 % Please edit documentation in R/hi_loadings.R
 \name{hi_loadings}
 \alias{hi_loadings}
-\title{Title}
+\title{Extract genes with highest loadings}
 \usage{
 hi_loadings(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
   annotation = NULL, title = "Top/bottom loadings - ")
 }
 \arguments{
-\item{title}{}
+\item{pcaobj}{A \code{prcomp} object}
+
+\item{whichpc}{An integer number, corresponding to the principal component of
+interest}
+
+\item{topN}{Integer, number of genes with top and bottom loadings}
+
+\item{exprTable}{A \code{matrix} object, e.g. the counts of a \code{\link{DESeqDataSet}}.
+If not NULL, returns the counts matrix for the selected genes}
+
+\item{annotation}{A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
+and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols}
+
+\item{title}{The title of the plot}
+}
+\value{
+A base plot object, or a \code{matrix}, if \code{exprTable} is not null
 }
 \description{
-Title
+Extract genes with highest loadings
+}
+\examples{
+
+
 }
 

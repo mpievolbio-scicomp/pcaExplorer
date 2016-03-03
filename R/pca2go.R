@@ -40,7 +40,13 @@ pca2go <- function(se,
   exprsData <- assay(se)
 
   if(is.null(background_genes)) {
-    BGids <- rownames(se)[rowSums(counts(se))>0] # TODO: at best some other way of doing it - maybe passing additionally the DDS? or if nothing provided, then use all rownames...
+    if(is(dds,"DESeqDataSet")) {
+      BGids <- rownames(se)[rowSums(counts(se))>0]
+    } else if(is(dds,"DESeqTransform")){
+      BGids <- rownames(se)[rowSums(counts(se))!=0]
+    } else {
+      BGids <- rownames(se)
+    }
   } else {
     BGids <- background_genes
   }
@@ -124,36 +130,39 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 
 
 
-#' Title
+#' Extract functional terms enriched in the DE genes, based on topGO
 #'
-#' @param DEgenes
-#' @param BGgenes
-#' @param ontology
-#' @param maxP
-#' @param desc
-#' @param annot
-#' @param mapping
-#' @param geneID
-#' @param topTablerows
-#' @param fullNamesInRows
-#' @param plotGraph
-#' @param plotNodes
-#' @param writeOutput
-#' @param outputFile
-#' @param addGeneToTerms
+#' A wrapper for extracting functional GO terms enriched in the DE genes, based on
+#' the algorithm and the implementation in the topGO package
+#'
+#' @param DEgenes A vector of (differentially expressed) genes
+#' @param BGgenes A vector of background genes, e.g. all (expressed) genes in the assays
+#' @param ontology Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)
+#' @param maxP Max p-value, used to subset the returned table
+#' @param annot Which function to use for annotating genes to GO terms
+#' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
+#' @param geneID Which format the genes are provided
+#' @param topTablerows How many rows to report before any filtering
+#' @param fullNamesInRows Logical, whether to display or not the full names for the GO terms
+#' @param addGeneToTerms Logical, whether to add a column with all genes annotated to each GO term
+#' @param plotGraph Logical, if TRUE additionally plots a graph on the identified GO terms
+#' @param plotNodes Number of nodes to plot
+#' @param writeOutput Logical, if TRUE additionally writes out the result to a file
+#' @param outputFile Name of the file the result should be written into
 #'
 #' @import topGO
 #'
-#' @return A value
-#' @export
+#' @return A table containing the computed GO Terms and related enrichment scores
 #'
 #' @examples # An example
+#'
+#'
+#' @export
 topGOtable <- function(DEgenes,                  # Differentially expressed genes
                        BGgenes,                 # background genes, normally = rownames(cds) or filtering to genes
                        #  with at least 1 read - could also be ls(org.Mm.egGO)
                        ontology="BP",            # could use also "MF"
                        maxP = 0.001,             # use to subset the final table
-                       desc="",                  # could be used for the output file name
                        annot = annFUN.org,       # parameters for creating topGO object
                        mapping = "org.Mm.eg.db",
                        geneID = "symbol" ,       # could also beID = "entrez")
@@ -214,22 +223,6 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 
 
 
-#' Title
-#'
-#' @param se
-#' @param pca_ngenes
-#' @param annotation
-#' @param inputType
-#' @param organism
-#' @param loadings_ngenes
-#' @param background_genes
-#' @param scale
-#' @param ...
-#'
-#' @return
-#' @export
-#'
-#' @examples
 quickpca2go <- function(se,
                     pca_ngenes = 10000,
                     annotation = NULL,

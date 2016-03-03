@@ -1,19 +1,30 @@
-#' Title
+#' Sample PCA plot for transformed data
 #'
-#' @param x
-#' @param intgroup
-#' @param ntop
-#' @param returnData
-#' @param title
-#' @param pcX
-#' @param pcY
-#' @param text_labels
-#' @param point_size
+#' Plots the results of PCA on a 2-dimensional space
 #'
-#' @return A value
-#' @export
+#' @param x A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},
+#' produced for example by either \code{\link{rlog}} or
+#' \code{\link{varianceStabilizingTransformation}}
+#' @param intgroup Interesting groups: a character vector of
+#' names in \code{colData(x)} to use for grouping
+#' @param ntop number of top genes to use for principal components,
+#' selected by highest row variance
+#' @param returnData logical, if TRUE returns a data.frame for further use, containing the
+#' selected principal components and intgroup covariates for custom plotting
+#' @param title The plot title
+#' @param pcX The principal component to display on the x axis
+#' @param pcY The principal component to display on the y axis
+#' @param text_labels Logical, whether to display the labels with the sample identifiers
+#' @param point_size Integer, the size of the points for the samples
+#'
+#'
+#' @return An object created by \code{ggplot}, which can be assigned and further customized.
+#'
 #'
 #' @examples # An example
+#'
+#'
+#' @export
 pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
                     pcX = 1, pcY = 2,text_labels=TRUE,point_size=3) # customized principal components
 {
@@ -55,19 +66,24 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
   g
 }
 
-# library(topGO)
 
-#' Title
+#' Scree plot of the PCA on the samples
 #'
-#' @param obj
-#' @param type
-#' @param pc_nr
-#' @param title
+#' Produces a scree plot for investigating the proportion of explained variance, or
+#' alternatively the cumulative value
 #'
-#' @return
-#' @export
+#' @param obj A \code{prcomp} object
+#' @param type Display absolute proportions or cumulative proportion. Possible values:
+#' "pev" or "cev"
+#' @param pc_nr How many principal components to display max
+#' @param title Title of the plot
+#'
+#' @return An object created by \code{ggplot}, which can be assigned and further customized.
 #'
 #' @examples
+#'
+#'
+#' @export
 pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
 {
   type <- match.arg(type)

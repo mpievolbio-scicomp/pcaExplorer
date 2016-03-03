@@ -2,21 +2,44 @@
 % Please edit documentation in R/pcaplot.R
 \name{pcaplot}
 \alias{pcaplot}
-\title{Title}
+\title{Sample PCA plot for transformed data}
 \usage{
 pcaplot(x, intgroup = "condition", ntop = 500, returnData = FALSE,
   title = NULL, pcX = 1, pcY = 2, text_labels = TRUE, point_size = 3)
 }
 \arguments{
-\item{point_size}{}
+\item{x}{A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},
+produced for example by either \code{\link{rlog}} or
+\code{\link{varianceStabilizingTransformation}}}
+
+\item{intgroup}{Interesting groups: a character vector of
+names in \code{colData(x)} to use for grouping}
+
+\item{ntop}{number of top genes to use for principal components,
+selected by highest row variance}
+
+\item{returnData}{logical, if TRUE returns a data.frame for further use, containing the
+selected principal components and intgroup covariates for custom plotting}
+
+\item{title}{The plot title}
+
+\item{pcX}{The principal component to display on the x axis}
+
+\item{pcY}{The principal component to display on the y axis}
+
+\item{text_labels}{Logical, whether to display the labels with the sample identifiers}
+
+\item{point_size}{Integer, the size of the points for the samples}
 }
 \value{
-A value
+An object created by \code{ggplot}, which can be assigned and further customized.
 }
 \description{
-Title
+Plots the results of PCA on a 2-dimensional space
 }
 \examples{
 # An example
+
+
 }
 

@@ -6,19 +6,25 @@
 
 
 
-#' Title
+#' Extract genes with highest loadings
 #'
-#' @param pcaobj
-#' @param whichpc
-#' @param topN
-#' @param exprTable
-#' @param annotation
-#' @param title
+#' @param pcaobj A \code{prcomp} object
+#' @param whichpc An integer number, corresponding to the principal component of
+#' interest
+#' @param topN Integer, number of genes with top and bottom loadings
+#' @param exprTable A \code{matrix} object, e.g. the counts of a \code{\link{DESeqDataSet}}.
+#' If not NULL, returns the counts matrix for the selected genes
+#' @param annotation A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
+#' and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols
+#' @param title The title of the plot
 #'
-#' @return
-#' @export
+#' @return A base plot object, or a \code{matrix}, if \code{exprTable} is not null
+#'
 #'
 #' @examples
+#'
+#'
+#' @export
 hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
                         annotation = NULL, title="Top/bottom loadings - "){
   if(whichpc < 0)

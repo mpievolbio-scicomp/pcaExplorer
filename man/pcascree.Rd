@@ -2,14 +2,29 @@
 % Please edit documentation in R/pcaplot.R
 \name{pcascree}
 \alias{pcascree}
-\title{Title}
+\title{Scree plot of the PCA on the samples}
 \usage{
 pcascree(obj, type = c("pev", "cev"), pc_nr = NULL, title = NULL)
 }
 \arguments{
-\item{title}{}
+\item{obj}{A \code{prcomp} object}
+
+\item{type}{Display absolute proportions or cumulative proportion. Possible values:
+"pev" or "cev"}
+
+\item{pc_nr}{How many principal components to display max}
+
+\item{title}{Title of the plot}
+}
+\value{
+An object created by \code{ggplot}, which can be assigned and further customized.
 }
 \description{
-Title
+Produces a scree plot for investigating the proportion of explained variance, or
+alternatively the cumulative value
+}
+\examples{
+
+
 }
 

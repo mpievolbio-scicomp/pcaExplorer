@@ -2,24 +2,53 @@
 % Please edit documentation in R/pca2go.R
 \name{topGOtable}
 \alias{topGOtable}
-\title{Title}
+\title{Extract functional terms enriched in the DE genes, based on topGO}
 \usage{
-topGOtable(DEgenes, BGgenes, ontology = "BP", maxP = 0.001, desc = "",
+topGOtable(DEgenes, BGgenes, ontology = "BP", maxP = 0.001,
   annot = annFUN.org, mapping = "org.Mm.eg.db", geneID = "symbol",
   topTablerows = 200, fullNamesInRows = TRUE, addGeneToTerms = TRUE,
   plotGraph = FALSE, plotNodes = 10, writeOutput = FALSE,
   outputFile = "")
 }
 \arguments{
-\item{addGeneToTerms}{}
+\item{DEgenes}{A vector of (differentially expressed) genes}
+
+\item{BGgenes}{A vector of background genes, e.g. all (expressed) genes in the assays}
+
+\item{ontology}{Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)}
+
+\item{maxP}{Max p-value, used to subset the returned table}
+
+\item{annot}{Which function to use for annotating genes to GO terms}
+
+\item{mapping}{Which \code{org.XX.eg.db} to use for annotation - select according to the species}
+
+\item{geneID}{Which format the genes are provided}
+
+\item{topTablerows}{How many rows to report before any filtering}
+
+\item{fullNamesInRows}{Logical, whether to display or not the full names for the GO terms}
+
+\item{addGeneToTerms}{Logical, whether to add a column with all genes annotated to each GO term}
+
+\item{plotGraph}{Logical, if TRUE additionally plots a graph on the identified GO terms}
+
+\item{plotNodes}{Number of nodes to plot}
+
+\item{writeOutput}{Logical, if TRUE additionally writes out the result to a file}
+
+\item{outputFile}{Name of the file the result should be written into}
 }
 \value{
-A value
+A table containing the computed GO Terms and related enrichment scores
 }
 \description{
-Title
+A wrapper for extracting functional GO terms enriched in the DE genes, based on
+the algorithm and the implementation in the topGO package
 }
 \examples{
 # An example
+
+
 }
 

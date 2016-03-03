@@ -2,14 +2,28 @@
 % Please edit documentation in R/correlatePCs.R
 \name{correlatePCs}
 \alias{correlatePCs}
-\title{Title}
+\title{Principal components correlation with experimental covariates}
 \usage{
 correlatePCs(pcaobj, coldata, pcs = 1:4)
 }
 \arguments{
-\item{pcs}{}
+\item{pcaobj}{A \code{prcomp} object}
+
+\item{coldata}{A \code{data.frame} object containing the experimental
+covariates}
+
+\item{pcs}{A numeric vector, containing the corresponding PC number}
+}
+\value{
+A \code{data.frame} object with computed p values for each covariate
+and for each principal component
 }
 \description{
-Title
+Computes the correlations between PCA scores and the sample experimental
+covariates
+}
+\examples{
+
+
 }
 
