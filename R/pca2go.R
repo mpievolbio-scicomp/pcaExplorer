@@ -142,7 +142,6 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #' @param outputFile
 #' @param addGeneToTerms
 #'
-#'
 #' @import topGO
 #'
 #' @return A value

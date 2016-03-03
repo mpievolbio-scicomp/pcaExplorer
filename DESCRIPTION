@@ -16,6 +16,9 @@ Depends:
 Imports:
     DESeq2,
     SummarizedExperiment,
+    GenomicRanges,
+    IRanges,
+    S4Vectors,
     genefilter,
     ggplot2 (>= 2.0.0),
     d3heatmap,

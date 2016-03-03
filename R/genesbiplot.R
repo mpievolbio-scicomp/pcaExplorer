@@ -181,7 +181,7 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
     return(df.u)
   }
 
-  g <- ggplot(data = df.u, aes(x = xvar, y = yvar)) + xlab(u.axis.labs[1]) +
+  g <- ggplot(data = df.u, aes_string(x = "xvar", y = "yvar")) + xlab(u.axis.labs[1]) +
     ylab(u.axis.labs[2]) # + coord_equal() # REMOVED OTHERWISE BRUSH DOES NOT WORK PROPERLY
   if(coordEqual) g <- g + coord_equal()
 
@@ -202,7 +202,7 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
 
   if(useRownamesAsLabels) {
 
-    g <- g + geom_text(aes(label = geneNames), size = labels.size,hjust=0.25, vjust=-0.75)
+    g <- g + geom_text(aes_string(label = "geneNames"), size = labels.size,hjust=0.25, vjust=-0.75)
   }
 
   if (!is.null(df.u$groups) && ellipse) {
@@ -235,16 +235,20 @@ ggbiplotFede <- function (pcobj, choices = NULL, scale = 1, pc.biplot = TRUE,
     arrowColors <-  as.factor(arrowColors)
     df.v$arrowColors <- arrowColors
     df.v$groupNames <- groupNames
-    g <- g + geom_segment(data = df.v, aes(x = 0, y = 0, xend = scaleArrow*xvar, yend = scaleArrow*yvar, color = arrowColors),
+    df.v$sca_x <- df.v$xvar * scaleArrow
+    df.v$sca_y <- df.v$yvar * scaleArrow
+    df.v$sta_x <- 0
+    df.v$sta_y <- 0
+    g <- g + geom_segment(data = df.v, aes_string(x = "sta_x", y = "sta_y", xend = "sca_x", yend ="sca_y", color = "arrowColors"),
                           arrow = arrow(length = unit(1/2, "picas"))) +
       scale_color_manual(values = levels(arrowColors),name="Group",labels=levels(groupNames))
 
   }
 
   if (var.axes) {
-    g <- g + geom_text(data = df.v, aes(label = varname,
-                                        x = scaleArrow*xvar, y = scaleArrow*yvar,# angle = angle,
-                                        hjust = hjust),
+    g <- g + geom_text(data = df.v, aes_string(label = "varname",
+                                        x = "sca_x", y = "sca_y",# angle = angle,
+                                        hjust = "hjust"),
                        color = arrowColors, size = varname.size)
   }
   g <- g + theme_bw()

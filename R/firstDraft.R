@@ -59,13 +59,15 @@ footer <- function(){
 #'
 #' @import DESeq2
 #' @import SummarizedExperiment
+#' @importFrom GenomicRanges GRanges
+#' @importFrom IRanges IRanges
 #' @importFrom genefilter rowVars
 #' @import d3heatmap
 #' @importFrom scales brewer_pal hue_pal
 #' @importFrom NMF aheatmap
 #' @import plyr
 #' @importFrom limma goana topGO
-#' @importFrom AnnotationDbi select
+#' @importFrom AnnotationDbi select Term
 #' @importMethodsFrom GOstats hyperGTest summary
 #' @import GO.db
 #' @import shiny
@@ -732,10 +734,10 @@ pcaExplorer <- function(obj=NULL,
       rrdf <- data.frame(Reads=rr,Sample=names(rr),stringsAsFactors = FALSE)
       if (!is.null(input$color_by)) {
         rrdf$Group <- colData(values$mydds)[input$color_by][[1]]
-        p <- ggplot(rrdf,aes(Sample,weight=Reads)) + geom_bar(aes(fill=Group))
+        p <- ggplot(rrdf,aes_string("Sample",weight="Reads")) + geom_bar(aes_string(fill="Group"))
         p
       } else {
-        p <- ggplot(rrdf,aes(Sample,weight=Reads)) + geom_bar()
+        p <- ggplot(rrdf,aes_string("Sample",weight="Reads")) + geom_bar()
         p
       }
     })
@@ -901,11 +903,11 @@ pcaExplorer <- function(obj=NULL,
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
 
-      res <- ggplot(genedata,aes(x=plotby,y=count,fill=plotby)) +
+      res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
         geom_boxplot(outlier.shape = NA) + scale_y_log10(name="Normalized counts") +
         labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
         scale_x_discrete(name="") +
-        geom_jitter(aes(x=plotby,y=count),position = position_jitter(width = 0.1)) +
+        geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
         scale_fill_discrete(name="Experimental\nconditions")
       exportPlots$genesBoxplot <- res
       res
@@ -1212,7 +1214,7 @@ pcaExplorer <- function(obj=NULL,
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
 
-      p <- ggplot(genedata,aes(x=plotby,y=count,fill=plotby)) + geom_boxplot() + labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +  scale_x_discrete(name="") + geom_jitter(aes(x=plotby,y=count),position = position_jitter(width = 0.1)) + scale_fill_discrete(name="Experimental\nconditions")
+      p <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) + geom_boxplot() + labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +  scale_x_discrete(name="") + geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) + scale_fill_discrete(name="Experimental\nconditions")
 
       if(input$ylimZero)
       {
@@ -1750,7 +1752,7 @@ pcaExplorer <- function(obj=NULL,
         selectedGenes <- brushedObject$ids
         toplot <- assay(values$myrlt)[selectedGenes,]
         rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
-        pheatmap(toplot,cluster_cols = as.logical(input$heatmap_colv))
+        aheatmap(toplot,Colv = as.logical(input$heatmap_colv))
         dev.off()
       }
     )

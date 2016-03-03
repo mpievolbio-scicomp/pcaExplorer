@@ -50,7 +50,7 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
     ylab(paste0("PC",pcY,": ", round(percentVar[pcY] * 100,digits = 2), "% variance"))
 
   # library("ggrepel")
-  if(text_labels) g <- g + geom_label_repel(mapping = aes(label=names,fill=group),color="white", show.legend = TRUE) +theme_bw()
+  if(text_labels) g <- g + geom_label_repel(mapping = aes_string(label="names",fill="group"),color="white", show.legend = TRUE) +theme_bw()
   if(!is.null(title)) g <- g + ggtitle(title)
   g
 }
@@ -88,12 +88,12 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
   pc_df <- data.frame(PC_count = 1:colsize, var = yvar)
 
   if(type=="pev"){
-    p <- ggplot(pc_df, aes(x = PC_count, y = var)) + geom_bar(stat = "identity")
+    p <- ggplot(pc_df, aes_string(x = "PC_count", y = "var")) + geom_bar(stat = "identity")
     p <- p + scale_x_continuous(breaks = 1:length(d))
     p <- p + ylab(yvar.lab) + xlab("principal components")
     # p
   } else {
-    p <- ggplot(pc_df, aes(x = PC_count, y = var)) + geom_point() + geom_path() + scale_x_continuous(breaks = 1:length(d))
+    p <- ggplot(pc_df, aes_string(x = "PC_count", y = "var")) + geom_point() + geom_path() + scale_x_continuous(breaks = 1:length(d))
     p <- p + ylab(yvar.lab) + xlab("principal components") + ylim(0,max(pc_df$var))
     # p
   }
