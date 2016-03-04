@@ -819,7 +819,7 @@ pcaExplorer <- function(dds=NULL,
       }
       colGroups <- colSel()[factor(expgroups)]
 
-      res <- genepca(values$myrlt,
+      res <- genespca(values$myrlt,
                      ntop = input$pca_nrgenes,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
@@ -850,7 +850,7 @@ pcaExplorer <- function(dds=NULL,
       }
       colGroups <- colSel()[factor(expgroups)]
 
-      res <- genepca(values$myrlt,
+      res <- genespca(values$myrlt,
                      ntop = input$pca_nrgenes,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
@@ -913,7 +913,7 @@ pcaExplorer <- function(dds=NULL,
 
     # for reading in the brushed/clicked points
     curData_brush <- reactive({
-      df2 <- genepca(values$myrlt,
+      df2 <- genespca(values$myrlt,
                      ntop = input$pca_nrgenes,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
@@ -927,7 +927,7 @@ pcaExplorer <- function(dds=NULL,
 
 
     curData_click <- reactive({
-      df2 <- genepca(values$myrlt,
+      df2 <- genespca(values$myrlt,
                      ntop = input$pca_nrgenes,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,
@@ -944,7 +944,7 @@ pcaExplorer <- function(dds=NULL,
 
 
     curData_zoomClick <- reactive({
-      df2 <- genepca(values$myrlt,
+      df2 <- genespca(values$myrlt,
                      ntop = input$pca_nrgenes,
                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                      biplot = TRUE,

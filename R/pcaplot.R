@@ -7,7 +7,7 @@
 #' \code{\link{varianceStabilizingTransformation}}
 #' @param intgroup Interesting groups: a character vector of
 #' names in \code{colData(x)} to use for grouping
-#' @param ntop number of top genes to use for principal components,
+#' @param ntop Number of top genes to use for principal components,
 #' selected by highest row variance
 #' @param returnData logical, if TRUE returns a data.frame for further use, containing the
 #' selected principal components and intgroup covariates for custom plotting
@@ -28,9 +28,6 @@
 pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
                     pcX = 1, pcY = 2,text_labels=TRUE,point_size=3) # customized principal components
 {
-  # library("DESeq2")
-  # library("genefilter")
-  # library("ggplot2")
   rv <- rowVars(assay(x))
   select <- order(rv, decreasing = TRUE)[seq_len(min(ntop,length(rv)))]
   pca <- prcomp(t(assay(x)[select, ]))
@@ -52,7 +49,7 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
     return(d)
   }
 
-  # clever way of positioning the labels
+  # clever way of positioning the labels - worked good, then no need with ggrepel
   d$hjust = ifelse((sign(d[,paste0("PC",pcX)])==1),0.9,0.1)# (1 + varname.adjust * sign(PC1))/2)
 
   g <- ggplot(data = d, aes_string(x = paste0("PC",pcX), y = paste0("PC",pcY), color = "group")) +
@@ -60,7 +57,6 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
     xlab(paste0("PC",pcX,": ", round(percentVar[pcX] * 100,digits = 2), "% variance")) +
     ylab(paste0("PC",pcY,": ", round(percentVar[pcY] * 100,digits = 2), "% variance"))
 
-  # library("ggrepel")
   if(text_labels) g <- g + geom_label_repel(mapping = aes_string(label="names",fill="group"),color="white", show.legend = TRUE) +theme_bw()
   if(!is.null(title)) g <- g + ggtitle(title)
   g

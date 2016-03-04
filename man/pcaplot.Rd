@@ -15,7 +15,7 @@ produced for example by either \code{\link{rlog}} or
 \item{intgroup}{Interesting groups: a character vector of
 names in \code{colData(x)} to use for grouping}
 
-\item{ntop}{number of top genes to use for principal components,
+\item{ntop}{Number of top genes to use for principal components,
 selected by highest row variance}
 
 \item{returnData}{logical, if TRUE returns a data.frame for further use, containing the
