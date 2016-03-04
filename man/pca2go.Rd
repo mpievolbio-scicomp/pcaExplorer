@@ -2,13 +2,48 @@
 % Please edit documentation in R/pca2go.R
 \name{pca2go}
 \alias{pca2go}
-\title{Title}
+\title{Functional interpretation of the principal components}
 \usage{
 pca2go(se, pca_ngenes = 10000, annotation = NULL,
   inputType = "geneSymbol", organism = "Mm", ensToGeneSymbol = FALSE,
   loadings_ngenes = 500, background_genes = NULL, scale = FALSE, ...)
 }
+\arguments{
+\item{se}{A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
+produced for example by either \code{\link{rlog}} or
+\code{\link{varianceStabilizingTransformation}}}
+
+\item{pca_ngenes}{Number of genes to use for the PCA}
+
+\item{annotation}{A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
+and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols}
+
+\item{inputType}{Input format type of the gene identifiers. Will be used by the routines of \code{topGO}}
+
+\item{organism}{Character abbreviation for the species, using \code{org.XX.eg.db} for annotation}
+
+\item{ensToGeneSymbol}{Logical, whether to expect ENSEMBL gene identifiers, to convert to gene symbols
+with the \code{annotation} provided}
+
+\item{loadings_ngenes}{Number of genes to extract the loadings (in each direction)}
+
+\item{background_genes}{Which genes to consider as background.}
+
+\item{scale}{Logical, defaults to FALSE, scale values for the PCA}
+
+\item{...}{Further parameters to be passed to the topGO routine}
+}
+\value{
+A nested list object containing for each principal component the terms enriched
+in each direction. This object is to be thought in combination with the displaying feature
+of the main \code{\link{pcaExplorer}} function
+}
 \description{
-Title
+Extracts the genes with the highest loadings for each principal component, and
+performs functional enrichment analysis on them using routines and algorithms from
+the \code{topGO} package
+}
+\examples{
+
 }
 

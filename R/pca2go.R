@@ -4,22 +4,36 @@
 # bbgg <- rownames(dds_deplall)[rowSums(counts(dds_deplall))>0]
 # seb_pca2go_unscaled <- pca2go(rld_deplall,annotation=annotation,ensToGeneSymbol = T,scale=F,background_genes=bbgg)
 # seb_pca2go_scaled <- pca2go(rld_deplall,annotation=annotation,ensToGeneSymbol = T,scale=T,background_genes=bbgg)
-#' Title
+
+
+#' Functional interpretation of the principal components
 #'
-#' @param se
-#' @param pca_ngenes
-#' @param annotation
-#' @param inputType
-#' @param organism
-#' @param ensToGeneSymbol
-#' @param loadings_ngenes
-#' @param background_genes
-#' @param scale
-#' @param ...
-#' @return
-#' @export
+#' Extracts the genes with the highest loadings for each principal component, and
+#' performs functional enrichment analysis on them using routines and algorithms from
+#' the \code{topGO} package
+#'
+#' @param se A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
+#' produced for example by either \code{\link{rlog}} or
+#' \code{\link{varianceStabilizingTransformation}}
+#' @param pca_ngenes Number of genes to use for the PCA
+#' @param annotation A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
+#' and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols
+#' @param inputType Input format type of the gene identifiers. Will be used by the routines of \code{topGO}
+#' @param organism Character abbreviation for the species, using \code{org.XX.eg.db} for annotation
+#' @param ensToGeneSymbol Logical, whether to expect ENSEMBL gene identifiers, to convert to gene symbols
+#' with the \code{annotation} provided
+#' @param loadings_ngenes Number of genes to extract the loadings (in each direction)
+#' @param background_genes Which genes to consider as background.
+#' @param scale Logical, defaults to FALSE, scale values for the PCA
+#' @param ... Further parameters to be passed to the topGO routine
+#'
+#' @return A nested list object containing for each principal component the terms enriched
+#' in each direction. This object is to be thought in combination with the displaying feature
+#' of the main \code{\link{pcaExplorer}} function
 #'
 #' @examples
+#'
+#' @export
 pca2go <- function(se,
                    pca_ngenes = 10000,
                    annotation = NULL,
@@ -40,9 +54,9 @@ pca2go <- function(se,
   exprsData <- assay(se)
 
   if(is.null(background_genes)) {
-    if(is(dds,"DESeqDataSet")) {
+    if(is(se,"DESeqDataSet")) {
       BGids <- rownames(se)[rowSums(counts(se))>0]
-    } else if(is(dds,"DESeqTransform")){
+    } else if(is(se,"DESeqTransform")){
       BGids <- rownames(se)[rowSums(counts(se))!=0]
     } else {
       BGids <- rownames(se)
@@ -94,14 +108,14 @@ pca2go <- function(se,
 
   print("Ranking genes by the loadings ... done!")
   print("Extracting functional categories enriched in the gene subsets ...")
-  topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org,mapping = annopkg)
-  topGOpc1neg <- topGOtable(probesPC1neg, BGids, annot = annFUN.org,mapping = annopkg)
-  topGOpc2pos <- topGOtable(probesPC2pos, BGids, annot = annFUN.org,mapping = annopkg)
-  topGOpc2neg <- topGOtable(probesPC2neg, BGids, annot = annFUN.org,mapping = annopkg)
-  topGOpc3pos <- topGOtable(probesPC3pos, BGids, annot = annFUN.org,mapping = annopkg)
-  topGOpc3neg <- topGOtable(probesPC3neg, BGids, annot = annFUN.org,mapping = annopkg)
-  topGOpc4pos <- topGOtable(probesPC4pos, BGids, annot = annFUN.org,mapping = annopkg)
-  topGOpc4neg <- topGOtable(probesPC4neg, BGids, annot = annFUN.org,mapping = annopkg)
+  topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org,mapping = annopkg,...)
+  topGOpc1neg <- topGOtable(probesPC1neg, BGids, annot = annFUN.org,mapping = annopkg,...)
+  topGOpc2pos <- topGOtable(probesPC2pos, BGids, annot = annFUN.org,mapping = annopkg,...)
+  topGOpc2neg <- topGOtable(probesPC2neg, BGids, annot = annFUN.org,mapping = annopkg,...)
+  topGOpc3pos <- topGOtable(probesPC3pos, BGids, annot = annFUN.org,mapping = annopkg,...)
+  topGOpc3neg <- topGOtable(probesPC3neg, BGids, annot = annFUN.org,mapping = annopkg,...)
+  topGOpc4pos <- topGOtable(probesPC4pos, BGids, annot = annFUN.org,mapping = annopkg,...)
+  topGOpc4neg <- topGOtable(probesPC4neg, BGids, annot = annFUN.org,mapping = annopkg,...)
 
   goEnrichs <- list(PC1=list(posLoad=topGOpc1pos,negLoad=topGOpc1neg),
                     PC2=list(posLoad=topGOpc2pos,negLoad=topGOpc2neg),
@@ -331,26 +345,37 @@ GOenrich <- function(geneIds,universeGeneIds,annotation,ontology="BP",pvalueCuto
 
 
 
-#' Title
+#' Functional interpretation of the principal components, based on simple
+#' overrepresentation analysis
 #'
-#' @param se
-#' @param pca_ngenes
-#' @param annotation
-#' @param inputType
-#' @param organism
-#' @param loadings_ngenes
-#' @param background_genes
-#' @param scale
-#' @param ...
+#' Extracts the genes with the highest loadings for each principal component, and
+#' performs functional enrichment analysis on them using the simple and quick routine
+#' provided by the \code{limma} package
 #'
-#' @return
-#' @export
+#'
+#' @param se A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
+#' produced for example by either \code{\link{rlog}} or
+#' \code{\link{varianceStabilizingTransformation}}
+#' @param pca_ngenes Number of genes to use for the PCA
+#' @param inputType Input format type of the gene identifiers. Deafults to \code{ENSEMBL}, that then will
+#' be converted to ENTREZ ids. Can assume values such as \code{ENTREZID},\code{GENENAME} or \code{SYMBOL},
+#' like it is normally used with the \code{select} function of \code{AnnotationDbi}
+#' @param organism Character abbreviation for the species, using \code{org.XX.eg.db} for annotation
+#' @param loadings_ngenes Number of genes to extract the loadings (in each direction)
+#' @param background_genes Which genes to consider as background.
+#' @param scale Logical, defaults to FALSE, scale values for the PCA
+#' @param ... Further parameters to be passed to the topGO routine
+#'
+#' @return A nested list object containing for each principal component the terms enriched
+#' in each direction. This object is to be thought in combination with the displaying feature
+#' of the main \code{\link{pcaExplorer}} function
 #'
 #' @examples
+#'
+#' @export
 limmaquickpca2go <- function(se,
                         pca_ngenes = 10000,
-                        annotation = NULL,
-                        inputType = "ensGene",
+                        inputType = "ENSEMBL",
                         organism = "Mm",
                         loadings_ngenes = 500,
                         background_genes = NULL,
@@ -400,15 +425,15 @@ limmaquickpca2go <- function(se,
 
   ## convert ensembl to entrez ids
 
-  probesPC1pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC1pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC1neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC1neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC2pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC2pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC2neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC2neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC3pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC3pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC3neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC3neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC4pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC4pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC4neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC4neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  bg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = BGids, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
+  probesPC1pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC1pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
+  probesPC1neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC1neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
+  probesPC2pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC2pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
+  probesPC2neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC2neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
+  probesPC3pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC3pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
+  probesPC3neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC3neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
+  probesPC4pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC4pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
+  probesPC4neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC4neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
+  bg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = BGids, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
   print("Ranking genes by the loadings ... done!")
   # print("Extracting functional categories enriched in the gene subsets ...")
 
