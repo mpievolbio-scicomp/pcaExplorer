@@ -1,10 +1,3 @@
-## TODOS
-# parameters instead of fixed values - MOSTLY DONE
-# some other tweaks - DOING THEM; DONE MANY
-# try one run from the scratch - DONE
-# list whatever is required on top of the pca_SUPALIVE function - GUESS WE'RE DONE
-### EMBED THIS INTO INTERACTIVE HTML REPORTS? e.g. a la maplots!!!!
-
 # library("DESeq2")
 # library("genefilter")
 # library("shiny")
@@ -17,36 +10,7 @@
 # load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_kleinert.RData")
 # load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/goEnrichs_paired.RData")
 
-
-# library(ggvis)
-# library(shinythemes)
-
-
-# library("DT")
-# library("pheatmap")
-# library("d3heatmap")
-# library(shinydashboard)
-
 # annotation <- data.frame(gene_id=rownames(cm2),gene_name=cm2$fromgtf,stringsAsFactors = FALSE,row.names = rownames(cm2))
-
-
-footer <- function(){
-  tags$div(
-    class = "footer",
-    style = "text-align:center",
-    tags$div(
-      class = "foot-inner",
-      list(
-        hr(),
-        "pcaExplorer is a project developed by Federico Marini in the Bioinformatics division of the ",
-        tags$a(href="http://www.unimedizin-mainz.de/imbei","IMBEI"),
-        ". ",br(),
-        "Development of the pcaExplorer package is on ",
-        tags$a(href="https://github.com/federicomarini/pcaExplorer", "GitHub")
-      )
-    )
-  )
-}
 
 #' Explore a dataset from a PCA perspective
 #'
@@ -93,19 +57,6 @@ pcaExplorer <- function(dds=NULL,
   # library("shinyURL")
   # here something like, if provided as a countmatrix, create dds and rld
 
-#   if(!is.null(obj)){
-#     poss_covars <- names(colData(obj))[] # exclude the size factor, not really required?
-#   } else {
-#     poss_covars <- c()
-#   }
-  ## TODO: colselection also passed as a palette?
-  ###### colSelection <- c("navyblue","steelblue","skyblue","darkred","coral3","darksalmon","green4","greenyellow","orange","gold")
-  # alternative to evaluate: use other palettes, eg hue_pal
-  ## place it in the server to be reactive on the ncol of the object!
-
-
-
-
 #   cmcm <- counts(dds_deplall)[1:10,]
 #   write.table(cmcm,file="minicm.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
 #   ddd <- colData(dds_deplall)
@@ -116,8 +67,6 @@ pcaExplorer <- function(dds=NULL,
   ##                          Define UI                                 ##
   ## ------------------------------------------------------------------ ##
 
-  # poss_covars <- names(colData(obj))
-  # poss_covars <- NULL
   newuiui <-
     shinydashboard::dashboardPage(
       dashboardHeader(
@@ -143,27 +92,58 @@ pcaExplorer <- function(dds=NULL,
                    "right", options = list(container = "body"))),
         menuItem("App settings",icon = icon("cogs"),
                  selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8, selected = 1),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
                  selectInput('pc_y', label = 'y-axis PC: ', choices = 1:8, selected = 2),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
                  uiOutput("color_by"),
-#                  selectInput('color_by', label = 'color by: ',
-#                              choices = c(NULL, poss_covars()), selected = NULL,multiple = T),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
                  numericInput('pca_nrgenes', label = 'Nr of (most variant) genes:', value = 300,min = 50,max = 20000),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
                  numericInput('pca_point_alpha', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
                  numericInput('pca_label_size', label = 'Labels size: ', value = 2,min = 1,max = 8),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
                  numericInput('pca_point_size', label = 'Points size: ', value = 2,min = 1,max = 8),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
                  numericInput('pca_varname_size', label = 'Varname size: ', value = 4,min = 1,max = 8),
-                 numericInput('pca_scale_arrow', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10)
-                 # TODO custom color palette? see icobra's proposal
-
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
+                 numericInput('pca_scale_arrow', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body"))
                  ),
         menuItem("Plot settings", icon = icon("paint-brush"),
                  # bstooltip: Use the widgets below to setup general parameters for exporting produced plots
 
-                 selectInput("col_palette","Color palette",choices = list("hue","set1","rainbow")),  ## TODO: need to work on the palette selector: maybe use selectize? see other examples
-                 # numericInput("nrcol","Number of palette colors",value=8,min=2), ## see if it makes sense, or maybe just leave it with hue_pal # now it is context dependent!
+                 selectInput("col_palette","Color palette",choices = list("hue","set1","rainbow")),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
 
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
                  numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
+                 shinyBS::bsTooltip(
+                   "EDITHERE", paste0("EDITHERE"),
+                   "right", options = list(container = "body")),
 
                  # tooltips explanation to have less crowded ui and still good docu
                  shinyBS::bsTooltip(
@@ -335,17 +315,20 @@ pcaExplorer <- function(dds=NULL,
             fluidRow(
               h1("GeneFinder"),
               textInput("genefinder",label = "type in the name of the gene to search",value = NULL),
+              shinyBS::bsTooltip(
+                "EDITHERE", paste0("EDITHERE"),
+                "right", options = list(container = "body")),
 
-              fluidRow(
-                column(
-                  width = 6,
-                  uiOutput("ui_selectID")
-                ),
-                column(
-                  width = 6,
-                  uiOutput("ui_selectName")
-                )
-              ),
+#               fluidRow(
+#                 column(
+#                   width = 6,
+#                   uiOutput("ui_selectID")
+#                 ),
+#                 column(
+#                   width = 6,
+#                   uiOutput("ui_selectName")
+#                 )
+#               ),
               # verbatimTextOutput("debugf"),
 
 
@@ -362,10 +345,19 @@ pcaExplorer <- function(dds=NULL,
             # verbatimTextOutput("enrichinfo"),
 
             uiOutput("ui_selectspecies"),
+            shinyBS::bsTooltip(
+              "EDITHERE", paste0("EDITHERE"),
+              "right", options = list(container = "body")),
             verbatimTextOutput("speciespkg"),
             checkboxInput("compact_pca2go","Display compact tables",value=FALSE),
+            shinyBS::bsTooltip(
+              "EDITHERE", paste0("EDITHERE"),
+              "right", options = list(container = "body")),
 
             uiOutput("ui_computePCA2GO"),
+            shinyBS::bsTooltip(
+              "EDITHERE", paste0("EDITHERE"),
+              "right", options = list(container = "body")),
 
             fluidRow(
               column(width = 3),
@@ -1825,7 +1817,23 @@ pcaExplorer <- function(dds=NULL,
 }
 
 
-
+footer <- function(){
+  tags$div(
+    class = "footer",
+    style = "text-align:center",
+    tags$div(
+      class = "foot-inner",
+      list(
+        hr(),
+        "pcaExplorer is a project developed by Federico Marini in the Bioinformatics division of the ",
+        tags$a(href="http://www.unimedizin-mainz.de/imbei","IMBEI"),
+        ". ",br(),
+        "Development of the pcaExplorer package is on ",
+        tags$a(href="https://github.com/federicomarini/pcaExplorer", "GitHub")
+      )
+    )
+  )
+}
 
 
 
