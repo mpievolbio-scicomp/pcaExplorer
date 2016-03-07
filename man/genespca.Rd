@@ -99,7 +99,7 @@ such as the transformed counts of RNA-seq experiments
 \examples{
 
 dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
-rlt <- rlogTransformation(dds)
+rlt <- DESeq2::rlogTransformation(dds)
 groups <- colData(dds)$condition
 cols <- hue_pal()(2)[groups]
 genespca(rlt,ntop=100,arrowColors=cols,groupNames=groups)

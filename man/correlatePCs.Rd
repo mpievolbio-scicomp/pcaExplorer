@@ -24,8 +24,9 @@ covariates
 }
 \examples{
 
+library(DESeq2)
 dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
-rlt <- DESeq2::rlogTransformation(dds)
+rlt <- rlogTransformation(dds)
 pcaobj <- prcomp(t(assay(rlt)))
 correlatePCs(pcaobj,colData(dds))
 

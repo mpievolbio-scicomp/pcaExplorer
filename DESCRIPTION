@@ -41,7 +41,8 @@ Suggests:
     testthat,
     BiocStyle,
     rmarkdown,
-    airway
+    airway,
+    org.Hs.eg.db
 URL: https://github.com/federicomarini/pcaExplorer
 BugReports: https://github.com/federicomarini/pcaExplorer/issues
 biocViews: Visualization, RNASeq, DimensionReduction, PrincipalComponent, QualityControl, GUI

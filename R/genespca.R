@@ -55,6 +55,7 @@
 #'
 #' @examples
 #'
+#' library(DESeq2)
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
 #' rlt <- rlogTransformation(dds)
 #' groups <- colData(dds)$condition
