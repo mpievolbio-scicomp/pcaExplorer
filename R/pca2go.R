@@ -39,7 +39,7 @@
 #' data(airway)
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
-#' rld_airway <- rlogTransformation(dds_airway)
+#' rld_airway <- DESeq2::rlogTransformation(dds_airway)
 #'
 #' # constructing the annotation object
 #' anno_df <- data.frame(gene_id = rownames(dds_airway),
@@ -475,11 +475,12 @@ GOenrich <- function(geneIds,universeGeneIds,annotation,ontology="BP",pvalueCuto
 #'                      column="SYMBOL",
 #'                      keytype="ENSEMBL",
 #'                      multiVals="first")
+#' \dontrun{
 #' goquick_airway <- limmaquickpca2go(dds_airway,
 #'                                    pca_ngenes = 10000,
 #'                                    inputType = "ENSEMBL",
 #'                                    organism = "Hs")
-#'
+#' }
 #'
 #' @export
 limmaquickpca2go <- function(se,

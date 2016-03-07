@@ -71,11 +71,12 @@ bg_symbols <- mapIds(org.Hs.eg.db,
                      column="SYMBOL",
                      keytype="ENSEMBL",
                      multiVals="first")
+\dontrun{
 goquick_airway <- limmaquickpca2go(dds_airway,
                                    pca_ngenes = 10000,
                                    inputType = "ENSEMBL",
                                    organism = "Hs")
-
+}
 
 }
 

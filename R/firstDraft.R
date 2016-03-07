@@ -43,12 +43,15 @@
 #' data(airway)
 #' airway
 #' dds_airway <- DESeqDataSetFromMatrix(assay(airway),colData = colData(airway),design=~dex+cell)
-#' rld_airway <- rlogTransformation(dds_airway)
+#' rld_airway <- DESeq2::rlogTransformation(dds_airway)
+#'
+#' \dontrun{
 #' pcaExplorer(dds_airway,rld_airway)
 #'
 #' pcaExplorer(countmatrix = counts(dds_airway), coldata = colData(dds_airway))
-#' pcaExplorer() # and then upload count matrix, covariate matrix (and eventual annotation)
 #'
+#' pcaExplorer() # and then upload count matrix, covariate matrix (and eventual annotation)
+#' }
 #'
 #'
 #' @export

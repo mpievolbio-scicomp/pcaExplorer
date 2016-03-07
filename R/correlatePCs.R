@@ -20,7 +20,7 @@
 #' @examples
 #'
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
-#' rlt <- rlogTransformation(dds)
+#' rlt <- DESeq2::rlogTransformation(dds)
 #' pcaobj <- prcomp(t(assay(rlt)))
 #' correlatePCs(pcaobj,colData(dds))
 #'
@@ -74,7 +74,7 @@ correlatePCs <- function(pcaobj,coldata,pcs=1:4){
 #' @examples
 #'
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
-#' rlt <- rlogTransformation(dds)
+#' rlt <- DESeq2::rlogTransformation(dds)
 #' pcaobj <- prcomp(t(assay(rlt)))
 #' res <- correlatePCs(pcaobj,colData(dds))
 #' plotPCcorrs(res)

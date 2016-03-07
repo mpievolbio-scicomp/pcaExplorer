@@ -40,7 +40,7 @@ Plots the results of PCA on a 2-dimensional space
 \examples{
 
 dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
-rlt <- rlogTransformation(dds)
+rlt <- DESeq2::rlogTransformation(dds)
 pcaplot(rlt, ntop=200)
 
 

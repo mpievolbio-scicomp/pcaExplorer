@@ -31,7 +31,7 @@ Extract genes with highest loadings
 }
 \examples{
 dds <- makeExampleDESeqDataSet_multifac(betaSD = 3,betaSD_tissue = 1)
-rlt <- rlogTransformation(dds)
+rlt <- DESeq2::rlogTransformation(dds)
 pcaobj <- prcomp(t(assay(rlt)))
 hi_loadings(pcaobj,topN = 20)
 hi_loadings(pcaobj,topN = 10,exprTable=dds)

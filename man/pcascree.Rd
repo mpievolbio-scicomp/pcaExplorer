@@ -26,7 +26,7 @@ alternatively the cumulative value
 \examples{
 
 dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
-rlt <- rlogTransformation(dds)
+rlt <- DESeq2::rlogTransformation(dds)
 pcaobj <- prcomp(t(assay(rlt)))
 pcascree(pcaobj,type="pev")
 pcascree(pcaobj,type="cev",title="Cumulative explained proportion of variance - Test dataset")

@@ -51,7 +51,7 @@ library(DESeq2)
 data(airway)
 airway
 dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
-rld_airway <- rlogTransformation(dds_airway)
+rld_airway <- DESeq2::rlogTransformation(dds_airway)
 
 # constructing the annotation object
 anno_df <- data.frame(gene_id = rownames(dds_airway),
