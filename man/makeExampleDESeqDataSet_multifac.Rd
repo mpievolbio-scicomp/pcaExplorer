@@ -36,6 +36,9 @@ Title
 }
 \examples{
 
+dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+dds
+
 
 }
 

@@ -33,6 +33,36 @@
 #'
 #' @examples
 #'
+#'
+#' library(airway)
+#' library(DESeq2)
+#' data(airway)
+#' airway
+#' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+#' rld_airway <- rlogTransformation(dds_airway)
+#'
+#' # constructing the annotation object
+#' anno_df <- data.frame(gene_id = rownames(dds_airway),
+#'                       stringsAsFactors=FALSE)
+#' library("AnnotationDbi")
+#' library("org.Hs.eg.db")
+#' anno_df$gene_name <- mapIds(org.Hs.eg.db,
+#'                             keys=anno_df$gene_id,
+#'                             column="SYMBOL",
+#'                             keytype="ENSEMBL",
+#'                             multiVals="first")
+#' rownames(anno_df) <- anno_df$gene_id
+#' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
+#' library(topGO)
+#' \dontrun{
+#' pca2go_airway <- pca2go(rld_airway,
+#'                         annotation = anno_df,
+#'                         organism = "Hs",
+#'                         ensToGeneSymbol = TRUE,
+#'                         background_genes = bg_ids)
+#' }
+#'
+#'
 #' @export
 pca2go <- function(se,
                    pca_ngenes = 10000,
@@ -84,13 +114,13 @@ pca2go <- function(se,
   message("After subsetting/filtering for invariant genes, working on a ",nrow(exprsData),"x",ncol(exprsData)," expression matrix\n")
 
   p <- prcomp(t(exprsData), scale=scale, center=TRUE)
-  # pcaobj <- list(scores=p$x, loadings=p$rotation, pov=p$sdev^2/sum(p$sdev^2),
-                 # expressionData=NA)
-  # class(pcaobj) <- "pca" # to view it eventually with pcaGoPromoter
-  # res
-
-  # library("pcaGoPromoter")
-  # pcaObj <- res
+#   pcaobj <- list(scores=p$x, loadings=p$rotation, pov=p$sdev^2/sum(p$sdev^2),
+#                  expressionData=NA)
+#   class(pcaobj) <- "pca" # to view it eventually with pcaGoPromoter
+#   res
+#
+#   library("pcaGoPromoter")
+#   pcaObj <- res
 
 
   print("Ranking genes by the loadings ...")
@@ -168,7 +198,45 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #'
 #' @return A table containing the computed GO Terms and related enrichment scores
 #'
-#' @examples # An example
+#' @examples
+#'
+#' library(airway)
+#' library(DESeq2)
+#' data(airway)
+#' airway
+#' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+#' dds_airway <- DESeq(dds_airway)
+#' res_airway <- results(dds_airway)
+#' library("AnnotationDbi")
+#' library("org.Hs.eg.db")
+#' res_airway$symbol <- mapIds(org.Hs.eg.db,
+#'                             keys=row.names(res_airway),
+#'                             column="SYMBOL",
+#'                             keytype="ENSEMBL",
+#'                             multiVals="first")
+#' res_airway$entrez <- mapIds(org.Hs.eg.db,
+#'                             keys=row.names(res_airway),
+#'                             column="ENTREZID",
+#'                             keytype="ENSEMBL",
+#'                             multiVals="first")
+#' resOrdered <- as.data.frame(res_airway[order(res_airway$padj),])
+#' de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+#' de_symbols <- de_df$symbol
+#' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
+#' bg_symbols <- mapIds(org.Hs.eg.db,
+#'                      keys=bg_ids,
+#'                      column="SYMBOL",
+#'                      keytype="ENSEMBL",
+#'                      multiVals="first")
+#' library(topGO)
+#' \dontrun{
+#' topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
+#'                              ontology = "BP",
+#'                              mapping = "org.Hs.eg.db",
+#'                              geneID = "symbol")
+#' }
+#'
+#'
 #'
 #'
 #' @export
@@ -377,6 +445,41 @@ GOenrich <- function(geneIds,universeGeneIds,annotation,ontology="BP",pvalueCuto
 #' of the main \code{\link{pcaExplorer}} function
 #'
 #' @examples
+#'
+#' library(airway)
+#' library(DESeq2)
+#' library(limma)
+#' data(airway)
+#' airway
+#' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+#' dds_airway <- DESeq(dds_airway)
+#' res_airway <- results(dds_airway)
+#' library("AnnotationDbi")
+#' library("org.Hs.eg.db")
+#' res_airway$symbol <- mapIds(org.Hs.eg.db,
+#'                             keys=row.names(res_airway),
+#'                             column="SYMBOL",
+#'                             keytype="ENSEMBL",
+#'                             multiVals="first")
+#' res_airway$entrez <- mapIds(org.Hs.eg.db,
+#'                             keys=row.names(res_airway),
+#'                             column="ENTREZID",
+#'                             keytype="ENSEMBL",
+#'                             multiVals="first")
+#' resOrdered <- as.data.frame(res_airway[order(res_airway$padj),])
+#' de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+#' de_symbols <- de_df$symbol
+#' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
+#' bg_symbols <- mapIds(org.Hs.eg.db,
+#'                      keys=bg_ids,
+#'                      column="SYMBOL",
+#'                      keytype="ENSEMBL",
+#'                      multiVals="first")
+#' goquick_airway <- limmaquickpca2go(dds_airway,
+#'                                    pca_ngenes = 10000,
+#'                                    inputType = "ENSEMBL",
+#'                                    organism = "Hs")
+#'
 #'
 #' @export
 limmaquickpca2go <- function(se,

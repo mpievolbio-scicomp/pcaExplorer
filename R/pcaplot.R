@@ -21,7 +21,11 @@
 #' @return An object created by \code{ggplot}, which can be assigned and further customized.
 #'
 #'
-#' @examples # An example
+#' @examples
+#'
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' rlt <- rlogTransformation(dds)
+#' pcaplot(rlt, ntop=200)
 #'
 #'
 #' @export
@@ -78,6 +82,11 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
 #'
 #' @examples
 #'
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' rlt <- rlogTransformation(dds)
+#' pcaobj <- prcomp(t(assay(rlt)))
+#' pcascree(pcaobj,type="pev")
+#' pcascree(pcaobj,type="cev",title="Cumulative explained proportion of variance - Test dataset")
 #'
 #' @export
 pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)

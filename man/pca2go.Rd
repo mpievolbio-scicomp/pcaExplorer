@@ -45,5 +45,35 @@ the \code{topGO} package
 }
 \examples{
 
+
+library(airway)
+library(DESeq2)
+data(airway)
+airway
+dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+rld_airway <- rlogTransformation(dds_airway)
+
+# constructing the annotation object
+anno_df <- data.frame(gene_id = rownames(dds_airway),
+                      stringsAsFactors=FALSE)
+library("AnnotationDbi")
+library("org.Hs.eg.db")
+anno_df$gene_name <- mapIds(org.Hs.eg.db,
+                            keys=anno_df$gene_id,
+                            column="SYMBOL",
+                            keytype="ENSEMBL",
+                            multiVals="first")
+rownames(anno_df) <- anno_df$gene_id
+bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
+library(topGO)
+\dontrun{
+pca2go_airway <- pca2go(rld_airway,
+                        annotation = anno_df,
+                        organism = "Hs",
+                        ensToGeneSymbol = TRUE,
+                        background_genes = bg_ids)
+}
+
+
 }
 

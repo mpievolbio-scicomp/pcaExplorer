@@ -39,6 +39,16 @@
 #'
 #' @examples
 #'
+#' library(airway)
+#' data(airway)
+#' airway
+#' dds_airway <- DESeqDataSetFromMatrix(assay(airway),colData = colData(airway),design=~dex+cell)
+#' rld_airway <- rlogTransformation(dds_airway)
+#' pcaExplorer(dds_airway,rld_airway)
+#'
+#' pcaExplorer(countmatrix = counts(dds_airway), coldata = colData(dds_airway))
+#' pcaExplorer() # and then upload count matrix, covariate matrix (and eventual annotation)
+#'
 #'
 #'
 #' @export
@@ -93,39 +103,42 @@ pcaExplorer <- function(dds=NULL,
         menuItem("App settings",icon = icon("cogs"),
                  selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8, selected = 1),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "pc_x", paste0("Select the principal component to display on the x axis"),
                    "right", options = list(container = "body")),
                  selectInput('pc_y', label = 'y-axis PC: ', choices = 1:8, selected = 2),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "pc_y", paste0("Select the principal component to display on the y axis"),
                    "right", options = list(container = "body")),
                  uiOutput("color_by"),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "color_by", paste0("Select the group of samples to stratify the analysis. Can also assume multiple values"),
                    "right", options = list(container = "body")),
                  numericInput('pca_nrgenes', label = 'Nr of (most variant) genes:', value = 300,min = 50,max = 20000),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "pca_nrgenes", paste0("Number of genes to select for computing the principal components. The top n genes are",
+                                         " selected ranked by their variance inter-samples"),
                    "right", options = list(container = "body")),
                  numericInput('pca_point_alpha', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "pca_point_alpha", paste0("Color transparency for the plots. Can assume values from 0 (transparent) ",
+                                             "to 1 (opaque)"),
                    "right", options = list(container = "body")),
                  numericInput('pca_label_size', label = 'Labels size: ', value = 2,min = 1,max = 8),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "pca_label_size", paste0("Size of the labels for the samples in the principal components plots"),
                    "right", options = list(container = "body")),
                  numericInput('pca_point_size', label = 'Points size: ', value = 2,min = 1,max = 8),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "pca_point_size", paste0("Size of the points to be plotted in the principal components plots"),
                    "right", options = list(container = "body")),
                  numericInput('pca_varname_size', label = 'Varname size: ', value = 4,min = 1,max = 8),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "pca_varname_size", paste0("Size of the labels for the genes PCA - correspond to the samples names"),
                    "right", options = list(container = "body")),
                  numericInput('pca_scale_arrow', label = 'Scaling factor : ', value = 1,min = 0.01,max = 10),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "pca_scale_arrow", paste0("Scale value for resizing the arrow corresponding to the variables in the ",
+                                             "PCA for the genes. It should be used for mere visualization purposes"),
                    "right", options = list(container = "body"))
                  ),
         menuItem("Plot settings", icon = icon("paint-brush"),
@@ -133,24 +146,19 @@ pcaExplorer <- function(dds=NULL,
 
                  selectInput("col_palette","Color palette",choices = list("hue","set1","rainbow")),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "col_palette", paste0("Select the color palette to be used in the principal components plots. The number of ",
+                                         "colors is selected automatically according to the number of samples and to the levels ",
+                                         "of the factors of interest and their interactions"),
                    "right", options = list(container = "body")),
 
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
+                   "export_width", paste0("Width of the figures to export, expressed in cm"),
                    "right", options = list(container = "body")),
                  numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
                  shinyBS::bsTooltip(
-                   "EDITHERE", paste0("EDITHERE"),
-                   "right", options = list(container = "body")),
-
-                 # tooltips explanation to have less crowded ui and still good docu
-                 shinyBS::bsTooltip(
-                   "export_width",
-                   paste0("Use the widgets below to setup general parameters for exporting produced plots"),
+                   "export_height", paste0("Height of the figures to export, expressed in cm"),
                    "right", options = list(container = "body"))
-
 
                  )
       ),
@@ -316,7 +324,13 @@ pcaExplorer <- function(dds=NULL,
               h1("GeneFinder"),
               textInput("genefinder",label = "type in the name of the gene to search",value = NULL),
               shinyBS::bsTooltip(
-                "EDITHERE", paste0("EDITHERE"),
+                "genefinder", paste0("Type in the name of the gene to search. If no annotation is ",
+                                     "provided, you need to use IDs that are the row names of the ",
+                                     "objects you are using - count matrix, SummarizedExperiments ",
+                                     "or similar. If an annotation is provided, that also contains ",
+                                     "gene symbols or similar, the gene finder tries to find the ",
+                                     "name and the ID, and it suggests if some characters are in a ",
+                                     "different case"),
                 "right", options = list(container = "body")),
 
 #               fluidRow(
@@ -346,18 +360,26 @@ pcaExplorer <- function(dds=NULL,
 
             uiOutput("ui_selectspecies"),
             shinyBS::bsTooltip(
-              "EDITHERE", paste0("EDITHERE"),
-              "right", options = list(container = "body")),
+              "ui_selectspecies", paste0("Select the species for the functional enrichment analysis, ",
+                                         "choosing among the ones currently supported by limma::goana. ",
+                                         "Alternatively, for other species, it can be possible to use one ",
+                                         "of the available annotation packages in Bioconductor, and pre-",
+                                         "computing the pca2go object in advance"),
+              "bottom", options = list(container = "body")),
             verbatimTextOutput("speciespkg"),
             checkboxInput("compact_pca2go","Display compact tables",value=FALSE),
             shinyBS::bsTooltip(
-              "EDITHERE", paste0("EDITHERE"),
-              "right", options = list(container = "body")),
+              "compact_pca2go", paste0("Should I display all the columns? If the information content of the ",
+                                       "tables is somehow too much for the screen width, as it can be for ",
+                                       "objects generated by pca2go with the topGO routines, the app can ",
+                                       "display just an essential subset of the columns"),
+              "bottom", options = list(container = "body")),
 
             uiOutput("ui_computePCA2GO"),
             shinyBS::bsTooltip(
-              "EDITHERE", paste0("EDITHERE"),
-              "right", options = list(container = "body")),
+              "ui_computePCA2GO", paste0("Compute a pca2go object, using the limma::goana function, ",
+                                         "after selecting the species of the experiment under investigation"),
+              "bottom", options = list(container = "body")),
 
             fluidRow(
               column(width = 3),
@@ -426,30 +448,39 @@ pcaExplorer <- function(dds=NULL,
 #                    uiOutput("colnames2"),
 
                    actionButton("composemat","Compose the matrix",icon=icon("spinner")),
+                    shinyBS::bsTooltip(
+                      "composemat", paste0("Select first two different experimental factors, for example ",
+                                           "condition and tissue. For each factor, select two or more ",
+                                           "levels. The corresponding samples which can be used are then displayed ",
+                                           "in the select boxes. Select an equal number of samples for each of ",
+                                           "the levels in factor 1, and then click the button to compute the ",
+                                           "new matrix which will be used for the visualizations below"),
+                      "bottom", options = list(container = "body")),
+
 
                    verbatimTextOutput("dd"),
 
                    fluidRow(
                      column(4,
-                            selectInput('pc_x_ruf', label = 'x-axis PC: ', choices = 1:8,
+                            selectInput('pc_x_multifac', label = 'x-axis PC: ', choices = 1:8,
                                         selected = 2)
                      ),
                      column(4,
-                            selectInput('pc_y_ruf', label = 'y-axis PC: ', choices = 1:8,
+                            selectInput('pc_y_multifac', label = 'y-axis PC: ', choices = 1:8,
                                         selected = 3)
                      )),
 
-                   # fluidRow(verbatimTextOutput("rufdebug")),
+                   # fluidRow(verbatimTextOutput("multifacdebug")),
 
                    fluidRow(
                      column(6,
-                            plotOutput('pcaruf',brush = 'pcaruf_brush')),
+                            plotOutput('pcamultifac',brush = 'pcamultifac_brush')),
                      column(6,
-                            plotOutput("rufzoom"))
+                            plotOutput("multifaczoom"))
                    ),
-                   fluidRow(downloadButton('downloadData_brush_ruf', 'Download brushed points'),
-                            textInput("brushedPoints_filename_ruf","File name..."),
-                            DT::dataTableOutput('pcaruf_out'))
+                   fluidRow(downloadButton('downloadData_brush_multifac', 'Download brushed points'),
+                            textInput("brushedPoints_filename_multifac","File name..."),
+                            DT::dataTableOutput('pcamultifac_out'))
 
 
           )
@@ -1370,7 +1401,7 @@ pcaExplorer <- function(dds=NULL,
 
 
 
-    ## from here on, RUF APP
+    ## from here on, multifac APP
 
 
     output$covar1 <- renderUI({
@@ -1546,13 +1577,13 @@ pcaExplorer <- function(dds=NULL,
     })
 
 
-    output$pcaruf <- renderPlot({
+    output$pcamultifac <- renderPlot({
     pcmat <- obj3()[[1]]
       tcol <- obj3()[[2]]
       tcol2 <- obj3()[[3]]
       pres <- prcomp(t(pcmat),scale=FALSE)
 
-      plot.index <- c(as.integer(input$pc_x_ruf),as.integer(input$pc_y_ruf))
+      plot.index <- c(as.integer(input$pc_x_multifac),as.integer(input$pc_y_multifac))
       offset <- ncol(pcmat)/2
       gene.no <- offset
       pcx <- pres$x
@@ -1590,14 +1621,14 @@ pcaExplorer <- function(dds=NULL,
     })
 
 
-    output$rufzoom <- renderPlot({
-      if(is.null(input$pcaruf_brush)) return(NULL)
+    output$multifaczoom <- renderPlot({
+      if(is.null(input$pcamultifac_brush)) return(NULL)
       pcmat <- obj3()[[1]]
       tcol <- obj3()[[2]]
       tcol2 <- obj3()[[3]]
       pres <- prcomp(t(pcmat),scale=FALSE)
 
-      plot.index <- c(as.integer(input$pc_x_ruf),as.integer(input$pc_y_ruf))
+      plot.index <- c(as.integer(input$pc_x_multifac),as.integer(input$pc_y_multifac))
       offset <- ncol(pcmat)/2
       gene.no <- offset
       pcx <- pres$x
@@ -1607,8 +1638,8 @@ pcaExplorer <- function(dds=NULL,
       # }
       plot(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],
            pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],
-           xlim=c(input$pcaruf_brush$xmin,input$pcaruf_brush$xmax),
-           ylim=c(input$pcaruf_brush$ymin,input$pcaruf_brush$ymax),
+           xlim=c(input$pcamultifac_brush$xmin,input$pcamultifac_brush$xmax),
+           ylim=c(input$pcamultifac_brush$ymin,input$pcamultifac_brush$ymax),
            pch=20,col=tcol,cex=0.3)#,type="n")
       #plot(0,type="n",xlim=range(pres$x[,plot.index]),ylim=range(pres$x[,plot.index]))
       lcol <- ifelse(tcol != tcol2,"black","grey")
@@ -1642,14 +1673,14 @@ pcaExplorer <- function(dds=NULL,
     #         str(input$pcagenes_brush)
     #       })
 
-    curData_brush_ruf <- reactive({
+    curData_brush_multifac <- reactive({
       pcmat <- obj3()[[1]]
       tcol <- obj3()[[2]]
       tcol2 <- obj3()[[3]]
 
       pres <- prcomp(t(pcmat),scale=FALSE)
 
-      plot.index <- c(as.integer(input$pc_x_ruf),as.integer(input$pc_y_ruf))
+      plot.index <- c(as.integer(input$pc_x_multifac),as.integer(input$pc_y_multifac))
       offset <- ncol(pcmat)/2
       gene.no <- offset
       pcx <- pres$x
@@ -1678,14 +1709,14 @@ pcaExplorer <- function(dds=NULL,
         pcspcs$geneName <- values$myannotation$gene_name[match(pcspcs$geneID,rownames(values$myannotation))]
 
 
-      res <- brushedPoints(pcspcs, input$pcaruf_brush,xvar="firstPC",yvar="secondPC",)
+      res <- brushedPoints(pcspcs, input$pcamultifac_brush,xvar="firstPC",yvar="secondPC",)
       res
     })
 
 
 
-    output$pcaruf_out <- DT::renderDataTable({
-      datatable(curData_brush_ruf())
+    output$pcamultifac_out <- DT::renderDataTable({
+      datatable(curData_brush_multifac())
 
 
     }) # IDEALLY HERE?,options = list(lengthMenu = c(25, 50, 100), pageLength = 100)
@@ -1693,13 +1724,13 @@ pcaExplorer <- function(dds=NULL,
     #
     #
     #
-    output$downloadData_brush_ruf <- downloadHandler(
-      filename = function() { paste(input$brushedPoints_filename_ruf, '.csv', sep='') },
+    output$downloadData_brush_multifac <- downloadHandler(
+      filename = function() { paste(input$brushedPoints_filename_multifac, '.csv', sep='') },
       content = function(file) {
-        if(length(input$pcaruf_out_rows_selected)){
-          data <- curData_brush_ruf()[input$pcaruf_out_rows_selected,]
+        if(length(input$pcamultifac_out_rows_selected)){
+          data <- curData_brush_multifac()[input$pcamultifac_out_rows_selected,]
         } else {
-          data <- curData_brush_ruf()
+          data <- curData_brush_multifac()
         }
         write.csv(data, file, quote=FALSE)
       }

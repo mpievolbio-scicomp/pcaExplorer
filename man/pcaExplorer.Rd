@@ -51,6 +51,16 @@ extraction and effective data exploration. A Shiny application encapsulates the 
 }
 \examples{
 
+library(airway)
+data(airway)
+airway
+dds_airway <- DESeqDataSetFromMatrix(assay(airway),colData = colData(airway),design=~dex+cell)
+rld_airway <- rlogTransformation(dds_airway)
+pcaExplorer(dds_airway,rld_airway)
+
+pcaExplorer(countmatrix = counts(dds_airway), coldata = colData(dds_airway))
+pcaExplorer() # and then upload count matrix, covariate matrix (and eventual annotation)
+
 
 
 }

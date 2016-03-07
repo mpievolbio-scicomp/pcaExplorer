@@ -17,6 +17,9 @@
 #'
 #' @examples
 #'
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' dds
+#'
 #'
 #' @export
 makeExampleDESeqDataSet_multifac <- function (n = 1000, m = 12,

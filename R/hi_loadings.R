@@ -22,7 +22,12 @@
 #'
 #'
 #' @examples
-#'
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD = 3,betaSD_tissue = 1)
+#' rlt <- rlogTransformation(dds)
+#' pcaobj <- prcomp(t(assay(rlt)))
+#' hi_loadings(pcaobj,topN = 20)
+#' hi_loadings(pcaobj,topN = 10,exprTable=dds)
+#' hi_loadings(pcaobj,topN = 10,exprTable=counts(dds))
 #'
 #' @export
 hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,

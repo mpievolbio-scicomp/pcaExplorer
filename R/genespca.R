@@ -55,8 +55,14 @@
 #'
 #' @examples
 #'
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' rlt <- rlogTransformation(dds)
+#' groups <- colData(dds)$condition
+#' cols <- hue_pal()(2)[groups]
+#' genespca(rlt,ntop=100,arrowColors=cols,groupNames=groups)
+#'
 #' @export
-genespca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames="group", biplot=FALSE,
+genespca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames="group", biplot=TRUE,
                     scale = 1, pc.biplot = TRUE,
                     obs.scale = 1 - scale, var.scale = scale, groups = NULL,
                     ellipse = FALSE, ellipse.prob = 0.68, labels = NULL, labels.size = 3,
