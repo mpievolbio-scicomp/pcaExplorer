@@ -95,11 +95,11 @@ genespca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames
       # geom_text(aes(label=names),hjust=0.25, vjust=-0.5, show.legend = F) +
       ggtitle("title") + theme_bw()
   } else {
-    if (inherits(pcobj, "prcomp")) {
-      nobs.factor <- sqrt(nrow(pcobj$x) - 1)
-      d <- pcobj$sdev
-      u <- sweep(pcobj$x, 2, 1/(d * nobs.factor), FUN = "*")
-      v <- pcobj$rotation
+    if (inherits(pca, "prcomp")) {
+      nobs.factor <- sqrt(nrow(pca$x) - 1)
+      d <- pca$sdev
+      u <- sweep(pca$x, 2, 1/(d * nobs.factor), FUN = "*")
+      v <- pca$rotation
     }
 
     choices <- pmin(choices, ncol(u))
@@ -122,7 +122,7 @@ genespca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames
       u.axis.labs <- paste("PC", choices, sep = "")
     }
     u.axis.labs <- paste(u.axis.labs, sprintf("(%0.1f%% explained var.)",
-                                              100 * pcobj$sdev[choices]^2/sum(pcobj$sdev^2)))
+                                              100 * pca$sdev[choices]^2/sum(pca$sdev^2)))
     if (!is.null(labels)) {
       df.u$labels <- labels
     }

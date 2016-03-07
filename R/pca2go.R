@@ -57,7 +57,7 @@ pca2go <- function(se,
     if(is(se,"DESeqDataSet")) {
       BGids <- rownames(se)[rowSums(counts(se))>0]
     } else if(is(se,"DESeqTransform")){
-      BGids <- rownames(se)[rowSums(counts(se))!=0]
+      BGids <- rownames(se)[rowSums(assay(se))!=0]
     } else {
       BGids <- rownames(se)
     }
@@ -255,7 +255,13 @@ quickpca2go <- function(se,
   exprsData <- assay(se)
 
   if(is.null(background_genes)) {
-    BGids <- rownames(se)[rowSums(counts(se))>0] # TODO: at best some other way of doing it - maybe passing additionally the DDS? or if nothing provided, then use all rownames...
+    if(is(se,"DESeqDataSet")) {
+      BGids <- rownames(se)[rowSums(counts(se))>0]
+    } else if(is(se,"DESeqTransform")){
+      BGids <- rownames(se)[rowSums(assay(se))!=0]
+    } else {
+      BGids <- rownames(se)
+    }
   } else {
     BGids <- background_genes
   }
@@ -389,8 +395,15 @@ limmaquickpca2go <- function(se,
   }
   exprsData <- assay(se)
 
+
   if(is.null(background_genes)) {
-    BGids <- rownames(se)[rowSums(counts(se))>0] # TODO: at best some other way of doing it - maybe passing additionally the DDS? or if nothing provided, then use all rownames...
+    if(is(se,"DESeqDataSet")) {
+      BGids <- rownames(se)[rowSums(counts(se))>0]
+    } else if(is(se,"DESeqTransform")){
+      BGids <- rownames(se)[rowSums(assay(se))!=0]
+    } else {
+      BGids <- rownames(se)
+    }
   } else {
     BGids <- background_genes
   }
@@ -457,6 +470,15 @@ limmaquickpca2go <- function(se,
   quickGOpc3neg <- topGO(limma::goana(probesPC3neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("6")
   quickGOpc4pos <- topGO(limma::goana(probesPC4pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("7")
   quickGOpc4neg <- topGO(limma::goana(probesPC4neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("8")
+
+  quickGOpc1pos <- quickGOpc1pos[order(quickGOpc1pos$P.DE),]
+  quickGOpc1neg <- quickGOpc1neg[order(quickGOpc1neg$P.DE),]
+  quickGOpc2pos <- quickGOpc2pos[order(quickGOpc2pos$P.DE),]
+  quickGOpc2neg <- quickGOpc2neg[order(quickGOpc2neg$P.DE),]
+  quickGOpc3pos <- quickGOpc3pos[order(quickGOpc3pos$P.DE),]
+  quickGOpc3neg <- quickGOpc3neg[order(quickGOpc3neg$P.DE),]
+  quickGOpc4pos <- quickGOpc4pos[order(quickGOpc4pos$P.DE),]
+  quickGOpc4neg <- quickGOpc4neg[order(quickGOpc4neg$P.DE),]
 
   goEnrichs <- list(PC1=list(posLoad=quickGOpc1pos,negLoad=quickGOpc1neg),
                     PC2=list(posLoad=quickGOpc2pos,negLoad=quickGOpc2neg),

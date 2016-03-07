@@ -359,8 +359,11 @@ pcaExplorer <- function(dds=NULL,
           tabPanel(
             "PCA2GO",
             h1("Functions enriched in the genes with high loadings on the selected principal components"),
-            verbatimTextOutput("enrichinfo"),
-            checkboxInput("compact_pca2go","Display compact tables",value=TRUE),
+            # verbatimTextOutput("enrichinfo"),
+
+            uiOutput("ui_selectspecies"),
+            verbatimTextOutput("speciespkg"),
+            checkboxInput("compact_pca2go","Display compact tables",value=FALSE),
 
             uiOutput("ui_computePCA2GO"),
 
@@ -1233,13 +1236,63 @@ pcaExplorer <- function(dds=NULL,
         actionButton("computepca2go","Compute the PCA2GO object",icon=icon("spinner"))
     })
 
+    annoSpecies_df <- data.frame(species=c("","Anopheles","Arabidopsis","Bovine","Worm",
+                                           "Canine","Fly","Zebrafish","E coli strain K12",
+                                           "E coli strain Sakai","Chicken","Human","Mouse",
+                                           "Rhesus","Malaria","Chimp","Rat",
+                                           "Yeast","Streptomyces coelicolor", "Pig","Toxoplasma gondii",
+                                           "Xenopus"),
+                                 pkg=c("","org.Ag.eg.db",	"org.At.tair.db", "org.Bt.eg.db",	"org.Ce.eg.db",
+                                       "org.Cf.eg.db",	"org.Dm.eg.db", "org.Dr.eg.db",	"org.EcK12.eg.db",
+                                       "org.EcSakai.eg.db","org.Gg.eg.db","org.Hs.eg.db",	"org.Mm.eg.db",
+                                       "org.Mmu.eg.db","org.Pf.plasmo.db","org.Pt.eg.db","org.Rn.eg.db",
+                                       "org.Sc.sgd.db","org.Sco.eg.db",	"org.Ss.eg.db","org.Tgondii.eg.db",
+                                       "org.Xl.eg.db"),
+                                 stringsAsFactors = FALSE)
+    annoSpecies_df <- annoSpecies_df[order(annoSpecies_df$species),]
+    annoSpecies_df <- annoSpecies_df[annoSpecies_df$species %in% c("","Human", "Mouse", "Rat", "Fly", "Chimp"),]
+
+    output$ui_selectspecies <- renderUI({
+      if(is.null(pca2go))
+        selectInput("speciesSelect",label = "Select the species of your samples",choices = annoSpecies_df$species,selected="")
+    })
+
+    output$speciespkg <- renderPrint({
+
+      shiny::validate(
+        need(input$speciesSelect!="",
+             "Select a species - requires the corresponding annotation package"
+        )
+      )
+
+      annopkg <- annoSpecies_df$pkg[annoSpecies_df$species==input$speciesSelect]
+
+      shiny::validate(
+        need(require(annopkg,character.only=TRUE),
+             paste0("The package ",annopkg, " is not installed/available. Try installing it with biocLite('",annopkg,"')"))
+      )
+
+      cat(annopkg," - package available and loaded")
+      # if (!require(annopkg,character.only=TRUE)) {
+      # stop("The package",annopkg, "is not installed/available. Try installing it with biocLite() ?")
+      # }
+      gsub(".eg.db","",gsub("org.","",annopkg))
+
+    })
+
+
+
+
+
+
 
     computedPCA2GO <- eventReactive( input$computepca2go, {
-
+      annopkg <- annoSpecies_df$pkg[annoSpecies_df$species==input$speciesSelect]
       withProgress(message = "Computing the PCA2GO object...",
                    value = 0,
                    {
-                     pcpc <- limmaquickpca2go(values$myrlt,background_genes = rownames(values$mydds))
+                     pcpc <- limmaquickpca2go(values$myrlt,background_genes = rownames(values$mydds),
+                                              organism = gsub(".eg.db","",gsub("org.","",annopkg)))
                    })
       pcpc
     })
