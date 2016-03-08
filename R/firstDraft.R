@@ -42,7 +42,9 @@
 #' library(airway)
 #' data(airway)
 #' airway
-#' dds_airway <- DESeqDataSetFromMatrix(assay(airway),colData = colData(airway),design=~dex+cell)
+#' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
+#'                                              colData = colData(airway),
+#'                                              design=~dex+cell)
 #' rld_airway <- DESeq2::rlogTransformation(dds_airway)
 #'
 #' \dontrun{

@@ -19,7 +19,7 @@
 #' @importFrom NMF aheatmap
 #' @import plyr
 #' @importFrom limma goana topGO
-#' @importFrom AnnotationDbi select Term
+#' @importFrom AnnotationDbi select Term mapIds
 #' @importMethodsFrom GOstats hyperGTest summary
 #' @import GO.db
 #' @import shiny

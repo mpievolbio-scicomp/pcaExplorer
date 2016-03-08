@@ -39,7 +39,7 @@
 #' data(airway)
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
-#' rld_airway <- DESeq2::rlogTransformation(dds_airway)
+#' rld_airway <- rlogTransformation(dds_airway)
 #'
 #' # constructing the annotation object
 #' anno_df <- data.frame(gene_id = rownames(dds_airway),
@@ -53,8 +53,8 @@
 #'                             multiVals="first")
 #' rownames(anno_df) <- anno_df$gene_id
 #' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
-#' library(topGO)
 #' \dontrun{
+#' library(topGO)
 #' pca2go_airway <- pca2go(rld_airway,
 #'                         annotation = anno_df,
 #'                         organism = "Hs",
@@ -114,17 +114,9 @@ pca2go <- function(se,
   message("After subsetting/filtering for invariant genes, working on a ",nrow(exprsData),"x",ncol(exprsData)," expression matrix\n")
 
   p <- prcomp(t(exprsData), scale=scale, center=TRUE)
-#   pcaobj <- list(scores=p$x, loadings=p$rotation, pov=p$sdev^2/sum(p$sdev^2),
-#                  expressionData=NA)
-#   class(pcaobj) <- "pca" # to view it eventually with pcaGoPromoter
-#   res
-#
-#   library("pcaGoPromoter")
-#   pcaObj <- res
 
 
   print("Ranking genes by the loadings ...")
-  # library("pcaGoPromoter")
   probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
   probesPC1neg <- rankedGeneLoadings(p, pc=1,decreasing=FALSE)[1:loadings_ngenes]
   probesPC2pos <- rankedGeneLoadings(p, pc=2,decreasing=TRUE)[1:loadings_ngenes]
@@ -205,6 +197,11 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #' data(airway)
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+#'
+#' # Example, performing extraction of enriched functional categories in
+#' # detected significantly expressed genes
+#'
+#' \dontrun{
 #' dds_airway <- DESeq(dds_airway)
 #' res_airway <- results(dds_airway)
 #' library("AnnotationDbi")
@@ -229,7 +226,7 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #'                      keytype="ENSEMBL",
 #'                      multiVals="first")
 #' library(topGO)
-#' \dontrun{
+#'
 #' topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
 #'                              ontology = "BP",
 #'                              mapping = "org.Hs.eg.db",
@@ -352,7 +349,6 @@ quickpca2go <- function(se,
 
 
   print("Ranking genes by the loadings ...")
-  # library("pcaGoPromoter")
   probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
   probesPC1neg <- rankedGeneLoadings(p, pc=1,decreasing=FALSE)[1:loadings_ngenes]
   probesPC2pos <- rankedGeneLoadings(p, pc=2,decreasing=TRUE)[1:loadings_ngenes]
@@ -452,31 +448,9 @@ GOenrich <- function(geneIds,universeGeneIds,annotation,ontology="BP",pvalueCuto
 #' data(airway)
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
-#' dds_airway <- DESeq(dds_airway)
-#' res_airway <- results(dds_airway)
-#' library("AnnotationDbi")
-#' library("org.Hs.eg.db")
-#' res_airway$symbol <- mapIds(org.Hs.eg.db,
-#'                             keys=row.names(res_airway),
-#'                             column="SYMBOL",
-#'                             keytype="ENSEMBL",
-#'                             multiVals="first")
-#' res_airway$entrez <- mapIds(org.Hs.eg.db,
-#'                             keys=row.names(res_airway),
-#'                             column="ENTREZID",
-#'                             keytype="ENSEMBL",
-#'                             multiVals="first")
-#' resOrdered <- as.data.frame(res_airway[order(res_airway$padj),])
-#' de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
-#' de_symbols <- de_df$symbol
-#' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
-#' bg_symbols <- mapIds(org.Hs.eg.db,
-#'                      keys=bg_ids,
-#'                      column="SYMBOL",
-#'                      keytype="ENSEMBL",
-#'                      multiVals="first")
+#' rld_airway <- rlogTransformation(dds_airway)
 #' \dontrun{
-#' goquick_airway <- limmaquickpca2go(dds_airway,
+#' goquick_airway <- limmaquickpca2go(rld_airway,
 #'                                    pca_ngenes = 10000,
 #'                                    inputType = "ENSEMBL",
 #'                                    organism = "Hs")
@@ -530,7 +504,6 @@ limmaquickpca2go <- function(se,
 
 
   print("Ranking genes by the loadings ...")
-  # library("pcaGoPromoter")
   probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
   probesPC1neg <- rankedGeneLoadings(p, pc=1,decreasing=FALSE)[1:loadings_ngenes]
   probesPC2pos <- rankedGeneLoadings(p, pc=2,decreasing=TRUE)[1:loadings_ngenes]
@@ -542,15 +515,15 @@ limmaquickpca2go <- function(se,
 
   ## convert ensembl to entrez ids
 
-  probesPC1pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC1pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
-  probesPC1neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC1neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
-  probesPC2pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC2pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
-  probesPC2neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC2neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
-  probesPC3pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC3pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
-  probesPC3neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC3neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
-  probesPC4pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC4pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
-  probesPC4neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC4neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
-  bg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = BGids, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype=inputType)
+  probesPC1pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC1pos, column="ENTREZID", keytype=inputType)
+  probesPC1neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC1neg, column="ENTREZID", keytype=inputType)
+  probesPC2pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC2pos, column="ENTREZID", keytype=inputType)
+  probesPC2neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC2neg, column="ENTREZID", keytype=inputType)
+  probesPC3pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC3pos, column="ENTREZID", keytype=inputType)
+  probesPC3neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC3neg, column="ENTREZID", keytype=inputType)
+  probesPC4pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC4pos, column="ENTREZID", keytype=inputType)
+  probesPC4neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC4neg, column="ENTREZID", keytype=inputType)
+  bg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = BGids, column="ENTREZID", keytype=inputType)
   print("Ranking genes by the loadings ... done!")
   # print("Extracting functional categories enriched in the gene subsets ...")
 
@@ -566,14 +539,14 @@ limmaquickpca2go <- function(se,
   #   summary(goResults)
 
   print("Extracting functional categories enriched in the gene subsets ...")
-  quickGOpc1pos <- topGO(limma::goana(probesPC1pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("1")
-  quickGOpc1neg <- topGO(limma::goana(probesPC1neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("2")
-  quickGOpc2pos <- topGO(limma::goana(probesPC2pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("3")
-  quickGOpc2neg <- topGO(limma::goana(probesPC2neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("4")
-  quickGOpc3pos <- topGO(limma::goana(probesPC3pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("5")
-  quickGOpc3neg <- topGO(limma::goana(probesPC3neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("6")
-  quickGOpc4pos <- topGO(limma::goana(probesPC4pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("7")
-  quickGOpc4neg <- topGO(limma::goana(probesPC4neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, species = organism),ontology="BP",number=200);message("8")
+  quickGOpc1pos <- topGO(limma::goana(probesPC1pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("1")
+  quickGOpc1neg <- topGO(limma::goana(probesPC1neg_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("2")
+  quickGOpc2pos <- topGO(limma::goana(probesPC2pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("3")
+  quickGOpc2neg <- topGO(limma::goana(probesPC2neg_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("4")
+  quickGOpc3pos <- topGO(limma::goana(probesPC3pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("5")
+  quickGOpc3neg <- topGO(limma::goana(probesPC3neg_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("6")
+  quickGOpc4pos <- topGO(limma::goana(probesPC4pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("7")
+  quickGOpc4neg <- topGO(limma::goana(probesPC4neg_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("8")
 
   quickGOpc1pos <- quickGOpc1pos[order(quickGOpc1pos$P.DE),]
   quickGOpc1neg <- quickGOpc1neg[order(quickGOpc1neg$P.DE),]
