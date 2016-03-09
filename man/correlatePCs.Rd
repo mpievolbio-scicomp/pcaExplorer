@@ -2,7 +2,7 @@
 % Please edit documentation in R/correlatePCs.R
 \name{correlatePCs}
 \alias{correlatePCs}
-\title{Principal components correlation with experimental covariates}
+\title{Principal components (cor)relation with experimental covariates}
 \usage{
 correlatePCs(pcaobj, coldata, pcs = 1:4)
 }
@@ -19,8 +19,10 @@ A \code{data.frame} object with computed p values for each covariate
 and for each principal component
 }
 \description{
-Computes the correlations between PCA scores and the sample experimental
-covariates
+Computes the significance of (cor)relations between PCA scores and the sample
+experimental covariates, using Kruskal-Wallis test for categorial variables
+and the \code{cor.test} based on Spearman's correlation for continuous
+variables
 }
 \examples{
 

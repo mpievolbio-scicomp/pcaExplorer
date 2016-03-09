@@ -534,6 +534,15 @@ pcaExplorer <- function(dds=NULL,
 
     # shinyURL.server()
 
+    if(!is.null(dds)){
+      if(!is(dds,"DESeqDataSet"))
+        stop("dds must be a DESeqDataSet object. If it is a simple counts matrix, provide it to the countmatrix parameter!")
+    }
+    if(!is.null(rlt)){
+      if(!is(rlt,"DESeqTransform"))
+        stop("dds must be a DESeqTransform object")
+    }
+
     # compute only rlt if dds is provided but not cm&coldata
     if(!is.null(dds) & (is.null(countmatrix) & is.null(coldata)) & is.null(rlt))
       withProgress(message = "computing rlog transformed values...",
@@ -845,7 +854,7 @@ pcaExplorer <- function(dds=NULL,
 
 
     output$ui_outliersamples <- renderUI({
-      available_samples <- c("",colnames(rld_angII))
+      available_samples <- c("",colnames(values$myrlt))
 
       selectInput("outlierselection",label = "Select which sample(s) to remove - suspected outliers",choices = available_samples,multiple = TRUE)
 

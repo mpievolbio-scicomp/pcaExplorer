@@ -58,7 +58,7 @@ belong to. If provided the points will be colored according to groups}
 \item{circle}{Logical, draw a correlation circle? (only applies when prcomp
 was called with scale = TRUE and when var.scale = 1)}
 
-\item{circle.prob}{Size of the correltation circle in Normal probability}
+\item{circle.prob}{Size of the correlation circle in Normal probability}
 
 \item{varname.size}{Size of the text for variable names}
 

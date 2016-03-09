@@ -2,7 +2,7 @@
 % Please edit documentation in R/correlatePCs.R
 \name{plotPCcorrs}
 \alias{plotPCcorrs}
-\title{Plot correlations of covariates VS principal components}
+\title{Plot significance of (cor)relations of covariates VS principal components}
 \usage{
 plotPCcorrs(pccorrs, pc = 1, logp = TRUE)
 }
@@ -19,7 +19,7 @@ the pvalue instead of the p value itself}
 A base plot object
 }
 \description{
-Plots the correlation of each covariate vs a principal component
+Plots the significance of the (cor)relation of each covariate vs a principal component
 }
 \examples{
 

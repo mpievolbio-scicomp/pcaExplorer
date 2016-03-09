@@ -34,7 +34,7 @@
 #' @param var.axes Logical, draw arrows for the variables?
 #' @param circle Logical, draw a correlation circle? (only applies when prcomp
 #' was called with scale = TRUE and when var.scale = 1)
-#' @param circle.prob Size of the correltation circle in Normal probability
+#' @param circle.prob Size of the correlation circle in Normal probability
 #' @param varname.size Size of the text for variable names
 #' @param varname.adjust  Adjustment factor the placement of the variable names,
 #'  >= 1 means farther from the arrow
