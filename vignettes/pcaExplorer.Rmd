@@ -21,6 +21,13 @@ vignette: >
   %\VignetteKeywords{Visualization, RNASeq, DimensionReduction, PrincipalComponent, QualityControl, GUI}
 ---
 
+<br>
+**Package**: `r Rpackage("pcaExplorer")`<br />
+**Authors**: `r packageDescription("pcaExplorer")[["Author"]]`<br />
+**Version**: `r packageDescription("pcaExplorer")$Version`<br />
+**Compiled date**: `r Sys.Date()`<br />
+**License**: `r packageDescription("pcaExplorer")[["License"]]`<br />
+
 ```{r style, echo = FALSE, results = 'asis'}
 BiocStyle::markdown()
 ```
