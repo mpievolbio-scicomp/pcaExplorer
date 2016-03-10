@@ -1,2 +1,12 @@
-v0.1.0: - Restyling and (re)packaging mostly completed
- 
+Version 0.1.0: - Restyling and (re)packaging mostly completed
+Version 0.2.0: - Multifactorial exploration completed and adaptable to each dataset
+Version 0.3.0: - Added color palette to choose, and dependent on the samples and factors available/selected 
+Version 0.4.0: - Added pca2go live functionality
+Version 0.5.0: - Further steps in direction of R CMD check
+Version 0.6.0: - Documentation completed
+			   - Examples fully working, cleaned up further a little more.
+Version 0.6.1: - Added function to remove selected samples suspected to be deemed as outliers, in order to see the effect of clustering on the good ones
+Version 0.6.2: - Corrected wordings for (cor)relations of principal components with covariates
+			   - Added a couple of checks if correct objects are provided
+Version 0.6.3: - About and Instructions done by now
+			   - Added some missing details on the documentations
