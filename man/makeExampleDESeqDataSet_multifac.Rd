@@ -2,7 +2,7 @@
 % Please edit documentation in R/makeds.R
 \name{makeExampleDESeqDataSet_multifac}
 \alias{makeExampleDESeqDataSet_multifac}
-\title{Title}
+\title{Make a simulated DESeqDataSet for two or more experimental factors}
 \usage{
 makeExampleDESeqDataSet_multifac(n = 1000, m = 12, betaSD_condition = 1,
   betaSD_tissue = 3, interceptMean = 4, interceptSD = 2,
@@ -32,7 +32,14 @@ intercept for two factors (condition and tissue) and beta values in the
  metadata columns.  Note that the true betas are provided on the log2 scale.
 }
 \description{
-Title
+Constructs a simulated dataset of Negative Binomial data from different conditions.
+The fold changes between the conditions can be adjusted with the \code{betaSD_condition}
+and the \code{betaSD_tissue} arguments.
+}
+\details{
+This function is designed and inspired following the proposal of
+\code{\link{makeExampleDESeqDataSet}} from the \code{DESeq2} package. Credits are given
+to Mike Love for the nice initial implementation
 }
 \examples{
 

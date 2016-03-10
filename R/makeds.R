@@ -1,5 +1,12 @@
-
-#' Title
+#' Make a simulated DESeqDataSet for two or more experimental factors
+#'
+#' Constructs a simulated dataset of Negative Binomial data from different conditions.
+#' The fold changes between the conditions can be adjusted with the \code{betaSD_condition}
+#' and the \code{betaSD_tissue} arguments.
+#'
+#' This function is designed and inspired following the proposal of
+#' \code{\link{makeExampleDESeqDataSet}} from the \code{DESeq2} package. Credits are given
+#' to Mike Love for the nice initial implementation
 #'
 #' @param n number of rows (genes)
 #' @param m number of columns (samples)

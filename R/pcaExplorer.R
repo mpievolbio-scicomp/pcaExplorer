@@ -190,6 +190,9 @@ pcaExplorer <- function(dds=NULL,
 #             shiny::verbatimTextOutput("showuploaded2"),
 #             shiny::verbatimTextOutput("showuploaded3"),
 #             shiny::verbatimTextOutput("showuploaded4"),
+
+            h4("Session Info"),
+            verbatimTextOutput("sessioninfo"),
             footer()
             ),
 
@@ -756,6 +759,10 @@ pcaExplorer <- function(dds=NULL,
 
     output$debudebu <- renderPrint({
       colSel()
+    })
+
+    output$sessioninfo <- renderPrint({
+      sessionInfo()
     })
 
 

@@ -236,22 +236,34 @@ pcaExplorer(dds = dds_multifac,
             rlt = rld_multifac)
 ```
 
-When such a dataset is provided, 
+When such a dataset is provided, the panel for multifactorial exploration is also usable at its best.
 
 
 ## Functions exported by the package for standalone usage
 
-export(correlatePCs)
-export(genespca)
-export(hi_loadings)
-export(limmaquickpca2go)
-export(makeExampleDESeqDataSet_multifac)
-export(pca2go)
-export(pcaExplorer)
-export(pcaplot)
-export(pcascree)
-export(plotPCcorrs)
-export(topGOtable)
+The functions exported by the `pcaExplorer` package can be also used in a standalone scenario,
+provided the required objects are in the working environment. They are listed here for an overview,
+but please refer to the documentation for additional details.
+
+- `pcaplot` plots the sample PCA for `DESeqTransform` objects, such as rlog-transformed data. This is 
+the workhorse of the Samples View tab
+- `pcascree` produces a scree plot of the PC computed on the samples. A `prcomp` object needs to be 
+passed as main argument
+- `correlatePCs` and `plotPCcorrs` respectively compute and plot significance of the (cor)relation 
+of each covariate versus a principal component. The input for `correlatePCs` is a `prcomp` object
+- `hi_loadings` extracts and optionally plots the genes with the highest loadings
+- `genespca` computes and plots the principal components of the genes, eventually displaying 
+the samples as in a typical biplot visualization. This is the function in action for the Genes View tab
+- `topGOtable` is a convenient wrapper for extracting functional GO terms enriched in a subset of genes 
+(such as the differentially expressed genes), based on the algorithm and the implementation in the topGO package
+- `pca2go` provides a functional interpretation of the principal components, by extracting the genes
+with the highest loadings for each PC, and then runs internally `topGOtable` on them for efficient functional
+enrichment analysis. Needs a `DESeqTransform` object as main parameter
+- `limmaquickpca2go` is an alternative to `pca2go`, used in the live running app, thanks to its fast 
+implementation based on the `limma::goana` function.
+- `makeExampleDESeqDataSet_multifac` constructs a simulated `DESeqDataSet` of Negative Binomial dataset
+from different conditions. The fold changes between the conditions can be adjusted with the `betaSD_condition`
+`betaSD_tissue` arguments
 
 
 
