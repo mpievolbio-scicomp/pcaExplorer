@@ -1359,7 +1359,7 @@ pcaExplorer <- function(dds=NULL,
       # if (!require(annopkg,character.only=TRUE)) {
       # stop("The package",annopkg, "is not installed/available. Try installing it with biocLite() ?")
       # }
-      retmsg <- paste0(retmsg," - "gsub(".eg.db","",gsub("org.","",annopkg)))
+      retmsg <- paste0(retmsg," - ",gsub(".eg.db","",gsub("org.","",annopkg)))
       retmsg
 
     })
