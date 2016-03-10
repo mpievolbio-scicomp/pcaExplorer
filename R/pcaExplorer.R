@@ -123,7 +123,7 @@ pcaExplorer <- function(dds=NULL,
                    "pca_nrgenes", paste0("Number of genes to select for computing the principal components. The top n genes are",
                                          " selected ranked by their variance inter-samples"),
                    "right", options = list(container = "body")),
-                 numericInput('pca_point_alpha', label = 'alpha: ', value = 1,min = 0,max = 1,step = 0.01),
+                 numericInput('pca_point_alpha', label = 'Alpha: ', value = 1,min = 0,max = 1,step = 0.01),
                  shinyBS::bsTooltip(
                    "pca_point_alpha", paste0("Color transparency for the plots. Can assume values from 0 (transparent) ",
                                              "to 1 (opaque)"),
@@ -136,7 +136,7 @@ pcaExplorer <- function(dds=NULL,
                  shinyBS::bsTooltip(
                    "pca_point_size", paste0("Size of the points to be plotted in the principal components plots"),
                    "right", options = list(container = "body")),
-                 numericInput('pca_varname_size', label = 'Varname size: ', value = 4,min = 1,max = 8),
+                 numericInput('pca_varname_size', label = 'Variable name size: ', value = 4,min = 1,max = 8),
                  shinyBS::bsTooltip(
                    "pca_varname_size", paste0("Size of the labels for the genes PCA - correspond to the samples names"),
                    "right", options = list(container = "body")),
@@ -144,17 +144,15 @@ pcaExplorer <- function(dds=NULL,
                  shinyBS::bsTooltip(
                    "pca_scale_arrow", paste0("Scale value for resizing the arrow corresponding to the variables in the ",
                                              "PCA for the genes. It should be used for mere visualization purposes"),
-                   "right", options = list(container = "body"))
-                 ),
-        menuItem("Plot settings", icon = icon("paint-brush"),
-                 # bstooltip: Use the widgets below to setup general parameters for exporting produced plots
-
+                   "right", options = list(container = "body")),
                  selectInput("col_palette","Color palette",choices = list("hue","set1","rainbow")),
                  shinyBS::bsTooltip(
                    "col_palette", paste0("Select the color palette to be used in the principal components plots. The number of ",
                                          "colors is selected automatically according to the number of samples and to the levels ",
                                          "of the factors of interest and their interactions"),
-                   "right", options = list(container = "body")),
+                   "right", options = list(container = "body"))
+                 ),
+        menuItem("Plot export settings", icon = icon("paint-brush"),
 
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
                  shinyBS::bsTooltip(
@@ -188,10 +186,10 @@ pcaExplorer <- function(dds=NULL,
             "About",
             includeMarkdown(system.file("extdata", "about.md",package = "pcaExplorer")),
             hr(),
-            shiny::verbatimTextOutput("showuploaded1"),
-            shiny::verbatimTextOutput("showuploaded2"),
-            shiny::verbatimTextOutput("showuploaded3"),
-            shiny::verbatimTextOutput("showuploaded4"),
+#             shiny::verbatimTextOutput("showuploaded1"),
+#             shiny::verbatimTextOutput("showuploaded2"),
+#             shiny::verbatimTextOutput("showuploaded3"),
+#             shiny::verbatimTextOutput("showuploaded4"),
             footer()
             ),
 
@@ -202,7 +200,7 @@ pcaExplorer <- function(dds=NULL,
 
           tabPanel(
             "Data Preview",
-            h1("Here will go some head of the count dataset, the samples design/covariates and so"),
+            h1("Sneak peek in the data"),
 
             h3("General information on the provided SummarizedExperiment/DESeqDataSet"),
             shiny::verbatimTextOutput("showdata"),
@@ -223,7 +221,7 @@ pcaExplorer <- function(dds=NULL,
 
           tabPanel(
             "Samples View",
-            p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components."),
+            p(h1('Principal Component Analysis on the samples'), "PCA projections of sample expression profiles onto any pair of components."),
             fluidRow(checkboxInput("sample_labels","Display sample labels",value = TRUE)),
             fluidRow(
               column(
@@ -274,9 +272,9 @@ pcaExplorer <- function(dds=NULL,
 
           tabPanel(
             "Genes View",
-            p(h3('principal component analysis'), "PCA projections of sample abundances onto any pair of components."),
+            p(h1('Principal Component Analysis on the genes'), "PCA projections of genes abundances onto any pair of components."),
 
-            verbatimTextOutput("debudebu"),
+            # verbatimTextOutput("debudebu"),
             # shinyURL.ui(),
 
             fluidRow(checkboxInput("variable_labels","Display variable labels",value = TRUE)),
@@ -367,7 +365,8 @@ pcaExplorer <- function(dds=NULL,
 
           tabPanel(
             "PCA2GO",
-            h1("Functions enriched in the genes with high loadings on the selected principal components"),
+            h1("pca2go - Functional annotation of PC"),
+            h4("Functions enriched in the genes with high loadings on the selected principal components"),
             # verbatimTextOutput("enrichinfo"),
 
             uiOutput("ui_selectspecies"),
@@ -420,79 +419,78 @@ pcaExplorer <- function(dds=NULL,
 
 
 
-          tabPanel("Multifactor exploration",
-                   fluidRow(
-                     column(
-                       width = 6,
-                       uiOutput("covar1")
-                     ),
-                     column(
-                       width = 6,
-                       uiOutput("covar2")
-                     )
-                   ),
-                   fluidRow(
-                     column(
-                       width = 6,
-                       uiOutput("c1levels")
-                     ),
-                     column(
-                       width = 6,
-                       uiOutput("c2levels")
-                     )
-                   ),
-                   fluidRow(
-                     column(
-                       width = 6,
-                       uiOutput("colnames1")
-                     ),
-                     column(
-                       width = 6,
-                       uiOutput("colnames2")
-                     )
-                   ),
+          tabPanel(
+            "Multifactor Exploration",
+            h1("Multifactor exploration of datasets with >= 2 experimental factors"),
 
-#
-#                    uiOutput("c1levels"),
-#                    uiOutput("c2levels"),
-#
-#                    uiOutput("colnames1"),
-#                    uiOutput("colnames2"),
+            verbatimTextOutput("intro_multifac"),
 
-                   actionButton("composemat","Compose the matrix",icon=icon("spinner")),
-                    shinyBS::bsTooltip(
-                      "composemat", paste0("Select first two different experimental factors, for example ",
-                                           "condition and tissue. For each factor, select two or more ",
-                                           "levels. The corresponding samples which can be used are then displayed ",
-                                           "in the select boxes. Select an equal number of samples for each of ",
-                                           "the levels in factor 1, and then click the button to compute the ",
-                                           "new matrix which will be used for the visualizations below"),
-                      "bottom", options = list(container = "body")),
+            fluidRow(
+              column(
+                width = 6,
+                uiOutput("covar1")
+              ),
+              column(
+                width = 6,
+                uiOutput("covar2")
+              )
+            ),
+            fluidRow(
+              column(
+                width = 6,
+                uiOutput("c1levels")
+              ),
+              column(
+                width = 6,
+                uiOutput("c2levels")
+              )
+            ),
+            fluidRow(
+              column(
+                width = 6,
+                uiOutput("colnames1")
+              ),
+              column(
+                width = 6,
+                uiOutput("colnames2")
+              )
+            ),
 
 
-                   verbatimTextOutput("dd"),
+            actionButton("composemat","Compose the matrix",icon=icon("spinner")),
+            shinyBS::bsTooltip(
+              "composemat", paste0("Select first two different experimental factors, for example ",
+                                   "condition and tissue. For each factor, select two or more ",
+                                   "levels. The corresponding samples which can be used are then displayed ",
+                                   "in the select boxes. Select an equal number of samples for each of ",
+                                   "the levels in factor 1, and then click the button to compute the ",
+                                   "new matrix which will be used for the visualizations below"),
+              "bottom", options = list(container = "body")),
 
-                   fluidRow(
-                     column(4,
-                            selectInput('pc_x_multifac', label = 'x-axis PC: ', choices = 1:8,
-                                        selected = 2)
-                     ),
-                     column(4,
-                            selectInput('pc_y_multifac', label = 'y-axis PC: ', choices = 1:8,
-                                        selected = 3)
-                     )),
 
-                   # fluidRow(verbatimTextOutput("multifacdebug")),
+            verbatimTextOutput("dd"),
 
-                   fluidRow(
-                     column(6,
-                            plotOutput('pcamultifac',brush = 'pcamultifac_brush')),
-                     column(6,
-                            plotOutput("multifaczoom"))
-                   ),
-                   fluidRow(downloadButton('downloadData_brush_multifac', 'Download brushed points'),
-                            textInput("brushedPoints_filename_multifac","File name..."),
-                            DT::dataTableOutput('pcamultifac_out'))
+            fluidRow(
+              column(4,
+                     selectInput('pc_x_multifac', label = 'x-axis PC: ', choices = 1:8,
+                                 selected = 1)
+              ),
+              column(4,
+                     selectInput('pc_y_multifac', label = 'y-axis PC: ', choices = 1:8,
+                                 selected = 2)
+              )),
+
+            # fluidRow(verbatimTextOutput("multifacdebug")),
+
+            fluidRow(
+              column(6,
+                     plotOutput('pcamultifac',brush = 'pcamultifac_brush')),
+              column(6,
+                     plotOutput("multifaczoom"))
+            ),
+            fluidRow(downloadButton('downloadData_brush_multifac', 'Download brushed points'),
+                     textInput("brushedPoints_filename_multifac","File name..."),
+                     DT::dataTableOutput('pcamultifac_out'))
 
 
           )
@@ -556,7 +554,7 @@ pcaExplorer <- function(dds=NULL,
       if(is.null(values$mydds))
         return(NULL)
       poss_covars <- names(colData(values$mydds))
-      selectInput('color_by', label = 'color by: ',
+      selectInput('color_by', label = 'Group/color by: ',
                   choices = c(NULL, poss_covars), selected = NULL,multiple = TRUE)
     })
 
@@ -1455,12 +1453,21 @@ pcaExplorer <- function(dds=NULL,
 
     ## from here on, multifac APP
 
+    output$intro_multifac <- renderText({
+      if(!is.null(values$mydds))
+        shiny::validate(
+          need(ncol(colData(values$mydds)) > 1,
+               message = "To use this section, you need a dataset where more than one experimental factor is available.")
+        )
+      cat("Refer to the Instructions section if you need help on using this section")
+    })
+
 
     output$covar1 <- renderUI({
       # if(is.null(values$myrlt))
         # return(NULL)
       poss_covars <- names(colData(values$mydds))
-      selectInput('covar1', label = 'factor1: ',
+      selectInput('covar1', label = 'Select factor 1: ',
                   choices = c(NULL, poss_covars), selected = NULL,multiple = FALSE)
     })
 
@@ -1468,7 +1475,7 @@ pcaExplorer <- function(dds=NULL,
       # if(is.null(values$myrlt))
       # return(NULL)
       poss_covars <- names(colData(values$mydds))
-      selectInput('covar2', label = 'factor2: ',
+      selectInput('covar2', label = 'Select factor 2: ',
                   choices = c(NULL, poss_covars), selected = NULL,multiple = FALSE)
     })
 
@@ -1477,7 +1484,7 @@ pcaExplorer <- function(dds=NULL,
       if(is.null(input$covar1))
         return(NULL)
       fac1lev <- levels(colData(values$myrlt)[[input$covar1]])
-      selectInput('covar1levels', label = 'factor1 levels: ',
+      selectInput('covar1levels', label = 'Factor 1 available levels: ',
                   choices = c(NULL, fac1lev), selected = NULL,multiple = TRUE) # actually 2
     })
 
@@ -1485,7 +1492,7 @@ pcaExplorer <- function(dds=NULL,
       if(is.null(input$covar2))
         return(NULL)
       fac2lev <- levels(colData(values$myrlt)[[input$covar2]])
-      selectInput('covar2levels', label = 'factor2 levels: ',
+      selectInput('covar2levels', label = 'Factor 2 available levels: ',
                   choices = c(NULL, fac2lev), selected = NULL,multiple = TRUE) # 2 or more are allowed!
     })
 
@@ -1510,7 +1517,7 @@ pcaExplorer <- function(dds=NULL,
 
       presel1 <- colnames(values$myrlt)[(colData(values$myrlt)[[fac1]] %in% fac1_touse[1]) & colData(values$myrlt)[[fac2]] %in% fac2_touse]
 
-      selectInput('picksamples1', label = 'combine these samples in the selected order: ',
+      selectInput('picksamples1', label = 'Combine samples from Factor1-Level1 in the selected order: ',
                   choices = c(NULL, presel1), selected = NULL,multiple = TRUE)
     })
 
@@ -1536,25 +1543,10 @@ pcaExplorer <- function(dds=NULL,
 
       presel2 <- colnames(values$myrlt)[(colData(values$myrlt)[[fac1]] %in% fac1_touse[2]) & colData(values$myrlt)[[fac2]] %in% fac2_touse]
 
-      selectInput('picksamples2', label = 'combine these samples in the selected order: ',
+      selectInput('picksamples2', label = 'Combine samples from Factor1-Level2 in the selected order: ',
                   choices = c(NULL, presel2), selected = NULL,multiple = TRUE)
     })
 
-
-
-
-
-    # I WILL MODIFY HERE
-#     ddsmf_clean
-#     rld_global
-#
-#
-#
-#     kldds <- updateObject(dds_kl)
-#     klrld <- updateObject(rld_kl)
-#
-#     ddsobj <- updateObject(ddsmf_clean)
-#     rldobj <- updateObject(rld_global)
 
 
     composedMat <- eventReactive( input$composemat, {
@@ -1575,7 +1567,6 @@ pcaExplorer <- function(dds=NULL,
 
       pcmat <- composedMat()
 
-      # library(scales)
       aval <- 0.3
       fac2pal <- alpha(c("green","red","blue","orange","violet"),aval) # 5 are enough
 
@@ -1596,31 +1587,6 @@ pcaExplorer <- function(dds=NULL,
 
       # using the median across replicates
       celltypes <- gsub("_R.","",rownames(pcmat))
-
-      # brutal way, with for loop...
-      #         mediansByReps <- matrix(NA,4,ncol(pcmat))
-      #         minipcmat <- pcmat[1:16,1:5]
-      #         # mediansByReps <- matrix(NA,4,ncol(minipcmat))
-      #
-      #         starts <- c(1,5,9,13)
-      #         for(j in 1:ncol(mediansByReps)){
-      #           for(i in 1:4){
-      #             tmp <- pcmat[(starts[i]:(starts[i]+3)),j]
-      #             # cat(paste(tmp,collapse=","))
-      #             res <- median(tmp)
-      #             mediansByReps[i,j] <- res
-      #           }
-      #           # print(j)
-      #         }
-      #
-      #         max.median.type <- apply(mediansByReps[,1:ncol(exprmat)],2,which.max)
-      #         max.median.type2 <- apply(mediansByReps[,(ncol(exprmat)+1):ncol(mediansByReps)],2,which.max)
-      #         tcol.median <- c(alpha("green",aval),alpha("red",aval),alpha("blue",aval),alpha("orange",aval))[max.median.type]
-      #         tcol2.median <- c(alpha("green",aval),alpha("red",aval),alpha("blue",aval),alpha("orange",aval))[max.median.type2]
-      #
-      #         # optional step, in the end, to see if the median across replicates delivers different stuff
-      #         tcol <- tcol.median
-      #         tcol2 <- tcol2.median
 
       tcol <- tcol.justMax
       tcol2 <- tcol2.justMax
@@ -1652,20 +1618,6 @@ pcaExplorer <- function(dds=NULL,
       points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
       points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)
 
-#       ## ## ##
-#       #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[1]],
-#       #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[2]],
-#       #                pch=20,col="darkviolet",cex=2)
-#       #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[1]],
-#       #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[2]],
-#       #                pch=20,col="steelblue",cex=2)
-#       #         # legend("topleft",fill = c("darkviolet","steelblue"),legend=c("galon Macro","galon CD8"))
-#       mgenes_extended <- c("Tnf","Mmp12","Adam8","Mrc1","Cd36","Cd83","Itgam","Lyz1","Slamf8","Clec12a","Clec10a","Pdc","Cd274")
-#       mgenes_extended_ENS <- rownames(cm2)[match(mgenes_extended,cm2$fromgtf)]
-#       points(pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[1]],
-#              pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[2]],
-#              pch=20,col="salmon",cex=2)
-      ## ## ##
     })
 
     output$dd <- renderPrint({
@@ -1684,10 +1636,7 @@ pcaExplorer <- function(dds=NULL,
       offset <- ncol(pcmat)/2
       gene.no <- offset
       pcx <- pres$x
-      # set.seed(11)
-      # for (i in 1:ncol(pcx)) {
-      #   pcx[,i] <- pcx[,i] + rnorm(nrow(pcx),sd=diff(range(pcx[,i]))/100)
-      # }
+
       plot(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],
            pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],
            xlim=c(input$pcamultifac_brush$xmin,input$pcamultifac_brush$xmax),
@@ -1700,21 +1649,6 @@ pcaExplorer <- function(dds=NULL,
       }
       points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
       points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)
-#       #
-#       #         ## ## ##
-#       #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[1]],
-#       #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_macro_mouse,cm2$fromgtf)],plot.index[2]],
-#       #                pch=20,col="darkviolet",cex=2)
-#       #         points(pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[1]],
-#       #                pcx[rownames(pcx) %in% rownames(cm2)[match(galon_cd8_mouse,cm2$fromgtf)],plot.index[2]],
-#       #                pch=20,col="steelblue",cex=2)
-#       #         # legend("topleft",fill = c("darkviolet","steelblue"),legend=c("galon Macro","galon CD8"))
-#       mgenes_extended <- c("Tnf","Mmp12","Adam8","Mrc1","Cd36","Cd83","Itgam","Lyz1","Slamf8","Clec12a","Clec10a","Pdc","Cd274")
-#       mgenes_extended_ENS <- rownames(cm2)[match(mgenes_extended,cm2$fromgtf)]
-#       points(pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[1]],
-#              pcx[rownames(pcx) %in% mgenes_extended_ENS,plot.index[2]],
-#              pch=20,col="salmon",cex=2)
-      ## ## ##
 
     })
 
@@ -1736,10 +1670,7 @@ pcaExplorer <- function(dds=NULL,
       offset <- ncol(pcmat)/2
       gene.no <- offset
       pcx <- pres$x
-      # set.seed(11)
-      # for (i in 1:ncol(pcx)) {
-      #   pcx[,i] <- pcx[,i] + rnorm(nrow(pcx),sd=diff(range(pcx[,i]))/100)
-      # }
+
 
       firstPCselected <- c(
         pcx[1:offset,plot.index[1]][1:gene.no],
@@ -1771,11 +1702,9 @@ pcaExplorer <- function(dds=NULL,
       datatable(curData_brush_multifac())
 
 
-    }) # IDEALLY HERE?,options = list(lengthMenu = c(25, 50, 100), pageLength = 100)
-    #
-    #
-    #
-    #
+    })
+
+
     output$downloadData_brush_multifac <- downloadHandler(
       filename = function() { paste(input$brushedPoints_filename_multifac, '.csv', sep='') },
       content = function(file) {
@@ -1787,31 +1716,6 @@ pcaExplorer <- function(dds=NULL,
         write.csv(data, file, quote=FALSE)
       }
     )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

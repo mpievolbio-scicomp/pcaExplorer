@@ -8,8 +8,9 @@ date: "`r doc_date()`"
 package: "`r pkg_ver('pcaExplorer')`"
 abstract: >
   `r Biocpkg("pcaExplorer")` provides functionality for interactive visualization of RNA-seq datasets
-  based on Principal Components Analysis. The methods provided allow for quick information 
-  extraction and effective data exploration. A Shiny application encapsulates the whole analysis. 
+  based on Principal Components Analysis. Such methods allow for quick information 
+  extraction and effective data exploration. A Shiny application encapsulates the whole analysis, and
+  is developed to become a practical companion for any RNA-seq dataset.
 output: 
   BiocStyle::html_document:
     fig_caption: TRUE
@@ -55,8 +56,27 @@ Once `r Rpackage("pcaExplorer")` is installed, it can be loaded by the following
 library("pcaExplorer")
 ```
 
+# Name the Sections, and then fill them up - then use the one for instructions to fill up the instructions.md of the app
 
 
+
+# Introduction
+
+# Launching the application
+
+# The controls sidebar
+
+# The app panels
+
+# `pcaExplorer` on published datasets
+
+# `pcaExplorer` on synthetic datasets
+
+
+
+
+
+# Additional functions provided in the package
 
 # Session info
 
