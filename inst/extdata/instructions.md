@@ -196,7 +196,7 @@ The `annotation` for this dataset can be built by exploiting the `org.Hs.eg.db` 
 library(org.Hs.eg.db)
 genenames_airway <- mapIds(org.Hs.eg.db,keys = rownames(dds_airway),column = "SYMBOL",keytype="ENSEMBL")
 annotation_airway <- data.frame(gene_name = genenames_airway,
-                                rownames = rownames(dds_airway),
+                                row.names = rownames(dds_airway),
                                 stringsAsFactors = FALSE)
 head(annotation_airway)                                
 # launch the app now with the annotation

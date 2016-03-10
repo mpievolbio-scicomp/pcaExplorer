@@ -1333,11 +1333,14 @@ pcaExplorer <- function(dds=NULL,
     annoSpecies_df <- annoSpecies_df[annoSpecies_df$species %in% c("","Human", "Mouse", "Rat", "Fly", "Chimp"),]
 
     output$ui_selectspecies <- renderUI({
-      if(is.null(pca2go))
+      if(is.null(values$mypca2go))
         selectInput("speciesSelect",label = "Select the species of your samples",choices = annoSpecies_df$species,selected="")
     })
 
-    output$speciespkg <- renderPrint({
+    output$speciespkg <- renderText({
+
+      if(!is.null(values$mypca2go))
+        return("pca2go object provided")
 
       shiny::validate(
         need(input$speciesSelect!="",
@@ -1352,11 +1355,12 @@ pcaExplorer <- function(dds=NULL,
              paste0("The package ",annopkg, " is not installed/available. Try installing it with biocLite('",annopkg,"')"))
       )
 
-      cat(annopkg," - package available and loaded")
+      retmsg <- paste0(annopkg," - package available and loaded")
       # if (!require(annopkg,character.only=TRUE)) {
       # stop("The package",annopkg, "is not installed/available. Try installing it with biocLite() ?")
       # }
-      gsub(".eg.db","",gsub("org.","",annopkg))
+      retmsg <- paste0(retmsg," - "gsub(".eg.db","",gsub("org.","",annopkg)))
+      retmsg
 
     })
 
@@ -1466,7 +1470,7 @@ pcaExplorer <- function(dds=NULL,
           need(ncol(colData(values$mydds)) > 1,
                message = "To use this section, you need a dataset where more than one experimental factor is available.")
         )
-      cat("Refer to the Instructions section if you need help on using this section")
+      return("Refer to the Instructions section if you need help on using this section")
     })
 
 
