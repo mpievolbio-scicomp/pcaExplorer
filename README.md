@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/federicomarini/pcaExplorer.png?branch=master)](https://travis-ci.org/federicomarini/pcaExplorer)
+
 # pcaExplorer - Interactive exploration of Principal Components of Samples and Genes in RNA-seq data
 
 `pcaExplorer` is a Bioconductor package containing a Shiny application for
