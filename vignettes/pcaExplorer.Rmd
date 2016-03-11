@@ -125,7 +125,7 @@ By changing one or more of the input parameters, the user can get a fine control
 
 ## Data upload
 
-These file input controls are available when no `dds` or `countmatrix` + `coldata` are provided. Additionally,
+These **file input** controls are available when no `dds` or `countmatrix` + `coldata` are provided. Additionally,
 it is possible to upload the `annotation` data frame.
 
 ## App settings
@@ -133,24 +133,24 @@ it is possible to upload the `annotation` data frame.
 Here are the parameters that set input values for most of the tabs. By hovering over with the mouse,
 the user can receive additional information on how to set the parameter, powered by the `r CRANpkg("shinyBS")` package.
 
-- x-axis PC - Select the principal component to display on the x axis
-- y-axis PC - Select the principal component to display on the y axis
-- Group/color by - Select the group of samples to stratify the analysis. Can also assume multiple values.
-- Nr of (most variant) genes - Number of genes to select for computing the principal components. The top n genes are
+- **x-axis PC** - Select the principal component to display on the x axis
+- **y-axis PC** - Select the principal component to display on the y axis
+- **Group/color by** - Select the group of samples to stratify the analysis. Can also assume multiple values.
+- **Nr of (most variant) genes** - Number of genes to select for computing the principal components. The top n genes are
 selected ranked by their variance inter-samples
-- Alpha - Color transparency for the plots. Can assume values from 0 (transparent) to 1 (opaque)
-- Labels size - Size of the labels for the samples in the principal components plots
-- Points size - Size of the points to be plotted in the principal components plots
-- Variable name size - Size of the labels for the genes PCA - correspond to the samples names
-- Scaling factor - Scale value for resizing the arrow corresponding to the variables in the PCA for the genes. It
+- **Alpha** - Color transparency for the plots. Can assume values from 0 (transparent) to 1 (opaque)
+- **Labels size** - Size of the labels for the samples in the principal components plots
+- **Points size** - Size of the points to be plotted in the principal components plots
+- **Variable name size** - Size of the labels for the genes PCA - correspond to the samples names
+- **Scaling factor** - Scale value for resizing the arrow corresponding to the variables in the PCA for the genes. It
 should be used for mere visualization purposes
-- Color palette - Select the color palette to be used in the principal components plots. The number of colors 
+- **Color palette** - Select the color palette to be used in the principal components plots. The number of colors 
 is selected automatically according to the number of samples and to the levels of the factors of interest
 and their interactions
 
 ## Plot export settings        
 
-Width and height for the figures to export are input here in cm.
+**Width** and **height** for the figures to export are input here in cm.
 
 Additional controls available in the single tabs are also assisted by tooltips that show on hovering the mouse.
 Normally they are tightly related to the plot/output they are placed nearby.
@@ -179,8 +179,9 @@ This is where you most likely are reading this text (otherwise in the package vi
 ## Samples View
 
 This panel displays the PCA projections of sample expression profiles onto any pair of components,
-a scree plot, a zoomed PCA plot, a plot of the genes with top and bottom loadings, and a PCA plot where
-it is possible to remove samples deemed to be outliers in the analysis.
+a scree plot, a zoomed PCA plot, a plot of the genes with top and bottom loadings. Additionally, this section 
+presents a PCA plot where it is possible to remove samples deemed to be outliers in the analysis, which is 
+very useful to check the effect of excluding them.
 
 ## Genes View
 
@@ -240,7 +241,7 @@ count quantifications can be found in the `r Biocpkg("airway")` package vignette
 To run `r Biocpkg("pcaExplorer")` on this dataset, the following commands are required. First, prepare the objects to be 
 passed as parameters of `r Biocpkg("pcaExplorer")`
 
-```{r loadairway, cache=TRUE, message=FALSE}
+```{r loadairway, message=FALSE}
 library(airway)
 library(DESeq2)
 
@@ -261,7 +262,7 @@ pcaExplorer(dds = dds_airway,
 
 The `annotation` for this dataset can be built by exploiting the `r Biocpkg("org.Hs.eg.db")` package
 
-```{r annoairway}
+```{r annoairway, message = FALSE}
 library(org.Hs.eg.db)
 genenames_airway <- mapIds(org.Hs.eg.db,keys = rownames(dds_airway),column = "SYMBOL",keytype="ENSEMBL")
 annotation_airway <- data.frame(gene_name = genenames_airway,
@@ -464,7 +465,7 @@ datatable(pca2go_airway)
 `limmaquickpca2go` is an alternative to `pca2go`, used in the live running app, thanks to its fast 
 implementation based on the `limma::goana` function.
 
-```{r func, message = FALSE, cache= TRUE}
+```{r func, message = FALSE}
 goquick_airway <- limmaquickpca2go(rld_airway,
                                    pca_ngenes = 10000,
                                    inputType = "ENSEMBL",
@@ -473,8 +474,8 @@ goquick_airway <- limmaquickpca2go(rld_airway,
 head(goquick_airway$PC1$posLoad)
 # ... or use it for running the app and display in the dedicated tab
 # pcaExplorer(dds_airway,rld_airway,
-#            pca2go = goquick_airway,
-#            annotation = annotation_airway)
+#             pca2go = goquick_airway,
+#             annotation = annotation_airway)
 
 
 ```
@@ -495,8 +496,10 @@ dds2_simu
 
 rld_simu <- rlogTransformation(dds_simu)
 rld2_simu <- rlogTransformation(dds2_simu)
-pcaplot(rld_simu,intgroup = c("condition","tissue")) + ggplot2::ggtitle("Simulated data - Big condition effect, small tissue effect")
-pcaplot(rld2_simu,intgroup = c("condition","tissue")) + ggplot2::ggtitle("Simulated data - Small condition effect, bigger tissue effect")
+pcaplot(rld_simu,intgroup = c("condition","tissue")) + 
+  ggplot2::ggtitle("Simulated data - Big condition effect, small tissue effect")
+pcaplot(rld2_simu,intgroup = c("condition","tissue")) + 
+  ggplot2::ggtitle("Simulated data - Small condition effect, bigger tissue effect")
 ```
 
 
