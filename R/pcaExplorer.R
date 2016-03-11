@@ -266,9 +266,12 @@ pcaExplorer <- function(dds=NULL,
             ),
             hr(),
             fluidRow(
-              p(h4('Outlier Identification'), "Toggle which samples to remove - suspected to be considered as outliers"),
-              uiOutput("ui_outliersamples"),
-              plotOutput("samples_outliersremoved")
+              column(
+                width = 6,
+                p(h4(' Identification'), "Toggle which samples to remove - suspected to be considered as s"),
+                uiOutput("ui_samples"),
+                plotOutput("samples_sremoved")
+              )
 
             )
           ),
@@ -858,25 +861,25 @@ pcaExplorer <- function(dds=NULL,
     })
 
 
-    output$ui_outliersamples <- renderUI({
+    output$ui_samples <- renderUI({
       available_samples <- c("",colnames(values$myrlt))
 
-      selectInput("outlierselection",label = "Select which sample(s) to remove - suspected outliers",choices = available_samples,multiple = TRUE)
+      selectInput("selection",label = "Select which sample(s) to remove - suspected s",choices = available_samples,multiple = TRUE)
 
     })
 
-    output$samples_outliersremoved <- renderPlot({
+    output$samples_sremoved <- renderPlot({
 
       shiny::validate(
-        need(input$outlierselection!="",
+        need(input$selection!="",
              message = "Select at least one sample to plot the new PCA where the selection is removed")
       )
 
       currentrlt <- values$myrlt
       allsamples <- colnames(currentrlt)
 
-      outliersamples <- input$outlierselection
-      currentrlt <- currentrlt[,setdiff(allsamples,outliersamples)]
+      samples <- input$selection
+      currentrlt <- currentrlt[,setdiff(allsamples,samples)]
 
       res <- pcaplot(currentrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
@@ -984,7 +987,7 @@ pcaExplorer <- function(dds=NULL,
       genedata$plotby <- interaction(onlyfactors)
 
       res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
-        geom_boxplot(outlier.shape = NA) + scale_y_log10(name="Normalized counts") +
+        geom_boxplot(.shape = NA) + scale_y_log10(name="Normalized counts") +
         labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
         scale_x_discrete(name="") +
         geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
@@ -1402,7 +1405,7 @@ pcaExplorer <- function(dds=NULL,
       res <- pcaplot(values$myrlt,intgroup = input$color_by,
                      ntop = attr(values$mypca2go,"n_genesforpca"),
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),text_labels = input$sample_labels,
-                     point_size = input$pca_point_size, title=paste0("PCA on the samples - ",attr(pca2go,"n_genesforpca"), " genes used")
+                     point_size = input$pca_point_size, title=paste0("PCA on the samples - ",attr(values$mypca2go,"n_genesforpca"), " genes used")
 
       )
       res
