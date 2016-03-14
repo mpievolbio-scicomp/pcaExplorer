@@ -473,6 +473,27 @@ pcaExplorer <- function(dds=NULL,
             ),
 
 
+            shinyBS::bsTooltip(
+              "covar1", paste0("Select the first experimental factor"),
+              "bottom", options = list(container = "body")),
+            shinyBS::bsTooltip(
+              "covar2", paste0("Select the second experimental factor"),
+              "bottom", options = list(container = "body")),
+            shinyBS::bsTooltip(
+              "c1levels", paste0("For factor 1, select two levels to contrast"),
+              "bottom", options = list(container = "body")),
+            shinyBS::bsTooltip(
+              "c2levels", paste0("For factor 2, select two or more levels to contrast"),
+              "bottom", options = list(container = "body")),
+            shinyBS::bsTooltip(
+              "colnames1", paste0("Combine samples belonging to Factor1-Level1 samples for each level in Factor 2"),
+              "bottom", options = list(container = "body")),
+            shinyBS::bsTooltip(
+              "colnames2", paste0("Combine samples belonging to Factor1-Level2 samples for each level in Factor 2"),
+              "bottom", options = list(container = "body")),
+
+
+
             actionButton("composemat","Compose the matrix",icon=icon("spinner")),
             shinyBS::bsTooltip(
               "composemat", paste0("Select first two different experimental factors, for example ",

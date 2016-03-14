@@ -207,8 +207,9 @@ samples, surrounded on each side by the tables with the functions enriched in ea
 
 This panel allows for the multifactor exploration of datasets with 2 or more experimental factors. The user has to select 
 first the two factors and the levels for each. Then, it is possible to combine samples from Factor1-Level1 in the selected
-order by clicking on each sample name. The matrix to build requires an equal number of samples for each level of Factor 1.
-A typical case for choosing factors 1 and 2 is for example when different conditions and tissues are present
+order by clicking on each sample name, one for each level available in the selected Factor2. In order to build the matrix, 
+an equal number of samples for each level of Factor 1 is required, to keep the design somehow balanced.
+A typical case for choosing factors 1 and 2 is for example when different conditions and tissues are present.
 
 Once constructed, a plot is returned that tries to represent simultaneously the effect of the two factors on the data.
 Each gene is represented by a dot-line-dot structure, with the color that is indicating the tissue (factor 2) where the gene 
