@@ -375,7 +375,17 @@ pcaExplorer <- function(dds=NULL,
             h4("Functions enriched in the genes with high loadings on the selected principal components"),
             # verbatimTextOutput("enrichinfo"),
 
-            uiOutput("ui_selectspecies"),
+            # uiOutput("ui_selectspecies"),
+
+            column(
+              width = 6,
+              uiOutput("ui_selectspecies")
+            ),
+            column(
+              width = 6,
+              uiOutput("ui_inputtype")
+            ),
+
             shinyBS::bsTooltip(
               "ui_selectspecies", paste0("Select the species for the functional enrichment analysis, ",
                                          "choosing among the ones currently supported by limma::goana. ",
@@ -1336,9 +1346,17 @@ pcaExplorer <- function(dds=NULL,
     annoSpecies_df <- annoSpecies_df[annoSpecies_df$species %in% c("","Human", "Mouse", "Rat", "Fly", "Chimp"),]
 
     output$ui_selectspecies <- renderUI({
-      if(is.null(values$mypca2go))
+      if(is.null(values$mypca2go)) {
         selectInput("speciesSelect",label = "Select the species of your samples",choices = annoSpecies_df$species,selected="")
+      }
     })
+    output$ui_inputtype <- renderUI({
+      if(is.null(values$mypca2go)) {
+        selectInput("idtype",label = "Select the input type of your identifiers",
+                    choices = c("ENSEMBL","SYMBOL","REFSEQ","ENTREZID"), selected = "ENSEMBL")
+      }
+    })
+
 
     output$speciespkg <- renderText({
 
@@ -1379,6 +1397,7 @@ pcaExplorer <- function(dds=NULL,
                    value = 0,
                    {
                      pcpc <- limmaquickpca2go(values$myrlt,background_genes = rownames(values$mydds),
+                                              inputType = input$idtype,
                                               organism = gsub(".eg.db","",gsub("org.","",annopkg)))
                    })
       pcpc
