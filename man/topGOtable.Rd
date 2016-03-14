@@ -4,11 +4,10 @@
 \alias{topGOtable}
 \title{Extract functional terms enriched in the DE genes, based on topGO}
 \usage{
-topGOtable(DEgenes, BGgenes, ontology = "BP", maxP = 0.001,
-  annot = annFUN.org, mapping = "org.Mm.eg.db", geneID = "symbol",
-  topTablerows = 200, fullNamesInRows = TRUE, addGeneToTerms = TRUE,
-  plotGraph = FALSE, plotNodes = 10, writeOutput = FALSE,
-  outputFile = "")
+topGOtable(DEgenes, BGgenes, ontology = "BP", annot = annFUN.org,
+  mapping = "org.Mm.eg.db", geneID = "symbol", topTablerows = 200,
+  fullNamesInRows = TRUE, addGeneToTerms = TRUE, plotGraph = FALSE,
+  plotNodes = 10, writeOutput = FALSE, outputFile = "")
 }
 \arguments{
 \item{DEgenes}{A vector of (differentially expressed) genes}
@@ -16,8 +15,6 @@ topGOtable(DEgenes, BGgenes, ontology = "BP", maxP = 0.001,
 \item{BGgenes}{A vector of background genes, e.g. all (expressed) genes in the assays}
 
 \item{ontology}{Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)}
-
-\item{maxP}{Max p-value, used to subset the returned table}
 
 \item{annot}{Which function to use for annotating genes to GO terms}
 

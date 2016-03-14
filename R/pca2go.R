@@ -174,7 +174,6 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #' @param DEgenes A vector of (differentially expressed) genes
 #' @param BGgenes A vector of background genes, e.g. all (expressed) genes in the assays
 #' @param ontology Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)
-#' @param maxP Max p-value, used to subset the returned table
 #' @param annot Which function to use for annotating genes to GO terms
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #' @param geneID Which format the genes are provided
@@ -241,7 +240,6 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
                        BGgenes,                 # background genes, normally = rownames(cds) or filtering to genes
                        #  with at least 1 read - could also be ls(org.Mm.egGO)
                        ontology="BP",            # could use also "MF"
-                       maxP = 0.001,             # use to subset the final table
                        annot = annFUN.org,       # parameters for creating topGO object
                        mapping = "org.Mm.eg.db",
                        geneID = "symbol" ,       # could also beID = "entrez")
@@ -271,10 +269,8 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
                    orderBy= "p.value_elim",
                    ranksOf= "p.value_classic",
                    topNodes=topTablerows)
-  sTabSig <- subset(sTab, as.numeric(p.value_elim) < maxP)
 
   if(fullNamesInRows){
-    # library("GO.db")
     sTab$Term <- sapply(sTab$GO.ID ,function(go) { Term(GOTERM[[go]])})
   }
 
