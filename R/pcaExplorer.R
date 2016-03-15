@@ -993,7 +993,7 @@ pcaExplorer <- function(dds=NULL,
       shiny::validate(
         need(
           length(input$color_by)>0,
-          "Select an experimental factor"
+          "Select an experimental factor in the Group/color by element in the sidebar"
         )
       )
       shiny::validate(

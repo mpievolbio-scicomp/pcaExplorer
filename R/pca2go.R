@@ -174,9 +174,10 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #' @param DEgenes A vector of (differentially expressed) genes
 #' @param BGgenes A vector of background genes, e.g. all (expressed) genes in the assays
 #' @param ontology Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)
-#' @param annot Which function to use for annotating genes to GO terms
+#' @param annot Which function to use for annotating genes to GO terms. Defaults to \code{annFUN.org}
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
-#' @param geneID Which format the genes are provided
+#' @param geneID Which format the genes are provided. Defaults to \code{symbol}, could also be
+#' \code{entrez} or \code{ENSEMBL}
 #' @param topTablerows How many rows to report before any filtering
 #' @param fullNamesInRows Logical, whether to display or not the full names for the GO terms
 #' @param addGeneToTerms Logical, whether to add a column with all genes annotated to each GO term
