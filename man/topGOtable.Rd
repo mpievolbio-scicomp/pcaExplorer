@@ -16,11 +16,12 @@ topGOtable(DEgenes, BGgenes, ontology = "BP", annot = annFUN.org,
 
 \item{ontology}{Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)}
 
-\item{annot}{Which function to use for annotating genes to GO terms}
+\item{annot}{Which function to use for annotating genes to GO terms. Defaults to \code{annFUN.org}}
 
 \item{mapping}{Which \code{org.XX.eg.db} to use for annotation - select according to the species}
 
-\item{geneID}{Which format the genes are provided}
+\item{geneID}{Which format the genes are provided. Defaults to \code{symbol}, could also be
+\code{entrez} or \code{ENSEMBL}}
 
 \item{topTablerows}{How many rows to report before any filtering}
 
