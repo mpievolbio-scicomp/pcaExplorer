@@ -14,6 +14,8 @@ install:
 
 build_script:
   - travis-tool.sh install_bioc_deps
+  - travis-tool.sh install_bioc airway GO.db org.Hs.eg.db
+
 
 test_script:
   - travis-tool.sh run_tests
