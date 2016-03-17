@@ -105,5 +105,9 @@ groups <- colData(dds)$condition
 cols <- scales::hue_pal()(2)[groups]
 genespca(rlt,ntop=100,arrowColors=cols,groupNames=groups)
 
+groups_multi <- interaction(as.data.frame(colData(rlt)[,c("condition","tissue")]))
+cols_multi <- scales::hue_pal()(length(levels(groups_multi)))[factor(groups_multi)]
+genespca(rlt,ntop=100,arrowColors=cols_multi,groupNames=groups_multi)
+
 }
 

@@ -62,6 +62,10 @@
 #' cols <- scales::hue_pal()(2)[groups]
 #' genespca(rlt,ntop=100,arrowColors=cols,groupNames=groups)
 #'
+#' groups_multi <- interaction(as.data.frame(colData(rlt)[,c("condition","tissue")]))
+#' cols_multi <- scales::hue_pal()(length(levels(groups_multi)))[factor(groups_multi)]
+#' genespca(rlt,ntop=100,arrowColors=cols_multi,groupNames=groups_multi)
+#'
 #' @export
 genespca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames="group", biplot=TRUE,
                     scale = 1, pc.biplot = TRUE,
@@ -73,6 +77,8 @@ genespca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames
                     useRownamesAsLabels=TRUE, point_size=2,annotation = NULL) {
 
   stopifnot(length(choices) == 2)
+  if(length(arrowColors) != 1 & length(arrowColors) != ncol(x))
+    stop("Please provide either one color or a vector as long as the number of samples")
 
   rv <- rowVars(assay(x))
   select <- order(rv, decreasing = TRUE)[seq_len(min(ntop,length(rv)))]

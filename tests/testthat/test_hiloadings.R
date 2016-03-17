@@ -9,7 +9,7 @@ pcaobj <- prcomp(t(SummarizedExperiment::assay(rlt)))
 anno <- data.frame(gene_id=rownames(dds),gene_name=toupper(rownames(dds)),stringsAsFactors = FALSE,row.names = rownames(dds))
 
 hi_loadings(pcaobj,1)
-dev.off()
+# dev.off()
 
 test_that("Hi loadings are computed", {
   expect_is(hi_loadings(pcaobj,1,exprTable = counts(dds)), "matrix")
