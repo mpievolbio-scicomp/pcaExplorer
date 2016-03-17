@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/federicomarini/pcaExplorer.png?branch=master)](https://travis-ci.org/federicomarini/pcaExplorer)
+[![codecov.io](https://codecov.io/github/federicomarini/pcaExplorer/coverage.svg?branch=master)](https://codecov.io/github/federicomarini/pcaExplorer?branch=master)
 
 # pcaExplorer - Interactive exploration of Principal Components of Samples and Genes in RNA-seq data
 
