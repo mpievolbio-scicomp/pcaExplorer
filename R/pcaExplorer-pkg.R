@@ -28,6 +28,7 @@
 #' @import ggplot2
 #' @import ggrepel
 #' @importFrom DT datatable
+#' @importFrom grDevices dev.off pdf rainbow
 #' @import methods
 #'
 #' @author
