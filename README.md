@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/federicomarini/pcaExplorer.png?branch=master)](https://travis-ci.org/federicomarini/pcaExplorer)
 [![codecov.io](https://codecov.io/github/federicomarini/pcaExplorer/coverage.svg?branch=master)](https://codecov.io/github/federicomarini/pcaExplorer?branch=master)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/federicomarini/pcaExplorer?svg=true)](https://ci.appveyor.com/project/federicomarini/pcaexplorer)
 
 # pcaExplorer - Interactive exploration of Principal Components of Samples and Genes in RNA-seq data
 
@@ -35,6 +36,8 @@ or, optionally,
 
 ```
 biocLite("federicomarini/pcaExplorer")
+# or alternatively...
+devtools::install_github("federicomarini/pcaExplorer")
 ```
 
 
