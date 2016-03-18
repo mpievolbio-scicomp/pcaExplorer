@@ -22,4 +22,5 @@ Version 0.9.0: - added TravisCI integration for both branches
 			   - added appveyor integration - plus badges in the README.md
 			   - code cleanup
 			   - added screenshots for the vignette
+			   - removed some lengthy tests
 Version 0.99.0: - ready for submission to Bioconductor
