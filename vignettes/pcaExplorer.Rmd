@@ -170,20 +170,15 @@ The available panels are the described in the following subsections.
 
 ## About
 
-Contains general information on `r Biocpkg("pcaExplorer")`.
-
-<p align="center">
-<img src="snap_about.png" style="width:800px;"/>
-</p>
+Contains general information on `r Biocpkg("pcaExplorer")`, including the developer's contact, the link to
+the development version in Github, as well as the output of `sessionInfo`, to use for reproducibility sake - 
+or bug reporting.
 
 
 ## Instructions
 
-This is where you most likely are reading this text (otherwise in the package vignette).
+This is where you most likely are reading this text (otherwise in the package vignette). 
 
-<p align="center">
-<img src="snap_instructions.png" style="width:800px;"/>
-</p>
 
 ## Data Preview
 
@@ -224,7 +219,7 @@ provided, including the subset of selected genes. These are also reported in `da
 
 The user can search and display the expression values of a gene of interest, either by ID or gene
 name, as provided in the `annotation`. A handy panel for quick screening of shortlisted genes, again grouped by
-the factors of interest.
+the factors of interest. The graphic can be readily exported as it is.
 
 <p align="center">
 <img src="snap_genefinder.png" style="width:800px;"/>
