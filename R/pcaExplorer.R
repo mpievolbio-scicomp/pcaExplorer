@@ -475,8 +475,6 @@ pcaExplorer <- function(dds=NULL,
               "bottom", options = list(container = "body")),
 
 
-            verbatimTextOutput("dd"),
-
             fluidRow(
               column(4,
                      selectInput('pc_x_multifac', label = 'x-axis PC: ', choices = 1:8,
@@ -1606,10 +1604,6 @@ pcaExplorer <- function(dds=NULL,
       points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
       points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)
 
-    })
-
-    output$dd <- renderPrint({
-      input$picksamples1
     })
 
 

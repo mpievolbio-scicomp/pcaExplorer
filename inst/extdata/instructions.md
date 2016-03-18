@@ -117,6 +117,14 @@ Contains general information on `pcaExplorer`.
 
 This is where you most likely are reading this text (otherwise in the package vignette).
 
+### Data Preview
+
+This panel displays information on the objects in use, either passed as parameters or 
+generated from the count matrix provided. It also displays its metadata in an interactive
+table, along with an overview of the number of reads assigned to features (in the typical
+use case, genes) for each sample in form of a barplot and summary statistics.
+
+
 ### Samples View
 
 This panel displays the PCA projections of sample expression profiles onto any pair of components,
