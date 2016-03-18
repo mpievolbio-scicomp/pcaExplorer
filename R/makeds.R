@@ -68,10 +68,14 @@ makeExampleDESeqDataSet_multifac <- function (n = 1000, m = 12,
   }
   object <- DESeqDataSetFromMatrix(countData = countData, colData = colData,
                                    design = design, rowRanges = rowRanges)
-  trueVals <- DataFrame(trueIntercept = beta[, 1], trueBeta = beta[,
-                                                                   2], trueDisp = dispersion)
+  trueVals <- DataFrame(trueIntercept = beta[, 1],
+                        trueBeta_condition = beta[,2],
+                        trueBeta_tissue = beta[,3],
+                        trueDisp = dispersion)
   mcols(trueVals) <- DataFrame(type = rep("input", ncol(trueVals)),
-                               description = c("simulated intercept values", "simulated beta values",
+                               description = c("simulated intercept values",
+                                               "simulated beta values for the condition",
+                                               "simulated beta values for the tissue",
                                                "simulated dispersion values"))
   mcols(object) <- cbind(mcols(object), trueVals)
   return(object)

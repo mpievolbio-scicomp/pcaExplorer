@@ -1,8 +1,3 @@
-# p <- prcomp(t(assay(rld_airway)))
-# cd <- as.data.frame(colData(rld_airway))
-
-
-
 #' Principal components (cor)relation with experimental covariates
 #'
 #' Computes the significance of (cor)relations between PCA scores and the sample
@@ -31,14 +26,11 @@
 #' @export
 correlatePCs <- function(pcaobj,coldata,pcs=1:4){
   # split the analysis for continuous and categorial
-
   coldataTypes <- sapply(coldata,class)
-
   # extract the scores from the pc object
   x <- pcaobj$x
 
   # do it until 1:4 PCs
-
   res <- matrix(NA,nrow=length(pcs),ncol = ncol(coldata))
 
   colnames(res) <- colnames(coldata)

@@ -1,11 +1,3 @@
-## interpreting PCA.--..
-
-# groups <- colData(dds_cleaner)$condition
-# bbgg <- rownames(dds_deplall)[rowSums(counts(dds_deplall))>0]
-# seb_pca2go_unscaled <- pca2go(rld_deplall,annotation=annotation,ensToGeneSymbol = T,scale=F,background_genes=bbgg)
-# seb_pca2go_scaled <- pca2go(rld_deplall,annotation=annotation,ensToGeneSymbol = T,scale=T,background_genes=bbgg)
-
-
 #' Functional interpretation of the principal components
 #'
 #' Extracts the genes with the highest loadings for each principal component, and
@@ -74,7 +66,6 @@ pca2go <- function(se,
                    background_genes = NULL,
                    scale = FALSE,
                    ... # further parameters to be passed to the topgo routine
-
                    ) {
 
   annopkg <- paste0("org.",organism,".eg.db")
@@ -115,7 +106,6 @@ pca2go <- function(se,
 
   p <- prcomp(t(exprsData), scale=scale, center=TRUE)
 
-
   print("Ranking genes by the loadings ...")
   probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
   probesPC1neg <- rankedGeneLoadings(p, pc=1,decreasing=FALSE)[1:loadings_ngenes]
@@ -125,8 +115,6 @@ pca2go <- function(se,
   probesPC3neg <- rankedGeneLoadings(p, pc=3,decreasing=FALSE)[1:loadings_ngenes]
   probesPC4pos <- rankedGeneLoadings(p, pc=4,decreasing=TRUE)[1:loadings_ngenes]
   probesPC4neg <- rankedGeneLoadings(p, pc=4,decreasing=FALSE)[1:loadings_ngenes]
-
-
 
   print("Ranking genes by the loadings ... done!")
   print("Extracting functional categories enriched in the gene subsets ...")
@@ -153,15 +141,11 @@ pca2go <- function(se,
 
 
 
-
-
 rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 {
   # works directly on the prcomp object
   return(rownames(x$rotation)[order(x$rotation[, pc], decreasing = decreasing)])
 }
-
-
 
 
 
@@ -298,120 +282,6 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 
 
 
-
-quickpca2go <- function(se,
-                    pca_ngenes = 10000,
-                    annotation = NULL,
-                    inputType = "ensGene",
-                    organism = "Mm",
-                    loadings_ngenes = 500,
-                    background_genes = NULL,
-                    scale = FALSE,
-                    ... # further parameters to be passed to the topgo routine
-
-){
-  annopkg <- paste0("org.",organism,".eg.db")
-  if (!require(annopkg,character.only=TRUE)) {
-    stop("The package",annopkg, "is not installed/available. Try installing it with biocLite() ?")
-  }
-  exprsData <- assay(se)
-
-  if(is.null(background_genes)) {
-    if(is(se,"DESeqDataSet")) {
-      BGids <- rownames(se)[rowSums(counts(se))>0]
-    } else if(is(se,"DESeqTransform")){
-      BGids <- rownames(se)[rowSums(assay(se))!=0]
-    } else {
-      BGids <- rownames(se)
-    }
-  } else {
-    BGids <- background_genes
-  }
-
-  exprsData <- assay(se)[order(rowVars(assay(se)),decreasing=TRUE),]
-  exprsData <- exprsData[1:pca_ngenes,]
-
-
-
-  rv <- rowVars(exprsData)
-  dropped <- sum(rv==0)
-  if (dropped > 0)
-    print(paste("Dropped", dropped, "genes with 0 variance"))
-
-  exprsData <- exprsData[rv>0,]
-
-  message("After subsetting/filtering for invariant genes, working on a ",nrow(exprsData),"x",ncol(exprsData)," expression matrix\n")
-
-  p <- prcomp(t(exprsData), scale=scale, center=TRUE)
-
-
-  print("Ranking genes by the loadings ...")
-  probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC1neg <- rankedGeneLoadings(p, pc=1,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC2pos <- rankedGeneLoadings(p, pc=2,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC2neg <- rankedGeneLoadings(p, pc=2,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC3pos <- rankedGeneLoadings(p, pc=3,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC3neg <- rankedGeneLoadings(p, pc=3,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC4pos <- rankedGeneLoadings(p, pc=4,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC4neg <- rankedGeneLoadings(p, pc=4,decreasing=FALSE)[1:loadings_ngenes]
-
-  ## convert ensembl to entrez ids
-
-  probesPC1pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC1pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC1neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC1neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC2pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC2pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC2neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC2neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC3pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC3pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC3neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC3neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC4pos_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC4pos, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  probesPC4neg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = probesPC4neg, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  bg_ENTREZ <- AnnotationDbi::select(eval(parse(text=annopkg)), keys = BGids, columns=c("ENSEMBL","ENTREZID","GENENAME","SYMBOL"), keytype="ENSEMBL")
-  print("Ranking genes by the loadings ... done!")
-  # print("Extracting functional categories enriched in the gene subsets ...")
-
-
-
-
-
-#   goParams <- new("GOHyperGParams",geneIds = tt$ENTREZID,universeGeneIds = uu$ENTREZID,annotation ="org.Mm.eg" ,ontology = "BP",pvalueCutoff = 0.01,conditional = TRUE,testDirection = "over")
-#   goResults <- hyperGTest(goParams)
-#   summary(goResults)
-#   goParams <- new("GOHyperGParams",geneIds = probesPC1pos_ENTREZ,universeGeneIds = bg_ENTREZ,annotation ="org.Mm.eg" ,ontology = "BP",pvalueCutoff = 0.01,conditional = TRUE,testDirection = "over")
-#   goResults <- hyperGTest(goParams)
-#   summary(goResults)
-
-  print("Extracting functional categories enriched in the gene subsets ...")
-  quickGOpc1pos <- GOenrich(probesPC1pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, annotation = gsub(".db","",annopkg), ontology = "BP",pvalueCutoff = 0.01, conditional = TRUE)
-  quickGOpc1neg <- GOenrich(probesPC1neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, annotation = gsub(".db","",annopkg), ontology = "BP",pvalueCutoff = 0.01, conditional = TRUE)
-  quickGOpc2pos <- GOenrich(probesPC2pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, annotation = gsub(".db","",annopkg), ontology = "BP",pvalueCutoff = 0.01, conditional = TRUE)
-  quickGOpc2neg <- GOenrich(probesPC2neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, annotation = gsub(".db","",annopkg), ontology = "BP",pvalueCutoff = 0.01, conditional = TRUE)
-  quickGOpc3pos <- GOenrich(probesPC3pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, annotation = gsub(".db","",annopkg), ontology = "BP",pvalueCutoff = 0.01, conditional = TRUE)
-  quickGOpc3neg <- GOenrich(probesPC3neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, annotation = gsub(".db","",annopkg), ontology = "BP",pvalueCutoff = 0.01, conditional = TRUE)
-  quickGOpc4pos <- GOenrich(probesPC4pos_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, annotation = gsub(".db","",annopkg), ontology = "BP",pvalueCutoff = 0.01, conditional = TRUE)
-  quickGOpc4neg <- GOenrich(probesPC4neg_ENTREZ$ENTREZID, bg_ENTREZ$ENTREZID, annotation = gsub(".db","",annopkg), ontology = "BP",pvalueCutoff = 0.01, conditional = TRUE)
-
-  goEnrichs <- list(PC1=list(posLoad=quickGOpc1pos,negLoad=quickGOpc1neg),
-                    PC2=list(posLoad=quickGOpc2pos,negLoad=quickGOpc2neg),
-                    PC3=list(posLoad=quickGOpc3pos,negLoad=quickGOpc3neg),
-                    PC4=list(posLoad=quickGOpc4pos,negLoad=quickGOpc4neg)
-  )
-  print("Extracting functional categories enriched in the gene subsets ... done!")
-
-  attr(goEnrichs,"n_genesforpca") <- pca_ngenes
-
-  return(goEnrichs)
-
-}
-
-
-GOenrich <- function(geneIds,universeGeneIds,annotation,ontology="BP",pvalueCutoff=0.01,conditional=TRUE,testDirection="over"){
-  goParams <- new("GOHyperGParams",geneIds = geneIds,universeGeneIds = universeGeneIds,annotation =annotation ,ontology = ontology,pvalueCutoff = pvalueCutoff,conditional = conditional,testDirection = testDirection)
-  goResults <- hyperGTest(goParams)
-  summary(goResults)
-}
-
-
-
 #' Functional interpretation of the principal components, based on simple
 #' overrepresentation analysis
 #'
@@ -486,8 +356,6 @@ limmaquickpca2go <- function(se,
   exprsData <- assay(se)[order(rowVars(assay(se)),decreasing=TRUE),]
   exprsData <- exprsData[1:pca_ngenes,]
 
-
-
   rv <- rowVars(exprsData)
   dropped <- sum(rv==0)
   if (dropped > 0)
@@ -498,7 +366,6 @@ limmaquickpca2go <- function(se,
   message("After subsetting/filtering for invariant genes, working on a ",nrow(exprsData),"x",ncol(exprsData)," expression matrix\n")
 
   p <- prcomp(t(exprsData), scale=scale, center=TRUE)
-
 
   print("Ranking genes by the loadings ...")
   probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
@@ -511,7 +378,6 @@ limmaquickpca2go <- function(se,
   probesPC4neg <- rankedGeneLoadings(p, pc=4,decreasing=FALSE)[1:loadings_ngenes]
 
   ## convert ensembl to entrez ids
-
   probesPC1pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC1pos, column="ENTREZID", keytype=inputType)
   probesPC1neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC1neg, column="ENTREZID", keytype=inputType)
   probesPC2pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC2pos, column="ENTREZID", keytype=inputType)
@@ -522,18 +388,6 @@ limmaquickpca2go <- function(se,
   probesPC4neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC4neg, column="ENTREZID", keytype=inputType)
   bg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = BGids, column="ENTREZID", keytype=inputType)
   print("Ranking genes by the loadings ... done!")
-  # print("Extracting functional categories enriched in the gene subsets ...")
-
-
-
-
-
-  #   goParams <- new("GOHyperGParams",geneIds = tt$ENTREZID,universeGeneIds = uu$ENTREZID,annotation ="org.Mm.eg" ,ontology = "BP",pvalueCutoff = 0.01,conditional = TRUE,testDirection = "over")
-  #   goResults <- hyperGTest(goParams)
-  #   summary(goResults)
-  #   goParams <- new("GOHyperGParams",geneIds = probesPC1pos_ENTREZ,universeGeneIds = bg_ENTREZ,annotation ="org.Mm.eg" ,ontology = "BP",pvalueCutoff = 0.01,conditional = TRUE,testDirection = "over")
-  #   goResults <- hyperGTest(goParams)
-  #   summary(goResults)
 
   print("Extracting functional categories enriched in the gene subsets ...")
   quickGOpc1pos <- topGO(limma::goana(probesPC1pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("1")
@@ -560,16 +414,10 @@ limmaquickpca2go <- function(se,
                     PC4=list(posLoad=quickGOpc4pos,negLoad=quickGOpc4neg)
   )
   print("Extracting functional categories enriched in the gene subsets ... done!")
-
   attr(goEnrichs,"n_genesforpca") <- pca_ngenes
 
   return(goEnrichs)
-
 }
-
-
-
-
 
 
 

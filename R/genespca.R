@@ -92,8 +92,6 @@ genespca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames
     pcast <- pca
     pcast$x <- sweep(pca$x, 2, 1/(devs * nobs.factor), FUN = "*") * nobs.factor
     d <- data.frame(PC1 = pcast$x[, choices[1]], PC2 = pcast$x[, choices[2]],
-                    # group = group,
-                    # intgroup.df,
                     names = rownames((assay(x)[select, ])))
 
     if (returnData) {
@@ -224,7 +222,6 @@ genespca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames
       g <- g + geom_segment(data = df.v, aes_string(x = "sta_x", y = "sta_y", xend = "sca_x", yend ="sca_y", color = "arrowColors"),
                             arrow = arrow(length = unit(1/2, "picas"))) +
         scale_color_manual(values = levels(arrowColors),name="Group",labels=levels(groupNames))
-
     }
 
     if (var.axes) {

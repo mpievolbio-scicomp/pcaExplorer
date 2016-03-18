@@ -1,11 +1,3 @@
-
-# x <- rld_deplall
-# rv <- rowVars(assay(x))
-# select <- order(rv, decreasing = TRUE)[seq_len(min(nrow(x),length(rv)))]
-# pcaobj <- prcomp(t(assay(x)[select, ]),scale = F, center = T)
-
-
-
 #' Extract genes with highest loadings
 #'
 #' @param pcaobj A \code{prcomp} object

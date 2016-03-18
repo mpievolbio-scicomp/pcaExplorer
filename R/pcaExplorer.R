@@ -1,17 +1,3 @@
-# library("DESeq2")
-# library("genefilter")
-# library("shiny")
-
-# load("/Volumes/users$/marinif/linuxHome/032-ruf-macrophages/cm2.RData")
-# load("goEnrichs.RData")
-# load("/Volumes/users$/marinif/linuxHome/F07-schubert/seb_dds_rld.RData")
-# load("/Volumes/users$/marinif/linuxHome/F07-schubert/goEnrichs_rld_deplall.RData")
-# load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_ruf.RData")
-# load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/EXAMPLE_kleinert.RData")
-# load("/Volumes/users$/marinif/Development/presentations/2015_12_07-08_bioconductor_developers_meeting/goEnrichs_paired.RData")
-
-# annotation <- data.frame(gene_id=rownames(cm2),gene_name=cm2$fromgtf,stringsAsFactors = FALSE,row.names = rownames(cm2))
-
 #' Explore a dataset from a PCA perspective
 #'
 #' Launch a Shiny App for interactive exploration of a dataset from the perspective
@@ -63,21 +49,12 @@ pcaExplorer <- function(dds=NULL,
                         coldata=NULL,
                         pca2go=NULL,
                         annotation=NULL){
-  # stopifnot( is(obj, 'SummarizedExperiment') )
-  ## plenty of tests on the selected object(s)
   if ( !requireNamespace('shiny',quietly = TRUE) ) {
     stop("pca_SUPALIVE requires 'shiny'. Please install it using
          install.packages('shiny')")
   }
   # library("shinyURL")
-  # here something like, if provided as a countmatrix, create dds and rld
 
-#   cmcm <- counts(dds_deplall)[1:10,]
-#   write.table(cmcm,file="minicm.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
-#   ddd <- colData(dds_deplall)
-#   write.table(ddd,file="minicoldata.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
-  # write.table(counts(dds_deplall),file="fullcm.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
-  # write.table(annotation,file="anno_mouseEns.txt",quote=F,sep="\t",row.names=TRUE,col.names=TRUE)
   ## ------------------------------------------------------------------ ##
   ##                          Define UI                                 ##
   ## ------------------------------------------------------------------ ##
@@ -168,7 +145,7 @@ pcaExplorer <- function(dds=NULL,
 
       dashboardBody(
 
-        ## Define output size of error messages
+        ## Define output size and style of error messages
         tags$head(
           tags$style(HTML("
                           .shiny-output-error-validation {
@@ -214,12 +191,7 @@ pcaExplorer <- function(dds=NULL,
             h3("Basic summary for the counts"),
             verbatimTextOutput("reads_summary"),
 
-
-
-
-
             footer()
-
             ),
 
           tabPanel(
@@ -280,7 +252,6 @@ pcaExplorer <- function(dds=NULL,
             "Genes View",
             p(h1('Principal Component Analysis on the genes'), "PCA projections of genes abundances onto any pair of components."),
 
-            # verbatimTextOutput("debudebu"),
             # shinyURL.ui(),
 
             fluidRow(checkboxInput("variable_labels","Display variable labels",value = TRUE)),
@@ -375,7 +346,6 @@ pcaExplorer <- function(dds=NULL,
             h4("Functions enriched in the genes with high loadings on the selected principal components"),
             # verbatimTextOutput("enrichinfo"),
 
-            # uiOutput("ui_selectspecies"),
 
             column(
               width = 6,
@@ -791,10 +761,6 @@ pcaExplorer <- function(dds=NULL,
     })
 
 
-    output$debudebu <- renderPrint({
-      colSel()
-    })
-
     output$sessioninfo <- renderPrint({
       sessionInfo()
     })
@@ -1146,7 +1112,7 @@ pcaExplorer <- function(dds=NULL,
 
 
 
-    # displayed by default, with possibility to select from gene id provided as row names of the objects
+#     displayed by default, with possibility to select from gene id provided as row names of the objects
 #     output$ui_selectID <- renderUI({
 #       allIDs <- withProgress(message = "loading the names in the UI",value = 0,
 #                              {
@@ -1246,19 +1212,8 @@ pcaExplorer <- function(dds=NULL,
 #       exportPlots$genefinder <- p
 #
 #       p
-#
-#
-#
-#
-#
-#
-#
-#
-#
 #     })
 #
-#
-
 
     output$searchresult <- renderPrint({
 
@@ -1296,8 +1251,6 @@ pcaExplorer <- function(dds=NULL,
 
       }
     })
-
-
 
 
 
@@ -1340,9 +1293,6 @@ pcaExplorer <- function(dds=NULL,
 
       p
     })
-
-
-
 
 
     output$ui_computePCA2GO <- renderUI({
@@ -1409,9 +1359,6 @@ pcaExplorer <- function(dds=NULL,
 
 
 
-
-
-
     computedPCA2GO <- eventReactive( input$computepca2go, {
       annopkg <- annoSpecies_df$pkg[annoSpecies_df$species==input$speciesSelect]
       withProgress(message = "Computing the PCA2GO object...",
@@ -1429,7 +1376,6 @@ pcaExplorer <- function(dds=NULL,
                  {
                    values$mypca2go <- computedPCA2GO()
                  })
-
 
 
 
@@ -1497,16 +1443,7 @@ pcaExplorer <- function(dds=NULL,
 
 
 
-
-
-
-
-
-
-
-
     ## from here on, multifac APP
-
     output$intro_multifac <- renderText({
       if(!is.null(values$mydds))
         shiny::validate(
@@ -1620,7 +1557,6 @@ pcaExplorer <- function(dds=NULL,
     obj3 <- reactive({
 
       pcmat <- composedMat()
-
       aval <- 0.3
       fac2pal <- alpha(c("green","red","blue","orange","violet"),aval) # 5 are enough
 
@@ -1636,8 +1572,6 @@ pcaExplorer <- function(dds=NULL,
       # tcol2.justMax <- ifelse(max.type2 <= 4,alpha("green",aval),ifelse(max.type2 <= 8,alpha("red",aval),ifelse(max.type2 <= 12,alpha("blue",aval),alpha("orange",aval))))
 
       tcol2.justMax <- fac2pal[fac2_col][max.type2]
-
-
 
       # using the median across replicates
       celltypes <- gsub("_R.","",rownames(pcmat))
@@ -1707,7 +1641,6 @@ pcaExplorer <- function(dds=NULL,
     })
 
 
-
     #       output$plot_brushinfo <- renderPrint({
     #         cat("input$pcagenes_brush:\n")
     #         str(input$pcagenes_brush)
@@ -1730,14 +1663,11 @@ pcaExplorer <- function(dds=NULL,
         pcx[1:offset,plot.index[1]][1:gene.no],
         pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no])
 
-      # pcx[1:offset,plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],
-
       secondPCselected <- c(
         pcx[1:offset,plot.index[2]][1:gene.no],
         pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no]
       )
 
-      # pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no]
       pcspcs <- data.frame(firstPC=firstPCselected,secondPC=secondPCselected,geneID=colnames(pcmat))
       rownames(pcspcs) <- c(paste0(colnames(pcmat)[1:gene.no],"_WT"),
                             paste0(colnames(pcmat)[(gene.no+1):(2*gene.no)],"_G37"))
@@ -1754,8 +1684,6 @@ pcaExplorer <- function(dds=NULL,
 
     output$pcamultifac_out <- DT::renderDataTable({
       datatable(curData_brush_multifac())
-
-
     })
 
 
@@ -1770,10 +1698,6 @@ pcaExplorer <- function(dds=NULL,
         write.csv(data, file, quote=FALSE)
       }
     )
-
-
-
-
 
 
 
@@ -1841,18 +1765,7 @@ pcaExplorer <- function(dds=NULL,
     )
 
 
-
-
-
-
-
-
-
-
-
-
-
-  })
+  }) # end of pcaExplorer(dds,rlt,countmatrix,coldata,pca2go,annotation)
   shinyApp(ui = newuiui, server = newserver)
 
 }
@@ -1875,7 +1788,3 @@ footer <- function(){
     )
   )
 }
-
-
-
-

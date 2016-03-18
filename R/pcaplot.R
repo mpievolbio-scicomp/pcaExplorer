@@ -39,7 +39,7 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
   percentVar <- pca$sdev^2/sum(pca$sdev^2)
 
   if (!all(intgroup %in% names(colData(x)))) {
-    stop("the argument 'intgroup' should specify columns of colData(dds)")
+    stop("the argument 'intgroup' should specify columns of colData(x)")
   }
   intgroup.df <- as.data.frame(colData(x)[, intgroup, drop = FALSE])
   group <- factor(apply(intgroup.df, 1, paste, collapse = " : "))
@@ -61,7 +61,9 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
     xlab(paste0("PC",pcX,": ", round(percentVar[pcX] * 100,digits = 2), "% variance")) +
     ylab(paste0("PC",pcY,": ", round(percentVar[pcY] * 100,digits = 2), "% variance"))
 
-  if(text_labels) g <- g + geom_label_repel(mapping = aes_string(label="names",fill="group"),color="white", show.legend = TRUE) +theme_bw()
+  if(text_labels)
+    g <- g + geom_label_repel(mapping = aes_string(label="names",fill="group"),
+                              color="white", show.legend = TRUE) +theme_bw()
   if(!is.null(title)) g <- g + ggtitle(title)
   g
 }
@@ -114,7 +116,8 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
     p <- p + ylab(yvar.lab) + xlab("principal components")
     # p
   } else {
-    p <- ggplot(pc_df, aes_string(x = "PC_count", y = "var")) + geom_point() + geom_path() + scale_x_continuous(breaks = 1:length(d))
+    p <- ggplot(pc_df, aes_string(x = "PC_count", y = "var")) + geom_point() +
+      geom_path() + scale_x_continuous(breaks = 1:length(d))
     p <- p + ylab(yvar.lab) + xlab("principal components") + ylim(0,max(pc_df$var))
     # p
   }
