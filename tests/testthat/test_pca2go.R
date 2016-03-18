@@ -40,32 +40,32 @@ library(topGO)
 expect_is(de_symbols,"character")
 expect_is(bg_symbols,"character")
 
-topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
-                             ontology = "BP",
-                             mapping = "org.Hs.eg.db",
-                             geneID = "symbol")
-
-expect_is(topgoDE_airway,"data.frame")
+# topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
+#                              ontology = "BP",
+#                              mapping = "org.Hs.eg.db",
+#                              geneID = "symbol")
+#
+# expect_is(topgoDE_airway,"data.frame")
 
 
 rld_airway <- rlogTransformation(dds_airway)
 
 ngenes_pca <- 10000
 
-goquick_airway <- limmaquickpca2go(rld_airway,
-                                   pca_ngenes = ngenes_pca,
-                                   inputType = "ENSEMBL",
-                                   organism = "Hs")
+# goquick_airway <- limmaquickpca2go(rld_airway,
+#                                    pca_ngenes = ngenes_pca,
+#                                    inputType = "ENSEMBL",
+#                                    organism = "Hs")
 
 expect_error(limmaquickpca2go(rld_airway,
                               pca_ngenes = ngenes_pca,
                               inputType = "ENSEMBL",
                               organism = "foo")) # additionally throws a warning
 
-expect_is(goquick_airway,"list")
-expect_equal(length(goquick_airway),4) # ensure all pcs are there
-sapply(goquick_airway,names)
-
-expect_equal(attr(goquick_airway,"n_genesforpca"),ngenes_pca)
+# expect_is(goquick_airway,"list")
+# expect_equal(length(goquick_airway),4) # ensure all pcs are there
+# sapply(goquick_airway,names)
+#
+# expect_equal(attr(goquick_airway,"n_genesforpca"),ngenes_pca)
 
 
