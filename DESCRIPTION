@@ -11,8 +11,6 @@ Description: This package provides functionality for interactive visualization o
 	extraction and effective data exploration. A Shiny application encapsulates the whole analysis. 
 License: MIT + file LICENSE
 LazyData: TRUE
-Depends:
-    R (>= 3.2)
 Imports:
     DESeq2,
     SummarizedExperiment,
