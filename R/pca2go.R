@@ -31,6 +31,7 @@
 #' data(airway)
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+#' \dontrun{
 #' rld_airway <- rlogTransformation(dds_airway)
 #'
 #' # constructing the annotation object
@@ -45,7 +46,6 @@
 #'                             multiVals="first")
 #' rownames(anno_df) <- anno_df$gene_id
 #' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
-#' \dontrun{
 #' library(topGO)
 #' pca2go_airway <- pca2go(rld_airway,
 #'                         annotation = anno_df,
@@ -315,8 +315,8 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 #' data(airway)
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
-#' rld_airway <- rlogTransformation(dds_airway)
 #' \dontrun{
+#' rld_airway <- rlogTransformation(dds_airway)
 #' goquick_airway <- limmaquickpca2go(rld_airway,
 #'                                    pca_ngenes = 10000,
 #'                                    inputType = "ENSEMBL",

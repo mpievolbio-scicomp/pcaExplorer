@@ -10,3 +10,16 @@ Version 0.6.2: - Corrected wordings for (cor)relations of principal components w
 			   - Added a couple of checks if correct objects are provided
 Version 0.6.3: - About and Instructions done by now
 			   - Added some missing details on the documentations
+Version 0.6.4: - Updated NEWS file
+Version 0.7.0: - Vignette full draft done
+Version 0.8.0: - MIT license
+			   - added TravisCI integration
+			   - added codecov integration
+			   - couple of layout fixes
+			   - selection of identifier type available in pca2go
+			   - enhanced documentation
+Version 0.9.0: - added TravisCI integration for both branches
+			   - added appveyor integration - plus badges in the README.md
+			   - code cleanup
+			   - added screenshots for the vignette
+Version 0.99.0: - ready for submission to Bioconductor

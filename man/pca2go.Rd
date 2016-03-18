@@ -51,6 +51,7 @@ library(DESeq2)
 data(airway)
 airway
 dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+\dontrun{
 rld_airway <- rlogTransformation(dds_airway)
 
 # constructing the annotation object
@@ -65,7 +66,6 @@ anno_df$gene_name <- mapIds(org.Hs.eg.db,
                             multiVals="first")
 rownames(anno_df) <- anno_df$gene_id
 bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
-\dontrun{
 library(topGO)
 pca2go_airway <- pca2go(rld_airway,
                         annotation = anno_df,

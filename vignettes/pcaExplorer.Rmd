@@ -508,7 +508,7 @@ datatable(pca2go_airway)
 `limmaquickpca2go` is an alternative to `pca2go`, used in the live running app, thanks to its fast 
 implementation based on the `limma::goana` function.
 
-```{r func, message = FALSE}
+```{r func, message = FALSE, eval = FALSE}
 goquick_airway <- limmaquickpca2go(rld_airway,
                                    pca_ngenes = 10000,
                                    inputType = "ENSEMBL",
@@ -516,9 +516,9 @@ goquick_airway <- limmaquickpca2go(rld_airway,
 # display it in the normal R session...
 head(goquick_airway$PC1$posLoad)
 # ... or use it for running the app and display in the dedicated tab
-# pcaExplorer(dds_airway,rld_airway,
-#             pca2go = goquick_airway,
-#             annotation = annotation_airway)
+pcaExplorer(dds_airway,rld_airway,
+            pca2go = goquick_airway,
+            annotation = annotation_airway)
 
 
 ```

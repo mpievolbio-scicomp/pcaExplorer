@@ -48,8 +48,8 @@ library(limma)
 data(airway)
 airway
 dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
-rld_airway <- rlogTransformation(dds_airway)
 \dontrun{
+rld_airway <- rlogTransformation(dds_airway)
 goquick_airway <- limmaquickpca2go(rld_airway,
                                    pca_ngenes = 10000,
                                    inputType = "ENSEMBL",
