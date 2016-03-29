@@ -1,26 +1,122 @@
-Version 0.1.0: - Restyling and (re)packaging mostly completed
-Version 0.2.0: - Multifactorial exploration completed and adaptable to each dataset
-Version 0.3.0: - Added color palette to choose, and dependent on the samples and factors available/selected 
-Version 0.4.0: - Added pca2go live functionality
-Version 0.5.0: - Further steps in direction of R CMD check
-Version 0.6.0: - Documentation completed
-			   - Examples fully working, cleaned up further a little more.
-Version 0.6.1: - Added function to remove selected samples suspected to be deemed as outliers, in order to see the effect of clustering on the good ones
-Version 0.6.2: - Corrected wordings for (cor)relations of principal components with covariates
-			   - Added a couple of checks if correct objects are provided
-Version 0.6.3: - About and Instructions done by now
-			   - Added some missing details on the documentations
-Version 0.6.4: - Updated NEWS file
-Version 0.7.0: - Vignette full draft done
-Version 0.8.0: - MIT license
-			   - added TravisCI integration
-			   - added codecov integration
-			   - couple of layout fixes
-			   - selection of identifier type available in pca2go
-			   - enhanced documentation
-Version 0.9.0: - added TravisCI integration for both branches
-			   - added appveyor integration - plus badges in the README.md
-			   - code cleanup
-			   - added screenshots for the vignette
-			   - removed some lengthy tests
-Version 0.99.0: - ready for submission to Bioconductor
+CHANGES IN VERSION 0.99.1
+-------------------------
+
+OTHER NOTES
+
+    o Changed format of the NEWS file
+
+CHANGES IN VERSION 0.99.0
+-------------------------
+
+OTHER NOTES
+
+    o Ready for submission to Bioconductor
+
+CHANGES IN VERSION  0.9.0
+-------------------------
+
+OTHER NOTES
+
+    o Added TravisCI integration for both branches
+    o Added appveyor integration - plus badges in the README.md
+    o Code cleanup
+    o Added screenshots for the vignette
+    o Removed some lengthy tests
+
+CHANGES IN VERSION  0.8.0
+-------------------------
+
+NEW FEATURES
+
+    o Selection of identifier type available in pca2go
+
+OTHER NOTES
+
+    o MIT license
+    o Added TravisCI integration
+    o Added codecov integration
+    o Enhanced documentation
+
+BUG FIXES
+
+    o Couple of layout fixes
+
+CHANGES IN VERSION  0.7.0
+-------------------------
+
+NEW FEATURES
+
+    o Vignette full draft done
+
+CHANGES IN VERSION  0.6.4
+-------------------------
+
+OTHER NOTES
+
+    o Updated NEWS file
+
+CHANGES IN VERSION  0.6.3
+-------------------------
+
+NEW FEATURES
+
+    o About and Instructions done by now
+    o Added some missing details on the documentations
+
+CHANGES IN VERSION  0.6.2
+-------------------------
+
+OTHER NOTES
+
+    o Corrected wordings for (cor)relations of principal components with covariates
+    o Added a couple of checks if correct objects are provided
+
+CHANGES IN VERSION  0.6.1
+-------------------------
+
+NEW FEATURES
+
+    o Added function to remove selected samples suspected to be deemed as outliers, in order to see the effect of clustering on the good ones
+
+CHANGES IN VERSION  0.6.0
+-------------------------
+
+OTHER NOTES
+
+    o Documentation completed
+    o Examples fully working, cleaned up further a little more.
+
+CHANGES IN VERSION  0.5.0
+-------------------------
+
+OTHER NOTES
+
+    o Further steps in direction of R CMD check
+
+CHANGES IN VERSION  0.4.0
+-------------------------
+
+NEW FEATURES
+
+    o Added pca2go live functionality
+
+CHANGES IN VERSION  0.3.0
+-------------------------
+
+NEW FEATURES
+
+    o Added color palette to choose, and dependent on the samples and factors available/selected
+
+CHANGES IN VERSION  0.2.0
+-------------------------
+
+NEW FEATURES
+
+    o Multifactorial exploration completed and adaptable to each dataset
+
+CHANGES IN VERSION  0.1.0
+-------------------------
+
+NEW FEATURES
+
+    o Restyling and (re)packaging mostly completed
