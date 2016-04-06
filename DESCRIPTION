@@ -1,0 +1,30 @@
+Package: pcaExplorer
+Type: Package
+Title: Interactive Visualization of RNA-seq Data Using a Principal
+        Components Approach
+Version: 0.99.1
+Date: 2016-03-29
+Authors@R: c(person("Federico", "Marini", email =
+        "marinif@uni-mainz.de", role = c("aut", "cre")))
+Maintainer: Federico Marini <marinif@uni-mainz.de>
+Description: This package provides functionality for interactive
+        visualization of RNA-seq datasets based on Principal Components
+        Analysis. The methods provided allow for quick information
+        extraction and effective data exploration. A Shiny application
+        encapsulates the whole analysis.
+License: MIT + file LICENSE
+LazyData: TRUE
+Imports: DESeq2, SummarizedExperiment, GenomicRanges, IRanges,
+        S4Vectors, genefilter, ggplot2 (>= 2.0.0), d3heatmap, scales,
+        NMF, plyr, topGO, limma, GOstats, GO.db, AnnotationDbi, shiny
+        (>= 0.12.0), shinydashboard, shinyBS, ggrepel, DT, grDevices,
+        methods
+Suggests: knitr, testthat, BiocStyle, rmarkdown, airway, org.Hs.eg.db
+URL: https://github.com/federicomarini/pcaExplorer
+BugReports: https://github.com/federicomarini/pcaExplorer/issues
+biocViews: Visualization, RNASeq, DimensionReduction,
+        PrincipalComponent, QualityControl, GUI
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
+NeedsCompilation: no
+Author: Federico Marini [aut, cre]
