@@ -1,0 +1,122 @@
+CHANGES IN VERSION 0.99.1
+-------------------------
+
+OTHER NOTES
+
+    o Changed format of the NEWS file
+
+CHANGES IN VERSION 0.99.0
+-------------------------
+
+OTHER NOTES
+
+    o Ready for submission to Bioconductor
+
+CHANGES IN VERSION  0.9.0
+-------------------------
+
+OTHER NOTES
+
+    o Added TravisCI integration for both branches
+    o Added appveyor integration - plus badges in the README.md
+    o Code cleanup
+    o Added screenshots for the vignette
+    o Removed some lengthy tests
+
+CHANGES IN VERSION  0.8.0
+-------------------------
+
+NEW FEATURES
+
+    o Selection of identifier type available in pca2go
+
+OTHER NOTES
+
+    o MIT license
+    o Added TravisCI integration
+    o Added codecov integration
+    o Enhanced documentation
+
+BUG FIXES
+
+    o Couple of layout fixes
+
+CHANGES IN VERSION  0.7.0
+-------------------------
+
+NEW FEATURES
+
+    o Vignette full draft done
+
+CHANGES IN VERSION  0.6.4
+-------------------------
+
+OTHER NOTES
+
+    o Updated NEWS file
+
+CHANGES IN VERSION  0.6.3
+-------------------------
+
+NEW FEATURES
+
+    o About and Instructions done by now
+    o Added some missing details on the documentations
+
+CHANGES IN VERSION  0.6.2
+-------------------------
+
+OTHER NOTES
+
+    o Corrected wordings for (cor)relations of principal components with covariates
+    o Added a couple of checks if correct objects are provided
+
+CHANGES IN VERSION  0.6.1
+-------------------------
+
+NEW FEATURES
+
+    o Added function to remove selected samples suspected to be deemed as outliers, in order to see the effect of clustering on the good ones
+
+CHANGES IN VERSION  0.6.0
+-------------------------
+
+OTHER NOTES
+
+    o Documentation completed
+    o Examples fully working, cleaned up further a little more.
+
+CHANGES IN VERSION  0.5.0
+-------------------------
+
+OTHER NOTES
+
+    o Further steps in direction of R CMD check
+
+CHANGES IN VERSION  0.4.0
+-------------------------
+
+NEW FEATURES
+
+    o Added pca2go live functionality
+
+CHANGES IN VERSION  0.3.0
+-------------------------
+
+NEW FEATURES
+
+    o Added color palette to choose, and dependent on the samples and factors available/selected
+
+CHANGES IN VERSION  0.2.0
+-------------------------
+
+NEW FEATURES
+
+    o Multifactorial exploration completed and adaptable to each dataset
+
+CHANGES IN VERSION  0.1.0
+-------------------------
+
+NEW FEATURES
+
+    o Restyling and (re)packaging mostly completed
