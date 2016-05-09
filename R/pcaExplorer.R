@@ -895,6 +895,8 @@ pcaExplorer <- function(dds=NULL,
       if(!is.null(input$color_by)) {
         expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
         expgroups <- interaction(expgroups)
+        expgroups <- factor(expgroups,levels=unique(expgroups))
+
       } else {
         expgroups <- colnames(values$myrlt)
       }
@@ -926,6 +928,7 @@ pcaExplorer <- function(dds=NULL,
       if(!is.null(input$color_by)) {
         expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
         expgroups <- interaction(expgroups)
+        expgroups <- factor(expgroups,levels=unique(expgroups))
       } else {
         expgroups <- colnames(values$myrlt)
       }
@@ -1279,11 +1282,11 @@ pcaExplorer <- function(dds=NULL,
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
 
-      p <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) + geom_boxplot() + labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +  scale_x_discrete(name="") + geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) + scale_fill_discrete(name="Experimental\nconditions")
+      p <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) + geom_boxplot(outlier.shape = NA) + labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +  scale_x_discrete(name="") + geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) + scale_fill_discrete(name="Experimental\nconditions")
 
       if(input$ylimZero)
       {
-        p <- p + scale_y_log10(name="Normalized counts - log10 scale",limits=c(1,max(genedata$count)))
+        p <- p + scale_y_log10(name="Normalized counts - log10 scale",limits=c(1,NA))
       } else {
         p <- p + scale_y_log10(name="Normalized counts - log10 scale")
       }
