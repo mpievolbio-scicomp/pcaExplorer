@@ -128,7 +128,7 @@ pcaExplorer <- function(dds=NULL,
                                          "colors is selected automatically according to the number of samples and to the levels ",
                                          "of the factors of interest and their interactions"),
                    "right", options = list(container = "body"))
-                 ),
+        ),
         menuItem("Plot export settings", icon = icon("paint-brush"),
 
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
@@ -140,7 +140,7 @@ pcaExplorer <- function(dds=NULL,
                    "export_height", paste0("Height of the figures to export, expressed in cm"),
                    "right", options = list(container = "body"))
 
-                 )
+        )
       ),
 
       dashboardBody(
@@ -163,20 +163,20 @@ pcaExplorer <- function(dds=NULL,
             "About",
             includeMarkdown(system.file("extdata", "about.md",package = "pcaExplorer")),
             hr(),
-#             shiny::verbatimTextOutput("showuploaded1"),
-#             shiny::verbatimTextOutput("showuploaded2"),
-#             shiny::verbatimTextOutput("showuploaded3"),
-#             shiny::verbatimTextOutput("showuploaded4"),
+            #             shiny::verbatimTextOutput("showuploaded1"),
+            #             shiny::verbatimTextOutput("showuploaded2"),
+            #             shiny::verbatimTextOutput("showuploaded3"),
+            #             shiny::verbatimTextOutput("showuploaded4"),
 
             h4("Session Info"),
             verbatimTextOutput("sessioninfo"),
             footer()
-            ),
+          ),
 
           tabPanel(
             "Instructions",
             includeMarkdown(system.file("extdata", "instructions.md",package = "pcaExplorer"))
-            ),
+          ),
 
           tabPanel(
             "Data Preview",
@@ -192,7 +192,7 @@ pcaExplorer <- function(dds=NULL,
             verbatimTextOutput("reads_summary"),
 
             footer()
-            ),
+          ),
 
           tabPanel(
             "Samples View",
@@ -205,7 +205,7 @@ pcaExplorer <- function(dds=NULL,
                 div(align = "right", style = "margin-right:15px; margin-bottom:10px",
                     downloadButton("download_samplesPca", "Download Plot"),
                     textInput("filename_samplesPca",label = "Save as...",value = "samplesPca.pdf"))
-                ),
+              ),
               column(
                 width= 6,
                 plotOutput("samples_scree"),
@@ -216,12 +216,12 @@ pcaExplorer <- function(dds=NULL,
                   column(
                     width = 6,
                     radioButtons("scree_type","Scree plot type:",choices=list("Proportion of explained variance"="pev","Cumulative proportion of explained variance"="cev"),"pev")
-                    ),
+                  ),
                   column(
                     width = 6,
                     numericInput("scree_pcnr","Number of PCs to display",value=8,min=2)
-                    )
                   )
+                )
               )
             ),
             hr(),
@@ -283,11 +283,11 @@ pcaExplorer <- function(dds=NULL,
                 div(align = "right", style = "margin-right:15px; margin-bottom:10px",
                     downloadButton("download_genesHeatmap","Download Plot"),
                     textInput("filename_genesHeatmap",label = "Save as...",value = "genesHeatmap.pdf"))),
-            column(
-              width = 6,
-              h4("Zoomed interactive heatmap"),
-              fluidRow(radioButtons("heatmap_colv","Cluster samples",choices = list("Yes"=TRUE,"No"=FALSE),selected = TRUE)),
-              fluidRow(d3heatmapOutput("heatzoomd3")))),
+              column(
+                width = 6,
+                h4("Zoomed interactive heatmap"),
+                fluidRow(radioButtons("heatmap_colv","Cluster samples",choices = list("Yes"=TRUE,"No"=FALSE),selected = TRUE)),
+                fluidRow(d3heatmapOutput("heatzoomd3")))),
             hr(),
             fluidRow(
               column(
@@ -302,8 +302,8 @@ pcaExplorer <- function(dds=NULL,
                 DT::dataTableOutput("pca_click_out"),
                 textInput("clickedPoints_filename","File name..."),
                 downloadButton('downloadData_click', 'Download clicked (or nearby) points'))
-              )
-            ),
+            )
+          ),
 
           tabPanel(
             "Gene finder",
@@ -320,16 +320,16 @@ pcaExplorer <- function(dds=NULL,
                                      "different case"),
                 "right", options = list(container = "body")),
 
-#               fluidRow(
-#                 column(
-#                   width = 6,
-#                   uiOutput("ui_selectID")
-#                 ),
-#                 column(
-#                   width = 6,
-#                   uiOutput("ui_selectName")
-#                 )
-#               ),
+              #               fluidRow(
+              #                 column(
+              #                   width = 6,
+              #                   uiOutput("ui_selectID")
+              #                 ),
+              #                 column(
+              #                   width = 6,
+              #                   uiOutput("ui_selectName")
+              #                 )
+              #               ),
               # verbatimTextOutput("debugf"),
 
 
@@ -338,7 +338,7 @@ pcaExplorer <- function(dds=NULL,
               checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
               # plotOutput("newgenefinder_plot"),
               plotOutput("genefinder_plot"))
-            ),
+          ),
 
           tabPanel(
             "PCA2GO",
@@ -393,7 +393,7 @@ pcaExplorer <- function(dds=NULL,
                      plotOutput("pca2go")),
               column(4,
                      DT::dataTableOutput("dt_pchor_pos"))
-              ),
+            ),
             fluidRow(
               column(width = 3),
               column(
@@ -502,11 +502,11 @@ pcaExplorer <- function(dds=NULL,
 
         )
 
-      ),
+          ),
 
       skin="blue"
 
-    )
+          )
 
   ## ------------------------------------------------------------------ ##
   ##                          Define server                             ##
@@ -607,8 +607,8 @@ pcaExplorer <- function(dds=NULL,
       if (is.null(input$uploadmetadatafile))
         return(NULL)
       coldata <- utils::read.delim(input$uploadmetadatafile$datapath, header = TRUE,
-                              as.is = TRUE, sep = "\t", quote = "",
-                              check.names = FALSE)
+                                   as.is = TRUE, sep = "\t", quote = "",
+                                   check.names = FALSE)
 
       return(coldata)
     })
@@ -630,8 +630,8 @@ pcaExplorer <- function(dds=NULL,
       if (is.null(input$uploadannotationfile))
         return(NULL)
       annodata <- utils::read.delim(input$uploadannotationfile$datapath, header = TRUE,
-                                   as.is = TRUE, sep = "\t", quote = "",
-                                   check.names = FALSE)
+                                    as.is = TRUE, sep = "\t", quote = "",
+                                    check.names = FALSE)
 
       return(annodata)
     })
@@ -642,8 +642,8 @@ pcaExplorer <- function(dds=NULL,
         return(NULL)
 
       dds <- DESeqDataSetFromMatrix(countData = countmatrix,
-                                             colData = coldata,
-                                             design=~1)
+                                    colData = coldata,
+                                    design=~1)
 
       return(dds)
 
@@ -683,10 +683,10 @@ pcaExplorer <- function(dds=NULL,
                    if(!is.null(values$mymetadata)){
                      withProgress(message="Computing the objects...",value = 0,{
 
-                     values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
-                                                            colData = values$mymetadata,
-                                                            design=~1)
-                     values$myrlt <- rlogTransformation(values$mydds)})
+                       values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
+                                                              colData = values$mymetadata,
+                                                              design=~1)
+                       values$myrlt <- rlogTransformation(values$mydds)})
                    }
                  })
 
@@ -696,10 +696,10 @@ pcaExplorer <- function(dds=NULL,
                    if(!is.null(values$mycountmatrix)){
                      withProgress(message="Computing the objects...",value = 0,{
 
-                     values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
-                                                            colData = values$mymetadata,
-                                                            design=~1)
-                     values$myrlt <- rlogTransformation(values$mydds)})
+                       values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
+                                                              colData = values$mymetadata,
+                                                              design=~1)
+                       values$myrlt <- rlogTransformation(values$mydds)})
                    }
                  })
 
@@ -819,13 +819,13 @@ pcaExplorer <- function(dds=NULL,
         )
       )
       # if(is.null(input$pca_brush))
-        # return(ggplot() + annotate("text",label="zoom in by brushing",0,0) + theme_bw())
+      # return(ggplot() + annotate("text",label="zoom in by brushing",0,0) + theme_bw())
 
       res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
                      text_labels = input$sample_labels,
                      point_size = input$pca_point_size, title="Samples PCA - zoom in"
-)
+      )
       res <- res + xlim(input$pca_brush$xmin,input$pca_brush$xmax) + ylim(input$pca_brush$ymin,input$pca_brush$ymax)
       res <- res + theme_bw()
       exportPlots$samplesZoom <- res
@@ -903,13 +903,13 @@ pcaExplorer <- function(dds=NULL,
       colGroups <- colSel()[factor(expgroups)]
 
       res <- genespca(values$myrlt,
-                     ntop = input$pca_nrgenes,
-                     choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
-                     biplot = TRUE,
-                     arrowColors = factor(colGroups),
-                     groupNames = expgroups,
-                     alpha=input$pca_point_alpha,coordEqual=FALSE,useRownamesAsLabels=FALSE,labels.size=input$pca_label_size,
-                     point_size=input$pca_point_size,varname.size=input$pca_varname_size, scaleArrow = input$pca_scale_arrow,annotation=values$myannotation)
+                      ntop = input$pca_nrgenes,
+                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
+                      biplot = TRUE,
+                      arrowColors = factor(colGroups,levels=unique(colGroups)),
+                      groupNames = expgroups,
+                      alpha=input$pca_point_alpha,coordEqual=FALSE,useRownamesAsLabels=FALSE,labels.size=input$pca_label_size,
+                      point_size=input$pca_point_size,varname.size=input$pca_varname_size, scaleArrow = input$pca_scale_arrow,annotation=values$myannotation)
       exportPlots$genesPca <- res
       res
     })
@@ -935,15 +935,15 @@ pcaExplorer <- function(dds=NULL,
       colGroups <- colSel()[factor(expgroups)]
 
       res <- genespca(values$myrlt,
-                     ntop = input$pca_nrgenes,
-                     choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
-                     biplot = TRUE,
-                     arrowColors = factor(colGroups),
-                     groupNames = expgroups,
-                     alpha=input$pca_point_alpha,coordEqual=FALSE,
-                     var.axes=input$variable_labels, # workaround for a ggplot2 bug/missing thing: here details: https://github.com/hadley/ggplot2/issues/905
-                     labels.size=input$pca_label_size,varname.size=input$pca_varname_size,
-                     scaleArrow = input$pca_scale_arrow,point_size=input$pca_point_size,annotation=values$myannotation)
+                      ntop = input$pca_nrgenes,
+                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
+                      biplot = TRUE,
+                      arrowColors = factor(colGroups,levels=unique(colGroups)),
+                      groupNames = expgroups,
+                      alpha=input$pca_point_alpha,coordEqual=FALSE,
+                      var.axes=input$variable_labels, # workaround for a ggplot2 bug/missing thing: here details: https://github.com/hadley/ggplot2/issues/905
+                      labels.size=input$pca_label_size,varname.size=input$pca_varname_size,
+                      scaleArrow = input$pca_scale_arrow,point_size=input$pca_point_size,annotation=values$myannotation)
 
       res <- res +
         xlim(input$pcagenes_brush$xmin,input$pcagenes_brush$xmax) +
@@ -977,7 +977,7 @@ pcaExplorer <- function(dds=NULL,
       shiny::validate(
         need(nrow(curData_zoomClick()) >0,message = "Click closer to a gene to get the boxplot")
 
-        )
+      )
 
       genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
 
@@ -998,12 +998,12 @@ pcaExplorer <- function(dds=NULL,
     # for reading in the brushed/clicked points
     curData_brush <- reactive({
       df2 <- genespca(values$myrlt,
-                     ntop = input$pca_nrgenes,
-                     choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
-                     biplot = TRUE,
-                     # arrowColors = colGroups,
-                     alpha=input$pca_point_alpha,
-                     returnData=TRUE,annotation=values$myannotation)
+                      ntop = input$pca_nrgenes,
+                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
+                      biplot = TRUE,
+                      # arrowColors = colGroups,
+                      alpha=input$pca_point_alpha,
+                      returnData=TRUE,annotation=values$myannotation)
       df2$geneName <- values$myannotation$gene_name[match(rownames(df2),rownames(values$myannotation))]
       res <- brushedPoints(df2, input$pcagenes_brush,xvar="xvar",yvar="yvar",)
       res
@@ -1012,12 +1012,12 @@ pcaExplorer <- function(dds=NULL,
 
     curData_click <- reactive({
       df2 <- genespca(values$myrlt,
-                     ntop = input$pca_nrgenes,
-                     choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
-                     biplot = TRUE,
-                     # arrowColors = colGroups,
-                     alpha=input$pca_point_alpha,
-                     returnData=TRUE,annotation=values$myannotation)
+                      ntop = input$pca_nrgenes,
+                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
+                      biplot = TRUE,
+                      # arrowColors = colGroups,
+                      alpha=input$pca_point_alpha,
+                      returnData=TRUE,annotation=values$myannotation)
       df2$geneName <- values$myannotation$gene_name[match(rownames(df2),rownames(values$myannotation))]
       res <- nearPoints(df2, input$pcagenes_click,
                         threshold = 20, maxpoints = 3,
@@ -1029,12 +1029,12 @@ pcaExplorer <- function(dds=NULL,
 
     curData_zoomClick <- reactive({
       df2 <- genespca(values$myrlt,
-                     ntop = input$pca_nrgenes,
-                     choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
-                     biplot = TRUE,
-                     # arrowColors = colGroups,
-                     alpha=input$pca_point_alpha,
-                     returnData=TRUE,annotation=values$myannotation)
+                      ntop = input$pca_nrgenes,
+                      choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
+                      biplot = TRUE,
+                      # arrowColors = colGroups,
+                      alpha=input$pca_point_alpha,
+                      returnData=TRUE,annotation=values$myannotation)
       df2$geneName <- values$myannotation$gene_name[match(rownames(df2),rownames(values$myannotation))]
       res <- nearPoints(df2, input$pcagenes_zoom_click,
                         threshold = 20, maxpoints = 1,
@@ -1113,108 +1113,108 @@ pcaExplorer <- function(dds=NULL,
 
 
 
-#     displayed by default, with possibility to select from gene id provided as row names of the objects
-#     output$ui_selectID <- renderUI({
-#       allIDs <- withProgress(message = "loading the names in the UI",value = 0,
-#                              {
-#                                rownames(values$myrlt)
-#                              }
-#
-#
-#       )
-#       selectInput("selectID",label = "Select ID",choices = c("",allIDs),selected=NULL)
-#     })
-#     # additionally displayed if an annotation is provided
-#     output$ui_selectName <- renderUI({
-#       shiny::validate(
-#         need(
-#           !is.null(values$myannotation),
-#           "If you provide an annotation table, you could search by the corresponding name/ID"
-#         )
-#       )
-#
-#       selectInput("selectName",label = "Select gene name",choices = c("",values$myannotation$gene_name),selected=NULL)
-#       # selectInput("selectName")
-#     })
-#
-#     output$debugf <- renderPrint({
-#       input$selectID
-#     })
+    #     displayed by default, with possibility to select from gene id provided as row names of the objects
+    #     output$ui_selectID <- renderUI({
+    #       allIDs <- withProgress(message = "loading the names in the UI",value = 0,
+    #                              {
+    #                                rownames(values$myrlt)
+    #                              }
+    #
+    #
+    #       )
+    #       selectInput("selectID",label = "Select ID",choices = c("",allIDs),selected=NULL)
+    #     })
+    #     # additionally displayed if an annotation is provided
+    #     output$ui_selectName <- renderUI({
+    #       shiny::validate(
+    #         need(
+    #           !is.null(values$myannotation),
+    #           "If you provide an annotation table, you could search by the corresponding name/ID"
+    #         )
+    #       )
+    #
+    #       selectInput("selectName",label = "Select gene name",choices = c("",values$myannotation$gene_name),selected=NULL)
+    #       # selectInput("selectName")
+    #     })
+    #
+    #     output$debugf <- renderPrint({
+    #       input$selectID
+    #     })
 
 
-#     output$newgenefinder_plot <- renderPlot({
-#       if (input$selectID == "")
-#         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-#
-#
-#       if(!is.null(values$myannotation)){
-#         if(input$selectName != "") {
-#           selectedGeneName <- input$selectName
-#           selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$selectName)]
-#         } else {
-#           if (input$selectID == "") {
-#             return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-#           } else {
-#             selectedGene <- input$selectID
-#             selectedGeneName <- ifelse(!is.null(values$myannotation),
-#                                        values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))],
-#                                        "")
-#           }
-#         }
-#       } else if (input$selectID != ""){
-#         selectedGene <- input$selectID
-#         selectedGeneName <- ifelse(!is.null(values$myannotation),
-#                                    values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))],
-#                                    "")
-#       } else {
-#         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-#       }
-#
-#
-#       anno_id <- rownames(values$myannotation)
-#       anno_gene <- values$myannotation$gene_name
-#
-#       if(is.null(input$color_by))
-#         return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
-# #       if(is.null(input$color_by) & (input$selectName=="" | input$selectID ==""))
-# #         return(ggplot() + annotate("text",label="Select a gene and a factor to plot gene",0,0) + theme_bw())
-# #       if((input$selectName=="" | input$selectID ==""))
-# #         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-#       # if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
-#         # return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
-#
-# #       if (input$genefinder %in% anno_id) {
-# #         selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
-# #         selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
-# #       }
-# #       if (input$genefinder %in% anno_gene) {
-# #         selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
-# #         if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
-# #         selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
-# #       }
-#
-#
-#
-#
-#
-#       genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
-#
-#       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
-#       genedata$plotby <- interaction(onlyfactors)
-#
-#       p <- ggplot(genedata,aes(x=plotby,y=count,fill=plotby)) + geom_boxplot() + labs(title=paste0("Normalized counts for ",selectedGeneName," - ",selectedGene)) +  scale_x_discrete(name="") + geom_jitter(aes(x=plotby,y=count),position = position_jitter(width = 0.1)) + scale_fill_discrete(name="Experimental\nconditions")
-#
-#       if(input$ylimZero)
-#       {
-#         p <- p + scale_y_log10(name="Normalized counts - log10 scale",limits=c(1,max(genedata$count)))
-#       } else {
-#         p <- p + scale_y_log10(name="Normalized counts - log10 scale")
-#       }
-#       exportPlots$genefinder <- p
-#
-#       p
-#     })
-#
+    #     output$newgenefinder_plot <- renderPlot({
+    #       if (input$selectID == "")
+    #         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+    #
+    #
+    #       if(!is.null(values$myannotation)){
+    #         if(input$selectName != "") {
+    #           selectedGeneName <- input$selectName
+    #           selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$selectName)]
+    #         } else {
+    #           if (input$selectID == "") {
+    #             return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+    #           } else {
+    #             selectedGene <- input$selectID
+    #             selectedGeneName <- ifelse(!is.null(values$myannotation),
+    #                                        values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))],
+    #                                        "")
+    #           }
+    #         }
+    #       } else if (input$selectID != ""){
+    #         selectedGene <- input$selectID
+    #         selectedGeneName <- ifelse(!is.null(values$myannotation),
+    #                                    values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))],
+    #                                    "")
+    #       } else {
+    #         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+    #       }
+    #
+    #
+    #       anno_id <- rownames(values$myannotation)
+    #       anno_gene <- values$myannotation$gene_name
+    #
+    #       if(is.null(input$color_by))
+    #         return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
+    # #       if(is.null(input$color_by) & (input$selectName=="" | input$selectID ==""))
+    # #         return(ggplot() + annotate("text",label="Select a gene and a factor to plot gene",0,0) + theme_bw())
+    # #       if((input$selectName=="" | input$selectID ==""))
+    # #         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+    #       # if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
+    #         # return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
+    #
+    # #       if (input$genefinder %in% anno_id) {
+    # #         selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+    # #         selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
+    # #       }
+    # #       if (input$genefinder %in% anno_gene) {
+    # #         selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
+    # #         if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
+    # #         selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
+    # #       }
+    #
+    #
+    #
+    #
+    #
+    #       genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
+    #
+    #       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
+    #       genedata$plotby <- interaction(onlyfactors)
+    #
+    #       p <- ggplot(genedata,aes(x=plotby,y=count,fill=plotby)) + geom_boxplot() + labs(title=paste0("Normalized counts for ",selectedGeneName," - ",selectedGene)) +  scale_x_discrete(name="") + geom_jitter(aes(x=plotby,y=count),position = position_jitter(width = 0.1)) + scale_fill_discrete(name="Experimental\nconditions")
+    #
+    #       if(input$ylimZero)
+    #       {
+    #         p <- p + scale_y_log10(name="Normalized counts - log10 scale",limits=c(1,max(genedata$count)))
+    #       } else {
+    #         p <- p + scale_y_log10(name="Normalized counts - log10 scale")
+    #       }
+    #       exportPlots$genefinder <- p
+    #
+    #       p
+    #     })
+    #
 
     output$searchresult <- renderPrint({
 
@@ -1388,7 +1388,7 @@ pcaExplorer <- function(dds=NULL,
         )
       )
       # if(is.null(pca2go))
-        # return(ggplot() + annotate("text",label="Provide a pca2go object to the app",0,0) + theme_bw())
+      # return(ggplot() + annotate("text",label="Provide a pca2go object to the app",0,0) + theme_bw())
       res <- pcaplot(values$myrlt,intgroup = input$color_by,
                      ntop = attr(values$mypca2go,"n_genesforpca"),
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),text_labels = input$sample_labels,
@@ -1457,7 +1457,7 @@ pcaExplorer <- function(dds=NULL,
 
     output$covar1 <- renderUI({
       # if(is.null(values$myrlt))
-        # return(NULL)
+      # return(NULL)
       poss_covars <- names(colData(values$mydds))
       selectInput('covar1', label = 'Select factor 1: ',
                   choices = c(NULL, poss_covars), selected = NULL,multiple = FALSE)
@@ -1585,7 +1585,7 @@ pcaExplorer <- function(dds=NULL,
 
 
     output$pcamultifac <- renderPlot({
-    pcmat <- obj3()[[1]]
+      pcmat <- obj3()[[1]]
       tcol <- obj3()[[2]]
       tcol2 <- obj3()[[3]]
       pres <- prcomp(t(pcmat),scale=FALSE)
