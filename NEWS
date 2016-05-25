@@ -1,3 +1,18 @@
+CHANGES IN VERSION 1.1.3
+-------------------------
+
+BUG FIXES
+
+	o Remove y axis limits to gene boxplots
+	o Fixed: correct labels and colors assignements for genespca
+
+CHANGES IN VERSION 1.0.0
+-------------------------
+
+OTHER NOTES
+
+	o Released in Bioconductor 3.3
+
 CHANGES IN VERSION 0.99.1
 -------------------------
 
