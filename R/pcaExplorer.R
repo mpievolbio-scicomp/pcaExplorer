@@ -56,8 +56,8 @@ pcaExplorer <- function(dds=NULL,
   }
 
   # get modes and themes for the ace editor
-  modes <- getAceModes()
-  themes <- getAceThemes()
+  modes <- shinyAce::getAceModes()
+  themes <- shinyAce::getAceThemes()
 
   ## upload max 300mb files - can be changed if necessary
   options(shiny.maxRequestSize=300*1024^2)
@@ -2318,9 +2318,8 @@ pcaExplorer <- function(dds=NULL,
           paste0(rmd_yaml(),
                  input$acereport_rmd,collapse = "\n")
         # input$acereport_rmd
-        error_I <- 0
         if(input$rmd_dl_format == "rmd") {
-          tmp_content %>% cat(.,file=file,sep="\n")
+          cat(tmp_content,file=file,sep="\n")
         } else {
           # write it somewhere too keeping the source
           # tmpfile <- tempfile()
@@ -2329,32 +2328,13 @@ pcaExplorer <- function(dds=NULL,
           # writeLines(tmp_content, fileConn)
           # close(fileConn)
           if(input$rmd_dl_format == "html") {
-            # tryCatch({
-            tmp_content %>% cat(.,file="tempreport.Rmd",sep="\n")
+            cat(tmp_content,file="tempreport.Rmd",sep="\n")
             rmarkdown::render(input = "tempreport.Rmd",
                               output_file = file,
                               # fragment.only = TRUE,
                               quiet = TRUE)
-            # file.rename(out,file)
           }
-          # error = function(e) {
-          # session$sendCustomMessage(type = "showalert", "IDV failed to generate your report. Please make sure all specified modules have been run at least once and try again.")
-          # error_I <- 1
         }
-        # )
-        # }
-
-        # else if(input$rmd_dl_format == "slides") {
-        #   tryCatch({
-        #     rmarkdown::render(input = "www/tmp.rmd", output_format = "ioslides_presentation", output_file = file)},
-        #     error = function(e) {
-        #       session$sendCustomMessage(type = "showalert", "IDV failed to generate your report. Please make sure all specified modules have been run at least once and try again.")
-        #       error_I <- 0
-        #     }
-        #   )
-        # }
-        # }
-        if(error_I) return(NULL)
       })
 
 

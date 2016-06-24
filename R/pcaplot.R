@@ -16,7 +16,8 @@
 #' @param pcY The principal component to display on the y axis
 #' @param text_labels Logical, whether to display the labels with the sample identifiers
 #' @param point_size Integer, the size of the points for the samples
-#'
+#' @param ellipse Logical, whether to display the confidence ellipse for the selected groups
+#' @param ellipse.prob Numeric, a value in the interval [0;1)
 #'
 #' @return An object created by \code{ggplot}, which can be assigned and further customized.
 #'
@@ -155,20 +156,25 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
 
 
 
-
-
-#' Title
+#' Sample PCA plot for transformed data
 #'
-#' @param x
-#' @param intgroup
-#' @param ntop
-#' @param returnData
-#' @param title
-#' @param pcX
-#' @param pcY
-#' @param pcZ
-#' @param text_labels
-#' @param point_size
+#' Plots the results of PCA on a 3-dimensional space, interactively
+#'
+#' @param x A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},
+#' produced for example by either \code{\link{rlog}} or
+#' \code{\link{varianceStabilizingTransformation}}
+#' @param Interesting groups: a character vector of
+#' names in \code{colData(x)} to use for grouping
+#' @param ntop Number of top genes to use for principal components,
+#' selected by highest row variance
+#' @param returnData logical, if TRUE returns a data.frame for further use, containing the
+#' selected principal components and intgroup covariates for custom plotting
+#' @param title The plot title
+#' @param pcX The principal component to display on the x axis
+#' @param pcY The principal component to display on the y axis
+#' @param pcZ The principal component to display on the z axis
+#' @param text_labels Logical, whether to display the labels with the sample identifiers
+#' @param point_size Integer, the size of the points for the samples
 #'
 #' @return
 #' @export

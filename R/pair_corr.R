@@ -1,7 +1,8 @@
-#' Title
+#' Pairwise correlation plot of counts
 #'
-#' @param df
-#' @param method
+#' @param df A data frame, containing the (raw/normalized/transformed) counts
+#' @param method Character string, one of \code{pearson} (default), \code{kendall}, or
+#' \code{spearman} as in \code{cor}
 #'
 #' @return
 #' @export

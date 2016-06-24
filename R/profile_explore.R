@@ -1,9 +1,12 @@
-#' Title
+#' Extract and plot the expression profile of genes
 #'
-#' @param se
-#' @param genelist
-#' @param intgroup
-#' @param plotZ
+#' @param se A \code{\link{DESeqDataSet}} object, or a
+#' \code{\link{DESeqTransform}} object.
+#' @param genelist An array of characters, including the names of the genes of
+#' interest of which the profile is to be plotted
+#' @param intgroup A factor, needs to be in the \code{colnames} of \code{colData(se)}
+#' @param plotZ Logical, whether to plot the scaled expression values. Defaults to
+#' \code{FALSE}
 #'
 #' @return
 #' @export
@@ -31,8 +34,10 @@ geneprofiler <- function(se, genelist = NULL, intgroup="condition", plotZ = FALS
     # remove 0 variance genes
     rv <- rowVars(t(mydata))
     mydata <- mydata[,rv >0]
-    ## replace maybe with explicit code!
-    mydata <- NMF:::scale_mat(mydata,"col")
+
+    mydata <- scale(mydata,center = TRUE,scale=TRUE)
+    # was...
+    # mydata <- NMF:::scale_mat(mydata,"col")
   }
 
 

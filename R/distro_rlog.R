@@ -1,13 +1,14 @@
-#' Title
+#' Plot distribution of expression values
 #'
-#' @param rld
-#' @param plot_type
+#' @param rld A \code{\link{DESeqTransform}} object.
+#' @param plot_type Character, choose one of \code{boxplot}, \code{violin} or
+#' \code{density}. Defaults to \code{density}
 #'
 #' @return
 #' @export
 #'
 #' @examples
-distro_rlog <- function(rld, plot_type="density") {
+distro_expr <- function(rld, plot_type="density") {
   allrld <- tidyr::gather(as.data.frame(assay(rld)))
   names(allrld) <- c("Sample","rlogExpression")
 

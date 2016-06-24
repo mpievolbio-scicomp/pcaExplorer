@@ -33,7 +33,11 @@
 #' @importFrom lubridate now
 #' @importFrom stringr str_count
 #' @import biomaRt
-#' @importFrom grDevices dev.off pdf rainbow
+#' @importFrom pheatmap pheatmap
+#' @importFrom tidyr gather
+#' @import knitr
+#' @import rmarkdown
+#' @importFrom grDevices dev.off pdf rainbow colorRamp rgb
 #' @import methods
 #'
 #' @author

@@ -1,10 +1,12 @@
 
 
-#' Title
+#' Get an annotation data frame from biomaRt
 #'
-#' @param dds
-#' @param biomart_dataset
-#' @param idtype
+#' @param dds A \code{\link{DESeqDataSet}} object
+#' @param biomart_dataset A biomaRt dataset to use. To see the list, type
+#' \code{mart = useMart('ensembl')}, followed by \code{listDatasets(mart)}.
+#' @param idtype Character, the ID type of the genes as in the row names of
+#' \code{dds}, to be used for the call to \code{\link{getBM}}
 #'
 #' @return
 #' @export
@@ -36,11 +38,13 @@ To obtain a list, type mart = useMart('ensembl'), followed by listDatasets(mart)
 
 
 
-#' Title
+#' Get an annotation data frame from org db packages
 #'
-#' @param dds
-#' @param orgdb_species
-#' @param idtype
+#' @param dds A \code{\link{DESeqDataSet}} object
+#' @param orgdb_species Character string, named as the \code{org.XX.eg.db}
+#' package which should be available in Bioconductor
+#' @param idtype Character, the ID type of the genes as in the row names of
+#' \code{dds}, to be used for the call to \code{\link{mapIds}}
 #'
 #' @return
 #' @export
