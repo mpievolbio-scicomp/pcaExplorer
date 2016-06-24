@@ -28,6 +28,11 @@
 #' @import ggplot2
 #' @import ggrepel
 #' @importFrom DT datatable
+#' @import shinyAce
+#' @import threejs
+#' @importFrom lubridate now
+#' @importFrom stringr str_count
+#' @import biomaRt
 #' @importFrom grDevices dev.off pdf rainbow
 #' @import methods
 #'
