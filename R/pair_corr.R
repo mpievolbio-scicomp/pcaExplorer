@@ -1,13 +1,20 @@
-#' Pairwise correlation plot of counts
+#' Pairwise scatter and correlation plot of counts
 #'
 #' @param df A data frame, containing the (raw/normalized/transformed) counts
 #' @param method Character string, one of \code{pearson} (default), \code{kendall}, or
 #' \code{spearman} as in \code{cor}
 #'
-#' @return
+#' @return A plot with pairwise scatter plots and correlation coefficients
 #' @export
 #'
 #' @examples
+#' library(airway)
+#' data(airway)
+#' airway
+#' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
+#'                                              colData = colData(airway),
+#'                                              design=~dex+cell)
+#' pair_corr(counts(dds_airway)[1:100,]) # use just a subset for the example
 pair_corr <- function(df,method="pearson") {
   # get min and max count values for axis range.
   rangeMin = min(df)

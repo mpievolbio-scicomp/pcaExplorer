@@ -18,7 +18,16 @@ interest of which the profile is to be plotted}
 \item{plotZ}{Logical, whether to plot the scaled expression values. Defaults to
 \code{FALSE}}
 }
+\value{
+A plot of the expression profile for the genes
+}
 \description{
 Extract and plot the expression profile of genes
+}
+\examples{
+dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+rlt <- DESeq2::rlogTransformation(dds)
+geneprofiler(rlt,paste0("gene",sample(1:1000,20)))
+geneprofiler(rlt,paste0("gene",sample(1:1000,20)),plotZ=TRUE)
 }
 

@@ -15,7 +15,21 @@ get_annotation(dds, biomart_dataset, idtype)
 \item{idtype}{Character, the ID type of the genes as in the row names of
 \code{dds}, to be used for the call to \code{\link{getBM}}}
 }
+\value{
+A data frame for ready use in \code{pcaExplorer}, retrieved from biomaRt.
+}
 \description{
 Get an annotation data frame from biomaRt
+}
+\examples{
+library(airway)
+data(airway)
+airway
+dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
+                                             colData = colData(airway),
+                                             design=~dex+cell)
+\dontrun{
+get_annotation(dds_airway,"hsapiens_gene_ensembl","ensembl_gene_id")
+}
 }
 

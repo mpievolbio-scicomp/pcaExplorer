@@ -31,7 +31,6 @@
 #' @import shinyAce
 #' @import threejs
 #' @importFrom lubridate now
-#' @importFrom stringr str_count
 #' @import biomaRt
 #' @importFrom pheatmap pheatmap
 #' @importFrom tidyr gather

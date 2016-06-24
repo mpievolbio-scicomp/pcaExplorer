@@ -13,6 +13,9 @@ pcaplot3d(x, intgroup = "condition", ntop = 500, returnData = FALSE,
 produced for example by either \code{\link{rlog}} or
 \code{\link{varianceStabilizingTransformation}}}
 
+\item{intgroup}{Interesting groups: a character vector of
+names in \code{colData(x)} to use for grouping}
+
 \item{ntop}{Number of top genes to use for principal components,
 selected by highest row variance}
 
@@ -30,11 +33,16 @@ selected principal components and intgroup covariates for custom plotting}
 \item{text_labels}{Logical, whether to display the labels with the sample identifiers}
 
 \item{point_size}{Integer, the size of the points for the samples}
-
-\item{Interesting}{groups: a character vector of
-names in \code{colData(x)} to use for grouping}
+}
+\value{
+A html-based visualization of the 3d PCA plot
 }
 \description{
 Plots the results of PCA on a 3-dimensional space, interactively
+}
+\examples{
+dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+rlt <- DESeq2::rlogTransformation(dds)
+pcaplot3d(rlt, ntop=200)
 }
 

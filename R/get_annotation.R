@@ -8,10 +8,19 @@
 #' @param idtype Character, the ID type of the genes as in the row names of
 #' \code{dds}, to be used for the call to \code{\link{getBM}}
 #'
-#' @return
+#' @return A data frame for ready use in \code{pcaExplorer}, retrieved from biomaRt.
 #' @export
 #'
 #' @examples
+#' library(airway)
+#' data(airway)
+#' airway
+#' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
+#'                                              colData = colData(airway),
+#'                                              design=~dex+cell)
+#' \dontrun{
+#' get_annotation(dds_airway,"hsapiens_gene_ensembl","ensembl_gene_id")
+#' }
 get_annotation <- function(dds, biomart_dataset, idtype){
   if(is.null(biomart_dataset))
     stop("Select a species to generate the corresponding annotation.
@@ -46,10 +55,20 @@ To obtain a list, type mart = useMart('ensembl'), followed by listDatasets(mart)
 #' @param idtype Character, the ID type of the genes as in the row names of
 #' \code{dds}, to be used for the call to \code{\link{mapIds}}
 #'
-#' @return
+#' @return A data frame for ready use in \code{pcaExplorer}, retrieved from the
+#' org db packages
 #' @export
 #'
 #' @examples
+#' library(airway)
+#' data(airway)
+#' airway
+#' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
+#'                                              colData = colData(airway),
+#'                                              design=~dex+cell)
+#' \dontrun{
+#' get_annotation_orgdb(dds_airway,"org.Hs.eg.db","ENSEMBL")
+#' }
 get_annotation_orgdb <- function(dds, orgdb_species, idtype){
   if(is.null(orgdb_species))
     stop("Select a species to generate the corresponding annotation")

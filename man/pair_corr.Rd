@@ -2,7 +2,7 @@
 % Please edit documentation in R/pair_corr.R
 \name{pair_corr}
 \alias{pair_corr}
-\title{Pairwise correlation plot of counts}
+\title{Pairwise scatter and correlation plot of counts}
 \usage{
 pair_corr(df, method = "pearson")
 }
@@ -12,7 +12,19 @@ pair_corr(df, method = "pearson")
 \item{method}{Character string, one of \code{pearson} (default), \code{kendall}, or
 \code{spearman} as in \code{cor}}
 }
+\value{
+A plot with pairwise scatter plots and correlation coefficients
+}
 \description{
-Pairwise correlation plot of counts
+Pairwise scatter and correlation plot of counts
+}
+\examples{
+library(airway)
+data(airway)
+airway
+dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
+                                             colData = colData(airway),
+                                             design=~dex+cell)
+pair_corr(counts(dds_airway)[1:100,]) # use just a subset for the example
 }
 

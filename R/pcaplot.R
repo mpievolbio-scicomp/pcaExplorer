@@ -81,7 +81,7 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
     })
     # names(ell)[1:2] <- c('xvar', 'yvar')
     if(nrow(ell)>0) {
-      g <- g + geom_path(data = ell, aes(x=X1,y=X2,color = groups, group = groups))
+      g <- g + geom_path(data = ell, aes_string(x="X1",y="X2",color = "groups", group = "groups"))
     }
   }
 
@@ -163,7 +163,7 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
 #' @param x A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},
 #' produced for example by either \code{\link{rlog}} or
 #' \code{\link{varianceStabilizingTransformation}}
-#' @param Interesting groups: a character vector of
+#' @param intgroup Interesting groups: a character vector of
 #' names in \code{colData(x)} to use for grouping
 #' @param ntop Number of top genes to use for principal components,
 #' selected by highest row variance
@@ -176,10 +176,13 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
 #' @param text_labels Logical, whether to display the labels with the sample identifiers
 #' @param point_size Integer, the size of the points for the samples
 #'
-#' @return
+#' @return A html-based visualization of the 3d PCA plot
 #' @export
 #'
 #' @examples
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' rlt <- DESeq2::rlogTransformation(dds)
+#' pcaplot3d(rlt, ntop=200)
 pcaplot3d <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
                      pcX = 1, pcY = 2, pcZ = 3, text_labels=TRUE,point_size=3)
 {

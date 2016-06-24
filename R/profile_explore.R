@@ -8,10 +8,14 @@
 #' @param plotZ Logical, whether to plot the scaled expression values. Defaults to
 #' \code{FALSE}
 #'
-#' @return
+#' @return A plot of the expression profile for the genes
 #' @export
 #'
 #' @examples
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' rlt <- DESeq2::rlogTransformation(dds)
+#' geneprofiler(rlt,paste0("gene",sample(1:1000,20)))
+#' geneprofiler(rlt,paste0("gene",sample(1:1000,20)),plotZ=TRUE)
 geneprofiler <- function(se, genelist = NULL, intgroup="condition", plotZ = FALSE){
   if(is.null(genelist))
     stop("Provide at least one gene to the genelist parameter")
