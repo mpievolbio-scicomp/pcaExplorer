@@ -30,7 +30,6 @@
 #' @importFrom DT datatable
 #' @import shinyAce
 #' @import threejs
-#' @importFrom lubridate now
 #' @import biomaRt
 #' @importFrom pheatmap pheatmap
 #' @importFrom tidyr gather
