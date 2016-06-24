@@ -23,7 +23,7 @@ in the University Medical Center of the Johannes Gutenberg University Mainz.
 
 ### Developers
 
-Federico Marini [email](mailto:marinif@uni-mainz.de)
+<a href="mailto:marinif@uni-mainz.de" class="btn btn-primary">Federico Marini</a>
 
 ### Code
 
