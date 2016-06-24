@@ -30,7 +30,8 @@
 #'
 #' @export
 pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
-                    pcX = 1, pcY = 2,text_labels=TRUE,point_size=3) # customized principal components
+                    pcX = 1, pcY = 2,text_labels=TRUE,point_size=3,
+                    ellipse=TRUE,ellipse.prob=0.95) # customized principal components
 {
   rv <- rowVars(assay(x))
   select <- order(rv, decreasing = TRUE)[seq_len(min(ntop,length(rv)))]
@@ -60,6 +61,28 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
     geom_point(size = point_size) +
     xlab(paste0("PC",pcX,": ", round(percentVar[pcX] * 100,digits = 2), "% variance")) +
     ylab(paste0("PC",pcY,": ", round(percentVar[pcY] * 100,digits = 2), "% variance"))
+
+  ## plot confidence ellipse
+  # credit to vince vu, author of ggbiplot
+  if(ellipse) {
+    theta <- c(seq(-pi, pi, length = 50), seq(pi, -pi, length = 50))
+    circle <- cbind(cos(theta), sin(theta))
+
+    ell <- ddply(d, 'group', function(x) {
+      if(nrow(x) <= 2) {
+        return(NULL)
+      }
+      sigma <- var(cbind(x[[paste0("PC",pcX)]], x[[paste0("PC",pcY)]]))
+      mu <- c(mean(x[[paste0("PC",pcX)]]), mean(x[[paste0("PC",pcY)]]))
+      ed <- sqrt(qchisq(ellipse.prob, df = 2))
+      data.frame(sweep(circle %*% chol(sigma) * ed, 2, mu, FUN = '+'),
+                 groups = x$group[1])
+    })
+    # names(ell)[1:2] <- c('xvar', 'yvar')
+    if(nrow(ell)>0) {
+      g <- g + geom_path(data = ell, aes(x=X1,y=X2,color = groups, group = groups))
+    }
+  }
 
   if(text_labels)
     g <- g + geom_label_repel(mapping = aes_string(label="names",fill="group"),
@@ -124,3 +147,65 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
   if(!is.null(title)) p <- p + ggtitle(title)
   p
 }
+
+
+
+
+
+
+
+
+
+
+#' Title
+#'
+#' @param x
+#' @param intgroup
+#' @param ntop
+#' @param returnData
+#' @param title
+#' @param pcX
+#' @param pcY
+#' @param pcZ
+#' @param text_labels
+#' @param point_size
+#'
+#' @return
+#' @export
+#'
+#' @examples
+pcaplot3d <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
+                     pcX = 1, pcY = 2, pcZ = 3, text_labels=TRUE,point_size=3)
+{
+  rv <- rowVars(assay(x))
+  select <- order(rv, decreasing = TRUE)[seq_len(min(ntop,length(rv)))]
+  pca <- prcomp(t(assay(x)[select, ]))
+
+  percentVar <- pca$sdev^2/sum(pca$sdev^2)
+
+  if (!all(intgroup %in% names(colData(x)))) {
+    stop("the argument 'intgroup' should specify columns of colData(x)")
+  }
+  intgroup.df <- as.data.frame(colData(x)[, intgroup, drop = FALSE])
+  group <- factor(apply(intgroup.df, 1, paste, collapse = " : "))
+  d <- data.frame(PC1 = pca$x[, pcX], PC2 = pca$x[, pcY], PC3 = pca$x[,pcZ],
+                  group = group,
+                  intgroup.df, names = colnames(x))
+  colnames(d)[1] <- paste0("PC",pcX,": ", round(percentVar[pcX] * 100,digits = 2), "% variance")
+  colnames(d)[2] <- paste0("PC",pcY,": ", round(percentVar[pcY] * 100,digits = 2), "% variance")
+  colnames(d)[3] <- paste0("PC",pcZ,": ", round(percentVar[pcZ] * 100,digits = 2), "% variance")
+
+  if (returnData) {
+    attr(d, "percentVar") <- percentVar[1:3]
+    return(d)
+  }
+
+  nrgroups <- length(levels(d$group))
+  cols <- hue_pal()(nrgroups)[d$group]
+
+  scatterplot3js(d[,1:3],
+                 color = cols,
+                 renderer = "canvas", size = 1.3,
+                 labels = rownames(d),label.margin="50px 50px 50px 50px")
+}
+
