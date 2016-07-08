@@ -200,11 +200,12 @@ pcaExplorer <- function(dds=NULL,
 
           tabPanel(
             "Instructions",  icon = icon("info-circle"),
-            includeMarkdown(system.file("extdata", "instructions.md",package = "pcaExplorer"))
+            includeMarkdown(system.file("extdata", "instructions.md",package = "pcaExplorer")),
+            footer()
           ),
 
           tabPanel(
-            "Counts table",
+            "Counts Table",
             icon = icon("table"),
             h3("Counts table"),
 
@@ -260,10 +261,10 @@ pcaExplorer <- function(dds=NULL,
                   numericInput("threshold_rowmeans","Threshold on the row means of the normalized counts",value = 0, min = 0))
               )),
             p("According to the selected filtering criteria, this is an overview on the provided count data"),
-            verbatimTextOutput("detected_genes"),
+            verbatimTextOutput("detected_genes")
             # DT::dataTableOutput("reads_samples"),
 
-            footer()
+
           ),
 
           tabPanel(
@@ -416,7 +417,7 @@ pcaExplorer <- function(dds=NULL,
 
 
           tabPanel(
-            "Gene finder",
+            "Gene Finder",
             icon = icon("crosshairs"),
             fluidRow(
               h1("GeneFinder"),
@@ -521,7 +522,7 @@ pcaExplorer <- function(dds=NULL,
           tabPanel(
             "Multifactor Exploration",
             icon = icon("th-large"),
-            h1("Multifactor exploration of datasets with >= 2 experimental factors"),
+            h1("Multifactor exploration of datasets with 2 or more experimental factors"),
 
             verbatimTextOutput("intro_multifac"),
 
@@ -606,7 +607,7 @@ pcaExplorer <- function(dds=NULL,
           ),
 
           tabPanel(
-            "Report editor",
+            "Report Editor",
             icon = icon("pencil"),
 
 
