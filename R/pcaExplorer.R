@@ -70,7 +70,7 @@ pcaExplorer <- function(dds=NULL,
     shinydashboard::dashboardPage(
 
       dashboardHeader(
-        title = paste0("pcaExplorer - Interactive exploration of Principal Components",
+        title = paste0("pcaExplorer - Interactive exploration of Principal Components ",
                        "of Samples and Genes in RNA-seq data - version ",
                        packageVersion("pcaExplorer")),
         titleWidth = 900,
@@ -432,7 +432,8 @@ pcaExplorer <- function(dds=NULL,
                                                "name and the ID, and it suggests if some characters are in a ",
                                                "different case"),
                           "right", options = list(container = "body")),
-                        checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE)),
+                        checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
+                        checkboxInput("addsamplelabels","Annotate sample labels to the dots in the plot",value=TRUE)),
 
               #               fluidRow(
               #                 column(
@@ -452,7 +453,11 @@ pcaExplorer <- function(dds=NULL,
               # plotOutput("newgenefinder_plot"),
               column(
                 width = 8,
-                plotOutput("genefinder_plot")))
+                plotOutput("genefinder_plot")),
+              column(
+                width = 4,
+                DT::dataTableOutput("genefinder_table")
+              ))
           ),
 
           tabPanel(
@@ -1352,6 +1357,8 @@ pcaExplorer <- function(dds=NULL,
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
 
+      genedata$sampleID <- rownames(genedata)
+
       # input$plot_style chooses the style of plotting
       if(input$plot_style=="boxplot"){
         res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
@@ -1362,11 +1369,17 @@ pcaExplorer <- function(dds=NULL,
           res <- res + scale_y_log10(name="Normalized counts - log10 scale")
         }
 
+
+
         res <- res +
           labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
           scale_x_discrete(name="") +
           geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
           scale_fill_discrete(name="Experimental\nconditions")
+        # if(input$addsamplelabels){
+        #   res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
+        # }
+
         exportPlots$genesBoxplot <- res
         res
       } else if(input$plot_style=="violin plot"){
@@ -1378,11 +1391,16 @@ pcaExplorer <- function(dds=NULL,
           res <- res + scale_y_log10(name="Normalized counts - log10 scale")
         }
 
+
         res <- res +
           labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
           scale_x_discrete(name="") +
           geom_jitter(aes_string(x="plotby",y="count"),alpha = 0.8,position = position_jitter(width = 0.1)) +
           scale_fill_discrete(name="Experimental\nconditions") + scale_color_discrete(guide="none")
+        # if(input$addsamplelabels){
+        #   res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
+        # }
+
         exportPlots$genesBoxplot <- res
         res
       }
@@ -1674,7 +1692,7 @@ pcaExplorer <- function(dds=NULL,
       genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
-
+      genedata$sampleID <- rownames(genedata)
 
 
       # input$plot_style chooses the style of plotting
@@ -1692,6 +1710,9 @@ pcaExplorer <- function(dds=NULL,
           scale_x_discrete(name="") +
           geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
           scale_fill_discrete(name="Experimental\nconditions")
+        if(input$addsamplelabels){
+          res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
+        }
         exportPlots$genesBoxplot <- res
         res
       } else if(input$plot_style=="violin plot"){
@@ -1708,9 +1729,39 @@ pcaExplorer <- function(dds=NULL,
           scale_x_discrete(name="") +
           geom_jitter(aes_string(x="plotby",y="count"),alpha = 0.8,position = position_jitter(width = 0.1)) +
           scale_fill_discrete(name="Experimental\nconditions") + scale_color_discrete(guide="none")
+        if(input$addsamplelabels){
+          res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
+        }
         exportPlots$genefinder <- res
         res
       }
+    })
+
+
+    output$genefinder_table <- DT::renderDataTable({
+      anno_id <- rownames(values$myrlt)
+      anno_gene <- values$myannotation$gene_name
+
+      if(is.null(input$color_by) & input$genefinder!="")
+        return(NULL)
+      if(is.null(input$color_by) & input$genefinder=="")
+        return(NULL)
+      if(input$genefinder=="")
+        return(NULL)
+      if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
+        return(NULL)
+
+      if (input$genefinder %in% anno_id) {
+        selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+        selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
+      }
+      if (input$genefinder %in% anno_gene) {
+        selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
+        if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
+        selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
+      }
+      genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
+      genedata
     })
 
 
