@@ -481,8 +481,11 @@ pcaExplorer <- function(dds=NULL,
                     textInput("filename_genefinder_countsplot",label = "Save as...",value = "pcae_genefinder.pdf"))),
               column(
                 width = 4,
-                DT::dataTableOutput("genefinder_table")
-              ))
+                DT::dataTableOutput("genefinder_table"),
+                downloadButton("download_genefinder_countstable", "Download Table")
+
+              )
+            )
           ),
 
           tabPanel(
@@ -1075,6 +1078,43 @@ pcaExplorer <- function(dds=NULL,
         write.csv(current_countmat(), file)
       }
     )
+
+    output$download_genefinder_countstable <- downloadHandler(
+      filename = function() {
+        paste0(input$countstable_unit,"table.csv")
+      },
+      content = function(file) {
+
+        anno_id <- rownames(values$myrlt)
+        anno_gene <- values$myannotation$gene_name
+
+        if(is.null(input$color_by) & input$genefinder!="")
+          return(NULL)
+        if(is.null(input$color_by) & input$genefinder=="")
+          return(NULL)
+        if(input$genefinder=="")
+          return(NULL)
+        if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
+          return(NULL)
+
+        if (input$genefinder %in% anno_id) {
+          selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+          selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
+        }
+        if (input$genefinder %in% anno_gene) {
+          selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
+          if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
+          selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
+        }
+        genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
+        genedata
+
+        write.csv(genedata, file)
+      }
+    )
+
+
+
 
 
 
