@@ -239,7 +239,11 @@ pcaExplorer <- function(dds=NULL,
             fluidRow(
               column(
                 width=8,
-                plotOutput("heatmapsampledist"))),
+                plotOutput("heatmapsampledist"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplessamplesheat", "Download Plot"),
+                    textInput("filename_samplessamplesheat",label = "Save as...",value = "pcae_sampletosample.pdf")))
+            ),
             hr(),
             h3("General information on the provided SummarizedExperiment/DESeqDataSet"),
             shiny::verbatimTextOutput("showdata"),
@@ -247,7 +251,10 @@ pcaExplorer <- function(dds=NULL,
             fluidRow(
               column(
                 width=8,
-                plotOutput("reads_barplot"))),
+                plotOutput("reads_barplot"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_readsbarplot", "Download Plot"),
+                    textInput("filename_readsbarplot",label = "Save as...",value = "pcae_readsbarplot.pdf")))),
             h3("Basic summary for the counts"),
             p("Number of uniquely aligned reads assigned to each sample"),
             verbatimTextOutput("reads_summary"),
@@ -310,12 +317,18 @@ pcaExplorer <- function(dds=NULL,
             fluidRow(
               column(
                 width = 6,
-                plotOutput("samples_pca_zoom")
+                plotOutput("samples_pca_zoom"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesPcazoom", "Download Plot"),
+                    textInput("filename_samplesPcazoom",label = "Save as...",value = "samplesPcazoom.pdf"))
               ),
               column(
                 width = 6,
                 numericInput("ntophiload", "Nr of genes to display (top & bottom)",value = 10, min = 1, max=40),
-                plotOutput("geneshiload")
+                plotOutput("geneshiload"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesPca_hiload", "Download Plot"),
+                    textInput("filename_samplesPca_hiload",label = "Save as...",value = "pcae_hiload.pdf"))
               )
             ),
             hr(),
@@ -324,7 +337,10 @@ pcaExplorer <- function(dds=NULL,
                 width = 6,
                 p(h4('Outlier Identification'), "Toggle which samples to remove - suspected to be considered as outliers"),
                 uiOutput("ui_outliersamples"),
-                plotOutput("samples_outliersremoved")
+                plotOutput("samples_outliersremoved"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesPca_sampleout", "Download Plot"),
+                    textInput("filename_samplesPca_sampleout",label = "Save as...",value = "samplesPca_sampleout.pdf"))
               )
 
             ),
@@ -371,13 +387,19 @@ pcaExplorer <- function(dds=NULL,
                 h4("Profile explorer"),
 
                 checkboxInput("zprofile","Display scaled expression values",value=TRUE),
-                plotOutput("genes_profileexplorer"))
+                plotOutput("genes_profileexplorer"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genesPca_profile", "Download Plot"),
+                    textInput("filename_genesPca_profile",label = "Save as...",value = "genesPca_profile.pdf")))
               ,
               column(
                 width = 6,
                 h4("Boxplot of selected gene"),
 
-                plotOutput("genes_biplot_boxplot"))
+                plotOutput("genes_biplot_boxplot"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genesPca_countsplot", "Download Plot"),
+                    textInput("filename_genesPca_countsplot",label = "Save as...",value = "genesPca_countsplot.pdf")))
             ),
 
             fluidRow(
@@ -410,7 +432,7 @@ pcaExplorer <- function(dds=NULL,
                   h4("Points selected by clicking:"),
                   DT::dataTableOutput("pca_click_out"),
                   downloadButton('downloadData_click', 'Download clicked (or nearby) points')),
-                  textInput("clickedPoints_filename","File name...")
+                textInput("clickedPoints_filename","File name...")
               )
             )
           ),
@@ -453,7 +475,10 @@ pcaExplorer <- function(dds=NULL,
               # plotOutput("newgenefinder_plot"),
               column(
                 width = 8,
-                plotOutput("genefinder_plot")),
+                plotOutput("genefinder_plot"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genefinder_countsplot", "Download Plot"),
+                    textInput("filename_genefinder_countsplot",label = "Save as...",value = "pcae_genefinder.pdf"))),
               column(
                 width = 4,
                 DT::dataTableOutput("genefinder_table")
@@ -697,9 +722,9 @@ pcaExplorer <- function(dds=NULL,
           #           )
         )
 
-      ),
-    skin="blue"
-  )
+          ),
+      skin="blue"
+          )
 
   ## ------------------------------------------------------------------ ##
   ##                          Define server                             ##
@@ -709,14 +734,22 @@ pcaExplorer <- function(dds=NULL,
 
     ## placeholder for the figures to export
     exportPlots <- reactiveValues(
+      samplessamples_heatmap=NULL,
+      reads_barplot=NULL,
+
       samplesPca=NULL,
       samplesZoom=NULL,
       samplesScree=NULL,
+      samplesHiload=NULL,
+      samplesOutlier=NULL,
+
       genesPca=NULL,
       genesZoom=NULL,
+      genesProfile=NULL,
       genesBoxplot=NULL,
       genesHeatmap=NULL,
-      genefinder=NULL
+
+      genefinder_countsplot=NULL
     )
 
     if(!is.null(dds)){
@@ -1009,7 +1042,7 @@ pcaExplorer <- function(dds=NULL,
       df <- data.frame(
         colData(values$mydds),
         "Total number of reads"=totreads
-        )
+      )
 
       datatable(df)
     })
@@ -1123,6 +1156,8 @@ pcaExplorer <- function(dds=NULL,
         p
       } else {
         p <- ggplot(rrdf,aes_string("Sample",weight="Reads")) + geom_bar() + theme_bw()
+
+        exportPlots$reads_barplot <- p
         p
       }
     })
@@ -1227,6 +1262,7 @@ pcaExplorer <- function(dds=NULL,
       )
       res <- res + theme_bw()
       # exportPlots$samplesPca <- res
+      exportPlots$samplesOutlier <- res
       res
 
     })
@@ -1713,7 +1749,7 @@ pcaExplorer <- function(dds=NULL,
         if(input$addsamplelabels){
           res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
         }
-        exportPlots$genesBoxplot <- res
+        exportPlots$genefinder_countsplot <- res
         res
       } else if(input$plot_style=="violin plot"){
         res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
@@ -1732,7 +1768,7 @@ pcaExplorer <- function(dds=NULL,
         if(input$addsamplelabels){
           res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
         }
-        exportPlots$genefinder <- res
+        exportPlots$genefinder_countsplot <- res
         res
       }
     })
@@ -2285,7 +2321,7 @@ pcaExplorer <- function(dds=NULL,
     output$state_save_sc <- downloadHandler(
       filename = function() {
         paste0("pcaExplorerState-",gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time())))),".RData")
-        },
+      },
       content = function(file) {
         saveState(file)
       }
@@ -2318,6 +2354,36 @@ pcaExplorer <- function(dds=NULL,
       }
     )
 
+
+
+    output$download_samplessamplesheat <- downloadHandler(filename=function(){
+      input$filename_samplessamplesheat
+    },
+    content = function(file){
+      pdf(file)
+
+      if (!is.null(input$color_by)){
+        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        # expgroups <- interaction(expgroups)
+        rownames(expgroups) <- colnames(values$myrlt)
+        colnames(expgroups) <- input$color_by
+
+        pheatmap(as.matrix(dist(t(assay(values$myrlt)))),annotation_col = expgroups)
+      } else {
+        pheatmap(as.matrix(dist(t(assay(values$myrlt)))))
+      }
+
+      dev.off()
+    })
+
+
+
+    output$download_readsbarplot <- downloadHandler(
+      filename = function() { input$filename_readsbarplot },
+      content = function(file) {
+        ggsave(file, exportPlots$reads_barplot, width = input$export_width, height = input$export_height, units = "cm")
+      })
+
     output$download_samplesPca <- downloadHandler(
       filename = function() { input$filename_samplesPca },
       content = function(file) {
@@ -2330,6 +2396,38 @@ pcaExplorer <- function(dds=NULL,
         ggsave(file, exportPlots$samplesScree, width = input$export_width, height = input$export_height, units = "cm")
       })
 
+    output$download_samplesPcazoom <- downloadHandler(
+      filename = function() { input$filename_samplesPcazoom },
+      content = function(file) {
+        ggsave(file, exportPlots$samplesZoom, width = input$export_width, height = input$export_height, units = "cm")
+      })
+
+    output$download_samplesPca_hiload <- downloadHandler(filename=function(){
+      input$filename_samplesPca_hiload
+    },
+    content = function(file){
+      pdf(file)
+
+      rv <- rowVars(assay(values$myrlt))
+      select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
+      pca <- prcomp(t(assay(values$myrlt)[select, ]))
+
+      par(mfrow=c(2,1))
+      hi_loadings(pca,whichpc = as.integer(input$pc_x),topN = input$ntophiload,annotation = values$myannotation)
+      hi_loadings(pca,whichpc = as.integer(input$pc_y),topN = input$ntophiload,annotation = values$myannotation)
+
+      dev.off()
+    })
+
+    output$download_samplesPca_sampleout <- downloadHandler(
+      filename = function() { input$filename_samplesPca_sampleout },
+      content = function(file) {
+        ggsave(file, exportPlots$samplesOutlier, width = input$export_width, height = input$export_height, units = "cm")
+      })
+
+
+
+
     output$download_genesPca <- downloadHandler(
       filename = function() { input$filename_genesPca },
       content = function(file) {
@@ -2341,6 +2439,29 @@ pcaExplorer <- function(dds=NULL,
       content = function(file) {
         ggsave(file, exportPlots$genesZoom, width = input$export_width, height = input$export_height, units = "cm")
       })
+
+
+    output$download_genesPca_profile <- downloadHandler(
+      filename=function(){
+        input$filename_genesPca_profile
+      },
+      content = function(file){
+        pdf(file)
+        geneprofiler(values$myrlt,
+                     genelist = curData_brush()$ids,
+                     intgroup = input$color_by,
+                     plotZ = input$zprofile)
+        dev.off()
+      })
+
+    output$download_genesPca_countsplot <- downloadHandler(
+      filename = function() { input$filename_genesPca_countsplot },
+      content = function(file) {
+        ggsave(file, exportPlots$genesBoxplot, width = input$export_width, height = input$export_height, units = "cm")
+      })
+
+
+
 
     output$download_genesHeatmap <- downloadHandler(
       filename=function(){
@@ -2356,6 +2477,14 @@ pcaExplorer <- function(dds=NULL,
         aheatmap(toplot,Colv = as.logical(input$heatmap_colv))
         dev.off()
       })
+
+
+    output$download_genefinder_countsplot <- downloadHandler(
+      filename = function() { input$filename_genefinder_countsplot },
+      content = function(file) {
+        ggsave(file, exportPlots$genefinder_countsplot, width = input$export_width, height = input$export_height, units = "cm")
+      })
+
 
 
 
