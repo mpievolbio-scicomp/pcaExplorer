@@ -379,12 +379,16 @@ in the University Medical Center of the Johannes Gutenberg University Mainz.
 
 ## Developers
 
+`pcaExplorer` is currently maintained by Federico Marini at the IMBEI (www.imbei.uni-mainz.de).
+You can contact him by clicking on the button below.
+
 <a href="mailto:mailto:marinif@uni-mainz.de" class="btn btn-primary">Federico Marini</a>
 
 ## Code
 
-All code for `pcaExplorer` is available on 
-<a href="https://github.com/federicomarini/pcaExplorer" target="_blank">GitHub</a>.
+`pcaExplorer` is a part of the Bioconductor project (www.bioconductor.org).
+All code for `pcaExplorer`, especially for the development version, is available
+on <a href="https://github.com/federicomarini/pcaExplorer" target="_blank">GitHub</a>.
 
 
 
@@ -392,5 +396,31 @@ All code for `pcaExplorer` is available on
 
 ```{r}
 sessionInfo()
+```
+
+
+```{r}
+library(shiny)
+footertemplate <- function(){
+  tags$div(
+    class = "footer",
+    style = "text-align:center",
+    tags$div(
+      class = "foot-inner",
+      list(
+        hr(),
+        "This report was generated with", tags$a(href="http://bioconductor.org/packages/pcaExplorer/", "pcaExplorer"), br(),
+        "pcaExplorer is a project developed by Federico Marini in the Bioinformatics division of the ",
+        tags$a(href="http://www.unimedizin-mainz.de/imbei","IMBEI"),br(),
+        "Development of the pcaExplorer package is on ",
+        tags$a(href="https://github.com/federicomarini/pcaExplorer", "GitHub")
+      )
+    )
+  )
+}
+```
+
+```{r}
+footertemplate()
 ```
 

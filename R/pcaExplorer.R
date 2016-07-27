@@ -1081,7 +1081,7 @@ pcaExplorer <- function(dds=NULL,
 
     output$download_genefinder_countstable <- downloadHandler(
       filename = function() {
-        paste0(input$countstable_unit,"table.csv")
+        paste0("genefinder_pcaE_","table.csv")
       },
       content = function(file) {
 
