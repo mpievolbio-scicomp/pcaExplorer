@@ -1787,7 +1787,7 @@ pcaExplorer <- function(dds=NULL,
           geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
           scale_fill_discrete(name="Experimental\nconditions")
         if(input$addsamplelabels){
-          res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
+          res <- res + geom_text(aes_string(label="sampleID"),hjust=-.1,vjust=0)
         }
         exportPlots$genefinder_countsplot <- res
         res
@@ -1806,7 +1806,7 @@ pcaExplorer <- function(dds=NULL,
           geom_jitter(aes_string(x="plotby",y="count"),alpha = 0.8,position = position_jitter(width = 0.1)) +
           scale_fill_discrete(name="Experimental\nconditions") + scale_color_discrete(guide="none")
         if(input$addsamplelabels){
-          res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
+          res <- res + geom_text(aes_string(label="sampleID"),hjust=-.1,vjust=0)
         }
         exportPlots$genefinder_countsplot <- res
         res
