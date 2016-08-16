@@ -92,7 +92,7 @@ citation("pcaExplorer")
 
 ## Launching the application
 
-The `pcaExplorer` app can be launched in different modes:
+After loading the package, the `pcaExplorer` app can be launched in different modes:
 
 - `pcaExplorer(dds = dds, rlt = rlt)`, where `dds` is a `DESeqDataSet` object and `rlt` is a `DESeqTransform`
 object, which were created during an existing session for the analysis of an RNA-seq
@@ -135,30 +135,27 @@ annotation information, respectively from `biomaRt` or via the `org.XX.eg.db` pa
 Most of the input controls are located in the sidebar, some are as well in the individual tabs of the app.
 By changing one or more of the input parameters, the user can get a fine control on what is displayed.
 
-### Data upload
-
-These file input controls are available when no `dds` or `countmatrix` + `coldata` are provided. Additionally,
-it is possible to upload the `annotation` data frame.
 
 ### App settings
 
 Here are the parameters that set input values for most of the tabs. By hovering over with the mouse,
 the user can receive additional information on how to set the parameter, powered by the `shinyBS` package.
 
-- x-axis PC - Select the principal component to display on the x axis
-- y-axis PC - Select the principal component to display on the y axis
-- Group/color by - Select the group of samples to stratify the analysis. Can also assume multiple values.
-- Nr of (most variant) genes - Number of genes to select for computing the principal components. The top n genes are
+- **x-axis PC** - Select the principal component to display on the x axis
+- **y-axis PC** - Select the principal component to display on the y axis
+- **Group/color by** - Select the group of samples to stratify the analysis. Can also assume multiple values.
+- **Nr of (most variant) genes** - Number of genes to select for computing the principal components. The top n genes are
 selected ranked by their variance inter-samples
-- Alpha - Color transparency for the plots. Can assume values from 0 (transparent) to 1 (opaque)
-- Labels size - Size of the labels for the samples in the principal components plots
-- Points size - Size of the points to be plotted in the principal components plots
-- Variable name size - Size of the labels for the genes PCA - correspond to the samples names
-- Scaling factor - Scale value for resizing the arrow corresponding to the variables in the PCA for the genes. It
+- **Alpha** - Color transparency for the plots. Can assume values from 0 (transparent) to 1 (opaque)
+- **Labels size** - Size of the labels for the samples in the principal components plots
+- **Points size** - Size of the points to be plotted in the principal components plots
+- **Variable name size** - Size of the labels for the genes PCA - correspond to the samples names
+- **Scaling factor** - Scale value for resizing the arrow corresponding to the variables in the PCA for the genes. It
 should be used for mere visualization purposes
-- Color palette - Select the color palette to be used in the principal components plots. The number of colors 
+- **Color palette** - Select the color palette to be used in the principal components plots. The number of colors 
 is selected automatically according to the number of samples and to the levels of the factors of interest
 and their interactions
+- **Plot style for gene counts** - Plot either boxplots or violin plots, with jittered points superimposed 
 
 ### Plot export settings        
 
@@ -180,40 +177,60 @@ recent developments in the `shiny` package/framework.
 
 The available panels are the described in the following subsections.
 
-### About
 
-Contains general information on `pcaExplorer`.
+### Data Upload
+
+These **file input** controls are available when no `dds` or `countmatrix` + `coldata` are provided. Additionally,
+it is possible to upload the `annotation` data frame.
+
+When the objects are already passed as parameters, a brief overview/summary for them is displayed.
+
+
 
 ### Instructions
 
-This is where you most likely are reading this text (otherwise in the package vignette).
+This is where you most likely are reading this text (otherwise in the package vignette). 
 
-### Data Preview
+### Counts Table
+
+Interactive tables for the raw, normalized or (r)log-transformed counts are shown in this tab.
+The user can also generate a sample-to-sample correlation scatter plot with the selected data.
+
+### Data Overview
 
 This panel displays information on the objects in use, either passed as parameters or 
-generated from the count matrix provided. It also displays its metadata in an interactive
-table, along with an overview of the number of reads assigned to features (in the typical
-use case, genes) for each sample in form of a barplot and summary statistics.
+generated from the count matrix provided. Displayed information comprise the design metadata,
+a sample to sample distance heatmap, the number of million of reads per sample and some
+basic summary for the counts.
 
 
 ### Samples View
 
 This panel displays the PCA projections of sample expression profiles onto any pair of components,
-a scree plot, a zoomed PCA plot, a plot of the genes with top and bottom loadings, and a PCA plot where
-it is possible to remove samples deemed to be outliers in the analysis.
+a scree plot, a zoomed PCA plot, a plot of the genes with top and bottom loadings. Additionally, this section 
+presents a PCA plot where it is possible to remove samples deemed to be outliers in the analysis, which is 
+very useful to check the effect of excluding them. If needed, an interactive 3D visualization of the principal 
+components is also available.
+
 
 ### Genes View
 
 This panel displays the PCA projections of genes abundances onto any pair of components, with samples
 as biplot variables, to identify interesting groups of genes. Zooming is also possible, and clicking on single
 genes, a boxplot is returned, grouped by the factors of interest. A static and an interactive heatmap are 
-provided, including the subset of selected genes. These are also reported in `datatable` objects.
+provided, including the subset of selected genes, also displayed as (standardized) expression profiles across the 
+samples. These are also reported in `datatable` objects, accessible in the bottom part of the tab.
+
 
 ### GeneFinder
 
 The user can search and display the expression values of a gene of interest, either by ID or gene
 name, as provided in the `annotation`. A handy panel for quick screening of shortlisted genes, again grouped by
-the factors of interest.
+the factors of interest. The graphic can be readily exported as it is, and this can be iterated on a shortlisted
+set of genes. For each of them, the underlying data is displayed in an interactive table, also exportable with a 
+click.
+
+
 ### PCA2GO
 
 This panel shows the functional annotation of the principal components, with GO functions enriched in the 
@@ -240,7 +257,30 @@ according to their behavior on the Principal Components subspaces. Zooming and e
 allowed by brushing on the main plot.
 
 
-## `pcaExplorer` on published datasets
+### Report Editor
+
+The report editor is the backbone for generating and editing the interactive report on the basis of the 
+uploaded data and the current state of the application. General `Markdown options` and `Editor options`
+are available, and the text editor, based on the `shinyAce` package, contains a comprehensive template 
+report, that can be edited to the best convenience of the user.
+
+The editor supports R code autocompletion, making it easy to add new code chunks for additional sections.
+A preview is available in the tab itself, and the report can be generated, saved and subsequently shared 
+with simple mouse clicks.
+
+
+### About
+
+Contains general information on `pcaExplorer`, including the developer's contact, the link to
+the development version in Github, as well as the output of `sessionInfo`, to use for reproducibility sake - 
+or bug reporting. Information for citing `pcaExplorer` is also reported.
+
+
+
+
+
+
+## Running `pcaExplorer` on published datasets
 
 We can run `pcaExplorer` for demonstration purpose on published datasets that are available as SummarizedExperiment
 in an experiment Bioconductor packages.
@@ -279,16 +319,31 @@ annotation_airway <- data.frame(gene_name = genenames_airway,
                                 row.names = rownames(dds_airway),
                                 stringsAsFactors = FALSE)
 head(annotation_airway)                                
-# launch the app now with the annotation
+```
+
+or alternatively, by using the `get_annotation` or `get_annotation_orgdb` wrappers.
+
+```
+anno_df_orgdb <- get_annotation_orgdb(dds = dds_airway,
+                                      orgdb_species = "org.Hs.eg.db",
+                                      idtype = "ENSEMBL")
+
+anno_df_biomart <- get_annotation(dds = dds_airway,
+                                  biomart_dataset = "hsapiens_gene_ensembl",
+                                  idtype = "ensembl_gene_id")
+```
+
+Then again, the app can be launched with 
+
+```
 pcaExplorer(dds = dds_airway,
             rlt = rld_airway,
             annotation = annotation_airway)
-
 ```
 
 If desired, alternatives can be used. See the well written annotation workflow available at the Bioconductor site (https://bioconductor.org/help/workflows/annotation/annotation/).
 
-## `pcaExplorer` on synthetic datasets
+## Running `pcaExplorer` on synthetic datasets
 
 For testing and demonstration purposes, a function is also available to generate synthetic datasets whose counts
 are generated based on two or more experimental factors.
@@ -311,7 +366,11 @@ rld_multifac <- rlogTransformation(dds_multifac)
 rld_multifac
 ## checking how the samples cluster on the PCA plot
 pcaplot(rld_multifac,intgroup = c("condition","tissue"))
-## launching the app
+```
+
+Launch the app for exploring this dataset with 
+
+```
 pcaExplorer(dds = dds_multifac,
             rlt = rld_multifac)
 ```
@@ -327,6 +386,7 @@ but please refer to the documentation for additional details.
 
 - `pcaplot` plots the sample PCA for `DESeqTransform` objects, such as rlog-transformed data. This is 
 the workhorse of the Samples View tab
+- `pcaplot3d` - same as for `pcaplot`, but it uses the `threejs` package for the 3d interactive view.
 - `pcascree` produces a scree plot of the PC computed on the samples. A `prcomp` object needs to be 
 passed as main argument
 - `correlatePCs` and `plotPCcorrs` respectively compute and plot significance of the (cor)relation 
@@ -344,6 +404,27 @@ implementation based on the `limma::goana` function.
 - `makeExampleDESeqDataSet_multifac` constructs a simulated `DESeqDataSet` of Negative Binomial dataset
 from different conditions. The fold changes between the conditions can be adjusted with the `betaSD_condition`
 `betaSD_tissue` arguments
+- `distro_expr` plots the distribution of expression values, either with density lines, boxplots or 
+violin plots
+- `geneprofiler` plots the profile expression of a subset of genes, optionally as standardized values
+- `get_annotation` and `get_annotation_orgdb` retrieve the latest annotations for the `dds` object, to be
+used in the call to the `pcaExplorer` function. They use respectively the `biomaRt` package
+and the `org.XX.eg.db` packages
+- `pair_corr` plots the pairwise scatter plots and computes the correlation coefficient on the 
+expression matrix provided.
+
+For more information on the functions of the `pcaExplorer` package, please refer to the
+vignette and/or the documentation.
+
+## Further development
+
+Additional functionality for the `pcaExplorer` will be added in the future, as it is tightly related to a topic
+under current development research. 
+
+Improvements, suggestions, bugs, issues and feedback of any type can be sent to marinif@uni-mainz.de.
+
+
+
 
 
 

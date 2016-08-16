@@ -317,7 +317,9 @@ or bug reporting. Information for citing `r Biocpkg("pcaExplorer")` is also repo
 
 
 
-# `pcaExplorer` on published datasets
+
+
+# Running `pcaExplorer` on published datasets
 
 We can run `r Biocpkg("pcaExplorer")` for demonstration purpose on published datasets that are available as SummarizedExperiment
 in an experiment Bioconductor packages.
@@ -392,7 +394,7 @@ pcaExplorer(dds = dds_airway,
 
 If desired, alternatives can be used. See the well written annotation workflow available at the Bioconductor site (https://bioconductor.org/help/workflows/annotation/annotation/).
 
-# `pcaExplorer` on synthetic datasets
+# Running `pcaExplorer` on synthetic datasets
 
 For testing and demonstration purposes, a function is also available to generate synthetic datasets whose counts
 are generated based on two or more experimental factors.
