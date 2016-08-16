@@ -10,7 +10,8 @@ abstract: >
   `r Biocpkg("pcaExplorer")` provides functionality for interactive visualization of RNA-seq datasets
   based on Principal Components Analysis. Such methods allow for quick information 
   extraction and effective data exploration. A Shiny application encapsulates the whole analysis, and
-  is developed to become a practical companion for any RNA-seq dataset.
+  is developed to become a practical companion for any RNA-seq dataset. This app supports reproducible
+  research with state saving and automated report generation. 
 output: 
   BiocStyle::html_document:
     fig_caption: TRUE
@@ -19,7 +20,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
   %\VignettePackage{pcaExplorer}
-  %\VignetteKeywords{Visualization, RNASeq, DimensionReduction, PrincipalComponent, QualityControl, GUI}
+  %\VignetteKeywords{Visualization, RNASeq, DimensionReduction, PrincipalComponent, QualityControl, GUI, ReportWriting}
 ---
 
 <br>
@@ -50,6 +51,15 @@ source("http://bioconductor.org/biocLite.R")
 biocLite("pcaExplorer")
 ```
 
+If you prefer, you can install and use the development version, which can be retrieved via Github (https://github.com/federicomarini/pcaExplorer). To do so, use
+
+```{r installation-github, eval=FALSE}
+library("devtools")
+install_github("federicomarini/pcaExplorer")
+```
+
+
+
 Once `r Rpackage("pcaExplorer")` is installed, it can be loaded by the following command.
 
 ```{r loadlibrary, message=FALSE}
@@ -78,16 +88,30 @@ companion to any RNA-seq dataset analysis, making exploratory data analysis
 accessible also to the bench biologist, while providing additional insight also
 for the experienced data analyst.
 
+Starting from development version 1.1.3, `r Biocpkg("pcaExplorer")` supports reproducible 
+research with state saving and automated report generation. Each generated plot and table 
+can be exported by simple mouse clicks on the dedicated buttons.
+
+## Citation info
+
+If you use `r Biocpkg("pcaExplorer")` for your analysis, please cite it as here below:
+
+```{r}
+citation("pcaExplorer")
+```
+
+
+
 
 # Launching the application
 
 After loading the package, the `r Biocpkg("pcaExplorer")` app can be launched in different modes:
 
-- `pcaExplorer(dds = dds, rld = rld)`, where `dds` is a `DESeqDataSet` object and `rld` is a `DESeqTransform`
+- `pcaExplorer(dds = dds, rlt = rlt)`, where `dds` is a `DESeqDataSet` object and `rlt` is a `DESeqTransform`
 object, which were created during an existing session for the analysis of an RNA-seq
 dataset with the `r Biocpkg("DESeq2")` package
 
-- `pcaExplorer(dds = dds)`, where `dds` is a `DESeqDataSet` object. The `rld` object is automatically 
+- `pcaExplorer(dds = dds)`, where `dds` is a `DESeqDataSet` object. The `rlt` object is automatically 
 computed upon launch.
 
 - `pcaExplorer(countmatrix = countmatrix, coldata = coldata)`, where `countmatrix` is a count matrix, generated
@@ -112,7 +136,9 @@ exploiting the `goana` function, provided by the `r Biocpkg("limma")` package. A
 row names of the count matrix or `dds` object, and an extra column `gene_name`, containing e.g. HGNC-based 
 gene symbols. This can be used for making information extraction easier, as ENSEMBL ids (a usual choice when
 assigning reads to features) do not provide an immediate readout for which gene they refer to. This can be
-either passed as a parameter when launching the app, or also uploaded as a tab separated text file.
+either passed as a parameter when launching the app, or also uploaded as a tab separated text file. The package
+provides two functions, `get_annotation` and `get_annotation_orgdb`, as a convenient wrapper to obtain the updated
+annotation information, respectively from `biomaRt` or via the `org.XX.eg.db` packages.
 
 
 
@@ -123,10 +149,6 @@ either passed as a parameter when launching the app, or also uploaded as a tab s
 Most of the input controls are located in the sidebar, some are as well in the individual tabs of the app.
 By changing one or more of the input parameters, the user can get a fine control on what is displayed.
 
-## Data upload
-
-These **file input** controls are available when no `dds` or `countmatrix` + `coldata` are provided. Additionally,
-it is possible to upload the `annotation` data frame.
 
 ## App settings
 
@@ -147,6 +169,7 @@ should be used for mere visualization purposes
 - **Color palette** - Select the color palette to be used in the principal components plots. The number of colors 
 is selected automatically according to the number of samples and to the levels of the factors of interest
 and their interactions
+- **Plot style for gene counts** - Plot either boxplots or violin plots, with jittered points superimposed 
 
 ## Plot export settings        
 
@@ -154,6 +177,7 @@ and their interactions
 
 Additional controls available in the single tabs are also assisted by tooltips that show on hovering the mouse.
 Normally they are tightly related to the plot/output they are placed nearby.
+
 
 
            
@@ -168,24 +192,33 @@ recent developments in the `r CRANpkg("shiny")` package/framework.
 
 The available panels are the described in the following subsections.
 
-## About
 
-Contains general information on `r Biocpkg("pcaExplorer")`, including the developer's contact, the link to
-the development version in Github, as well as the output of `sessionInfo`, to use for reproducibility sake - 
-or bug reporting.
+
+## Data Upload
+
+These **file input** controls are available when no `dds` or `countmatrix` + `coldata` are provided. Additionally,
+it is possible to upload the `annotation` data frame.
+
+When the objects are already passed as parameters, a brief overview/summary for them is displayed.
+
 
 
 ## Instructions
 
 This is where you most likely are reading this text (otherwise in the package vignette). 
 
+## Counts Table
 
-## Data Preview
+Interactive tables for the raw, normalized or (r)log-transformed counts are shown in this tab.
+The user can also generate a sample-to-sample correlation scatter plot with the selected data.
+
+## Data Overview
 
 This panel displays information on the objects in use, either passed as parameters or 
-generated from the count matrix provided. It also displays its metadata in an interactive
-table, along with an overview of the number of reads assigned to features (in the typical
-use case, genes) for each sample in form of a barplot and summary statistics.
+generated from the count matrix provided. Displayed information comprise the design metadata,
+a sample to sample distance heatmap, the number of million of reads per sample and some
+basic summary for the counts.
+
 
 <p align="center">
 <img src="snap_datapreview.png" style="width:800px;"/>
@@ -196,7 +229,8 @@ use case, genes) for each sample in form of a barplot and summary statistics.
 This panel displays the PCA projections of sample expression profiles onto any pair of components,
 a scree plot, a zoomed PCA plot, a plot of the genes with top and bottom loadings. Additionally, this section 
 presents a PCA plot where it is possible to remove samples deemed to be outliers in the analysis, which is 
-very useful to check the effect of excluding them.
+very useful to check the effect of excluding them. If needed, an interactive 3D visualization of the principal 
+components is also available.
 
 <p align="center">
 <img src="snap_pcasamples.png" style="width:800px;"/>
@@ -208,7 +242,8 @@ very useful to check the effect of excluding them.
 This panel displays the PCA projections of genes abundances onto any pair of components, with samples
 as biplot variables, to identify interesting groups of genes. Zooming is also possible, and clicking on single
 genes, a boxplot is returned, grouped by the factors of interest. A static and an interactive heatmap are 
-provided, including the subset of selected genes. These are also reported in `datatable` objects.
+provided, including the subset of selected genes, also displayed as (standardized) expression profiles across the 
+samples. These are also reported in `datatable` objects, accessible in the bottom part of the tab.
 
 <p align="center">
 <img src="snap_pcagenes.png" style="width:800px;"/>
@@ -219,7 +254,9 @@ provided, including the subset of selected genes. These are also reported in `da
 
 The user can search and display the expression values of a gene of interest, either by ID or gene
 name, as provided in the `annotation`. A handy panel for quick screening of shortlisted genes, again grouped by
-the factors of interest. The graphic can be readily exported as it is.
+the factors of interest. The graphic can be readily exported as it is, and this can be iterated on a shortlisted
+set of genes. For each of them, the underlying data is displayed in an interactive table, also exportable with a 
+click.
 
 <p align="center">
 <img src="snap_genefinder.png" style="width:800px;"/>
@@ -257,6 +294,27 @@ allowed by brushing on the main plot.
 <p align="center">
 <img src="snap_multifac.png" style="width:800px;"/>
 </p>
+
+
+## Report Editor
+
+The report editor is the backbone for generating and editing the interactive report on the basis of the 
+uploaded data and the current state of the application. General `Markdown options` and `Editor options`
+are available, and the text editor, based on the `shinyAce` package, contains a comprehensive template 
+report, that can be edited to the best convenience of the user.
+
+The editor supports R code autocompletion, making it easy to add new code chunks for additional sections.
+A preview is available in the tab itself, and the report can be generated, saved and subsequently shared 
+with simple mouse clicks.
+
+
+## About
+
+Contains general information on `r Biocpkg("pcaExplorer")`, including the developer's contact, the link to
+the development version in Github, as well as the output of `sessionInfo`, to use for reproducibility sake - 
+or bug reporting. Information for citing `r Biocpkg("pcaExplorer")` is also reported.
+
+
 
 
 # `pcaExplorer` on published datasets
@@ -308,6 +366,21 @@ annotation_airway <- data.frame(gene_name = genenames_airway,
                                 stringsAsFactors = FALSE)
 head(annotation_airway)                                
 ```
+
+or alternatively, by using the `get_annotation` or `get_annotation_orgdb` wrappers.
+
+```{r annofuncs, eval=FALSE}
+
+anno_df_orgdb <- get_annotation_orgdb(dds = dds_airway,
+                                      orgdb_species = "org.Hs.eg.db",
+                                      idtype = "ENSEMBL")
+
+anno_df_biomart <- get_annotation(dds = dds_airway,
+                                  biomart_dataset = "hsapiens_gene_ensembl",
+                                  idtype = "ensembl_gene_id")
+
+```
+
 
 Then again, the app can be launched with 
 
@@ -361,6 +434,8 @@ provided the required objects are in the working environment. They are listed he
 but please refer to the documentation for additional details. Where possible, for each function a code 
 snippet will be provided for its typical usage.
 
+
+
 ## `pcaplot`
 
 `pcaplot` plots the sample PCA for `DESeqTransform` objects, such as rlog-transformed data. This is 
@@ -372,8 +447,19 @@ pcaplot(rld_airway,intgroup = c("cell","dex"),ntop = 1000,
 
 # on a different set of principal components...
 pcaplot(rld_airway,intgroup = c("dex"),ntop = 1000,
-        pcX = 3, pcY = 4, title = "airway dataset PCA on samples - PC3 vs PC4")
+        pcX = 3, pcY = 4, title = "airway dataset PCA on samples - PC3 vs PC4",
+        ellipse = TRUE)
 
+```
+
+
+## `pcaplot3d`
+
+Same as for `pcaplot`, but it uses the `threejs` package for the 3d interactive view.
+
+```{r func-pcaplot3d, eval=FALSE}
+pcaplot3d(rld_airway,intgroup = c("cell","dex"),ntop = 1000,
+        pcX = 1, pcY = 2, pcZ = 3)
 ```
 
 
@@ -539,6 +625,59 @@ pcaplot(rld_simu,intgroup = c("condition","tissue")) +
 pcaplot(rld2_simu,intgroup = c("condition","tissue")) + 
   ggplot2::ggtitle("Simulated data - Small condition effect, bigger tissue effect")
 ```
+
+
+## `distro_expr`
+
+Plots the distribution of expression values, either with density lines, boxplots or 
+violin plots.
+
+```{r eval=FALSE}
+distro_expr(rld_airway,plot_type = "density")
+distro_expr(rld_airway,plot_type = "boxplot")
+```
+
+
+## `geneprofiler` 
+
+Plots the profile expression of a subset of genes, optionally as standardized values
+
+```{r}
+dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+rlt <- DESeq2::rlogTransformation(dds)
+set.seed(42)
+geneprofiler(rlt,paste0("gene",sample(1:1000,20)), plotZ = FALSE)
+```
+
+
+## `get_annotation` and `get_annotation_orgdb`
+
+These two wrapper functions retrieve the latest annotations for the `dds` object, to be
+used in the call to the `pcaExplorer` function. They use respectively the `biomaRt` package
+and the `org.XX.eg.db` packages.
+
+```{r eval=FALSE}
+anno_df_biomart <- get_annotation(dds = dds_airway,
+                                  biomart_dataset = "hsapiens_gene_ensembl",
+                                  idtype = "ensembl_gene_id")
+
+anno_df_orgdb <- get_annotation_orgdb(dds = dds_airway,
+                                      orgdb_species = "org.Hs.eg.db",
+                                      idtype = "ENSEMBL")
+```
+
+
+## `pair_corr`
+
+Plots the pairwise scatter plots and computes the correlation coefficient on the 
+expression matrix provided.
+
+```{r}
+# use a subset of the counts to reduce plotting time, it can be time consuming with many samples
+pair_corr(counts(dds_airway)[1:100,])
+```
+
+
 
 
 # Further development

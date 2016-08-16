@@ -1,4 +1,36 @@
-This information is also contained in the `pcaExplorer` package vignette.
+*This information is also contained in the `pcaExplorer` package vignette. For more
+information on the functions of the `pcaExplorer` package, please refer to the
+vignette and/or the documentation.*
+
+
+## Getting started
+
+`pcaExplorer` is an R package distributed as part of the [Bioconductor](http://bioconductor.org)
+project. To install the package, start R and enter:
+
+```r
+source("http://bioconductor.org/biocLite.R")
+biocLite("pcaExplorer")
+```
+
+If you prefer, you can install and use the development version, which can be 
+retrieved via Github (https://github.com/federicomarini/pcaExplorer). To do so, use
+
+```r
+library("devtools")
+install_github("federicomarini/pcaExplorer")
+```
+
+
+
+Once `pcaExplorer` is installed, it can be loaded by the following command.
+
+```r
+library("pcaExplorer")
+```
+
+
+
 
 ## Introduction
 
@@ -21,16 +53,52 @@ companion to any RNA-seq dataset analysis, making exploratory data analysis
 accessible also to the bench biologist, while providing additional insight also
 for the experienced data analyst.
 
+Starting from development version 1.1.3, `pcaExplorer` supports reproducible 
+research with state saving and automated report generation. 
+
+
+
+
+
+## Citation info
+
+If you use `pcaExplorer` for your analysis, please cite it as here below:
+
+
+```r
+citation("pcaExplorer")
+```
+
+```
+## 
+## To cite package 'pcaExplorer' in publications use:
+## 
+##   Federico Marini (2016). pcaExplorer: Interactive Visualization
+##   of RNA-seq Data Using a Principal Components Approach. R package
+##   version 1.1.3. https://github.com/federicomarini/pcaExplorer
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Manual{,
+##     title = {pcaExplorer: Interactive Visualization of RNA-seq Data Using a Principal Components Approach},
+##     author = {Federico Marini},
+##     year = {2016},
+##     note = {R package version 1.1.3},
+##     url = {https://github.com/federicomarini/pcaExplorer},
+##   }
+```
+
+
 
 ## Launching the application
 
 The `pcaExplorer` app can be launched in different modes:
 
-- `pcaExplorer(dds = dds, rld = rld)`, where `dds` is a `DESeqDataSet` object and `rld` is a `DESeqTransform`
+- `pcaExplorer(dds = dds, rlt = rlt)`, where `dds` is a `DESeqDataSet` object and `rlt` is a `DESeqTransform`
 object, which were created during an existing session for the analysis of an RNA-seq
 dataset with the `DESeq2` package
 
-- `pcaExplorer(dds = dds)`, where `dds` is a `DESeqDataSet` object. The `rld` object is automatically 
+- `pcaExplorer(dds = dds)`, where `dds` is a `DESeqDataSet` object. The `rlt` object is automatically 
 computed upon launch.
 
 - `pcaExplorer(countmatrix = countmatrix, coldata = coldata)`, where `countmatrix` is a count matrix, generated
@@ -55,7 +123,10 @@ exploiting the `goana` function, provided by the `limma` package. Although this 
 row names of the count matrix or `dds` object, and an extra column `gene_name`, containing e.g. HGNC-based 
 gene symbols. This can be used for making information extraction easier, as ENSEMBL ids (a usual choice when
 assigning reads to features) do not provide an immediate readout for which gene they refer to. This can be
-either passed as a parameter when launching the app, or also uploaded as a tab separated text file.
+either passed as a parameter when launching the app, or also uploaded as a tab separated text file. The package
+provides two functions, `get_annotation` and `get_annotation_orgdb`, as a convenient wrapper to obtain the updated
+annotation information, respectively from `biomaRt` or via the `org.XX.eg.db` packages.
+
 
 
 

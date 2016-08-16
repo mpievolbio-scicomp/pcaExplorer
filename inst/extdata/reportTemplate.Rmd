@@ -387,6 +387,18 @@ on <a href="https://github.com/federicomarini/pcaExplorer" target="_blank">GitHu
 
 
 
+# Citation info
+
+If you use `pcaExplorer` for your analysis, please cite it as here below:
+
+```{r}
+citation("pcaExplorer")
+```
+
+
+
+
+
 # Session Information
 
 ```{r}
