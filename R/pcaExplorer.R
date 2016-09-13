@@ -821,6 +821,7 @@ pcaExplorer <- function(dds=NULL,
         return(NULL)
       cm <- utils::read.delim(input$uploadcmfile$datapath, header = TRUE,
                               as.is = TRUE, sep = "\t", quote = "",
+                              row.names = 1, # https://github.com/federicomarini/pcaExplorer/issues/1
                               ## TODO: tell the user to use tsv, or use heuristics
                               ## to check what is most frequently occurring separation character? -> see sepGuesser.R
                               check.names = FALSE)
