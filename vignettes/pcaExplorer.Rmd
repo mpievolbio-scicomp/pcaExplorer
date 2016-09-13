@@ -213,16 +213,28 @@ it is possible to upload the `annotation` data frame.
 
 When the objects are already passed as parameters, a brief overview/summary for them is displayed.
 
-
+<p align="center">
+<img src="newsnap_01_upload.png" style="width:800px;"/>
+</p>
 
 ## Instructions
 
 This is where you most likely are reading this text (otherwise in the package vignette). 
 
+<p align="center">
+<img src="newsnap_02_instructions.png" style="width:800px;"/>
+</p>
+
+
 ## Counts Table
 
 Interactive tables for the raw, normalized or (r)log-transformed counts are shown in this tab.
 The user can also generate a sample-to-sample correlation scatter plot with the selected data.
+
+<p align="center">
+<img src="newsnap_03_countstable.png" style="width:800px;"/>
+</p>
+
 
 ## Data Overview
 
@@ -233,7 +245,7 @@ basic summary for the counts.
 
 
 <p align="center">
-<img src="snap_datapreview.png" style="width:800px;"/>
+<img src="newsnap_04_overview.png" style="width:800px;"/>
 </p>
 
 ## Samples View
@@ -245,7 +257,7 @@ very useful to check the effect of excluding them. If needed, an interactive 3D 
 components is also available.
 
 <p align="center">
-<img src="snap_pcasamples.png" style="width:800px;"/>
+<img src="newsnap_05_samples.png" style="width:800px;"/>
 </p>
 
 
@@ -258,7 +270,7 @@ provided, including the subset of selected genes, also displayed as (standardize
 samples. These are also reported in `datatable` objects, accessible in the bottom part of the tab.
 
 <p align="center">
-<img src="snap_pcagenes.png" style="width:800px;"/>
+<img src="newsnap_06_genes.png" style="width:800px;"/>
 </p>
 
 
@@ -271,7 +283,7 @@ set of genes. For each of them, the underlying data is displayed in an interacti
 click.
 
 <p align="center">
-<img src="snap_genefinder.png" style="width:800px;"/>
+<img src="newsnap_07_finder.png" style="width:800px;"/>
 </p>
 
 ## PCA2GO
@@ -282,7 +294,7 @@ that can otherwise provided as a parameter when launching the app. The panel dis
 samples, surrounded on each side by the tables with the functions enriched in each component and direction.
 
 <p align="center">
-<img src="snap_pca2go.png" style="width:800px;"/>
+<img src="newsnap_08_pca2go.png" style="width:800px;"/>
 </p>
 
 ## Multifactor Exploration
@@ -304,7 +316,7 @@ according to their behavior on the Principal Components subspaces. Zooming and e
 allowed by brushing on the main plot.
 
 <p align="center">
-<img src="snap_multifac.png" style="width:800px;"/>
+<img src="newsnap_09_multifac.png" style="width:800px;"/>
 </p>
 
 
@@ -319,12 +331,20 @@ The editor supports R code autocompletion, making it easy to add new code chunks
 A preview is available in the tab itself, and the report can be generated, saved and subsequently shared 
 with simple mouse clicks.
 
+<p align="center">
+<img src="newsnap_10_editor.png" style="width:800px;"/>
+</p>
+
 
 ## About
 
 Contains general information on `r Biocpkg("pcaExplorer")`, including the developer's contact, the link to
 the development version in Github, as well as the output of `sessionInfo`, to use for reproducibility sake - 
 or bug reporting. Information for citing `r Biocpkg("pcaExplorer")` is also reported.
+
+<p align="center">
+<img src="newsnap_11_about.png" style="width:800px;"/>
+</p>
 
 
 
