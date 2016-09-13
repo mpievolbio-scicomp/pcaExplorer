@@ -140,11 +140,11 @@ pcaExplorer <- function(dds=NULL,
         ),
         menuItem("Plot export settings", icon = icon("paint-brush"),
 
-                 numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
+                 numericInput("export_width",label = "Width of exported figures (cm)",value = 10,min = 2),
                  shinyBS::bsTooltip(
                    "export_width", paste0("Width of the figures to export, expressed in cm"),
                    "right", options = list(container = "body")),
-                 numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
+                 numericInput("export_height",label = "Height of exported figures (cm)",value = 10,min = 2),
                  shinyBS::bsTooltip(
                    "export_height", paste0("Height of the figures to export, expressed in cm"),
                    "right", options = list(container = "body"))
