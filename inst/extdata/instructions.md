@@ -165,6 +165,19 @@ Additional controls available in the single tabs are also assisted by tooltips t
 Normally they are tightly related to the plot/output they are placed nearby.
 
 
+## The task menu
+
+The task menu, accessible by clicking on the cog icon in the upper right part of the application, provides two 
+functionalities:
+
+- `Exit pcaExplorer & save` will close the application and store the content of the `input` and `values` reactive 
+objects in two list objects made available in the global environment, called `pcaExplorer_inputs_YYYYMMDD_HHMMSS` and 
+`pcaExplorer_values_YYYYMMDD_HHMMSS`
+- `Save State as .RData` will similarly store `LiveInputs` and `r_data` in a binary file named
+`pcaExplorerState_YYYYMMDD_HHMMSS.Rdata`, without closing the application 
+
+
+
            
 ## The app panels
 

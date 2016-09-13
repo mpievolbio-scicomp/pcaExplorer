@@ -2334,7 +2334,7 @@ pcaExplorer <- function(dds=NULL,
       if(interactive()) {
         # flush input and values to the environment in two distinct objects (to be reused later?)
         isolate({
-          assign(paste0("pcaExplorer_inputs",
+          assign(paste0("pcaExplorer_inputs_",
                         gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time()))))),
                  reactiveValuesToList(input), envir = .GlobalEnv)
           assign(paste0("pcaExplorer_values_",
@@ -2360,7 +2360,7 @@ pcaExplorer <- function(dds=NULL,
 
     output$state_save_sc <- downloadHandler(
       filename = function() {
-        paste0("pcaExplorerState-",gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time())))),".RData")
+        paste0("pcaExplorerState_",gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time())))),".RData")
       },
       content = function(file) {
         saveState(file)
