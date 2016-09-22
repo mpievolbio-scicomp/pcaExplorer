@@ -1,3 +1,31 @@
+CHANGES IN VERSION 1.1.5
+-------------------------
+
+NEW FEATURES
+
+    o Automated report generation - template available + editor in the app tab for advance user
+    customization
+    o Support for state saving, in the global environment as well as with binary data
+    o All plots generated can be now exported with the dedicated button 
+    o Added confidence ellipse for PCA plot
+    o Added 3d pca plot
+    o Added functions to automatically retrieve the annotation in format ready to use for the app
+    o Added profile explorer function, for plotting behaviour across all samples for subset of genes
+    o Added distribution plots
+    o Added pairwise correlation plot
+    o Added table to enhance readability of the gene finder plot, also by annotating sample names
+
+BUG FIXES
+
+    o Minor typos fixed in the tabs
+    o Added option row.names to read.delim for allowing row names when uploading the data
+
+OTHER NOTES
+
+    o Added extra info in the about section
+    o Instructions and vignette rewritten to reflect new design of the app
+
+
 CHANGES IN VERSION 1.1.3
 -------------------------
 
