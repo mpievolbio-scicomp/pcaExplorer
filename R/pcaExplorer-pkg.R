@@ -28,7 +28,14 @@
 #' @import ggplot2
 #' @import ggrepel
 #' @importFrom DT datatable
-#' @importFrom grDevices dev.off pdf rainbow
+#' @import shinyAce
+#' @import threejs
+#' @import biomaRt
+#' @importFrom pheatmap pheatmap
+#' @importFrom tidyr gather
+#' @import knitr
+#' @import rmarkdown
+#' @importFrom grDevices dev.off pdf rainbow colorRamp rgb
 #' @import methods
 #'
 #' @author

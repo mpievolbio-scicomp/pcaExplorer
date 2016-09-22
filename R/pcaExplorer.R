@@ -49,11 +49,18 @@ pcaExplorer <- function(dds=NULL,
                         coldata=NULL,
                         pca2go=NULL,
                         annotation=NULL){
+
   if ( !requireNamespace('shiny',quietly = TRUE) ) {
-    stop("pca_SUPALIVE requires 'shiny'. Please install it using
+    stop("pcaExplorer requires 'shiny'. Please install it using
          install.packages('shiny')")
   }
-  # library("shinyURL")
+
+  # get modes and themes for the ace editor
+  modes <- shinyAce::getAceModes()
+  themes <- shinyAce::getAceThemes()
+
+  ## upload max 300mb files - can be changed if necessary
+  options(shiny.maxRequestSize=300*1024^2)
 
   ## ------------------------------------------------------------------ ##
   ##                          Define UI                                 ##
@@ -61,27 +68,28 @@ pcaExplorer <- function(dds=NULL,
 
   newuiui <-
     shinydashboard::dashboardPage(
+
       dashboardHeader(
-        title = paste0("pcaExplorer - Interactive exploration of Principal Components",
+        title = paste0("pcaExplorer - Interactive exploration of Principal Components ",
                        "of Samples and Genes in RNA-seq data - version ",
                        packageVersion("pcaExplorer")),
-        titleWidth = 900),
+        titleWidth = 900,
+
+        # task menu for saving state to environment or binary data
+        shinydashboard::dropdownMenu(type = "tasks",icon = icon("cog"),badgeStatus = "success",
+                                     notificationItem(
+                                       text = actionButton("exit_and_save","Exit pcaExplorer & save",
+                                                           class = "btn_no_border",
+                                                           onclick = "setTimeout(function(){window.close();}, 100); "),
+                                       icon = icon("sign-out"),status = "primary"),
+                                     menuItem(
+                                       text = downloadButton("state_save_sc","Save State as .RData"))
+        )
+      ),
 
       dashboardSidebar(
         width = 280,
-        menuItem("Data upload",icon = icon("upload"),
-                 uiOutput("upload_count_matrix"),
-                 shinyBS::bsTooltip(
-                   "upload_count_matrix", paste0("Select file containing the count matrix"),
-                   "right", options = list(container = "body")),
-                 uiOutput("upload_metadata"),
-                 shinyBS::bsTooltip(
-                   "upload_metadata", paste0("Select file containing the samples metadata"),
-                   "right", options = list(container = "body")),
-                 uiOutput("upload_annotation"),
-                 shinyBS::bsTooltip(
-                   "upload_annotation", paste0("Select file containing the annotation data"),
-                   "right", options = list(container = "body"))),
+
         menuItem("App settings",icon = icon("cogs"),
                  selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8, selected = 1),
                  shinyBS::bsTooltip(
@@ -123,6 +131,7 @@ pcaExplorer <- function(dds=NULL,
                                              "PCA for the genes. It should be used for mere visualization purposes"),
                    "right", options = list(container = "body")),
                  selectInput("col_palette","Color palette",choices = list("hue","set1","rainbow")),
+                 selectInput("plot_style","Plot style for gene counts",choices = list("boxplot","violin plot")),
                  shinyBS::bsTooltip(
                    "col_palette", paste0("Select the color palette to be used in the principal components plots. The number of ",
                                          "colors is selected automatically according to the number of samples and to the levels ",
@@ -131,11 +140,11 @@ pcaExplorer <- function(dds=NULL,
         ),
         menuItem("Plot export settings", icon = icon("paint-brush"),
 
-                 numericInput("export_width",label = "Width of exported figures (cm)",value = 30,min = 2),
+                 numericInput("export_width",label = "Width of exported figures (cm)",value = 10,min = 2),
                  shinyBS::bsTooltip(
                    "export_width", paste0("Width of the figures to export, expressed in cm"),
                    "right", options = list(container = "body")),
-                 numericInput("export_height",label = "Height of exported figures (cm)",value = 30,min = 2),
+                 numericInput("export_height",label = "Height of exported figures (cm)",value = 10,min = 2),
                  shinyBS::bsTooltip(
                    "export_height", paste0("Height of the figures to export, expressed in cm"),
                    "right", options = list(container = "body"))
@@ -156,48 +165,126 @@ pcaExplorer <- function(dds=NULL,
                           "))
           ),
 
+        ## main structure of the body for the dashboard
         tabBox(
           width=12,
 
           tabPanel(
-            "About",
-            includeMarkdown(system.file("extdata", "about.md",package = "pcaExplorer")),
-            hr(),
-            #             shiny::verbatimTextOutput("showuploaded1"),
-            #             shiny::verbatimTextOutput("showuploaded2"),
-            #             shiny::verbatimTextOutput("showuploaded3"),
-            #             shiny::verbatimTextOutput("showuploaded4"),
+            "Data Upload", icon = icon("upload"),
+            uiOutput("upload_count_matrix"),
+            shinyBS::bsTooltip(
+              "upload_count_matrix", paste0("Select file containing the count matrix"),
+              "right", options = list(container = "body")),
+            uiOutput("upload_metadata"),
+            shinyBS::bsTooltip(
+              "upload_metadata", paste0("Select file containing the samples metadata"),
+              "right", options = list(container = "body")),
+            uiOutput("upload_annotation"),
+            shinyBS::bsTooltip(
+              "upload_annotation", paste0("Select file containing the annotation data"),
+              "right", options = list(container = "body")),
+            # wellPanel(
+            #
+            #   checkboxInput("header_ct", "Header", TRUE),
+            #   radioButtons("sep_ct", "Separator", c( Tab="\t",Comma=",", Semicolon=";", Space = " "), selected = "\t", inline = TRUE)
+            #
+            # ),
+            # ## TODO: replace with heuristics for detecting separator with a guess
+            p("Preview on the uploaded data"),
 
-            h4("Session Info"),
-            verbatimTextOutput("sessioninfo"),
+            verbatimTextOutput("printdds"),
+            DT::dataTableOutput("printanno"),
+            # this last one will just be visible if the user uploads the count matrix separately via button
+            DT::dataTableOutput("sneakpeekcm")
+          ),
+
+          tabPanel(
+            "Instructions",  icon = icon("info-circle"),
+            includeMarkdown(system.file("extdata", "instructions.md",package = "pcaExplorer")),
             footer()
           ),
 
           tabPanel(
-            "Instructions",
-            includeMarkdown(system.file("extdata", "instructions.md",package = "pcaExplorer"))
+            "Counts Table",
+            icon = icon("table"),
+            h3("Counts table"),
+
+            selectInput("countstable_unit", label = "Data scale in the table",
+                        choices = list("Counts (raw)" = "raw_counts",
+                                       "Counts (normalized)" = "normalized_counts",
+                                       "Regularized logarithm transformed" = "rlog_counts",
+                                       "Log10 (pseudocount of 1 added)" = "log10_counts",
+                                       "TPM (Transcripts Per Million)" = "tpm_counts")),
+
+            DT::dataTableOutput("showcountmat"),
+
+            downloadButton("downloadData","Download", class = "btn btn-success"),
+            hr(),
+            h3("Sample to sample scatter plots"),
+            selectInput("corr_method","Correlation method palette",choices = list("pearson","spearman")),
+            p("Compute sample to sample correlations on the normalized counts - warning, it can take a while to plot all points (depending mostly on the number of samples you provided)."),
+            actionButton("compute_pairwisecorr", "Run", class = "btn btn-primary"),
+            uiOutput("pairwise_plotUI"),
+            uiOutput("heatcorr_plotUI")
+
           ),
 
           tabPanel(
-            "Data Preview",
+            "Data Overview", icon = icon("eye"),
             h1("Sneak peek in the data"),
+            h3("Design metadata"),
+            DT::dataTableOutput("showcoldata"),
 
+            h3("Sample to sample distance heatmap"),
+            fluidRow(
+              column(
+                width=8,
+                plotOutput("heatmapsampledist"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplessamplesheat", "Download Plot"),
+                    textInput("filename_samplessamplesheat",label = "Save as...",value = "pcae_sampletosample.pdf")))
+            ),
+            hr(),
             h3("General information on the provided SummarizedExperiment/DESeqDataSet"),
             shiny::verbatimTextOutput("showdata"),
-            h3("Available metadata"),
-            DT::dataTableOutput("showcoldata"),
             h3("Number of million of reads per sample"),
-            plotOutput("reads_barplot"),
+            fluidRow(
+              column(
+                width=8,
+                plotOutput("reads_barplot"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_readsbarplot", "Download Plot"),
+                    textInput("filename_readsbarplot",label = "Save as...",value = "pcae_readsbarplot.pdf")))),
             h3("Basic summary for the counts"),
+            p("Number of uniquely aligned reads assigned to each sample"),
             verbatimTextOutput("reads_summary"),
+            wellPanel(
+              fluidRow(
+                column(
+                  width = 4,
+                  numericInput("threshold_rowsums","Threshold on the row sums of the counts",value = 0, min = 0)),
+                column(
+                  width = 4,
+                  numericInput("threshold_rowmeans","Threshold on the row means of the normalized counts",value = 0, min = 0))
+              )),
+            p("According to the selected filtering criteria, this is an overview on the provided count data"),
+            verbatimTextOutput("detected_genes")
+            # DT::dataTableOutput("reads_samples"),
 
-            footer()
+
           ),
 
           tabPanel(
             "Samples View",
-            p(h1('Principal Component Analysis on the samples'), "PCA projections of sample expression profiles onto any pair of components."),
-            fluidRow(checkboxInput("sample_labels","Display sample labels",value = TRUE)),
+            icon = icon("share-alt"),
+            p(h1('Principal Component Analysis on the samples'),
+              "PCA projections of sample expression profiles onto any pair of components."),
+            fluidRow(
+              column(
+                width = 4,
+                wellPanel(checkboxInput("sample_labels","Display sample labels",value = TRUE),
+                          checkboxInput("pca_ellipse","draw a confidence ellipse for each group",value = FALSE),
+                          sliderInput("pca_cislider", "select the confidence interval level", min=0,max=1,value=0.95)))),
             fluidRow(
               column(
                 width = 6,
@@ -212,28 +299,36 @@ pcaExplorer <- function(dds=NULL,
                 div(align = "right", style = "margin-right:15px; margin-bottom:10px",
                     downloadButton("download_samplesScree", "Download Plot"),
                     textInput("filename_samplesScree",label = "Save as...",value = "samplesScree.pdf")),
-                fluidRow(
+                wellPanel(fluidRow(
                   column(
                     width = 6,
-                    radioButtons("scree_type","Scree plot type:",choices=list("Proportion of explained variance"="pev","Cumulative proportion of explained variance"="cev"),"pev")
+                    radioButtons("scree_type","Scree plot type:",
+                                 choices=list("Proportion of explained variance"="pev",
+                                              "Cumulative proportion of explained variance"="cev"),"pev")
                   ),
                   column(
                     width = 6,
                     numericInput("scree_pcnr","Number of PCs to display",value=8,min=2)
                   )
-                )
+                ))
               )
             ),
             hr(),
             fluidRow(
               column(
                 width = 6,
-                plotOutput("samples_pca_zoom")
+                plotOutput("samples_pca_zoom"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesPcazoom", "Download Plot"),
+                    textInput("filename_samplesPcazoom",label = "Save as...",value = "samplesPcazoom.pdf"))
               ),
               column(
                 width = 6,
                 numericInput("ntophiload", "Nr of genes to display (top & bottom)",value = 10, min = 1, max=40),
-                plotOutput("geneshiload")
+                plotOutput("geneshiload"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesPca_hiload", "Download Plot"),
+                    textInput("filename_samplesPca_hiload",label = "Save as...",value = "pcae_hiload.pdf"))
               )
             ),
             hr(),
@@ -242,38 +337,70 @@ pcaExplorer <- function(dds=NULL,
                 width = 6,
                 p(h4('Outlier Identification'), "Toggle which samples to remove - suspected to be considered as outliers"),
                 uiOutput("ui_outliersamples"),
-                plotOutput("samples_outliersremoved")
+                plotOutput("samples_outliersremoved"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesPca_sampleout", "Download Plot"),
+                    textInput("filename_samplesPca_sampleout",label = "Save as...",value = "samplesPca_sampleout.pdf"))
               )
 
+            ),
+
+            fluidRow(
+              column(
+                width = 8,
+                selectInput("pc_z","Select the principal component to display on the z axis",choices = 1:8,selected = 3),
+                scatterplotThreeOutput("pca3d")
+              )
             )
+
           ),
 
           tabPanel(
             "Genes View",
+            icon = icon("yelp"),
             p(h1('Principal Component Analysis on the genes'), "PCA projections of genes abundances onto any pair of components."),
-
-            # shinyURL.ui(),
 
             fluidRow(checkboxInput("variable_labels","Display variable labels",value = TRUE)),
             fluidRow(
+              checkboxInput("ylimZero_genes","Set y axis limit to 0",value=TRUE)),
+
+            fluidRow(
               column(
-                width = 4,
+                width = 6,
                 h4("Main Plot - interact!"),
                 plotOutput('genes_biplot',brush = 'pcagenes_brush',click="pcagenes_click"),
                 div(align = "right", style = "margin-right:15px; margin-bottom:10px",
                     downloadButton("download_genesPca", "Download Plot"),
                     textInput("filename_genesPca",label = "Save as...",value = "genesPca.pdf"))),
               column(
-                width = 4,
+                width = 6,
                 h4("Zoomed window"),
                 plotOutput("genes_biplot_zoom",click="pcagenes_zoom_click"),
                 div(align = "right", style = "margin-right:15px; margin-bottom:10px",
                     downloadButton("download_genesZoom", "Download Plot"),
-                    textInput("filename_genesZoom",label = "Save as...",value = "genesPca_zoomed.pdf"))),
+                    textInput("filename_genesZoom",label = "Save as...",value = "genesPca_zoomed.pdf")))
+            ),
+
+            fluidRow(
               column(
-                width = 4,
+                width = 6,
+                h4("Profile explorer"),
+
+                checkboxInput("zprofile","Display scaled expression values",value=TRUE),
+                plotOutput("genes_profileexplorer"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genesPca_profile", "Download Plot"),
+                    textInput("filename_genesPca_profile",label = "Save as...",value = "genesPca_profile.pdf")))
+              ,
+              column(
+                width = 6,
                 h4("Boxplot of selected gene"),
-                plotOutput("genes_biplot_boxplot"))),
+
+                plotOutput("genes_biplot_boxplot"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genesPca_countsplot", "Download Plot"),
+                    textInput("filename_genesPca_countsplot",label = "Save as...",value = "genesPca_countsplot.pdf")))
+            ),
 
             fluidRow(
               column(
@@ -288,37 +415,47 @@ pcaExplorer <- function(dds=NULL,
                 h4("Zoomed interactive heatmap"),
                 fluidRow(radioButtons("heatmap_colv","Cluster samples",choices = list("Yes"=TRUE,"No"=FALSE),selected = TRUE)),
                 fluidRow(d3heatmapOutput("heatzoomd3")))),
+
             hr(),
-            fluidRow(
-              column(
-                width = 6,
-                h4("Points selected by brushing - clicking and dragging:"),
-                DT::dataTableOutput("pca_brush_out"),
-                downloadButton('downloadData_brush', 'Download brushed points'),
-                textInput("brushedPoints_filename","File name...")),
-              column(
-                width = 6,
-                h4("Points selected by clicking:"),
-                DT::dataTableOutput("pca_click_out"),
-                textInput("clickedPoints_filename","File name..."),
-                downloadButton('downloadData_click', 'Download clicked (or nearby) points'))
+            box(
+              title = "Table export options", status = "primary", solidHeader = TRUE,
+              collapsible = TRUE, collapsed = TRUE, width = 12,
+              fluidRow(
+                column(
+                  width = 6,
+                  h4("Points selected by brushing - clicking and dragging:"),
+                  DT::dataTableOutput("pca_brush_out"),
+                  downloadButton('downloadData_brush', 'Download brushed points'),
+                  textInput("brushedPoints_filename","File name...")),
+                column(
+                  width = 6,
+                  h4("Points selected by clicking:"),
+                  DT::dataTableOutput("pca_click_out"),
+                  downloadButton('downloadData_click', 'Download clicked (or nearby) points')),
+                textInput("clickedPoints_filename","File name...")
+              )
             )
           ),
 
+
           tabPanel(
-            "Gene finder",
+            "Gene Finder",
+            icon = icon("crosshairs"),
             fluidRow(
               h1("GeneFinder"),
-              textInput("genefinder",label = "type in the name of the gene to search",value = NULL),
-              shinyBS::bsTooltip(
-                "genefinder", paste0("Type in the name of the gene to search. If no annotation is ",
-                                     "provided, you need to use IDs that are the row names of the ",
-                                     "objects you are using - count matrix, SummarizedExperiments ",
-                                     "or similar. If an annotation is provided, that also contains ",
-                                     "gene symbols or similar, the gene finder tries to find the ",
-                                     "name and the ID, and it suggests if some characters are in a ",
-                                     "different case"),
-                "right", options = list(container = "body")),
+              wellPanel(width=5,
+                        textInput("genefinder",label = "Type in the name of the gene to search",value = NULL),
+                        shinyBS::bsTooltip(
+                          "genefinder", paste0("Type in the name of the gene to search. If no annotation is ",
+                                               "provided, you need to use IDs that are the row names of the ",
+                                               "objects you are using - count matrix, SummarizedExperiments ",
+                                               "or similar. If an annotation is provided, that also contains ",
+                                               "gene symbols or similar, the gene finder tries to find the ",
+                                               "name and the ID, and it suggests if some characters are in a ",
+                                               "different case"),
+                          "right", options = list(container = "body")),
+                        checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
+                        checkboxInput("addsamplelabels","Annotate sample labels to the dots in the plot",value=TRUE)),
 
               #               fluidRow(
               #                 column(
@@ -332,22 +469,32 @@ pcaExplorer <- function(dds=NULL,
               #               ),
               # verbatimTextOutput("debugf"),
 
-
               verbatimTextOutput("searchresult"),
               verbatimTextOutput("debuggene"),
-              checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
+
               # plotOutput("newgenefinder_plot"),
-              plotOutput("genefinder_plot"))
+              column(
+                width = 8,
+                plotOutput("genefinder_plot"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genefinder_countsplot", "Download Plot"),
+                    textInput("filename_genefinder_countsplot",label = "Save as...",value = "pcae_genefinder.pdf"))),
+              column(
+                width = 4,
+                DT::dataTableOutput("genefinder_table"),
+                downloadButton("download_genefinder_countstable", "Download Table")
+
+              )
+            )
           ),
 
           tabPanel(
             "PCA2GO",
-            h1("pca2go - Functional annotation of PC"),
+            icon = icon("magic"),
+            h1("pca2go - Functional annotation of Principal Components"),
             h4("Functions enriched in the genes with high loadings on the selected principal components"),
             # verbatimTextOutput("enrichinfo"),
-
-
-            column(
+            wellPanel(column(
               width = 6,
               uiOutput("ui_selectspecies")
             ),
@@ -376,7 +523,7 @@ pcaExplorer <- function(dds=NULL,
             shinyBS::bsTooltip(
               "ui_computePCA2GO", paste0("Compute a pca2go object, using the limma::goana function, ",
                                          "after selecting the species of the experiment under investigation"),
-              "bottom", options = list(container = "body")),
+              "bottom", options = list(container = "body"))),
 
             fluidRow(
               column(width = 3),
@@ -407,11 +554,12 @@ pcaExplorer <- function(dds=NULL,
 
           tabPanel(
             "Multifactor Exploration",
-            h1("Multifactor exploration of datasets with >= 2 experimental factors"),
+            icon = icon("th-large"),
+            h1("Multifactor exploration of datasets with 2 or more experimental factors"),
 
             verbatimTextOutput("intro_multifac"),
 
-            fluidRow(
+            wellPanel(fluidRow(
               column(
                 width = 6,
                 uiOutput("covar1")
@@ -434,14 +582,10 @@ pcaExplorer <- function(dds=NULL,
             fluidRow(
               column(
                 width = 6,
-                uiOutput("colnames1")
-              ),
-              column(
-                width = 6,
+                uiOutput("colnames1"),
                 uiOutput("colnames2")
               )
             ),
-
 
             shinyBS::bsTooltip(
               "covar1", paste0("Select the first experimental factor"),
@@ -460,11 +604,9 @@ pcaExplorer <- function(dds=NULL,
               "bottom", options = list(container = "body")),
             shinyBS::bsTooltip(
               "colnames2", paste0("Combine samples belonging to Factor1-Level2 samples for each level in Factor 2"),
-              "bottom", options = list(container = "body")),
+              "bottom", options = list(container = "body"))),
 
-
-
-            actionButton("composemat","Compose the matrix",icon=icon("spinner")),
+            actionButton("composemat","Compose the matrix",icon=icon("spinner"),class = "btn btn-primary"),
             shinyBS::bsTooltip(
               "composemat", paste0("Select first two different experimental factors, for example ",
                                    "condition and tissue. For each factor, select two or more ",
@@ -474,8 +616,7 @@ pcaExplorer <- function(dds=NULL,
                                    "new matrix which will be used for the visualizations below"),
               "bottom", options = list(container = "body")),
 
-
-            fluidRow(
+            wellPanel(fluidRow(
               column(4,
                      selectInput('pc_x_multifac', label = 'x-axis PC: ', choices = 1:8,
                                  selected = 1)
@@ -483,10 +624,9 @@ pcaExplorer <- function(dds=NULL,
               column(4,
                      selectInput('pc_y_multifac', label = 'y-axis PC: ', choices = 1:8,
                                  selected = 2)
-              )),
+              ))),
 
             # fluidRow(verbatimTextOutput("multifacdebug")),
-
             fluidRow(
               column(6,
                      plotOutput('pcamultifac',brush = 'pcamultifac_brush')),
@@ -497,15 +637,96 @@ pcaExplorer <- function(dds=NULL,
                      textInput("brushedPoints_filename_multifac","File name..."),
                      DT::dataTableOutput('pcamultifac_out'))
 
+          ),
 
+          tabPanel(
+            "Report Editor",
+            icon = icon("pencil"),
+
+
+            fluidRow(
+              column(
+                width = 6,
+                box(
+                  title = "markdown options", status = "primary", solidHeader = TRUE, collapsible = TRUE, width = 9,
+                  radioButtons("rmd_dl_format", label = "Choose Format:", c("HTML" = "html", "R Markdown" = "rmd"), inline = T),
+                  textInput("report_title", "Title: "),
+                  textInput("report_author", "Author: "),
+                  radioButtons("report_toc", "Table of Contents", choices = list("Yes" = "true", "No" = "false")),
+                  radioButtons("report_ns", "Number sections", choices = list("Yes" = "true", "No" = "false")),
+                  selectInput("report_theme", "Theme", choices = list("Default" = "default", "Cerulean" = "cerulean",
+                                                                      "Journal" = "journal", "Flatly" = "flatly",
+                                                                      "Readable" = "readable", "Spacelab" = "spacelab",
+                                                                      "United" = "united", "Cosmo" = "cosmo")),
+                  radioButtons("report_echo", "Echo the commands in the output", choices = list("Yes" = "TRUE", "No" = "FALSE")))),
+              column(
+                width = 6,
+                box(
+                  title = "editor options", status = "primary", solidHeader = TRUE, collapsible = TRUE, width = 9,
+                  checkboxInput("enableAutocomplete", "Enable AutoComplete", TRUE),
+                  conditionalPanel(
+                    "input.enableAutocomplete",
+                    wellPanel(
+                      checkboxInput("enableLiveCompletion", "Live auto completion", TRUE),
+                      checkboxInput("enableRCompletion", "R code completion", TRUE)
+                    )
+                  ),
+
+                  selectInput("mode", "Mode: ", choices=modes, selected="markdown"),
+                  selectInput("theme", "Theme: ", choices=themes, selected="solarized_light"))
+              )
+              # ,
+              # column( # kept for debugging purposes!
+              #   width = 6,
+              #   verbatimTextOutput("loadedRmd")
+              # )
+            ),
+            fluidRow(
+              column(3,
+                     actionButton("updatepreview_button", "Update report",class = "btn btn-primary"),p()
+              ),
+              column(3, downloadButton("saveRmd", "Generate & Save",class = "btn btn-success"))
+            ),
+
+            tabBox(
+              width = NULL,
+              id="report_tabbox",
+              tabPanel("Report preview",
+                       icon = icon("file-text"),
+                       htmlOutput("knitDoc")
+              ),
+
+              tabPanel("Edit report",
+                       icon = icon("pencil-square-o"),
+                       aceEditor("acereport_rmd", mode="markdown",theme = "solarized_light",autoComplete = "live",
+                                 value=readLines(system.file("extdata", "reportTemplate.Rmd",package = "pcaExplorer")),
+                                 height="800px"))
+            )
+          ),
+
+          tabPanel(
+            "About", icon = icon("institution"),
+            includeMarkdown(system.file("extdata", "about.md",package = "pcaExplorer")),
+            hr(),
+            #             shiny::verbatimTextOutput("showuploaded1"),
+            #             shiny::verbatimTextOutput("showuploaded2"),
+            #             shiny::verbatimTextOutput("showuploaded3"),
+            #             shiny::verbatimTextOutput("showuploaded4"),
+
+            h4("Session Info"),
+            verbatimTextOutput("sessioninfo"),
+            footer()
           )
 
+          #           tabPanel(
+          #             "Session manager",
+          #             ## will put here the things to save/restore the sessions
+          #             p("something"),
+          #           )
         )
 
           ),
-
       skin="blue"
-
           )
 
   ## ------------------------------------------------------------------ ##
@@ -514,17 +735,32 @@ pcaExplorer <- function(dds=NULL,
 
   newserver <- shinyServer(function(input, output, session) {
 
+    ## placeholder for the figures to export
     exportPlots <- reactiveValues(
+      samplessamples_heatmap=NULL,
+      reads_barplot=NULL,
+
       samplesPca=NULL,
       samplesZoom=NULL,
       samplesScree=NULL,
+      samplesHiload=NULL,
+      samplesOutlier=NULL,
+
       genesPca=NULL,
       genesZoom=NULL,
+      genesProfile=NULL,
       genesBoxplot=NULL,
       genesHeatmap=NULL,
-      genefinder=NULL
+
+      genefinder_countsplot=NULL
     )
 
+    if(!is.null(dds)){
+      if(is.null(sizeFactors(dds)))
+        dds <- estimateSizeFactors(dds)
+    }
+
+    ## reactive values to use in the app
     values <- reactiveValues()
     values$mydds <- dds
     values$myrlt <- rlt
@@ -533,13 +769,15 @@ pcaExplorer <- function(dds=NULL,
     values$mypca2go <- pca2go
     values$myannotation <- annotation
 
-    user_settings <- reactiveValues(save_width = 45, save_height = 11)
+    user_settings <- reactiveValues(save_width = 15, save_height = 11)
 
-    # shinyURL.server()
 
     if(!is.null(dds)){
       if(!is(dds,"DESeqDataSet"))
         stop("dds must be a DESeqDataSet object. If it is a simple counts matrix, provide it to the countmatrix parameter!")
+
+      if(is.null(sizeFactors(dds)))
+        dds <- estimateSizeFactors(dds)
     }
     if(!is.null(rlt)){
       if(!is(rlt,"DESeqTransform"))
@@ -547,13 +785,13 @@ pcaExplorer <- function(dds=NULL,
     }
 
     # compute only rlt if dds is provided but not cm&coldata
-    if(!is.null(dds) & (is.null(countmatrix) & is.null(coldata)) & is.null(rlt))
+    if(!is.null(dds) & (is.null(countmatrix) & is.null(coldata)) & is.null(rlt)){
       withProgress(message = "computing rlog transformed values...",
                    value = 0,
                    {
                      values$myrlt <- rlogTransformation(dds)
                    })
-
+    }
 
     output$color_by <- renderUI({
       if(is.null(values$mydds))
@@ -583,12 +821,13 @@ pcaExplorer <- function(dds=NULL,
         return(NULL)
       cm <- utils::read.delim(input$uploadcmfile$datapath, header = TRUE,
                               as.is = TRUE, sep = "\t", quote = "",
+                              row.names = 1, # https://github.com/federicomarini/pcaExplorer/issues/1
+                              ## TODO: tell the user to use tsv, or use heuristics
+                              ## to check what is most frequently occurring separation character? -> see sepGuesser.R
                               check.names = FALSE)
 
       return(cm)
     })
-
-
 
 
     output$upload_metadata <- renderUI({
@@ -637,6 +876,30 @@ pcaExplorer <- function(dds=NULL,
     })
 
 
+    output$printdds <- renderPrint({
+
+      shiny::validate(
+        need(!is.null(values$mydds),
+             "Upload your dataset, as a count matrix or passing it as a parameter, as well as the design information"
+        )
+      )
+
+      values$mydds
+
+    })
+
+
+    output$printanno <- DT::renderDataTable({
+      shiny::validate(
+        need(!is.null(values$myannotation),
+             "Upload your annotation table as a matrix/data frame or passing it as a parameter"
+        )
+      )
+      DT::datatable(values$myannotation,options = list(pageLength=10))
+
+    })
+
+
     createDDS <- reactive({
       if(is.null(countmatrix) | is.null(coldata))
         return(NULL)
@@ -644,6 +907,7 @@ pcaExplorer <- function(dds=NULL,
       dds <- DESeqDataSetFromMatrix(countData = countmatrix,
                                     colData = coldata,
                                     design=~1)
+      dds <- estimateSizeFactors(dds)
 
       return(dds)
 
@@ -657,9 +921,8 @@ pcaExplorer <- function(dds=NULL,
       rlt <- rlogTransformation(values$mydds)
 
       return(rlt)
-
-
     })
+
 
     observeEvent(createDDS,
                  {
@@ -672,6 +935,18 @@ pcaExplorer <- function(dds=NULL,
                    if(!is.null(values$mycountmatrix) & !is.null(values$mymetadata))
                      values$myrlt <- createRLT()
                  })
+
+    # useful when count matrix is uploaded by hand
+    sneakpeek <- reactiveValues()
+    observeEvent(input$uploadcmfile,
+                 {
+
+                   sneakpeek$cm <- readCountmatrix()
+                 })
+
+    output$sneakpeekcm <- DT::renderDataTable({
+      head(sneakpeek$cm,10)
+    })
 
 
 
@@ -738,8 +1013,6 @@ pcaExplorer <- function(dds=NULL,
 
       nrgroups <- length(levels(expgroups))
 
-      # hue_pal()(ncol(values$myrlt)/6) # or somewhat other way
-
       if(input$col_palette=="hue"){
         return(hue_pal()(nrgroups))
       }
@@ -755,7 +1028,6 @@ pcaExplorer <- function(dds=NULL,
       if(input$col_palette=="rainbow"){
         return(rainbow(nrgroups))
       }
-      # hue_pal()(nrgroups) # or somewhat other way
     })
 
 
@@ -765,14 +1037,153 @@ pcaExplorer <- function(dds=NULL,
 
 
 
-
     output$showdata <- renderPrint({
       values$mydds
     })
 
     output$showcoldata <- DT::renderDataTable({
-      datatable(as.data.frame(colData(values$mydds)))
+      totreads <- (colSums(counts(values$mydds)))
+      df <- data.frame(
+        colData(values$mydds),
+        "Total number of reads"=totreads
+      )
+
+      datatable(df)
     })
+
+
+
+    current_countmat <- reactive({
+      if(input$countstable_unit=="raw_counts")
+        return(counts(values$mydds,normalized=FALSE))
+      if(input$countstable_unit=="normalized_counts")
+        return(counts(values$mydds,normalized=TRUE))
+      if(input$countstable_unit=="rlog_counts")
+        return(assay(values$myrlt))
+      if(input$countstable_unit=="log10_counts")
+        return(log10(1 + counts(values$mydds,normalized=TRUE)))
+      if(input$countstable_unit=="tpm_counts")
+        return(NULL) ## TODO!: assumes length of genes/exons as known, and is currently not required in the dds
+
+    })
+
+    output$showcountmat <- DT::renderDataTable({
+      datatable(current_countmat())
+    })
+
+    output$downloadData <- downloadHandler(
+      filename = function() {
+        paste0(input$countstable_unit,"table.csv")
+      },
+      content = function(file) {
+        write.csv(current_countmat(), file)
+      }
+    )
+
+    output$download_genefinder_countstable <- downloadHandler(
+      filename = function() {
+        paste0("genefinder_pcaE_","table.csv")
+      },
+      content = function(file) {
+
+        anno_id <- rownames(values$myrlt)
+        anno_gene <- values$myannotation$gene_name
+
+        if(is.null(input$color_by) & input$genefinder!="")
+          return(NULL)
+        if(is.null(input$color_by) & input$genefinder=="")
+          return(NULL)
+        if(input$genefinder=="")
+          return(NULL)
+        if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
+          return(NULL)
+
+        if (input$genefinder %in% anno_id) {
+          selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+          selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
+        }
+        if (input$genefinder %in% anno_gene) {
+          selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
+          if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
+          selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
+        }
+        genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
+        genedata
+
+        write.csv(genedata, file)
+      }
+    )
+
+
+
+
+
+
+    output$corrplot <- renderPlot({
+      if(input$compute_pairwisecorr)
+        pair_corr(current_countmat(),method=input$corr_method)
+    })
+
+    output$heatcorr <- renderPlot({
+      if(input$compute_pairwisecorr)
+        pheatmap(cor(current_countmat()))
+    })
+
+
+    output$pairwise_plotUI <- renderUI({
+      if(!input$compute_pairwisecorr) return()
+
+      plotOutput("corrplot", height = "1000px")
+      # )
+    })
+
+
+    output$heatcorr_plotUI <- renderUI({
+      if(!input$compute_pairwisecorr) return()
+
+      plotOutput("heatcorr")
+    })
+
+
+    # overview on number of detected genes on different threshold types
+    output$detected_genes <- renderPrint({
+      t1 <- rowSums(counts(values$mydds))
+      t2 <- rowMeans(counts(values$mydds,normalized=TRUE))
+
+      thresh_rowsums <- input$threshold_rowsums
+      thresh_rowmeans <- input$threshold_rowmeans
+      abs_t1 <- sum(t1 > thresh_rowsums)
+      rel_t1 <- 100 * mean(t1 > thresh_rowsums)
+      abs_t2 <- sum(t2 > thresh_rowmeans)
+      rel_t2 <- 100 * mean(t2 > thresh_rowmeans)
+
+      cat("Number of detected genes:\n")
+      # TODO: parametrize the thresholds
+      cat(abs_t1,"genes have at least a sample with more than",thresh_rowsums,"counts\n")
+      cat(paste0(round(rel_t1,3),"%"), "of the",nrow(values$mydds),
+          "genes have at least a sample with more than",thresh_rowsums,"counts\n")
+      cat(abs_t2,"genes have more than",thresh_rowmeans,"counts (normalized) on average\n")
+      cat(paste0(round(rel_t2,3),"%"), "of the",nrow(values$mydds),
+          "genes have more than",thresh_rowsums,"counts (normalized) on average\n")
+      cat("Counts are ranging from", min(counts(values$mydds)),"to",max(counts(values$mydds)))
+    })
+
+
+
+    output$heatmapsampledist <- renderPlot({
+      if (!is.null(input$color_by)){
+        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        # expgroups <- interaction(expgroups)
+        rownames(expgroups) <- colnames(values$myrlt)
+        colnames(expgroups) <- input$color_by
+
+        pheatmap(as.matrix(dist(t(assay(values$myrlt)))),annotation_col = expgroups)
+      } else {
+        pheatmap(as.matrix(dist(t(assay(values$myrlt)))))
+      }
+    })
+
+
 
     output$reads_barplot <- renderPlot({
       rr <- colSums(counts(values$mydds))/1e6
@@ -780,16 +1191,20 @@ pcaExplorer <- function(dds=NULL,
         names(rr) <- paste0("sample_",1:length(rr))
       rrdf <- data.frame(Reads=rr,Sample=names(rr),stringsAsFactors = FALSE)
       if (!is.null(input$color_by)) {
-        rrdf$Group <- colData(values$mydds)[input$color_by][[1]]
-        p <- ggplot(rrdf,aes_string("Sample",weight="Reads")) + geom_bar(aes_string(fill="Group"))
+        selGroups <- as.data.frame(colData(values$mydds)[input$color_by])
+        rrdf$Group <- interaction(selGroups)
+        p <- ggplot(rrdf,aes_string("Sample",weight="Reads")) + geom_bar(aes_string(fill="Group")) + theme_bw()
         p
       } else {
-        p <- ggplot(rrdf,aes_string("Sample",weight="Reads")) + geom_bar()
+        p <- ggplot(rrdf,aes_string("Sample",weight="Reads")) + geom_bar() + theme_bw()
+
+        exportPlots$reads_barplot <- p
         p
       }
     })
 
     output$reads_summary <- renderPrint({
+      print(colSums(counts(values$mydds)))
       summary(colSums(counts(values$mydds))/1e6)
     })
 
@@ -800,12 +1215,15 @@ pcaExplorer <- function(dds=NULL,
 
 
 
+    ## SAMPLES VIEW
     output$samples_pca <- renderPlot({
       res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
                      text_labels = input$sample_labels,
-                     point_size = input$pca_point_size, title="Samples PCA"
-      )
+                     point_size = input$pca_point_size, title="Samples PCA",
+                     ellipse = input$pca_ellipse, ellipse.prob = input$pca_cislider)
+
+
       res <- res + theme_bw()
       exportPlots$samplesPca <- res
       res
@@ -824,7 +1242,8 @@ pcaExplorer <- function(dds=NULL,
       res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
                      text_labels = input$sample_labels,
-                     point_size = input$pca_point_size, title="Samples PCA - zoom in"
+                     point_size = input$pca_point_size, title="Samples PCA - zoom in",
+                     ellipse = input$pca_ellipse, ellipse.prob = input$pca_cislider
       )
       res <- res + xlim(input$pca_brush$xmin,input$pca_brush$xmax) + ylim(input$pca_brush$ymin,input$pca_brush$ymax)
       res <- res + theme_bw()
@@ -879,18 +1298,27 @@ pcaExplorer <- function(dds=NULL,
       res <- pcaplot(currentrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
                      text_labels = input$sample_labels,
-                     point_size = input$pca_point_size, title="Samples PCA"
+                     point_size = input$pca_point_size, title="Samples PCA",
+                     ellipse = input$pca_ellipse, ellipse.prob = input$pca_cislider
       )
       res <- res + theme_bw()
       # exportPlots$samplesPca <- res
+      exportPlots$samplesOutlier <- res
       res
+
+    })
+
+
+    output$pca3d <- renderScatterplotThree({
+      pcaplot3d(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
+                pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),pcZ = as.integer(input$pc_z))
 
     })
 
 
 
 
-
+    ## GENES VIEW
     output$genes_biplot <- renderPlot({
       if(!is.null(input$color_by)) {
         expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
@@ -953,6 +1381,28 @@ pcaExplorer <- function(dds=NULL,
     })
 
 
+    output$genes_profileexplorer <- renderPlot({
+      shiny::validate(
+        need(
+          !is.null(input$pcagenes_brush),
+          "Zoom in by brushing in the main panel"
+        )
+      )
+      shiny::validate(
+        need(
+          length(input$color_by)>0,
+          "Select an experimental factor in the Group/color by element in the sidebar"
+        )
+      )
+
+      geneprofiler(values$myrlt,
+                   genelist = curData_brush()$ids,
+                   intgroup = input$color_by,
+                   plotZ = input$zprofile)
+
+    })
+
+
     output$genes_biplot_boxplot <- renderPlot({
       # if(length(input$color_by)==0) return(ggplot() + annotate("text",label="select an experimental factor",0,0) + theme_bw())
       # if(is.null(input$pcagenes_zoom_click)) return(ggplot() + annotate("text",label="click to generate the boxplot\nfor the selected gene",0,0) + theme_bw())
@@ -966,7 +1416,7 @@ pcaExplorer <- function(dds=NULL,
       shiny::validate(
         need(
           !is.null(input$pcagenes_zoom_click),
-          "Click to generate the boxplot for the selected gene"
+          "Click the plot above to generate the boxplot for the selected gene"
         )
       )
 
@@ -984,14 +1434,53 @@ pcaExplorer <- function(dds=NULL,
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
 
-      res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
-        geom_boxplot(outlier.shape = NA) + scale_y_log10(name="Normalized counts") +
-        labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
-        scale_x_discrete(name="") +
-        geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
-        scale_fill_discrete(name="Experimental\nconditions")
-      exportPlots$genesBoxplot <- res
-      res
+      genedata$sampleID <- rownames(genedata)
+
+      # input$plot_style chooses the style of plotting
+      if(input$plot_style=="boxplot"){
+        res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
+          geom_boxplot(outlier.shape = NA,alpha=0.7) + theme_bw()
+        if(input$ylimZero_genes){
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
+        } else {
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale")
+        }
+
+
+
+        res <- res +
+          labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
+          scale_x_discrete(name="") +
+          geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
+          scale_fill_discrete(name="Experimental\nconditions")
+        # if(input$addsamplelabels){
+        #   res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
+        # }
+
+        exportPlots$genesBoxplot <- res
+        res
+      } else if(input$plot_style=="violin plot"){
+        res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
+          geom_violin(aes_string(col="plotby"),alpha = 0.6) + theme_bw()
+        if(input$ylimZero_genes){
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
+        } else {
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale")
+        }
+
+
+        res <- res +
+          labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
+          scale_x_discrete(name="") +
+          geom_jitter(aes_string(x="plotby",y="count"),alpha = 0.8,position = position_jitter(width = 0.1)) +
+          scale_fill_discrete(name="Experimental\nconditions") + scale_color_discrete(guide="none")
+        # if(input$addsamplelabels){
+        #   res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
+        # }
+
+        exportPlots$genesBoxplot <- res
+        res
+      }
     })
 
 
@@ -1027,6 +1516,7 @@ pcaExplorer <- function(dds=NULL,
     })
 
 
+    # data to be used for plotting the picked gene from the zoomed panel
     curData_zoomClick <- reactive({
       df2 <- genespca(values$myrlt,
                       ntop = input$pca_nrgenes,
@@ -1108,9 +1598,6 @@ pcaExplorer <- function(dds=NULL,
       ## aheatmap is actually consistent in displaying the clusters with most of other heatmap packages
       ## keep in mind: pheatmap does somehow a better job if scaling/centering
     })
-
-
-
 
 
     #     displayed by default, with possibility to select from gene id provided as row names of the objects
@@ -1216,6 +1703,8 @@ pcaExplorer <- function(dds=NULL,
     #     })
     #
 
+
+    ## GENE FINDER
     output$searchresult <- renderPrint({
 
       if(is.null(input$color_by)) return("Select a factor to plot your gene")
@@ -1278,27 +1767,85 @@ pcaExplorer <- function(dds=NULL,
         selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
       }
       genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
-
       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
+      genedata$sampleID <- rownames(genedata)
 
-      p <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) + geom_boxplot(outlier.shape = NA) + labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +  scale_x_discrete(name="") + geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) + scale_fill_discrete(name="Experimental\nconditions")
 
-      if(input$ylimZero)
-      {
-        p <- p + scale_y_log10(name="Normalized counts - log10 scale",limits=c(1,NA))
-      } else {
-        p <- p + scale_y_log10(name="Normalized counts - log10 scale")
+      # input$plot_style chooses the style of plotting
+      if(input$plot_style=="boxplot"){
+        res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
+          geom_boxplot(outlier.shape = NA,alpha=0.7) + theme_bw()
+        if(input$ylimZero){
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
+        } else {
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale")
+        }
+
+        res <- res +
+          labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
+          scale_x_discrete(name="") +
+          geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
+          scale_fill_discrete(name="Experimental\nconditions")
+        if(input$addsamplelabels){
+          res <- res + geom_text(aes_string(label="sampleID"),hjust=-.1,vjust=0)
+        }
+        exportPlots$genefinder_countsplot <- res
+        res
+      } else if(input$plot_style=="violin plot"){
+        res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
+          geom_violin(aes_string(col="plotby"),alpha = 0.6) + theme_bw()
+        if(input$ylimZero){
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
+        } else {
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale")
+        }
+
+        res <- res +
+          labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
+          scale_x_discrete(name="") +
+          geom_jitter(aes_string(x="plotby",y="count"),alpha = 0.8,position = position_jitter(width = 0.1)) +
+          scale_fill_discrete(name="Experimental\nconditions") + scale_color_discrete(guide="none")
+        if(input$addsamplelabels){
+          res <- res + geom_text(aes_string(label="sampleID"),hjust=-.1,vjust=0)
+        }
+        exportPlots$genefinder_countsplot <- res
+        res
       }
-      exportPlots$genefinder <- p
-
-      p
     })
 
 
+    output$genefinder_table <- DT::renderDataTable({
+      anno_id <- rownames(values$myrlt)
+      anno_gene <- values$myannotation$gene_name
+
+      if(is.null(input$color_by) & input$genefinder!="")
+        return(NULL)
+      if(is.null(input$color_by) & input$genefinder=="")
+        return(NULL)
+      if(input$genefinder=="")
+        return(NULL)
+      if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
+        return(NULL)
+
+      if (input$genefinder %in% anno_id) {
+        selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+        selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
+      }
+      if (input$genefinder %in% anno_gene) {
+        selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
+        if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
+        selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
+      }
+      genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
+      genedata
+    })
+
+
+    ## PCA2GO
     output$ui_computePCA2GO <- renderUI({
       if(is.null(pca2go))
-        actionButton("computepca2go","Compute the PCA2GO object",icon=icon("spinner"))
+        actionButton("computepca2go","Compute the PCA2GO object",icon=icon("spinner"),class = "btn btn-primary")
     })
 
     annoSpecies_df <- data.frame(species=c("","Anopheles","Arabidopsis","Bovine","Worm",
@@ -1332,8 +1879,11 @@ pcaExplorer <- function(dds=NULL,
 
     output$speciespkg <- renderText({
 
-      if(!is.null(values$mypca2go))
+      if(!is.null(pca2go))
         return("pca2go object provided")
+
+      if(!is.null(values$mypca2go))
+        return("pca2go object computed or provided")
 
       shiny::validate(
         need(input$speciesSelect!="",
@@ -1444,7 +1994,7 @@ pcaExplorer <- function(dds=NULL,
 
 
 
-    ## from here on, multifac APP
+    ## MULTIFACTOR EXPLORATION
     output$intro_multifac <- renderText({
       if(!is.null(values$mydds))
         shiny::validate(
@@ -1534,9 +2084,10 @@ pcaExplorer <- function(dds=NULL,
       mysamples <- colData(values$myrlt)[presel,] # check that the repl are balanced
 
       presel2 <- colnames(values$myrlt)[(colData(values$myrlt)[[fac1]] %in% fac1_touse[2]) & colData(values$myrlt)[[fac2]] %in% fac2_touse]
-
       selectInput('picksamples2', label = 'Combine samples from Factor1-Level2 in the selected order: ',
                   choices = c(NULL, presel2), selected = NULL,multiple = TRUE)
+
+
     })
 
 
@@ -1701,6 +2252,129 @@ pcaExplorer <- function(dds=NULL,
 
 
 
+
+    ## REPORT EDITOR
+    ### yaml generation
+    rmd_yaml <- reactive({
+      paste0("---",
+             "\ntitle: '", input$report_title,
+             "'\nauthor: '", input$report_author,
+             "'\ndate: '", Sys.Date(),
+             "'\noutput:\n  html_document:\n    toc: ", input$report_toc, "\n    number_sections: ", input$report_ns, "\n    theme: ", input$report_theme, "\n---\n\n",collapse = "\n")
+    })
+
+
+    # rmd_full <- reactive({
+    #   paste0(rmd_yaml(),"\n",
+    #          readLines("reportTemplate.Rmd"))
+    # })
+    # output$loadedRmd <- renderPrint({
+    #   # rmd_yaml() # or rmd_full()
+    #   paste0(
+    #     # rmd_yaml(),
+    #     paste0(readLines("reportTemplate.Rmd"),collapse = "\n"))
+    #   # head(paste0(rmd_yaml(),
+    #   # readLines("reportTemplate.Rmd")),collapse="\n")
+    # })
+
+    ### loading report template
+    # update aceEditor module
+    observe({
+      # loading rmd report from disk
+      inFile <- system.file("extdata", "reportTemplate.Rmd",package = "pcaExplorer")
+
+      isolate({
+        if(!is.null(inFile) && !is.na(inFile)) {
+
+          rmdfilecontent <- paste0(readLines(inFile),collapse="\n")
+
+          shinyAce::updateAceEditor(session, "acereport_rmd", value = rmdfilecontent)
+        }
+      })
+    })
+
+
+    ### ace editor options
+    observe({
+      autoComplete <- if(input$enableAutocomplete) {
+        if(input$enableLiveCompletion) "live" else "enabled"
+      } else {
+        "disabled"
+      }
+
+      updateAceEditor(session, "acereport_rmd", autoComplete = autoComplete,theme=input$theme, mode=input$mode)
+      # updateAceEditor(session, "plot", autoComplete = autoComplete)
+    })
+
+    #Enable/Disable R code completion
+    rmdOb <- aceAutocomplete("acereport_rmd")
+    observe({
+      if(input$enableRCompletion) {
+        rmdOb$resume()
+      } else {
+        rmdOb$suspend()
+      }
+    })
+
+    ## currently not working as I want with rmarkdown::render, but can leave it like this - the yaml will be taken in the final version only
+    output$knitDoc <- renderUI({
+      input$updatepreview_button
+      return(isolate(HTML(knit2html(text = input$acereport_rmd, fragment.only = TRUE, quiet = TRUE))))
+    })
+
+
+
+
+
+    ## STATE SAVING
+    ### to environment
+    observe({
+      if(is.null(input$exit_and_save) || input$exit_and_save ==0 ) return()
+
+      # quit R, unless you are running an interactive session
+      if(interactive()) {
+        # flush input and values to the environment in two distinct objects (to be reused later?)
+        isolate({
+          assign(paste0("pcaExplorer_inputs_",
+                        gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time()))))),
+                 reactiveValuesToList(input), envir = .GlobalEnv)
+          assign(paste0("pcaExplorer_values_",
+                        gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time()))))),
+                 reactiveValuesToList(values), envir = .GlobalEnv)
+          stopApp("pcaExplorer closed, state successfully saved to global R environment.")
+        })
+      } else {
+        stopApp("pcaExplorer closed")
+        q("no")
+      }
+    })
+
+    ### to binary data
+    saveState <- function(filename) {
+      isolate({
+        LiveInputs <- reactiveValuesToList(input)
+        # values[names(LiveInputs)] <- LiveInputs
+        r_data <- reactiveValuesToList(values)
+        save(LiveInputs, r_data , file = filename)
+      })
+    }
+
+    output$state_save_sc <- downloadHandler(
+      filename = function() {
+        paste0("pcaExplorerState_",gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time())))),".RData")
+      },
+      content = function(file) {
+        saveState(file)
+      }
+    )
+
+
+
+
+
+
+
+
     ## all download handlers
     output$downloadData_brush <- downloadHandler(
       filename = function() { paste(input$brushedPoints_filename, '.csv', sep='') },
@@ -1721,6 +2395,36 @@ pcaExplorer <- function(dds=NULL,
       }
     )
 
+
+
+    output$download_samplessamplesheat <- downloadHandler(filename=function(){
+      input$filename_samplessamplesheat
+    },
+    content = function(file){
+      pdf(file)
+
+      if (!is.null(input$color_by)){
+        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        # expgroups <- interaction(expgroups)
+        rownames(expgroups) <- colnames(values$myrlt)
+        colnames(expgroups) <- input$color_by
+
+        pheatmap(as.matrix(dist(t(assay(values$myrlt)))),annotation_col = expgroups)
+      } else {
+        pheatmap(as.matrix(dist(t(assay(values$myrlt)))))
+      }
+
+      dev.off()
+    })
+
+
+
+    output$download_readsbarplot <- downloadHandler(
+      filename = function() { input$filename_readsbarplot },
+      content = function(file) {
+        ggsave(file, exportPlots$reads_barplot, width = input$export_width, height = input$export_height, units = "cm")
+      })
+
     output$download_samplesPca <- downloadHandler(
       filename = function() { input$filename_samplesPca },
       content = function(file) {
@@ -1733,6 +2437,38 @@ pcaExplorer <- function(dds=NULL,
         ggsave(file, exportPlots$samplesScree, width = input$export_width, height = input$export_height, units = "cm")
       })
 
+    output$download_samplesPcazoom <- downloadHandler(
+      filename = function() { input$filename_samplesPcazoom },
+      content = function(file) {
+        ggsave(file, exportPlots$samplesZoom, width = input$export_width, height = input$export_height, units = "cm")
+      })
+
+    output$download_samplesPca_hiload <- downloadHandler(filename=function(){
+      input$filename_samplesPca_hiload
+    },
+    content = function(file){
+      pdf(file)
+
+      rv <- rowVars(assay(values$myrlt))
+      select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
+      pca <- prcomp(t(assay(values$myrlt)[select, ]))
+
+      par(mfrow=c(2,1))
+      hi_loadings(pca,whichpc = as.integer(input$pc_x),topN = input$ntophiload,annotation = values$myannotation)
+      hi_loadings(pca,whichpc = as.integer(input$pc_y),topN = input$ntophiload,annotation = values$myannotation)
+
+      dev.off()
+    })
+
+    output$download_samplesPca_sampleout <- downloadHandler(
+      filename = function() { input$filename_samplesPca_sampleout },
+      content = function(file) {
+        ggsave(file, exportPlots$samplesOutlier, width = input$export_width, height = input$export_height, units = "cm")
+      })
+
+
+
+
     output$download_genesPca <- downloadHandler(
       filename = function() { input$filename_genesPca },
       content = function(file) {
@@ -1744,6 +2480,29 @@ pcaExplorer <- function(dds=NULL,
       content = function(file) {
         ggsave(file, exportPlots$genesZoom, width = input$export_width, height = input$export_height, units = "cm")
       })
+
+
+    output$download_genesPca_profile <- downloadHandler(
+      filename=function(){
+        input$filename_genesPca_profile
+      },
+      content = function(file){
+        pdf(file)
+        geneprofiler(values$myrlt,
+                     genelist = curData_brush()$ids,
+                     intgroup = input$color_by,
+                     plotZ = input$zprofile)
+        dev.off()
+      })
+
+    output$download_genesPca_countsplot <- downloadHandler(
+      filename = function() { input$filename_genesPca_countsplot },
+      content = function(file) {
+        ggsave(file, exportPlots$genesBoxplot, width = input$export_width, height = input$export_height, units = "cm")
+      })
+
+
+
 
     output$download_genesHeatmap <- downloadHandler(
       filename=function(){
@@ -1758,8 +2517,55 @@ pcaExplorer <- function(dds=NULL,
         rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
         aheatmap(toplot,Colv = as.logical(input$heatmap_colv))
         dev.off()
-      }
-    )
+      })
+
+
+    output$download_genefinder_countsplot <- downloadHandler(
+      filename = function() { input$filename_genefinder_countsplot },
+      content = function(file) {
+        ggsave(file, exportPlots$genefinder_countsplot, width = input$export_width, height = input$export_height, units = "cm")
+      })
+
+
+
+
+    # Generate and Download module
+    output$saveRmd <- downloadHandler(
+      filename = function() {
+        if(input$rmd_dl_format == "rmd") {
+          "report.Rmd"
+        } else {
+          "report.html"
+        }
+      },
+      content = function(file) {
+
+        # knit2html(text = input$rmd, fragment.only = TRUE, quiet = TRUE))
+
+        tmp_content <-
+          paste0(rmd_yaml(),
+                 input$acereport_rmd,collapse = "\n")
+        # input$acereport_rmd
+        if(input$rmd_dl_format == "rmd") {
+          cat(tmp_content,file=file,sep="\n")
+        } else {
+          # write it somewhere too keeping the source
+          # tmpfile <- tempfile()
+          # file.create(tmpfile)
+          # fileConn<- file(tempfile())
+          # writeLines(tmp_content, fileConn)
+          # close(fileConn)
+          if(input$rmd_dl_format == "html") {
+            cat(tmp_content,file="tempreport.Rmd",sep="\n")
+            rmarkdown::render(input = "tempreport.Rmd",
+                              output_file = file,
+                              # fragment.only = TRUE,
+                              quiet = TRUE)
+          }
+        }
+      })
+
+
 
 
   }) # end of pcaExplorer(dds,rlt,countmatrix,coldata,pca2go,annotation)

@@ -1,0 +1,433 @@
+# Section title
+
+This content has been loaded from the template report `.Rmd` file. Please edit it at your best convenience!
+
+```{r setup, include=FALSE, eval = TRUE, echo = FALSE}
+opts_chunk$set(
+  echo=input$report_echo
+)
+```
+
+
+# Overview on the data
+
+The data provided was used to construct the following objects
+
+```{r}
+values$mydds
+
+values$myrlt
+
+head(values$myannotation)
+```
+
+The following design were used:
+
+```{r}
+DT::datatable(as.data.frame(colData(values$mydds)))
+```
+
+An overview of the table for the features is shown here, by displaying the `r input$countstable_unit`
+
+```{r}
+if(input$countstable_unit=="raw_counts")
+  currentMat <- counts(values$mydds,normalized=FALSE)
+if(input$countstable_unit=="normalized_counts")
+  currentMat <- counts(values$mydds,normalized=TRUE)
+if(input$countstable_unit=="rlog_counts")
+  currentMat <- assay(values$myrlt)
+if(input$countstable_unit=="log10_counts")
+  currentMat <- log10(1 + counts(values$mydds,normalized=TRUE))
+```
+
+
+```{r}
+DT::datatable(currentMat)
+```
+
+This is how the samples cluster if we use euclidean distance on the rlog transformed values
+
+```{r}
+if (!is.null(input$color_by)){
+  expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+  # expgroups <- interaction(expgroups)
+  rownames(expgroups) <- colnames(values$myrlt)
+  colnames(expgroups) <- input$color_by
+
+  pheatmap(as.matrix(dist(t(assay(values$myrlt)))),annotation_col = expgroups)
+} else {
+  pheatmap(as.matrix(dist(t(assay(values$myrlt)))))
+}
+
+```
+
+
+This is an overview of the number of available reads in each sample (normally these are only uniquely aligned reads)
+
+
+```{r}
+rr <- colSums(counts(values$mydds))/1e6
+if(is.null(names(rr)))
+  names(rr) <- paste0("sample_",1:length(rr))
+rrdf <- data.frame(Reads=rr,Sample=names(rr),stringsAsFactors = FALSE)
+if (!is.null(input$color_by)) {
+  selGroups <- as.data.frame(colData(values$mydds)[input$color_by])
+  rrdf$Group <- interaction(selGroups)
+  p <- ggplot(rrdf,aes_string("Sample",weight="Reads")) + geom_bar(aes_string(fill="Group")) + theme_bw()
+  p
+} else {
+  p <- ggplot(rrdf,aes_string("Sample",weight="Reads")) + geom_bar() + theme_bw()
+  p
+}
+
+print(colSums(counts(values$mydds)))
+summary(colSums(counts(values$mydds))/1e6)      
+```
+
+
+This is a quick info on the number of detected genes
+
+```{r}
+t1 <- rowSums(counts(values$mydds))
+t2 <- rowMeans(counts(values$mydds,normalized=TRUE))
+
+thresh_rowsums <- input$threshold_rowsums
+thresh_rowmeans <- input$threshold_rowmeans
+abs_t1 <- sum(t1 > thresh_rowsums)
+rel_t1 <- 100 * mean(t1 > thresh_rowsums)
+abs_t2 <- sum(t2 > thresh_rowmeans)
+rel_t2 <- 100 * mean(t2 > thresh_rowmeans)
+
+cat("Number of detected genes:\n")
+# TODO: parametrize the thresholds
+cat(abs_t1,"genes have at least a sample with more than",thresh_rowsums,"counts\n")
+cat(paste0(round(rel_t1,3),"%"), "of the",nrow(values$mydds),"genes have at least a sample with more than",thresh_rowsums,"counts\n")
+cat(abs_t2,"genes have more than",thresh_rowmeans,"counts (normalized) on average\n")
+cat(paste0(round(rel_t2,3),"%"), "of the",nrow(values$mydds),"genes have more than",thresh_rowsums,"counts (normalized) on average\n")
+cat("Counts are ranging from", min(counts(values$mydds)),"to",max(counts(values$mydds)))
+```
+
+
+# PCA on the samples
+
+This plot shows how the samples are related to each other by plotting PC `r input$pc_x` vs PC `r input$pc_Y`, using the top `r input$pca_nrgenes` most variant genes
+
+```{r}
+res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
+                     pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
+                     text_labels = input$sample_labels,
+                     point_size = input$pca_point_size, title="Samples PCA - zoom in",
+                     ellipse = input$pca_ellipse, ellipse.prob = input$pca_cislider
+      )
+res <- res + theme_bw()
+res
+```
+
+
+The scree plot helps determining the number of underlying principal components
+
+```{r}
+rv <- rowVars(assay(values$myrlt))
+select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
+pca <- prcomp(t(assay(values$myrlt)[select, ]))
+
+res <- pcascree(pca,type = input$scree_type, pc_nr = input$scree_pcnr, title="Scree plot for the samples PCA")
+res <- res + theme_bw()
+res
+```
+
+
+
+The genes with the highest loadings in the selected principal components are the following
+
+```{r}
+rv <- rowVars(assay(values$myrlt))
+select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
+pca <- prcomp(t(assay(values$myrlt)[select, ]))
+
+par(mfrow=c(2,1))
+hi_loadings(pca,whichpc = as.integer(input$pc_x),topN = input$ntophiload,annotation = values$myannotation)
+hi_loadings(pca,whichpc = as.integer(input$pc_y),topN = input$ntophiload,annotation = values$myannotation)
+```
+
+
+
+# PCA on the genes
+
+This plot illustrates how the top `r input$pca_nrgenes` variant genes are distributed in PC `r input$pc_x` vs PC `r input$pc_y`
+
+```{r}
+if(!is.null(input$color_by)) {
+        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        expgroups <- interaction(expgroups)
+        expgroups <- factor(expgroups,levels=unique(expgroups))
+
+      } else {
+        expgroups <- colnames(values$myrlt)
+      }
+      colGroups <- colSel()[factor(expgroups)]
+
+res <- genespca(values$myrlt,
+                ntop = input$pca_nrgenes,
+                choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
+                biplot = TRUE,
+                arrowColors = factor(colGroups,levels=unique(colGroups)),
+                groupNames = expgroups,
+                alpha=input$pca_point_alpha,coordEqual=FALSE,useRownamesAsLabels=FALSE,labels.size=input$pca_label_size,
+                point_size=input$pca_point_size,varname.size=input$pca_varname_size, scaleArrow = input$pca_scale_arrow,
+                annotation=values$myannotation)
+res
+```
+
+
+For the selected genes, this is the overall profile across all samples
+
+```{r}
+if(!is.null(input$pcagenes_brush) & length(input$color_by)>0)
+      geneprofiler(values$myrlt,
+                   genelist = curData_brush()$ids,
+                   intgroup = input$color_by,
+                   plotZ = input$zprofile)
+```
+
+
+And here is an interactive heatmap for that subset
+
+```{r}
+
+if(!is.null(input$pcagenes_brush))
+{
+  brushedObject <- curData_brush()
+  if(nrow(brushedObject) > 1){
+    selectedGenes <- brushedObject$ids
+    toplot <- assay(values$myrlt)[selectedGenes,]
+    rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
+  
+    mycolss <- c("#313695","#4575b4","#74add1","#abd9e9","#e0f3f8","#fee090","#fdae61","#f46d43","#d73027","#a50026") # to be consistent with red/blue usual coding
+  
+    d3heatmap(toplot,Colv = as.logical(input$heatmap_colv),colors = mycolss)
+  }
+}
+
+```
+
+
+# Shortlisted genes
+
+
+This gene was selected in the interactive session.
+
+```{r}
+anno_id <- rownames(values$myrlt)
+      anno_gene <- values$myannotation$gene_name
+
+      # if(is.null(input$color_by) & input$genefinder!="")
+      #   return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
+      # if(is.null(input$color_by) & input$genefinder=="")
+      #   return(ggplot() + annotate("text",label="Select a gene and a factor to plot gene",0,0) + theme_bw())
+      # if(input$genefinder=="")
+      #   return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+      # if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
+      #   return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
+if(input$genefinder!="") {
+
+  if (input$genefinder %in% anno_id) {
+    selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+    selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
+    }
+    if (input$genefinder %in% anno_gene) {
+    selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
+    if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
+    selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
+    }
+    genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
+    onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
+    genedata$plotby <- interaction(onlyfactors)
+    
+    if(input$plot_style=="boxplot"){
+    res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
+      geom_boxplot(outlier.shape = NA,alpha=0.7) + theme_bw()
+    if(input$ylimZero){
+      res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
+    } else {
+      res <- res + scale_y_log10(name="Normalized counts - log10 scale")
+    }
+    
+    res <- res +
+      labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
+      scale_x_discrete(name="") +
+      geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
+      scale_fill_discrete(name="Experimental\nconditions")
+    # exportPlots$genesBoxplot <- res
+    res
+    
+    } else if(input$plot_style=="violin plot"){
+    res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
+      geom_violin(aes_string(col="plotby"),alpha = 0.6) + theme_bw()
+    if(input$ylimZero){
+      res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
+    } else {
+      res <- res + scale_y_log10(name="Normalized counts - log10 scale")
+    }
+    
+    res <- res +
+      labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
+      scale_x_discrete(name="") +
+      geom_jitter(aes_string(x="plotby",y="count"),alpha = 0.8,position = position_jitter(width = 0.1)) +
+      scale_fill_discrete(name="Experimental\nconditions") + scale_color_discrete(guide="none")
+    # exportPlots$genefinder <- res
+    res
+  }
+}
+```
+
+Repeat the same chunk of code and change the identifier of the gene to obtain the similar plot for the other candidates.
+
+
+
+# Functional interpretation of the principal components
+
+These tables report the functional categories enriched in the genes with the top and bottom loadings in the selected principal components.
+
+```{r}
+if(!is.null(values$mypca2go))
+{
+  goe <- values$mypca2go[[paste0("PC",input$pc_x)]][["posLoad"]]
+  kable(goe, caption=paste0("Functional categories enriched in ","PC",input$pc_x, "- positive loadings"))
+}
+
+if(!is.null(values$mypca2go))
+{
+  goe <- values$mypca2go[[paste0("PC",input$pc_x)]][["negLoad"]]
+  kable(goe, caption=paste0("Functional categories enriched in ","PC",input$pc_x, "- negative loadings"))
+}
+
+if(!is.null(values$mypca2go))
+{
+  goe <- values$mypca2go[[paste0("PC",input$pc_y)]][["posLoad"]]
+  kable(goe, caption=paste0("Functional categories enriched in ","PC",input$pc_y, "- positive loadings"))
+}
+
+if(!is.null(values$mypca2go))
+{
+  goe <- values$mypca2go[[paste0("PC",input$pc_y)]][["negLoad"]]
+  kable(goe, caption=paste0("Functional categories enriched in ","PC",input$pc_y, "- negative loadings"))
+}
+```
+
+
+
+
+# Multifactor exploration of the dataset
+
+```{r}
+
+if(input$composemat > 0){
+  pcmat <- obj3()[[1]]
+  tcol <- obj3()[[2]]
+  tcol2 <- obj3()[[3]]
+  pres <- prcomp(t(pcmat),scale=FALSE)
+
+  plot.index <- c(as.integer(input$pc_x_multifac),as.integer(input$pc_y_multifac))
+  offset <- ncol(pcmat)/2
+  gene.no <- offset
+  pcx <- pres$x
+  # set.seed(11)
+    # for (i in 1:ncol(pcx)) {
+    #   pcx[,i] <- pcx[,i] + rnorm(nrow(pcx),sd=diff(range(pcx[,i]))/100)
+    # }
+    plot(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],xlim=range(pcx[,plot.index[1]]),ylim=range(pcx[,plot.index[2]]),pch=20,col=tcol,cex=0.3)#,type="n")
+    #plot(0,type="n",xlim=range(pres$x[,plot.index]),ylim=range(pres$x[,plot.index]))
+    lcol <- ifelse(tcol != tcol2,"black","grey")
+    for (i in 1:gene.no) {
+      lines(pcx[c(i,offset+i),plot.index[1]],pcx[c(i,offset+i),plot.index[2]],col=lcol[i])
+    }
+    points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
+    points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)}
+```
+
+
+
+# About pcaExplorer
+
+
+`pcaExplorer` is a Bioconductor package containing a Shiny application for
+analyzing expression data in different conditions and experimental factors. 
+
+`pcaExplorer` guides the user in exploring the Principal Components of the data, 
+providing tools and functionality to detect outlier samples, genes that show 
+particular patterns, and additionally provides a functional interpretation of 
+the principal components for further quality assessment and hypothesis generation
+on the input data. 
+
+Thanks to its interactive/reactive design, it is designed to become a practical
+companion to any RNA-seq dataset analysis, making exploratory data analysis 
+accessible also to the bench biologist, while providing additional insight also
+for the experienced data analyst.
+
+`pcaExplorer` was developed in the Bioinformatics Division led by Harald Binder 
+at the IMBEI (Institut für Medizinische Biometrie, Epidemiologie und Informatik) 
+in the University Medical Center of the Johannes Gutenberg University Mainz.
+
+
+
+
+## Developers
+
+`pcaExplorer` is currently maintained by Federico Marini at the IMBEI (www.imbei.uni-mainz.de).
+You can contact him by clicking on the button below.
+
+<a href="mailto:mailto:marinif@uni-mainz.de" class="btn btn-primary">Federico Marini</a>
+
+## Code
+
+`pcaExplorer` is a part of the Bioconductor project (www.bioconductor.org).
+All code for `pcaExplorer`, especially for the development version, is available
+on <a href="https://github.com/federicomarini/pcaExplorer" target="_blank">GitHub</a>.
+
+
+
+# Citation info
+
+If you use `pcaExplorer` for your analysis, please cite it as here below:
+
+```{r}
+citation("pcaExplorer")
+```
+
+
+
+
+
+# Session Information
+
+```{r}
+sessionInfo()
+```
+
+
+```{r}
+library(shiny)
+footertemplate <- function(){
+  tags$div(
+    class = "footer",
+    style = "text-align:center",
+    tags$div(
+      class = "foot-inner",
+      list(
+        hr(),
+        "This report was generated with", tags$a(href="http://bioconductor.org/packages/pcaExplorer/", "pcaExplorer"), br(),
+        "pcaExplorer is a project developed by Federico Marini in the Bioinformatics division of the ",
+        tags$a(href="http://www.unimedizin-mainz.de/imbei","IMBEI"),br(),
+        "Development of the pcaExplorer package is on ",
+        tags$a(href="https://github.com/federicomarini/pcaExplorer", "GitHub")
+      )
+    )
+  )
+}
+```
+
+```{r}
+footertemplate()
+```
+
