@@ -415,13 +415,23 @@ anno_df_biomart <- get_annotation(dds = dds_airway,
 
 ```
 
+```{r echo=FALSE}
+anno_df_orgdb <- get_annotation_orgdb(dds = dds_airway,
+                                      orgdb_species = "org.Hs.eg.db",
+                                      idtype = "ENSEMBL")
+```
+
+```{r}
+head(anno_df_orgdb)
+```
+
 
 Then again, the app can be launched with 
 
 ```{r launchairwayanno, eval=FALSE}
 pcaExplorer(dds = dds_airway,
             rlt = rld_airway,
-            annotation = annotation_airway)
+            annotation = annotation_airway) # or anno_df_orgdb, or anno_df_biomart
 ```
 
 If desired, alternatives can be used. See the well written annotation workflow available at the Bioconductor site (https://bioconductor.org/help/workflows/annotation/annotation/).
@@ -481,7 +491,7 @@ pcaplot(rld_airway,intgroup = c("cell","dex"),ntop = 1000,
 
 # on a different set of principal components...
 pcaplot(rld_airway,intgroup = c("dex"),ntop = 1000,
-        pcX = 3, pcY = 4, title = "airway dataset PCA on samples - PC3 vs PC4",
+        pcX = 1, pcY = 4, title = "airway dataset PCA on samples - PC1 vs PC4",
         ellipse = TRUE)
 
 ```
@@ -494,6 +504,7 @@ Same as for `pcaplot`, but it uses the `threejs` package for the 3d interactive 
 ```{r func-pcaplot3d, eval=FALSE}
 pcaplot3d(rld_airway,intgroup = c("cell","dex"),ntop = 1000,
         pcX = 1, pcY = 2, pcZ = 3)
+# will open up in the viewer
 ```
 
 
@@ -614,7 +625,14 @@ pca2go_airway <- pca2go(rld_airway,
                         ensToGeneSymbol = TRUE,
                         background_genes = bg_ids)
 # for a smooth interactive exploration, use DT::datatable
-datatable(pca2go_airway)
+datatable(pca2go_airway$PC1$posLoad)
+# display it in the normal R session...
+head(pca2go_airway$PC1$posLoad)
+# ... or use it for running the app and display in the dedicated tab
+pcaExplorer(dds_airway,rld_airway,
+            pca2go = pca2go_airway,
+            annotation = annotation_airway)
+
 ```
 
 
@@ -668,6 +686,10 @@ violin plots.
 
 ```{r eval=FALSE}
 distro_expr(rld_airway,plot_type = "density")
+distro_expr(rld_airway,plot_type = "violin")
+```
+
+```{r}
 distro_expr(rld_airway,plot_type = "boxplot")
 ```
 
