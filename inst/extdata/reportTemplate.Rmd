@@ -110,7 +110,7 @@ cat("Counts are ranging from", min(counts(values$mydds)),"to",max(counts(values$
 
 # PCA on the samples
 
-This plot shows how the samples are related to each other by plotting PC `r input$pc_x` vs PC `r input$pc_Y`, using the top `r input$pca_nrgenes` most variant genes
+This plot shows how the samples are related to each other by plotting PC `r input$pc_x` vs PC `r input$pc_y`, using the top `r input$pca_nrgenes` most variant genes
 
 ```{r}
 res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
