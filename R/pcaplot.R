@@ -56,7 +56,7 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
   }
 
   # clever way of positioning the labels - worked good, then no need with ggrepel
-  d$hjust = ifelse((sign(d[,paste0("PC",pcX)])==1),0.9,0.1)# (1 + varname.adjust * sign(PC1))/2)
+  d$hjust <- ifelse((sign(d[,paste0("PC",pcX)])==1),0.9,0.1)# (1 + varname.adjust * sign(PC1))/2)
 
   g <- ggplot(data = d, aes_string(x = paste0("PC",pcX), y = paste0("PC",pcY), color = "group")) +
     geom_point(size = point_size) +

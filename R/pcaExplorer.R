@@ -649,7 +649,7 @@ pcaExplorer <- function(dds=NULL,
                 width = 6,
                 box(
                   title = "markdown options", status = "primary", solidHeader = TRUE, collapsible = TRUE, width = 9,
-                  radioButtons("rmd_dl_format", label = "Choose Format:", c("HTML" = "html", "R Markdown" = "rmd"), inline = T),
+                  radioButtons("rmd_dl_format", label = "Choose Format:", c("HTML" = "html", "R Markdown" = "rmd"), inline = TRUE),
                   textInput("report_title", "Title: "),
                   textInput("report_author", "Author: "),
                   radioButtons("report_toc", "Table of Contents", choices = list("Yes" = "true", "No" = "false")),
