@@ -55,6 +55,8 @@ pcaExplorer <- function(dds=NULL,
          install.packages('shiny')")
   }
 
+  library("shinyBS") # to correctly display the bsTooltips
+
   # get modes and themes for the ace editor
   modes <- shinyAce::getAceModes()
   themes <- shinyAce::getAceThemes()
