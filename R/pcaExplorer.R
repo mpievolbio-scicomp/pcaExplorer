@@ -1788,7 +1788,7 @@ pcaExplorer <- function(dds=NULL,
         res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
           geom_boxplot(outlier.shape = NA,alpha=0.7) + theme_bw()
         if(input$ylimZero){
-          res <- res + scale_y_log10(name="Normalized counts - log10 scale"),limits=c(0.4,NA))
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale", limits=c(0.4,NA))
         } else {
           res <- res + scale_y_log10(name="Normalized counts - log10 scale")
         }
@@ -1807,7 +1807,7 @@ pcaExplorer <- function(dds=NULL,
         res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
           geom_violin(aes_string(col="plotby"),alpha = 0.6) + theme_bw()
         if(input$ylimZero){
-          res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale", limits=c(0.4,NA))
         } else {
           res <- res + scale_y_log10(name="Normalized counts - log10 scale")
         }
