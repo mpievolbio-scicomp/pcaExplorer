@@ -55,11 +55,16 @@ pcaExplorer <- function(dds=NULL,
          install.packages('shiny')")
   }
 
+
   library("shinyBS") # to correctly display the bsTooltips
 
   # get modes and themes for the ace editor
   modes <- shinyAce::getAceModes()
   themes <- shinyAce::getAceThemes()
+
+  # create environment for storing inputs and values
+  ## i need the assignment like this to export it up one level - i.e. "globally"
+  pcaexplorer_env <<- new.env(parent = emptyenv())
 
   ## upload max 300mb files - can be changed if necessary
   options(shiny.maxRequestSize=300*1024^2)
@@ -1247,7 +1252,10 @@ pcaExplorer <- function(dds=NULL,
                      point_size = input$pca_point_size, title="Samples PCA - zoom in",
                      ellipse = input$pca_ellipse, ellipse.prob = input$pca_cislider
       )
-      res <- res + xlim(input$pca_brush$xmin,input$pca_brush$xmax) + ylim(input$pca_brush$ymin,input$pca_brush$ymax)
+      res <- res +
+        coord_cartesian(
+          xlim = c(input$pca_brush$xmin,input$pca_brush$xmax),
+          ylim = c(input$pca_brush$ymin,input$pca_brush$ymax))
       res <- res + theme_bw()
       exportPlots$samplesZoom <- res
       res
@@ -1376,8 +1384,9 @@ pcaExplorer <- function(dds=NULL,
                       scaleArrow = input$pca_scale_arrow,point_size=input$pca_point_size,annotation=values$myannotation)
 
       res <- res +
-        xlim(input$pcagenes_brush$xmin,input$pcagenes_brush$xmax) +
-        ylim(input$pcagenes_brush$ymin,input$pcagenes_brush$ymax)
+        coord_cartesian(
+          xlim = c(input$pcagenes_brush$xmin,input$pcagenes_brush$xmax),
+          ylim = c(input$pcagenes_brush$ymin,input$pcagenes_brush$ymax))
       exportPlots$genesZoom <- res
       res
     })
@@ -1779,7 +1788,7 @@ pcaExplorer <- function(dds=NULL,
         res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
           geom_boxplot(outlier.shape = NA,alpha=0.7) + theme_bw()
         if(input$ylimZero){
-          res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale"),limits=c(0.4,NA))
         } else {
           res <- res + scale_y_log10(name="Normalized counts - log10 scale")
         }
@@ -2337,12 +2346,18 @@ pcaExplorer <- function(dds=NULL,
       if(interactive()) {
         # flush input and values to the environment in two distinct objects (to be reused later?)
         isolate({
-          assign(paste0("pcaExplorer_inputs_",
-                        gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time()))))),
-                 reactiveValuesToList(input), envir = .GlobalEnv)
-          assign(paste0("pcaExplorer_values_",
-                        gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time()))))),
-                 reactiveValuesToList(values), envir = .GlobalEnv)
+
+          # pcaexplorer_env <<- new.env(parent = emptyenv())
+          cur_inputs <- reactiveValuesToList(input)
+          cur_values <- reactiveValuesToList(values)
+          tstamp <- gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time()))))
+
+          # myvar <- "frfr"
+          # assign("test", myvar, pcaexplorer_env)
+
+          # better practice rather than assigning to global env - notify users of this
+          assign(paste0("pcaExplorer_inputs_", tstamp),cur_inputs, envir = pcaexplorer_env)
+          assign(paste0("pcaExplorer_values_",tstamp),cur_values, envir = pcaexplorer_env)
           stopApp("pcaExplorer closed, state successfully saved to global R environment.")
         })
       } else {
