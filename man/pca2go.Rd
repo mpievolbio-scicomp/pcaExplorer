@@ -76,4 +76,3 @@ pca2go_airway <- pca2go(rld_airway,
 
 
 }
-

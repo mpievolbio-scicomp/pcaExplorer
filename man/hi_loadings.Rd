@@ -38,4 +38,3 @@ hi_loadings(pcaobj,topN = 10,exprTable=dds)
 hi_loadings(pcaobj,topN = 10,exprTable=counts(dds))
 
 }
-

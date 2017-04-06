@@ -32,4 +32,3 @@ dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
 get_annotation(dds_airway,"hsapiens_gene_ensembl","ensembl_gene_id")
 }
 }
-

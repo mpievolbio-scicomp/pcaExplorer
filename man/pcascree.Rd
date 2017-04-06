@@ -32,4 +32,3 @@ pcascree(pcaobj,type="pev")
 pcascree(pcaobj,type="cev",title="Cumulative explained proportion of variance - Test dataset")
 
 }
-

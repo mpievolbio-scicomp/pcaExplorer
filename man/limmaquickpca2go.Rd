@@ -57,4 +57,3 @@ goquick_airway <- limmaquickpca2go(rld_airway,
 }
 
 }
-

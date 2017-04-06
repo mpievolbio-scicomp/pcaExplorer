@@ -112,4 +112,3 @@ cols_multi <- scales::hue_pal()(length(levels(groups_multi)))[factor(groups_mult
 genespca(rlt,ntop=100,arrowColors=cols_multi,groupNames=groups_multi)
 
 }
-

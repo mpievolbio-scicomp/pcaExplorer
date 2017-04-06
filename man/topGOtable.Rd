@@ -91,4 +91,3 @@ topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
 
 
 }
-

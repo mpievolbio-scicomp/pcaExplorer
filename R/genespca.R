@@ -156,7 +156,7 @@ genespca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames
       df.v$varname <- rownames(v)
     }
     df.v$angle <- with(df.v, (180/pi) * atan(yvar/xvar))
-    df.v$hjust = with(df.v, (1 - varname.adjust * sign(xvar))/2)
+    df.v$hjust <- with(df.v, (1 - varname.adjust * sign(xvar))/2)
 
     if(returnData){
       return(df.u)

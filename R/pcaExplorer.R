@@ -55,9 +55,16 @@ pcaExplorer <- function(dds=NULL,
          install.packages('shiny')")
   }
 
+
+  # library("shinyBS") # to correctly display the bsTooltips
+
   # get modes and themes for the ace editor
   modes <- shinyAce::getAceModes()
   themes <- shinyAce::getAceThemes()
+
+  # create environment for storing inputs and values
+  ## i need the assignment like this to export it up one level - i.e. "globally"
+  pcaexplorer_env <<- new.env(parent = emptyenv())
 
   ## upload max 300mb files - can be changed if necessary
   options(shiny.maxRequestSize=300*1024^2)
@@ -183,6 +190,14 @@ pcaExplorer <- function(dds=NULL,
             shinyBS::bsTooltip(
               "upload_annotation", paste0("Select file containing the annotation data"),
               "right", options = list(container = "body")),
+
+
+            br(),
+            "... or you can also ",
+            actionButton("btn_loaddemo", "Load the demo airway data", icon = icon("play-circle"),
+                         class = "btn btn-info"),br(), p(),
+
+
             # wellPanel(
             #
             #   checkboxInput("header_ct", "Header", TRUE),
@@ -649,7 +664,7 @@ pcaExplorer <- function(dds=NULL,
                 width = 6,
                 box(
                   title = "markdown options", status = "primary", solidHeader = TRUE, collapsible = TRUE, width = 9,
-                  radioButtons("rmd_dl_format", label = "Choose Format:", c("HTML" = "html", "R Markdown" = "rmd"), inline = T),
+                  radioButtons("rmd_dl_format", label = "Choose Format:", c("HTML" = "html", "R Markdown" = "rmd"), inline = TRUE),
                   textInput("report_title", "Title: "),
                   textInput("report_author", "Author: "),
                   radioButtons("report_toc", "Table of Contents", choices = list("Yes" = "true", "No" = "false")),
@@ -999,6 +1014,39 @@ pcaExplorer <- function(dds=NULL,
     })
 
 
+    # load the demo data
+    observeEvent(input$btn_loaddemo,withProgress(
+      message = "Loading demo data...",
+      detail = "Generating DESeqDataSet", value = 0,
+      {
+        requireNamespace("airway",quietly = TRUE)
+        data(airway,package="airway",envir = environment())
+
+        cm_airway <- assay(airway)
+        ed_airway <- as.data.frame(colData(airway))
+
+        values$mycountmatrix <- cm_airway
+        values$mymetadata <- ed_airway
+
+        # just to be sure, overwrite the annotation and the rest
+
+        values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
+                                               colData = values$mymetadata,
+                                               design=~cell + dex)
+        incProgress(0.1,detail = "Generating DESeqTransform")
+        values$myrlt <- rlogTransformation(values$mydds)
+
+        incProgress(0.8, detail = "Retrieving annotation")
+
+        values$myannotation <- get_annotation_orgdb(values$mydds, "org.Hs.eg.db","ENSEMBL")
+      })
+    )
+
+
+
+
+
+
     colSel <- reactive({
       # find out how many colors to generate: if no factor is selected, either
       # return all say steelblue or all different
@@ -1245,7 +1293,10 @@ pcaExplorer <- function(dds=NULL,
                      point_size = input$pca_point_size, title="Samples PCA - zoom in",
                      ellipse = input$pca_ellipse, ellipse.prob = input$pca_cislider
       )
-      res <- res + xlim(input$pca_brush$xmin,input$pca_brush$xmax) + ylim(input$pca_brush$ymin,input$pca_brush$ymax)
+      res <- res +
+        coord_cartesian(
+          xlim = c(input$pca_brush$xmin,input$pca_brush$xmax),
+          ylim = c(input$pca_brush$ymin,input$pca_brush$ymax))
       res <- res + theme_bw()
       exportPlots$samplesZoom <- res
       res
@@ -1374,8 +1425,9 @@ pcaExplorer <- function(dds=NULL,
                       scaleArrow = input$pca_scale_arrow,point_size=input$pca_point_size,annotation=values$myannotation)
 
       res <- res +
-        xlim(input$pcagenes_brush$xmin,input$pcagenes_brush$xmax) +
-        ylim(input$pcagenes_brush$ymin,input$pcagenes_brush$ymax)
+        coord_cartesian(
+          xlim = c(input$pcagenes_brush$xmin,input$pcagenes_brush$xmax),
+          ylim = c(input$pcagenes_brush$ymin,input$pcagenes_brush$ymax))
       exportPlots$genesZoom <- res
       res
     })
@@ -1777,7 +1829,7 @@ pcaExplorer <- function(dds=NULL,
         res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
           geom_boxplot(outlier.shape = NA,alpha=0.7) + theme_bw()
         if(input$ylimZero){
-          res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale", limits=c(0.4,NA))
         } else {
           res <- res + scale_y_log10(name="Normalized counts - log10 scale")
         }
@@ -1796,7 +1848,7 @@ pcaExplorer <- function(dds=NULL,
         res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
           geom_violin(aes_string(col="plotby"),alpha = 0.6) + theme_bw()
         if(input$ylimZero){
-          res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
+          res <- res + scale_y_log10(name="Normalized counts - log10 scale", limits=c(0.4,NA))
         } else {
           res <- res + scale_y_log10(name="Normalized counts - log10 scale")
         }
@@ -2335,12 +2387,18 @@ pcaExplorer <- function(dds=NULL,
       if(interactive()) {
         # flush input and values to the environment in two distinct objects (to be reused later?)
         isolate({
-          assign(paste0("pcaExplorer_inputs_",
-                        gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time()))))),
-                 reactiveValuesToList(input), envir = .GlobalEnv)
-          assign(paste0("pcaExplorer_values_",
-                        gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time()))))),
-                 reactiveValuesToList(values), envir = .GlobalEnv)
+
+          # pcaexplorer_env <<- new.env(parent = emptyenv())
+          cur_inputs <- reactiveValuesToList(input)
+          cur_values <- reactiveValuesToList(values)
+          tstamp <- gsub(" ","_",gsub("-","",gsub(":","-",as.character(Sys.time()))))
+
+          # myvar <- "frfr"
+          # assign("test", myvar, pcaexplorer_env)
+
+          # better practice rather than assigning to global env - notify users of this
+          assign(paste0("pcaExplorer_inputs_", tstamp),cur_inputs, envir = pcaexplorer_env)
+          assign(paste0("pcaExplorer_values_",tstamp),cur_values, envir = pcaexplorer_env)
           stopApp("pcaExplorer closed, state successfully saved to global R environment.")
         })
       } else {
