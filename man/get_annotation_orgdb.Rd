@@ -33,4 +33,3 @@ dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
 get_annotation_orgdb(dds_airway,"org.Hs.eg.db","ENSEMBL")
 }
 }
-

@@ -49,4 +49,3 @@ dds2 <- makeExampleDESeqDataSet_multifac(betaSD_condition = 1,betaSD_tissue = 4)
 dds2
 
 }
-

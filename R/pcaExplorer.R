@@ -190,6 +190,14 @@ pcaExplorer <- function(dds=NULL,
             shinyBS::bsTooltip(
               "upload_annotation", paste0("Select file containing the annotation data"),
               "right", options = list(container = "body")),
+
+
+            br(),
+            "... or you can also ",
+            actionButton("btn_loaddemo", "Load the demo airway data", icon = icon("play-circle"),
+                         class = "btn btn-info"),br(), p(),
+
+
             # wellPanel(
             #
             #   checkboxInput("header_ct", "Header", TRUE),
@@ -1004,6 +1012,39 @@ pcaExplorer <- function(dds=NULL,
     output$showuploaded4 <- renderPrint({
       values$myrlt
     })
+
+
+    # load the demo data
+    observeEvent(input$btn_loaddemo,withProgress(
+      message = "Loading demo data...",
+      detail = "Generating DESeqDataSet", value = 0,
+      {
+        requireNamespace("airway",quietly = TRUE)
+        data(airway,package="airway",envir = environment())
+
+        cm_airway <- assay(airway)
+        ed_airway <- as.data.frame(colData(airway))
+
+        values$mycountmatrix <- cm_airway
+        values$mymetadata <- ed_airway
+
+        # just to be sure, overwrite the annotation and the rest
+
+        values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
+                                               colData = values$mymetadata,
+                                               design=~cell + dex)
+        incProgress(0.1,detail = "Generating DESeqTransform")
+        values$myrlt <- rlogTransformation(values$mydds)
+
+        incProgress(0.8, detail = "Retrieving annotation")
+
+        values$myannotation <- get_annotation_orgdb(values$mydds, "org.Hs.eg.db","ENSEMBL")
+      })
+    )
+
+
+
+
 
 
     colSel <- reactive({

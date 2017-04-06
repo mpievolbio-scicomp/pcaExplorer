@@ -1,8 +1,8 @@
 Package: pcaExplorer
 Type: Package
 Title: Interactive Visualization of RNA-seq Data Using a Principal Components Approach
-Version: 2.1.1
-Date: 2017-03-15
+Version: 2.1.3
+Date: 2017-04-07
 Authors@R: c(person("Federico", "Marini", email =
         "marinif@uni-mainz.de", role = c("aut", "cre")))
 Maintainer: Federico Marini <marinif@uni-mainz.de>
@@ -25,6 +25,6 @@ BugReports: https://github.com/federicomarini/pcaExplorer/issues
 biocViews: Visualization, RNASeq, DimensionReduction,
         PrincipalComponent, QualityControl, GUI, ReportWriting
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 NeedsCompilation: no
 Author: Federico Marini [aut, cre]

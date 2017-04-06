@@ -30,4 +30,3 @@ rlt <- DESeq2::rlogTransformation(dds)
 geneprofiler(rlt,paste0("gene",sample(1:1000,20)))
 geneprofiler(rlt,paste0("gene",sample(1:1000,20)),plotZ=TRUE)
 }
-

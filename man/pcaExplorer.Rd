@@ -4,6 +4,7 @@
 \name{pcaExplorer}
 \alias{pcaExplorer}
 \alias{pcaExplorer-package}
+\alias{pcaExplorer}
 \title{pcaExplorer: analyzing time-lapse microscopy imaging, from detection to tracking}
 \usage{
 pcaExplorer(dds = NULL, rlt = NULL, countmatrix = NULL, coldata = NULL,
@@ -74,4 +75,3 @@ Federico Marini \email{marinif@uni-mainz.de}, 2016
 
 Maintainer: Federico Marini \email{marinif@uni-mainz.de}
 }
-
