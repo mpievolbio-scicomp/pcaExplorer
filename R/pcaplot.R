@@ -212,9 +212,10 @@ pcaplot3d <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE
   nrgroups <- length(levels(d$group))
   cols <- hue_pal()(nrgroups)[d$group]
 
-  scatterplot3js(d[,1:3],
+  scatterplot3js(as.matrix(d[,1:3]),
                  color = cols,
-                 renderer = "canvas", size = 1.3,
+                 # renderer = "canvas",
+                 size = 1.3,
                  labels = rownames(d),label.margin="50px 50px 50px 50px")
 }
 
