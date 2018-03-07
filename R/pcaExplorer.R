@@ -2377,8 +2377,20 @@ pcaExplorer <- function(dds=NULL,
     ## currently not working as I want with rmarkdown::render, but can leave it like this - the yaml will be taken in the final version only
     output$knitDoc <- renderUI({
       input$updatepreview_button
-      return(isolate(HTML(knit2html(text = input$acereport_rmd, fragment.only = TRUE, quiet = TRUE))))
+      return(
+        withProgress({
+          tmp_content <- paste0(rmd_yaml(),input$acereport_rmd,collapse = "\n")
+          isolate(HTML(knit2html(text = tmp_content, fragment.only = TRUE, quiet = TRUE)))
+        },
+        ## TODO: I should just "render on the fly" the Rmd without messing with the folders...
+        message = "Updating the report in the app body",
+        detail = "This can take some time"
+        )
+      )
     })
+    
+    
+    
 
 
 
