@@ -12,9 +12,20 @@ install:
 
 # Adapt as necessary starting from here
 
+environment:
+
+  matrix:
+  - R_VERSION: release
+    R_ARCH: x64
+    _R_CHECK_FORCE_SUGGESTS_: false
+  - R_VERSION: devel
+    R_ARCH: x64
+    _R_CHECK_FORCE_SUGGESTS_: false
+
+
 build_script:
   - travis-tool.sh install_bioc_deps
-  - travis-tool.sh install_bioc airway GO.db org.Hs.eg.db
+  - travis-tool.sh install_bioc GenomeInfoDbData airway GO.db org.Hs.eg.db
 
 
 test_script:

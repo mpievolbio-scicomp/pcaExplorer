@@ -1037,10 +1037,12 @@ pcaExplorer <- function(dds=NULL,
         values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
                                                colData = values$mymetadata,
                                                design=~cell + dex)
+        incProgress(0.1,detail = "Computing size factors for normalization")
+        values$mydds <- estimateSizeFactors(values$mydds)
         incProgress(0.1,detail = "Generating DESeqTransform")
         values$myrlt <- rlogTransformation(values$mydds)
 
-        incProgress(0.8, detail = "Retrieving annotation")
+        incProgress(0.7, detail = "Retrieving annotation")
 
         values$myannotation <- get_annotation_orgdb(values$mydds, "org.Hs.eg.db","ENSEMBL")
       })
