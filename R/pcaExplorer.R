@@ -97,7 +97,9 @@ pcaExplorer <- function(dds=NULL,
       dashboardSidebar(
         width = 280,
 
-        menuItem("App settings",icon = icon("cogs"),
+        menuItem("App settings",
+                 icon = icon("cogs"),
+                 startExpanded = TRUE,
                  selectInput('pc_x', label = 'x-axis PC: ', choices = 1:8, selected = 1),
                  shinyBS::bsTooltip(
                    "pc_x", paste0("Select the principal component to display on the x axis"),
@@ -145,7 +147,9 @@ pcaExplorer <- function(dds=NULL,
                                          "of the factors of interest and their interactions"),
                    "right", options = list(container = "body"))
         ),
-        menuItem("Plot export settings", icon = icon("paint-brush"),
+        menuItem("Plot export settings", 
+                 icon = icon("paint-brush"),
+                 startExpanded = TRUE,
 
                  numericInput("export_width",label = "Width of exported figures (cm)",value = 10,min = 2),
                  shinyBS::bsTooltip(
