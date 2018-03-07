@@ -211,8 +211,8 @@ pcaExplorer <- function(dds=NULL,
             # ## TODO: replace with heuristics for detecting separator with a guess
             p("Preview on the uploaded data"),
 
-            verbatimTextOutput("printdds"),
-            DT::dataTableOutput("printanno"),
+            uiOutput("printdds"),
+            uiOutput("printanno"),
             # this last one will just be visible if the user uploads the count matrix separately via button
             DT::dataTableOutput("sneakpeekcm")
           ),
@@ -895,27 +895,32 @@ pcaExplorer <- function(dds=NULL,
     })
 
 
-    output$printdds <- renderPrint({
+    output$printdds <- renderUI({
 
       shiny::validate(
         need(!is.null(values$mydds),
              "Upload your dataset, as a count matrix or passing it as a parameter, as well as the design information"
         )
       )
-
+      verbatimTextOutput("ddsprint")
+    })
+    
+    output$ddsprint <- renderPrint({
       values$mydds
-
     })
 
 
-    output$printanno <- DT::renderDataTable({
+    output$printanno <- renderUI({
       shiny::validate(
         need(!is.null(values$myannotation),
              "Upload your annotation table as a matrix/data frame or passing it as a parameter"
         )
       )
+      DT::dataTableOutput("annoprint")
+    })
+    
+    output$annoprint <- DT::renderDataTable({
       DT::datatable(values$myannotation,options = list(pageLength=10))
-
     })
 
 
