@@ -83,7 +83,7 @@ pcaExplorer <- function(dds=NULL,
         titleWidth = 900,
 
         # task menu for saving state to environment or binary data
-        shinydashboard::dropdownMenu(type = "tasks",icon = icon("cog"),badgeStatus = "success",
+        shinydashboard::dropdownMenu(type = "tasks",icon = icon("cog"),badgeStatus = NULL,
                                      notificationItem(
                                        text = actionButton("exit_and_save","Exit pcaExplorer & save",
                                                            class = "btn_no_border",
