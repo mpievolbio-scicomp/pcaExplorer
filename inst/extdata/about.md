@@ -44,22 +44,21 @@ citation("pcaExplorer")
 ```
 
 ```
-## 
-## To cite package 'pcaExplorer' in publications use:
-## 
-##   Federico Marini (2016). pcaExplorer: Interactive Visualization
-##   of RNA-seq Data Using a Principal Components Approach. R package
-##   version 1.1.3. https://github.com/federicomarini/pcaExplorer
-## 
-## A BibTeX entry for LaTeX users is
-## 
-##   @Manual{,
-##     title = {pcaExplorer: Interactive Visualization of RNA-seq Data Using a Principal Components Approach},
-##     author = {Federico Marini},
-##     year = {2016},
-##     note = {R package version 1.1.3},
-##     url = {https://github.com/federicomarini/pcaExplorer},
-##   }
+To cite package ‘pcaExplorer’ in publications use:
+
+  Federico Marini (2018). pcaExplorer: Interactive Visualization of RNA-seq Data Using
+  a Principal Components Approach. R package version 2.6.0.
+  https://github.com/federicomarini/pcaExplorer
+
+A BibTeX entry for LaTeX users is
+
+  @Manual{,
+    title = {pcaExplorer: Interactive Visualization of RNA-seq Data Using a Principal Components Approach},
+    author = {Federico Marini},
+    year = {2018},
+    note = {R package version 2.6.0},
+    url = {https://github.com/federicomarini/pcaExplorer},
+  }
 ```
 
 
