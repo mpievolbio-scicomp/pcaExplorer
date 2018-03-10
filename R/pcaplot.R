@@ -87,8 +87,9 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
 
   if(text_labels)
     g <- g + geom_label_repel(mapping = aes_string(label="names",fill="group"),
-                              color="white", show.legend = TRUE) +theme_bw()
+                              color="white", show.legend = TRUE) 
   if(!is.null(title)) g <- g + ggtitle(title)
+  g <- g + theme_bw()
   g
 }
 
