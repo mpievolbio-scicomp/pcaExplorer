@@ -1,3 +1,23 @@
+CHANGES IN VERSION 2.6.0
+------------------------
+
+NEW FEATURES
+
+    o Automatically computing size factors where required
+    o Added progress indication when compiling the report
+
+BUG FIXES
+
+    o Fixed after changes in threejs package
+    o Edited dropdown menu to remove unused green badge
+    o Menus start expanded on the side, again
+    o theme_bw applied when needed, corrected previous behavior
+
+OTHER NOTES
+
+    o Updated citation infos
+    o Slight difference in handling validate/need errors
+
 CHANGES IN VERSION 2.2.0
 ------------------------
 
