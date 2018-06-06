@@ -20,9 +20,9 @@ environment:
     #_R_CHECK_FORCE_SUGGESTS_: false
     #GCC_PATH: mingw_64
   - R_VERSION: devel
-    #R_ARCH: x64
+    R_ARCH: x64
     #_R_CHECK_FORCE_SUGGESTS_: false
-    #GCC_PATH: mingw_64
+    GCC_PATH: mingw_64
   USE_RTOOLS: true
 
 
