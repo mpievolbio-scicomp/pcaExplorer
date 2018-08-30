@@ -9,8 +9,9 @@ vignette and/or the documentation.*
 project. To install the package, start R and enter:
 
 ```r
-source("http://bioconductor.org/biocLite.R")
-biocLite("pcaExplorer")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("pcaExplorer")
 ```
 
 If you prefer, you can install and use the development version, which can be 
@@ -301,8 +302,9 @@ in an experiment Bioconductor packages.
 We will use the `airway` dataset, which can be installed with this command
 
 ```
-source("https://bioconductor.org/biocLite.R")
-biocLite("airway")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("airway")
 ```
 
 This package provides a RangedSummarizedExperiment object of read counts in genes for an RNA-Seq experiment 

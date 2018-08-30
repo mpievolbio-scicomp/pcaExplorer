@@ -28,14 +28,15 @@ for the experienced data analyst.
 `pcaExplorer` can be easily installed using `biocLite()`:
 
 ```
-source("http://bioconductor.org/biocLite.R")
-biocLite("pcaExplorer")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("pcaExplorer")
 ```
 
 or, optionally, 
 
 ```
-biocLite("federicomarini/pcaExplorer")
+BiocManager::install("federicomarini/pcaExplorer")
 # or alternatively...
 devtools::install_github("federicomarini/pcaExplorer")
 ```
