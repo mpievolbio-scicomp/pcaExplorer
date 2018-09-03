@@ -47,8 +47,9 @@ opts_chunk$set(comment=NA,
 `r Biocpkg("pcaExplorer")` is an R package distributed as part of the [Bioconductor](http://bioconductor.org) project. To install the package, start R and enter:
 
 ```{r installation, eval=FALSE}
-source("http://bioconductor.org/biocLite.R")
-biocLite("pcaExplorer")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("pcaExplorer")
 ```
 
 If you prefer, you can install and use the development version, which can be retrieved via Github (https://github.com/federicomarini/pcaExplorer). To do so, use
@@ -360,8 +361,9 @@ We will use the `r Biocpkg("airway")` dataset, which can be installed with this 
 
 
 ```{r installairway, eval=FALSE}
-source("https://bioconductor.org/biocLite.R")
-biocLite("airway")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("airway")
 ```
 
 This package provides a `RangedSummarizedExperiment` object of read counts in genes for an RNA-Seq experiment 
