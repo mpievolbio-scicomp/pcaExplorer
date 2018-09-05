@@ -70,7 +70,7 @@ pca2go <- function(se,
 
   annopkg <- paste0("org.",organism,".eg.db")
   if (!require(annopkg,character.only=TRUE)) {
-    stop("The package",annopkg, "is not installed/available. Try installing it with biocLite() ?")
+    stop("The package",annopkg, "is not installed/available. Try installing it with BiocManager::install() ?")
   }
   exprsData <- assay(se)
 
@@ -336,7 +336,7 @@ limmaquickpca2go <- function(se,
 ){
   annopkg <- paste0("org.",organism,".eg.db")
   if (!require(annopkg,character.only=TRUE)) {
-    stop("The package",annopkg, "is not installed/available. Try installing it with biocLite() ?")
+    stop("The package",annopkg, "is not installed/available. Try installing it with BiocManager::install() ?")
   }
   exprsData <- assay(se)
 

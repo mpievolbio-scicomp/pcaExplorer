@@ -89,7 +89,7 @@ get_annotation_orgdb <- function(dds, orgdb_species, idtype){
   }
 
   if(!require(orgdb_species,character.only=TRUE))
-    stop("The package ",orgdb_species, " is not installed/available. Try installing it with biocLite('",orgdb_species,"')")
+    stop("The package ",orgdb_species, " is not installed/available. Try installing it with BiocManager::install('",orgdb_species,"')")
 
 
   if(!(idtype %in% keytypes(eval(parse(text=orgdb_species))))){

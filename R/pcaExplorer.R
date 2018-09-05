@@ -1958,12 +1958,12 @@ pcaExplorer <- function(dds=NULL,
 
       shiny::validate(
         need(require(annopkg,character.only=TRUE),
-             paste0("The package ",annopkg, " is not installed/available. Try installing it with biocLite('",annopkg,"')"))
+             paste0("The package ",annopkg, " is not installed/available. Try installing it with BiocManager::install('",annopkg,"')"))
       )
 
       retmsg <- paste0(annopkg," - package available and loaded")
       # if (!require(annopkg,character.only=TRUE)) {
-      # stop("The package",annopkg, "is not installed/available. Try installing it with biocLite() ?")
+      # stop("The package",annopkg, "is not installed/available. Try installing it with BiocManager::install() ?")
       # }
       retmsg <- paste0(retmsg," - ",gsub(".eg.db","",gsub("org.","",annopkg)))
       retmsg
