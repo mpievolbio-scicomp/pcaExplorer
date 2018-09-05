@@ -25,7 +25,7 @@ for the experienced data analyst.
 
 ## Installation
 
-`pcaExplorer` can be easily installed using `biocLite()`:
+`pcaExplorer` can be easily installed using `BiocManager::install()`:
 
 ```
 if (!requireNamespace("BiocManager", quietly=TRUE))
