@@ -7,11 +7,12 @@
 genespca(x, ntop, choices = c(1, 2), arrowColors = "steelblue",
   groupNames = "group", biplot = TRUE, scale = 1, pc.biplot = TRUE,
   obs.scale = 1 - scale, var.scale = scale, groups = NULL,
-  ellipse = FALSE, ellipse.prob = 0.68, labels = NULL, labels.size = 3,
-  alpha = 1, var.axes = TRUE, circle = FALSE, circle.prob = 0.69,
-  varname.size = 4, varname.adjust = 1.5, varname.abbrev = FALSE,
-  returnData = FALSE, coordEqual = FALSE, scaleArrow = 1,
-  useRownamesAsLabels = TRUE, point_size = 2, annotation = NULL)
+  ellipse = FALSE, ellipse.prob = 0.68, labels = NULL,
+  labels.size = 3, alpha = 1, var.axes = TRUE, circle = FALSE,
+  circle.prob = 0.69, varname.size = 4, varname.adjust = 1.5,
+  varname.abbrev = FALSE, returnData = FALSE, coordEqual = FALSE,
+  scaleArrow = 1, useRownamesAsLabels = TRUE, point_size = 2,
+  annotation = NULL)
 }
 \arguments{
 \item{x}{A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},

@@ -4,9 +4,10 @@
 \alias{makeExampleDESeqDataSet_multifac}
 \title{Make a simulated DESeqDataSet for two or more experimental factors}
 \usage{
-makeExampleDESeqDataSet_multifac(n = 1000, m = 12, betaSD_condition = 1,
-  betaSD_tissue = 3, interceptMean = 4, interceptSD = 2,
-  dispMeanRel = function(x) 4/x + 0.1, sizeFactors = rep(1, m))
+makeExampleDESeqDataSet_multifac(n = 1000, m = 12,
+  betaSD_condition = 1, betaSD_tissue = 3, interceptMean = 4,
+  interceptSD = 2, dispMeanRel = function(x) 4/x + 0.1,
+  sizeFactors = rep(1, m))
 }
 \arguments{
 \item{n}{number of rows (genes)}

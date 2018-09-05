@@ -4,11 +4,10 @@
 \name{pcaExplorer}
 \alias{pcaExplorer}
 \alias{pcaExplorer-package}
-\alias{pcaExplorer}
 \title{pcaExplorer: analyzing time-lapse microscopy imaging, from detection to tracking}
 \usage{
-pcaExplorer(dds = NULL, rlt = NULL, countmatrix = NULL, coldata = NULL,
-  pca2go = NULL, annotation = NULL)
+pcaExplorer(dds = NULL, rlt = NULL, countmatrix = NULL,
+  coldata = NULL, pca2go = NULL, annotation = NULL)
 }
 \arguments{
 \item{dds}{A \code{\link{DESeqDataSet}} object. If not provided, then a \code{countmatrix}
