@@ -90,6 +90,9 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
                               color="white", show.legend = TRUE) 
   if(!is.null(title)) g <- g + ggtitle(title)
   g <- g + theme_bw()
+  # as in http://www.huber.embl.de/msmb/Chap-Graphics.html
+  # "well-made PCA plots usually have a width that’s larger than the height"
+  g <- g + coord_fixed()
   g
 }
 
