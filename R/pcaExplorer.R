@@ -1960,8 +1960,7 @@ pcaExplorer <- function(dds=NULL,
       class(datatable(values$mypca2go[[paste0("PC",input$pc_x)]][["posLoad"]]))
     })
     
-    # server multica ----------------------------------------------------------
-    MULTIFACTOR EXPLORATION
+    # server multifactor exploration ----------------------------------------------------------
     output$intro_multifac <- renderText({
       if(!is.null(values$mydds))
         shiny::validate(
