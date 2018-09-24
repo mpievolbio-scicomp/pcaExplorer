@@ -24,8 +24,6 @@
 #' of the main \code{\link{pcaExplorer}} function
 #'
 #' @examples
-#'
-#'
 #' library(airway)
 #' library(DESeq2)
 #' data(airway)
@@ -33,7 +31,6 @@
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
 #' \dontrun{
 #' rld_airway <- rlogTransformation(dds_airway)
-#'
 #' # constructing the annotation object
 #' anno_df <- data.frame(gene_id = rownames(dds_airway),
 #'                       stringsAsFactors=FALSE)
@@ -53,7 +50,6 @@
 #'                         ensToGeneSymbol = TRUE,
 #'                         background_genes = bg_ids)
 #' }
-#'
 #'
 #' @export
 pca2go <- function(se,
@@ -133,12 +129,9 @@ pca2go <- function(se,
                     PC4=list(posLoad=topGOpc4pos,negLoad=topGOpc4neg)
   )
   print("Extracting functional categories enriched in the gene subsets ... done!")
-
   attr(goEnrichs,"n_genesforpca") <- pca_ngenes
-
   return(goEnrichs)
 }
-
 
 
 rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
@@ -146,8 +139,6 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
   # works directly on the prcomp object
   return(rownames(x$rotation)[order(x$rotation[, pc], decreasing = decreasing)])
 }
-
-
 
 
 #' Extract functional terms enriched in the DE genes, based on topGO
@@ -175,16 +166,13 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #' @return A table containing the computed GO Terms and related enrichment scores
 #'
 #' @examples
-#'
 #' library(airway)
 #' library(DESeq2)
 #' data(airway)
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
-#'
 #' # Example, performing extraction of enriched functional categories in
 #' # detected significantly expressed genes
-#'
 #' \dontrun{
 #' dds_airway <- DESeq(dds_airway)
 #' res_airway <- results(dds_airway)
@@ -210,15 +198,11 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #'                      keytype="ENSEMBL",
 #'                      multiVals="first")
 #' library(topGO)
-#'
 #' topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
 #'                              ontology = "BP",
 #'                              mapping = "org.Hs.eg.db",
 #'                              geneID = "symbol")
 #' }
-#'
-#'
-#'
 #'
 #' @export
 topGOtable <- function(DEgenes,                  # Differentially expressed genes
@@ -280,15 +264,12 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
   return(sTab)
 }
 
-
-
 #' Functional interpretation of the principal components, based on simple
 #' overrepresentation analysis
 #'
 #' Extracts the genes with the highest loadings for each principal component, and
 #' performs functional enrichment analysis on them using the simple and quick routine
 #' provided by the \code{limma} package
-#'
 #'
 #' @param se A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
 #' produced for example by either \code{\link{rlog}} or
@@ -308,7 +289,6 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 #' of the main \code{\link{pcaExplorer}} function
 #'
 #' @examples
-#'
 #' library(airway)
 #' library(DESeq2)
 #' library(limma)
@@ -332,14 +312,12 @@ limmaquickpca2go <- function(se,
                         background_genes = NULL,
                         scale = FALSE,
                         ... # further parameters to be passed to the topgo routine
-
 ){
   annopkg <- paste0("org.",organism,".eg.db")
   if (!require(annopkg,character.only=TRUE)) {
     stop("The package",annopkg, "is not installed/available. Try installing it with BiocManager::install() ?")
   }
   exprsData <- assay(se)
-
 
   if(is.null(background_genes)) {
     if(is(se,"DESeqDataSet")) {
@@ -415,9 +393,5 @@ limmaquickpca2go <- function(se,
   )
   print("Extracting functional categories enriched in the gene subsets ... done!")
   attr(goEnrichs,"n_genesforpca") <- pca_ngenes
-
   return(goEnrichs)
 }
-
-
-

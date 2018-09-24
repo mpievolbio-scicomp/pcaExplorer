@@ -10,7 +10,7 @@
 #' and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols
 #' @param title The title of the plot
 #'
-#' @return A base plot object, or a \code{matrix}, if \code{exprTable} is not null
+#' @return A ggplot2 object, or a \code{matrix}, if \code{exprTable} is not null
 #'
 #' @examples
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD = 3,betaSD_tissue = 1)
@@ -22,7 +22,7 @@
 #'
 #' @export
 hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
-                        annotation = NULL, title="Top/bottom loadings - "){
+                        annotation = NULL, title="Top/bottom loadings"){
   if(whichpc < 0)
     stop("Use a positive integer value for the principal component to select")
   if(whichpc > nrow(pcaobj$x))
@@ -41,7 +41,14 @@ hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
   if(!is.null(annotation))
     names(geneloadings_extreme) <- annotation$gene_name[match(names(geneloadings_extreme),rownames(annotation))]
 
-  barplot(geneloadings_extreme, las=2, col = c(rep("steelblue",topN),rep("coral",topN)),
-          main=paste0(title, "PC", whichpc))
-  # p <- ggplot(data.frame(loadings=geneloadings_extreme,geneID=names(geneloadings_extreme)),aes(geneID,weight=loadings)) + geom_bar()
+  # barplot(geneloadings_extreme, las=2, col = c(rep("steelblue",topN),rep("coral",topN)),
+          # main=paste0(title, "PC", whichpc))
+  mydf <- data.frame(loadings=geneloadings_extreme,
+                     geneID=names(geneloadings_extreme),
+                     mycol = c(rep("steelblue",topN),rep("coral",topN)))
+  mydf$geneID <- factor(mydf$geneID, levels = mydf$geneID)
+  p <- ggplot(mydf,aes(geneID,y=loadings)) + geom_col(aes(fill = mycol)) + theme_bw() +
+    theme(axis.text.x=element_text(angle = 90, vjust = 0.5)) + guides(fill = FALSE) + 
+    ggtitle(paste0(title, " - PC", whichpc))
+  p
 }

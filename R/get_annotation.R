@@ -1,5 +1,3 @@
-
-
 #' Get an annotation data frame from biomaRt
 #'
 #' @param dds A \code{\link{DESeqDataSet}} object
@@ -42,9 +40,6 @@ To obtain a list, type mart = useMart('ensembl'), followed by listDatasets(mart)
 
   return(anns2)
 }
-
-
-
 
 
 #' Get an annotation data frame from org db packages
@@ -111,7 +106,5 @@ get_annotation_orgdb <- function(dds, orgdb_species, idtype){
     stringsAsFactors = FALSE,
     row.names = rownames(dds)
   )
-
   return(anns)
 }
-
