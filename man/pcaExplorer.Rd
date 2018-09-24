@@ -50,7 +50,6 @@ based on Principal Components Analysis. The methods provided allow for quick inf
 extraction and effective data exploration. A Shiny application encapsulates the whole analysis.
 }
 \examples{
-
 library(airway)
 data(airway)
 airway
@@ -66,7 +65,6 @@ pcaExplorer(countmatrix = counts(dds_airway), coldata = colData(dds_airway))
 
 pcaExplorer() # and then upload count matrix, covariate matrix (and eventual annotation)
 }
-
 
 }
 \author{

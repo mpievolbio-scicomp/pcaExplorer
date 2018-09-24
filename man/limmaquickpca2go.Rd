@@ -41,7 +41,6 @@ performs functional enrichment analysis on them using the simple and quick routi
 provided by the \code{limma} package
 }
 \examples{
-
 library(airway)
 library(DESeq2)
 library(limma)

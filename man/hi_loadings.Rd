@@ -5,7 +5,7 @@
 \title{Extract genes with highest loadings}
 \usage{
 hi_loadings(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
-  annotation = NULL, title = "Top/bottom loadings - ")
+  annotation = NULL, title = "Top/bottom loadings")
 }
 \arguments{
 \item{pcaobj}{A \code{prcomp} object}
@@ -24,7 +24,7 @@ and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols}
 \item{title}{The title of the plot}
 }
 \value{
-A base plot object, or a \code{matrix}, if \code{exprTable} is not null
+A ggplot2 object, or a \code{matrix}, if \code{exprTable} is not null
 }
 \description{
 Extract genes with highest loadings
@@ -33,8 +33,8 @@ Extract genes with highest loadings
 dds <- makeExampleDESeqDataSet_multifac(betaSD = 3,betaSD_tissue = 1)
 rlt <- DESeq2::rlogTransformation(dds)
 pcaobj <- prcomp(t(SummarizedExperiment::assay(rlt)))
-hi_loadings(pcaobj,topN = 20)
-hi_loadings(pcaobj,topN = 10,exprTable=dds)
-hi_loadings(pcaobj,topN = 10,exprTable=counts(dds))
+hi_loadings(pcaobj, topN = 20)
+hi_loadings(pcaobj, topN = 10, exprTable=dds)
+hi_loadings(pcaobj, topN = 10, exprTable=counts(dds))
 
 }

@@ -45,16 +45,13 @@ A wrapper for extracting functional GO terms enriched in the DE genes, based on
 the algorithm and the implementation in the topGO package
 }
 \examples{
-
 library(airway)
 library(DESeq2)
 data(airway)
 airway
 dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
-
 # Example, performing extraction of enriched functional categories in
 # detected significantly expressed genes
-
 \dontrun{
 dds_airway <- DESeq(dds_airway)
 res_airway <- results(dds_airway)
@@ -80,14 +77,10 @@ bg_symbols <- mapIds(org.Hs.eg.db,
                      keytype="ENSEMBL",
                      multiVals="first")
 library(topGO)
-
 topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
                              ontology = "BP",
                              mapping = "org.Hs.eg.db",
                              geneID = "symbol")
 }
-
-
-
 
 }

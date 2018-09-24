@@ -24,7 +24,6 @@ Produces a scree plot for investigating the proportion of explained variance, or
 alternatively the cumulative value
 }
 \examples{
-
 dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
 rlt <- DESeq2::rlogTransformation(dds)
 pcaobj <- prcomp(t(SummarizedExperiment::assay(rlt)))

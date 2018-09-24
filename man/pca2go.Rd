@@ -44,8 +44,6 @@ performs functional enrichment analysis on them using routines and algorithms fr
 the \code{topGO} package
 }
 \examples{
-
-
 library(airway)
 library(DESeq2)
 data(airway)
@@ -53,7 +51,6 @@ airway
 dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
 \dontrun{
 rld_airway <- rlogTransformation(dds_airway)
-
 # constructing the annotation object
 anno_df <- data.frame(gene_id = rownames(dds_airway),
                       stringsAsFactors=FALSE)
@@ -73,6 +70,5 @@ pca2go_airway <- pca2go(rld_airway,
                         ensToGeneSymbol = TRUE,
                         background_genes = bg_ids)
 }
-
 
 }
