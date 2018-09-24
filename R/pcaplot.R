@@ -21,13 +21,10 @@
 #'
 #' @return An object created by \code{ggplot}, which can be assigned and further customized.
 #'
-#'
 #' @examples
-#'
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
 #' rlt <- DESeq2::rlogTransformation(dds)
 #' pcaplot(rlt, ntop=200)
-#'
 #'
 #' @export
 pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
@@ -111,7 +108,6 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
 #' @return An object created by \code{ggplot}, which can be assigned and further customized.
 #'
 #' @examples
-#'
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
 #' rlt <- DESeq2::rlogTransformation(dds)
 #' pcaobj <- prcomp(t(SummarizedExperiment::assay(rlt)))
@@ -152,12 +148,6 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
   if(!is.null(title)) p <- p + ggtitle(title)
   p
 }
-
-
-
-
-
-
 
 
 #' Sample PCA plot for transformed data
@@ -222,4 +212,3 @@ pcaplot3d <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE
                  size = 1.3,
                  labels = rownames(d),label.margin="50px 50px 50px 50px")
 }
-

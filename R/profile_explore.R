@@ -31,7 +31,6 @@ geneprofiler <- function(se, genelist = NULL, intgroup="condition", plotZ = FALS
 
   # resort the order of the rows according to the groups that are selected
   mygroups <- interaction(as.data.frame(colData(se)[intgroup]))
-
   mydata <- mydata[order(mygroups),]
 
   if(plotZ) {
@@ -43,8 +42,6 @@ geneprofiler <- function(se, genelist = NULL, intgroup="condition", plotZ = FALS
     # was...
     # mydata <- NMF:::scale_mat(mydata,"col")
   }
-
-
   mylabels <- colnames(se)[order(mygroups)]
   mycols <- scales::hue_pal()(length(levels(mygroups)))[sort(mygroups)]
 
@@ -62,5 +59,4 @@ geneprofiler <- function(se, genelist = NULL, intgroup="condition", plotZ = FALS
       lines(mydata[,i],type="l",xaxt="n",las=2,col=i)
   }
   ## TODO: if desired, plot only the avg pro group -> maybe as boxplot?
-
 }
