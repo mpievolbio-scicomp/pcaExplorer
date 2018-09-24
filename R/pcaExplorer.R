@@ -916,7 +916,6 @@ pcaExplorer <- function(dds=NULL,
       rlt <- rlogTransformation(values$mydds)
       return(rlt)
     })
-    dd
     
     observeEvent(createDDS,
                  {

@@ -47,7 +47,7 @@ hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
                      geneID=names(geneloadings_extreme),
                      mycol = c(rep("steelblue",topN),rep("coral",topN)))
   mydf$geneID <- factor(mydf$geneID, levels = mydf$geneID)
-  p <- ggplot(mydf,aes(geneID,y=loadings)) + geom_col(aes(fill = mycol)) + theme_bw() +
+  p <- ggplot(mydf,aes_string(x="geneID",y="loadings")) + geom_col(aes_string(fill = "mycol")) + theme_bw() +
     theme(axis.text.x=element_text(angle = 90, vjust = 0.5)) + guides(fill = FALSE) + 
     ggtitle(paste0(title, " - PC", whichpc))
   p
