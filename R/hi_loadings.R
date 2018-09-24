@@ -12,7 +12,6 @@
 #'
 #' @return A base plot object, or a \code{matrix}, if \code{exprTable} is not null
 #'
-#'
 #' @examples
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD = 3,betaSD_tissue = 1)
 #' rlt <- DESeq2::rlogTransformation(dds)
@@ -46,6 +45,3 @@ hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
           main=paste0(title, "PC", whichpc))
   # p <- ggplot(data.frame(loadings=geneloadings_extreme,geneID=names(geneloadings_extreme)),aes(geneID,weight=loadings)) + geom_bar()
 }
-
-
-

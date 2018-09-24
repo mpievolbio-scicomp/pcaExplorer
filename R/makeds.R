@@ -23,7 +23,6 @@
 #'  metadata columns.  Note that the true betas are provided on the log2 scale.
 #'
 #' @examples
-#'
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
 #' dds
 #' dds2 <- makeExampleDESeqDataSet_multifac(betaSD_condition = 1,betaSD_tissue = 4)

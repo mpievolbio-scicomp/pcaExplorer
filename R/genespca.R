@@ -50,7 +50,6 @@
 #' @param annotation A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
 #' and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols
 #'
-#'
 #' @return An object created by \code{ggplot}, which can be assigned and further customized.
 #'
 #' @examples
@@ -236,6 +235,3 @@ genespca <- function(x,ntop,choices=c(1,2),arrowColors = "steelblue", groupNames
     return(g)
   }
 }
-
-
-

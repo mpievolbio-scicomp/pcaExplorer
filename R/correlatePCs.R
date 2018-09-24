@@ -5,7 +5,6 @@
 #' and the \code{cor.test} based on Spearman's correlation for continuous
 #' variables
 #'
-#'
 #' @param pcaobj A \code{prcomp} object
 #' @param coldata A \code{data.frame} object containing the experimental
 #' covariates
@@ -15,7 +14,6 @@
 #' and for each principal component
 #'
 #' @examples
-#'
 #' library(DESeq2)
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
 #' rlt <- rlogTransformation(dds)
@@ -46,7 +44,6 @@ correlatePCs <- function(pcaobj,coldata,pcs=1:4){
         }
       }else {
         res[j,i] <- cor.test(x[,j],coldata[,i],method="spearman")$p.value
-
       }
     }
   }
@@ -67,14 +64,12 @@ correlatePCs <- function(pcaobj,coldata,pcs=1:4){
 #' @return A base plot object
 #'
 #' @examples
-#'
 #' library(DESeq2)
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
 #' rlt <- rlogTransformation(dds)
 #' pcaobj <- prcomp(t(assay(rlt)))
 #' res <- correlatePCs(pcaobj,colData(dds))
 #' plotPCcorrs(res)
-#'
 #'
 #' @export
 plotPCcorrs <- function(pccorrs,pc=1,logp=TRUE) {
@@ -87,6 +82,3 @@ plotPCcorrs <- function(pccorrs,pc=1,logp=TRUE) {
           main=paste0("Significance of the relations between PC ",pc," vs covariates"),
           ylab=ifelse(logp,"-log10(pval)","pval"))
 }
-
-
-
