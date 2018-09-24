@@ -12,4 +12,4 @@ expect_equal(dim(res),c(4,2))
 expect_equal(colnames(res),colnames(colData(dds)))
 plotPCcorrs(res)
 
-plotPCcorrs(res,logp = F,pc = 2)
+plotPCcorrs(res,logp = FALSE,pc = 2)
