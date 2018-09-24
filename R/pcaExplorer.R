@@ -24,7 +24,6 @@
 #' @return A Shiny App is launched for interactive data exploration
 #'
 #' @examples
-#'
 #' library(airway)
 #' data(airway)
 #' airway
@@ -40,7 +39,6 @@
 #'
 #' pcaExplorer() # and then upload count matrix, covariate matrix (and eventual annotation)
 #' }
-#'
 #'
 #' @export
 pcaExplorer <- function(dds=NULL,
@@ -72,7 +70,6 @@ pcaExplorer <- function(dds=NULL,
 
   newuiui <-
     shinydashboard::dashboardPage(
-
       dashboardHeader(
         title = paste0("pcaExplorer - Interactive exploration of Principal Components ",
                        "of Samples and Genes in RNA-seq data - version ",
