@@ -41,8 +41,6 @@ BiocManager::install("federicomarini/pcaExplorer")
 devtools::install_github("federicomarini/pcaExplorer")
 ```
 
-
-
 ## Quick start
 
 This command loads the `pcaExplorer` package
@@ -83,8 +81,6 @@ row names of the count matrix or `dds` object, and an extra column `gene_name`, 
 gene symbols. This can be used for making information extraction easier, as ENSEMBL ids (a usual choice when
 assigning reads to features) do not provide an immediate readout for which gene they refer to. This can be
 either passed as a parameter when launching the app, or also uploaded as a tab separated text file.
-
-
 
 ## Contact
 
