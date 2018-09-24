@@ -59,14 +59,11 @@ library("devtools")
 install_github("federicomarini/pcaExplorer")
 ```
 
-
-
 Once `r Rpackage("pcaExplorer")` is installed, it can be loaded by the following command.
 
 ```{r loadlibrary, message=FALSE}
 library("pcaExplorer")
 ```
-
 
 # Introduction
 
@@ -100,9 +97,6 @@ If you use `r Biocpkg("pcaExplorer")` for your analysis, please cite it as here 
 ```{r}
 citation("pcaExplorer")
 ```
-
-
-
 
 # Launching the application
 
@@ -141,15 +135,10 @@ either passed as a parameter when launching the app, or also uploaded as a tab s
 provides two functions, `get_annotation` and `get_annotation_orgdb`, as a convenient wrapper to obtain the updated
 annotation information, respectively from `biomaRt` or via the `org.XX.eg.db` packages.
 
-
-
-
-
 # The controls sidebar
 
 Most of the input controls are located in the sidebar, some are as well in the individual tabs of the app.
 By changing one or more of the input parameters, the user can get a fine control on what is displayed.
-
 
 ## App settings
 
@@ -179,8 +168,6 @@ and their interactions
 Additional controls available in the single tabs are also assisted by tooltips that show on hovering the mouse.
 Normally they are tightly related to the plot/output they are placed nearby.
 
-
-
 # The task menu
 
 The task menu, accessible by clicking on the cog icon in the upper right part of the application, provides two 
@@ -192,8 +179,6 @@ objects in two list objects made available in the global environment, called `pc
 - `Save State as .RData` will similarly store `LiveInputs` and `r_data` in a binary file named
 `pcaExplorerState_YYYYMMDD_HHMMSS.Rdata`, without closing the application 
 
-
-           
 # The app panels
 
 The `r Biocpkg("pcaExplorer")` app is structured in different panels, each focused on a different aspect of the 
@@ -204,8 +189,6 @@ depth in the explorations, for example by zooming, subsetting, selecting. This i
 recent developments in the `r CRANpkg("shiny")` package/framework.
 
 The available panels are the described in the following subsections.
-
-
 
 ## Data Upload
 
@@ -226,7 +209,6 @@ This is where you most likely are reading this text (otherwise in the package vi
 <img src="newsnap_02_instructions.png" style="width:800px;"/>
 </p>
 
-
 ## Counts Table
 
 Interactive tables for the raw, normalized or (r)log-transformed counts are shown in this tab.
@@ -236,14 +218,12 @@ The user can also generate a sample-to-sample correlation scatter plot with the 
 <img src="newsnap_03_countstable.png" style="width:800px;"/>
 </p>
 
-
 ## Data Overview
 
 This panel displays information on the objects in use, either passed as parameters or 
 generated from the count matrix provided. Displayed information comprise the design metadata,
 a sample to sample distance heatmap, the number of million of reads per sample and some
 basic summary for the counts.
-
 
 <p align="center">
 <img src="newsnap_04_overview.png" style="width:800px;"/>
@@ -261,7 +241,6 @@ components is also available.
 <img src="newsnap_05_samples.png" style="width:800px;"/>
 </p>
 
-
 ## Genes View
 
 This panel displays the PCA projections of genes abundances onto any pair of components, with samples
@@ -273,7 +252,6 @@ samples. These are also reported in `datatable` objects, accessible in the botto
 <p align="center">
 <img src="newsnap_06_genes.png" style="width:800px;"/>
 </p>
-
 
 ## GeneFinder
 
@@ -320,7 +298,6 @@ allowed by brushing on the main plot.
 <img src="newsnap_09_multifac.png" style="width:800px;"/>
 </p>
 
-
 ## Report Editor
 
 The report editor is the backbone for generating and editing the interactive report on the basis of the 
@@ -336,7 +313,6 @@ with simple mouse clicks.
 <img src="newsnap_10_editor.png" style="width:800px;"/>
 </p>
 
-
 ## About
 
 Contains general information on `r Biocpkg("pcaExplorer")`, including the developer's contact, the link to
@@ -347,18 +323,12 @@ or bug reporting. Information for citing `r Biocpkg("pcaExplorer")` is also repo
 <img src="newsnap_11_about.png" style="width:800px;"/>
 </p>
 
-
-
-
-
-
 # Running `pcaExplorer` on published datasets
 
 We can run `r Biocpkg("pcaExplorer")` for demonstration purpose on published datasets that are available as SummarizedExperiment
 in an experiment Bioconductor packages.
 
 We will use the `r Biocpkg("airway")` dataset, which can be installed with this command
-
 
 ```{r installairway, eval=FALSE}
 if (!requireNamespace("BiocManager", quietly=TRUE))
@@ -472,15 +442,12 @@ pcaExplorer(dds = dds_multifac,
 
 When such a dataset is provided, the panel for multifactorial exploration is also usable at its best.
 
-
 # Functions exported by the package for standalone usage
 
 The functions exported by the `r Biocpkg("pcaExplorer")` package can be also used in a standalone scenario,
 provided the required objects are in the working environment. They are listed here for an overview,
 but please refer to the documentation for additional details. Where possible, for each function a code 
 snippet will be provided for its typical usage.
-
-
 
 ## `pcaplot`
 
@@ -498,7 +465,6 @@ pcaplot(rld_airway,intgroup = c("dex"),ntop = 1000,
 
 ```
 
-
 ## `pcaplot3d`
 
 Same as for `pcaplot`, but it uses the `threejs` package for the 3d interactive view.
@@ -508,7 +474,6 @@ pcaplot3d(rld_airway,intgroup = c("cell","dex"),ntop = 1000,
         pcX = 1, pcY = 2, pcZ = 3)
 # will open up in the viewer
 ```
-
 
 ## `pcascree`
 
@@ -545,7 +510,6 @@ hi_loadings(pcaobj_airway,topN = 10,exprTable=counts(dds_airway))
 hi_loadings(pcaobj_airway,topN = 10,annotation = annotation_airway)
 ```
 
-
 ## `genespca`
 
 `genespca` computes and plots the principal components of the genes, eventually displaying 
@@ -570,9 +534,7 @@ genespca(rld_airway,ntop=100,
          varname.size = 5,
          annotation = annotation_airway
         )
-
 ```
-
 
 ## `topGOtable` 
 
@@ -613,7 +575,6 @@ topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
                              geneID = "symbol")
 ```
 
-
 ## `pca2go`
 
 `pca2go` provides a functional interpretation of the principal components, by extracting the genes
@@ -637,7 +598,6 @@ pcaExplorer(dds_airway,rld_airway,
 
 ```
 
-
 ## `limmaquickpca2go`
 
 `limmaquickpca2go` is an alternative to `pca2go`, used in the live running app, thanks to its fast 
@@ -654,10 +614,7 @@ head(goquick_airway$PC1$posLoad)
 pcaExplorer(dds_airway,rld_airway,
             pca2go = goquick_airway,
             annotation = annotation_airway)
-
-
 ```
-
 
 ## `makeExampleDESeqDataSet_multifac`
 
@@ -680,7 +637,6 @@ pcaplot(rld2_simu,intgroup = c("condition","tissue")) +
   ggplot2::ggtitle("Simulated data - Small condition effect, bigger tissue effect")
 ```
 
-
 ## `distro_expr`
 
 Plots the distribution of expression values, either with density lines, boxplots or 
@@ -695,7 +651,6 @@ distro_expr(rld_airway,plot_type = "violin")
 distro_expr(rld_airway,plot_type = "boxplot")
 ```
 
-
 ## `geneprofiler` 
 
 Plots the profile expression of a subset of genes, optionally as standardized values
@@ -706,7 +661,6 @@ rlt <- DESeq2::rlogTransformation(dds)
 set.seed(42)
 geneprofiler(rlt,paste0("gene",sample(1:1000,20)), plotZ = FALSE)
 ```
-
 
 ## `get_annotation` and `get_annotation_orgdb`
 
@@ -724,7 +678,6 @@ anno_df_orgdb <- get_annotation_orgdb(dds = dds_airway,
                                       idtype = "ENSEMBL")
 ```
 
-
 ## `pair_corr`
 
 Plots the pairwise scatter plots and computes the correlation coefficient on the 
@@ -735,9 +688,6 @@ expression matrix provided.
 pair_corr(counts(dds_airway)[1:100,])
 ```
 
-
-
-
 # Further development
 
 Additional functionality for the `r Biocpkg("pcaExplorer")` will be added in the future, as it is tightly related to a topic
@@ -745,12 +695,8 @@ under current development research.
 
 Improvements, suggestions, bugs, issues and feedback of any type can be sent to marinif@uni-mainz.de.
 
-
-
-
 # Session info
 
 ```{r}
 sessionInfo()
 ```
-

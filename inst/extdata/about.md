@@ -21,9 +21,6 @@ report generation.
 at the IMBEI (Institut für Medizinische Biometrie, Epidemiologie und Informatik) 
 in the University Medical Center of the Johannes Gutenberg University Mainz.
 
-
-
-
 ## Developers
 
 <a href="mailto:marinif@uni-mainz.de" class="btn btn-primary">Federico Marini</a>
@@ -33,11 +30,9 @@ in the University Medical Center of the Johannes Gutenberg University Mainz.
 All code for `pcaExplorer` is available on 
 <a href="https://github.com/federicomarini/pcaExplorer" target="_blank">GitHub</a>.
 
-
 # Citation info
 
 If you use `pcaExplorer` for your analysis, please cite it as here below:
-
 
 ```r
 citation("pcaExplorer")
@@ -60,6 +55,3 @@ A BibTeX entry for LaTeX users is
     url = {https://github.com/federicomarini/pcaExplorer},
   }
 ```
-
-
-

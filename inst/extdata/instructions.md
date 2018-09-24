@@ -2,7 +2,6 @@
 information on the functions of the `pcaExplorer` package, please refer to the
 vignette and/or the documentation.*
 
-
 ## Getting started
 
 `pcaExplorer` is an R package distributed as part of the [Bioconductor](http://bioconductor.org)
@@ -22,16 +21,11 @@ library("devtools")
 install_github("federicomarini/pcaExplorer")
 ```
 
-
-
 Once `pcaExplorer` is installed, it can be loaded by the following command.
 
 ```r
 library("pcaExplorer")
 ```
-
-
-
 
 ## Introduction
 
@@ -57,14 +51,9 @@ for the experienced data analyst.
 Starting from development version 1.1.3, `pcaExplorer` supports reproducible 
 research with state saving and automated report generation. 
 
-
-
-
-
 ## Citation info
 
 If you use `pcaExplorer` for your analysis, please cite it as here below:
-
 
 ```r
 citation("pcaExplorer")
@@ -88,8 +77,6 @@ citation("pcaExplorer")
 ##     url = {https://github.com/federicomarini/pcaExplorer},
 ##   }
 ```
-
-
 
 ## Launching the application
 
@@ -128,14 +115,10 @@ either passed as a parameter when launching the app, or also uploaded as a tab s
 provides two functions, `get_annotation` and `get_annotation_orgdb`, as a convenient wrapper to obtain the updated
 annotation information, respectively from `biomaRt` or via the `org.XX.eg.db` packages.
 
-
-
-
 ## The controls sidebar
 
 Most of the input controls are located in the sidebar, some are as well in the individual tabs of the app.
 By changing one or more of the input parameters, the user can get a fine control on what is displayed.
-
 
 ### App settings
 
@@ -165,7 +148,6 @@ Width and height for the figures to export are input here in cm.
 Additional controls available in the single tabs are also assisted by tooltips that show on hovering the mouse.
 Normally they are tightly related to the plot/output they are placed nearby.
 
-
 ## The task menu
 
 The task menu, accessible by clicking on the cog icon in the upper right part of the application, provides two 
@@ -177,9 +159,6 @@ objects in two list objects made available in the global environment, called `pc
 - `Save State as .RData` will similarly store `LiveInputs` and `r_data` in a binary file named
 `pcaExplorerState_YYYYMMDD_HHMMSS.Rdata`, without closing the application 
 
-
-
-           
 ## The app panels
 
 The `pcaExplorer` app is structured in different panels, each focused on a different aspect of the 
@@ -191,15 +170,12 @@ recent developments in the `shiny` package/framework.
 
 The available panels are the described in the following subsections.
 
-
 ### Data Upload
 
 These **file input** controls are available when no `dds` or `countmatrix` + `coldata` are provided. Additionally,
 it is possible to upload the `annotation` data frame.
 
 When the objects are already passed as parameters, a brief overview/summary for them is displayed.
-
-
 
 ### Instructions
 
@@ -217,7 +193,6 @@ generated from the count matrix provided. Displayed information comprise the des
 a sample to sample distance heatmap, the number of million of reads per sample and some
 basic summary for the counts.
 
-
 ### Samples View
 
 This panel displays the PCA projections of sample expression profiles onto any pair of components,
@@ -225,7 +200,6 @@ a scree plot, a zoomed PCA plot, a plot of the genes with top and bottom loading
 presents a PCA plot where it is possible to remove samples deemed to be outliers in the analysis, which is 
 very useful to check the effect of excluding them. If needed, an interactive 3D visualization of the principal 
 components is also available.
-
 
 ### Genes View
 
@@ -235,7 +209,6 @@ genes, a boxplot is returned, grouped by the factors of interest. A static and a
 provided, including the subset of selected genes, also displayed as (standardized) expression profiles across the 
 samples. These are also reported in `datatable` objects, accessible in the bottom part of the tab.
 
-
 ### GeneFinder
 
 The user can search and display the expression values of a gene of interest, either by ID or gene
@@ -243,7 +216,6 @@ name, as provided in the `annotation`. A handy panel for quick screening of shor
 the factors of interest. The graphic can be readily exported as it is, and this can be iterated on a shortlisted
 set of genes. For each of them, the underlying data is displayed in an interactive table, also exportable with a 
 click.
-
 
 ### PCA2GO
 
@@ -270,7 +242,6 @@ This representation is under active development, and it is promising for identif
 according to their behavior on the Principal Components subspaces. Zooming and exporting of the underlying genes is also
 allowed by brushing on the main plot.
 
-
 ### Report Editor
 
 The report editor is the backbone for generating and editing the interactive report on the basis of the 
@@ -282,17 +253,11 @@ The editor supports R code autocompletion, making it easy to add new code chunks
 A preview is available in the tab itself, and the report can be generated, saved and subsequently shared 
 with simple mouse clicks.
 
-
 ### About
 
 Contains general information on `pcaExplorer`, including the developer's contact, the link to
 the development version in Github, as well as the output of `sessionInfo`, to use for reproducibility sake - 
 or bug reporting. Information for citing `pcaExplorer` is also reported.
-
-
-
-
-
 
 ## Running `pcaExplorer` on published datasets
 
@@ -392,7 +357,6 @@ pcaExplorer(dds = dds_multifac,
 
 When such a dataset is provided, the panel for multifactorial exploration is also usable at its best.
 
-
 ## Functions exported by the package for standalone usage
 
 The functions exported by the `pcaExplorer` package can be also used in a standalone scenario,
@@ -437,10 +401,3 @@ Additional functionality for the `pcaExplorer` will be added in the future, as i
 under current development research. 
 
 Improvements, suggestions, bugs, issues and feedback of any type can be sent to marinif@uni-mainz.de.
-
-
-
-
-
-
-

@@ -8,7 +8,6 @@ opts_chunk$set(
 )
 ```
 
-
 # Overview on the data
 
 The data provided was used to construct the following objects
@@ -40,7 +39,6 @@ if(input$countstable_unit=="log10_counts")
   currentMat <- log10(1 + counts(values$mydds,normalized=TRUE))
 ```
 
-
 ```{r}
 DT::datatable(currentMat)
 ```
@@ -61,9 +59,7 @@ if (!is.null(input$color_by)){
 
 ```
 
-
 This is an overview of the number of available reads in each sample (normally these are only uniquely aligned reads)
-
 
 ```{r}
 rr <- colSums(counts(values$mydds))/1e6
@@ -83,7 +79,6 @@ if (!is.null(input$color_by)) {
 print(colSums(counts(values$mydds)))
 summary(colSums(counts(values$mydds))/1e6)      
 ```
-
 
 This is a quick info on the number of detected genes
 
@@ -107,7 +102,6 @@ cat(paste0(round(rel_t2,3),"%"), "of the",nrow(values$mydds),"genes have more th
 cat("Counts are ranging from", min(counts(values$mydds)),"to",max(counts(values$mydds)))
 ```
 
-
 # PCA on the samples
 
 This plot shows how the samples are related to each other by plotting PC `r input$pc_x` vs PC `r input$pc_y`, using the top `r input$pca_nrgenes` most variant genes
@@ -123,7 +117,6 @@ res <- res + theme_bw()
 res
 ```
 
-
 The scree plot helps determining the number of underlying principal components
 
 ```{r}
@@ -136,8 +129,6 @@ res <- res + theme_bw()
 res
 ```
 
-
-
 The genes with the highest loadings in the selected principal components are the following
 
 ```{r}
@@ -149,8 +140,6 @@ par(mfrow=c(2,1))
 hi_loadings(pca,whichpc = as.integer(input$pc_x),topN = input$ntophiload,annotation = values$myannotation)
 hi_loadings(pca,whichpc = as.integer(input$pc_y),topN = input$ntophiload,annotation = values$myannotation)
 ```
-
-
 
 # PCA on the genes
 
@@ -190,7 +179,6 @@ if(!is.null(input$pcagenes_brush) & length(input$color_by)>0)
                    plotZ = input$zprofile)
 ```
 
-
 And here is an interactive heatmap for that subset
 
 ```{r}
@@ -211,9 +199,7 @@ if(!is.null(input$pcagenes_brush))
 
 ```
 
-
 # Shortlisted genes
-
 
 This gene was selected in the interactive session.
 
@@ -283,8 +269,6 @@ if(input$genefinder!="") {
 
 Repeat the same chunk of code and change the identifier of the gene to obtain the similar plot for the other candidates.
 
-
-
 # Functional interpretation of the principal components
 
 These tables report the functional categories enriched in the genes with the top and bottom loadings in the selected principal components.
@@ -315,9 +299,6 @@ if(!is.null(values$mypca2go))
 }
 ```
 
-
-
-
 # Multifactor exploration of the dataset
 
 ```{r}
@@ -346,10 +327,7 @@ if(input$composemat > 0){
     points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)}
 ```
 
-
-
 # About pcaExplorer
-
 
 `pcaExplorer` is a Bioconductor package containing a Shiny application for
 analyzing expression data in different conditions and experimental factors. 
@@ -369,9 +347,6 @@ for the experienced data analyst.
 at the IMBEI (Institut für Medizinische Biometrie, Epidemiologie und Informatik) 
 in the University Medical Center of the Johannes Gutenberg University Mainz.
 
-
-
-
 ## Developers
 
 `pcaExplorer` is currently maintained by Federico Marini at the IMBEI (www.imbei.uni-mainz.de).
@@ -385,8 +360,6 @@ You can contact him by clicking on the button below.
 All code for `pcaExplorer`, especially for the development version, is available
 on <a href="https://github.com/federicomarini/pcaExplorer" target="_blank">GitHub</a>.
 
-
-
 # Citation info
 
 If you use `pcaExplorer` for your analysis, please cite it as here below:
@@ -395,16 +368,11 @@ If you use `pcaExplorer` for your analysis, please cite it as here below:
 citation("pcaExplorer")
 ```
 
-
-
-
-
 # Session Information
 
 ```{r}
 sessionInfo()
 ```
-
 
 ```{r}
 library(shiny)
@@ -430,4 +398,3 @@ footertemplate <- function(){
 ```{r}
 footertemplate()
 ```
-
