@@ -221,434 +221,478 @@ pcaExplorer <- function(dds=NULL,
         tabPanel(
           "Counts Table",
           icon = icon("table"),
-          h3("Counts table"),
-          
-          selectInput("countstable_unit", label = "Data scale in the table",
-                      choices = list("Counts (raw)" = "raw_counts",
-                                     "Counts (normalized)" = "normalized_counts",
-                                     "Regularized logarithm transformed" = "rlog_counts",
-                                     "Log10 (pseudocount of 1 added)" = "log10_counts",
-                                     "TPM (Transcripts Per Million)" = "tpm_counts")),
-          
-          DT::dataTableOutput("showcountmat"),
-          
-          downloadButton("downloadData","Download", class = "btn btn-success"),
-          hr(),
-          h3("Sample to sample scatter plots"),
-          selectInput("corr_method","Correlation method palette",choices = list("pearson","spearman")),
-          p("Compute sample to sample correlations on the normalized counts - warning, it can take a while to plot all points (depending mostly on the number of samples you provided)."),
-          actionButton("compute_pairwisecorr", "Run", class = "btn btn-primary"),
-          uiOutput("pairwise_plotUI"),
-          uiOutput("heatcorr_plotUI")
+          conditionalPanel(
+            condition="!output.checkdds",
+            h3("Counts table"),
+            
+            selectInput("countstable_unit", label = "Data scale in the table",
+                        choices = list("Counts (raw)" = "raw_counts",
+                                       "Counts (normalized)" = "normalized_counts",
+                                       "Regularized logarithm transformed" = "rlog_counts",
+                                       "Log10 (pseudocount of 1 added)" = "log10_counts",
+                                       "TPM (Transcripts Per Million)" = "tpm_counts")),
+            
+            DT::dataTableOutput("showcountmat"),
+            
+            downloadButton("downloadData","Download", class = "btn btn-success"),
+            hr(),
+            h3("Sample to sample scatter plots"),
+            selectInput("corr_method","Correlation method palette",choices = list("pearson","spearman")),
+            p("Compute sample to sample correlations on the normalized counts - warning, it can take a while to plot all points (depending mostly on the number of samples you provided)."),
+            actionButton("compute_pairwisecorr", "Run", class = "btn btn-primary"),
+            uiOutput("pairwise_plotUI"),
+            uiOutput("heatcorr_plotUI")
+          ),
+          conditionalPanel(
+            condition="output.checkdds",
+            h2("You did not create the dds object yet. Please go the main tab and generate it"))
         ),
         # ui panel data overview -------------------------------------------------------
         tabPanel(
           "Data Overview", icon = icon("eye"),
-          h1("Sneak peek in the data"),
-          h3("Design metadata"),
-          DT::dataTableOutput("showcoldata"),
-          
-          h3("Sample to sample distance heatmap"),
-          fluidRow(
-            column(
-              width=8,
-              plotOutput("heatmapsampledist"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_samplessamplesheat", "Download Plot"),
-                  textInput("filename_samplessamplesheat",label = "Save as...",value = "pcae_sampletosample.pdf")))
-          ),
-          hr(),
-          h3("General information on the provided SummarizedExperiment/DESeqDataSet"),
-          shiny::verbatimTextOutput("showdata"),
-          h3("Number of million of reads per sample"),
-          fluidRow(
-            column(
-              width=8,
-              plotOutput("reads_barplot"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_readsbarplot", "Download Plot"),
-                  textInput("filename_readsbarplot",label = "Save as...",value = "pcae_readsbarplot.pdf")))),
-          h3("Basic summary for the counts"),
-          p("Number of uniquely aligned reads assigned to each sample"),
-          verbatimTextOutput("reads_summary"),
-          wellPanel(
+          conditionalPanel(
+            condition="!output.checkrlt",
+            h1("Sneak peek in the data"),
+            h3("Design metadata"),
+            DT::dataTableOutput("showcoldata"),
+            
+            h3("Sample to sample distance heatmap"),
             fluidRow(
               column(
-                width = 4,
-                numericInput("threshold_rowsums","Threshold on the row sums of the counts",value = 0, min = 0)),
+                width=8,
+                plotOutput("heatmapsampledist"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplessamplesheat", "Download Plot"),
+                    textInput("filename_samplessamplesheat",label = "Save as...",value = "pcae_sampletosample.pdf")))
+            ),
+            hr(),
+            h3("General information on the provided SummarizedExperiment/DESeqDataSet"),
+            shiny::verbatimTextOutput("showdata"),
+            h3("Number of million of reads per sample"),
+            fluidRow(
               column(
-                width = 4,
-                numericInput("threshold_rowmeans","Threshold on the row means of the normalized counts",value = 0, min = 0))
-            )),
-          p("According to the selected filtering criteria, this is an overview on the provided count data"),
-          verbatimTextOutput("detected_genes")
+                width=8,
+                plotOutput("reads_barplot"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_readsbarplot", "Download Plot"),
+                    textInput("filename_readsbarplot",label = "Save as...",value = "pcae_readsbarplot.pdf")))),
+            h3("Basic summary for the counts"),
+            p("Number of uniquely aligned reads assigned to each sample"),
+            verbatimTextOutput("reads_summary"),
+            wellPanel(
+              fluidRow(
+                column(
+                  width = 4,
+                  numericInput("threshold_rowsums","Threshold on the row sums of the counts",value = 0, min = 0)),
+                column(
+                  width = 4,
+                  numericInput("threshold_rowmeans","Threshold on the row means of the normalized counts",value = 0, min = 0))
+              )),
+            p("According to the selected filtering criteria, this is an overview on the provided count data"),
+            verbatimTextOutput("detected_genes")),
+          conditionalPanel(
+            condition="output.checkrlt",
+            h2("You did not create the rlt object yet. Please go the main tab and generate it"))
           # DT::dataTableOutput("reads_samples"),
         ),
         # ui panel samples view -------------------------------------------------------
         tabPanel(
           "Samples View",
           icon = icon("share-alt"),
-          p(h1('Principal Component Analysis on the samples'),
-            "PCA projections of sample expression profiles onto any pair of components."),
-          fluidRow(
-            column(
-              width = 4,
-              wellPanel(checkboxInput("sample_labels","Display sample labels",value = TRUE),
-                        checkboxInput("pca_ellipse","draw a confidence ellipse for each group",value = FALSE),
-                        sliderInput("pca_cislider", "select the confidence interval level", min=0,max=1,value=0.95)))),
-          fluidRow(
-            column(
-              width = 6,
-              plotOutput('samples_pca',brush = "pca_brush"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_samplesPca", "Download Plot"),
-                  textInput("filename_samplesPca",label = "Save as...",value = "samplesPca.pdf"))
+          conditionalPanel(
+            condition="!output.checkrlt",
+            
+            p(h1('Principal Component Analysis on the samples'),
+              "PCA projections of sample expression profiles onto any pair of components."),
+            fluidRow(
+              column(
+                width = 4,
+                wellPanel(checkboxInput("sample_labels","Display sample labels",value = TRUE),
+                          checkboxInput("pca_ellipse","draw a confidence ellipse for each group",value = FALSE),
+                          sliderInput("pca_cislider", "select the confidence interval level", min=0,max=1,value=0.95)))),
+            fluidRow(
+              column(
+                width = 6,
+                plotOutput('samples_pca',brush = "pca_brush"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesPca", "Download Plot"),
+                    textInput("filename_samplesPca",label = "Save as...",value = "samplesPca.pdf"))
+              ),
+              column(
+                width= 6,
+                plotOutput("samples_scree"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesScree", "Download Plot"),
+                    textInput("filename_samplesScree",label = "Save as...",value = "samplesScree.pdf")),
+                wellPanel(fluidRow(
+                  column(
+                    width = 6,
+                    radioButtons("scree_type","Scree plot type:",
+                                 choices=list("Proportion of explained variance"="pev",
+                                              "Cumulative proportion of explained variance"="cev"),"pev")
+                  ),
+                  column(
+                    width = 6,
+                    numericInput("scree_pcnr","Number of PCs to display",value=8,min=2)
+                  )
+                ))
+              )
             ),
-            column(
-              width= 6,
-              plotOutput("samples_scree"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_samplesScree", "Download Plot"),
-                  textInput("filename_samplesScree",label = "Save as...",value = "samplesScree.pdf")),
-              wellPanel(fluidRow(
-                column(
-                  width = 6,
-                  radioButtons("scree_type","Scree plot type:",
-                               choices=list("Proportion of explained variance"="pev",
-                                            "Cumulative proportion of explained variance"="cev"),"pev")
-                ),
-                column(
-                  width = 6,
-                  numericInput("scree_pcnr","Number of PCs to display",value=8,min=2)
-                )
-              ))
-            )
-          ),
-          hr(),
-          fluidRow(
-            column(
-              width = 6,
-              plotOutput("samples_pca_zoom"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_samplesPcazoom", "Download Plot"),
-                  textInput("filename_samplesPcazoom",label = "Save as...",value = "samplesPcazoom.pdf"))
+            hr(),
+            fluidRow(
+              column(
+                width = 6,
+                plotOutput("samples_pca_zoom"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesPcazoom", "Download Plot"),
+                    textInput("filename_samplesPcazoom",label = "Save as...",value = "samplesPcazoom.pdf"))
+              ),
+              column(
+                width = 6,
+                numericInput("ntophiload", "Nr of genes to display (top & bottom)",value = 10, min = 1, max=40),
+                plotOutput("geneshiload"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesPca_hiload", "Download Plot"),
+                    textInput("filename_samplesPca_hiload",label = "Save as...",value = "pcae_hiload.pdf"))
+              )
             ),
-            column(
-              width = 6,
-              numericInput("ntophiload", "Nr of genes to display (top & bottom)",value = 10, min = 1, max=40),
-              plotOutput("geneshiload"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_samplesPca_hiload", "Download Plot"),
-                  textInput("filename_samplesPca_hiload",label = "Save as...",value = "pcae_hiload.pdf"))
+            hr(),
+            fluidRow(
+              column(
+                width = 6,
+                p(h4('Outlier Identification'), "Toggle which samples to remove - suspected to be considered as outliers"),
+                uiOutput("ui_outliersamples"),
+                plotOutput("samples_outliersremoved"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_samplesPca_sampleout", "Download Plot"),
+                    textInput("filename_samplesPca_sampleout",label = "Save as...",value = "samplesPca_sampleout.pdf"))
+              )
+            ),
+            fluidRow(
+              column(
+                width = 8,
+                selectInput("pc_z","Select the principal component to display on the z axis",choices = 1:8,selected = 3),
+                scatterplotThreeOutput("pca3d")
+              )
             )
           ),
-          hr(),
-          fluidRow(
-            column(
-              width = 6,
-              p(h4('Outlier Identification'), "Toggle which samples to remove - suspected to be considered as outliers"),
-              uiOutput("ui_outliersamples"),
-              plotOutput("samples_outliersremoved"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_samplesPca_sampleout", "Download Plot"),
-                  textInput("filename_samplesPca_sampleout",label = "Save as...",value = "samplesPca_sampleout.pdf"))
-            )
-          ),
-          fluidRow(
-            column(
-              width = 8,
-              selectInput("pc_z","Select the principal component to display on the z axis",choices = 1:8,selected = 3),
-              scatterplotThreeOutput("pca3d")
-            )
-          )
-          
+          conditionalPanel(
+            condition="output.checkrlt",
+            h2("You did not create the rlt object yet. Please go the main tab and generate it"))
         ),
         # ui panel genes view -------------------------------------------------------
         tabPanel(
           "Genes View",
           icon = icon("yelp"),
-          p(h1('Principal Component Analysis on the genes'), "PCA projections of genes abundances onto any pair of components."),
-          
-          fluidRow(checkboxInput("variable_labels","Display variable labels",value = TRUE)),
-          fluidRow(
-            checkboxInput("ylimZero_genes","Set y axis limit to 0",value=TRUE)),
-          
-          fluidRow(
-            column(
-              width = 6,
-              h4("Main Plot - interact!"),
-              plotOutput('genes_biplot',brush = 'pcagenes_brush',click="pcagenes_click"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_genesPca", "Download Plot"),
-                  textInput("filename_genesPca",label = "Save as...",value = "genesPca.pdf"))),
-            column(
-              width = 6,
-              h4("Zoomed window"),
-              plotOutput("genes_biplot_zoom",click="pcagenes_zoom_click"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_genesZoom", "Download Plot"),
-                  textInput("filename_genesZoom",label = "Save as...",value = "genesPca_zoomed.pdf")))
-          ),
-          
-          fluidRow(
-            column(
-              width = 6,
-              h4("Profile explorer"),
-              
-              checkboxInput("zprofile","Display scaled expression values",value=TRUE),
-              plotOutput("genes_profileexplorer"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_genesPca_profile", "Download Plot"),
-                  textInput("filename_genesPca_profile",label = "Save as...",value = "genesPca_profile.pdf")))
-            ,
-            column(
-              width = 6,
-              h4("Boxplot of selected gene"),
-              
-              plotOutput("genes_biplot_boxplot"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_genesPca_countsplot", "Download Plot"),
-                  textInput("filename_genesPca_countsplot",label = "Save as...",value = "genesPca_countsplot.pdf")))
-          ),
-          
-          fluidRow(
-            column(
-              width = 6,
-              h4("Zoomed heatmap"),
-              plotOutput("heatzoom"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_genesHeatmap","Download Plot"),
-                  textInput("filename_genesHeatmap",label = "Save as...",value = "genesHeatmap.pdf"))),
-            column(
-              width = 6,
-              h4("Zoomed interactive heatmap"),
-              fluidRow(radioButtons("heatmap_colv","Cluster samples",choices = list("Yes"=TRUE,"No"=FALSE),selected = TRUE)),
-              fluidRow(d3heatmapOutput("heatzoomd3")))),
-          
-          hr(),
-          box(
-            title = "Table export options", status = "primary", solidHeader = TRUE,
-            collapsible = TRUE, collapsed = TRUE, width = 12,
+          conditionalPanel(
+            condition="!output.checkrlt",
+            
+            p(h1('Principal Component Analysis on the genes'), "PCA projections of genes abundances onto any pair of components."),
+            
+            fluidRow(checkboxInput("variable_labels","Display variable labels",value = TRUE)),
+            fluidRow(
+              checkboxInput("ylimZero_genes","Set y axis limit to 0",value=TRUE)),
+            
             fluidRow(
               column(
                 width = 6,
-                h4("Points selected by brushing - clicking and dragging:"),
-                DT::dataTableOutput("pca_brush_out"),
-                downloadButton('downloadData_brush', 'Download brushed points'),
-                textInput("brushedPoints_filename","File name...")),
+                h4("Main Plot - interact!"),
+                plotOutput('genes_biplot',brush = 'pcagenes_brush',click="pcagenes_click"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genesPca", "Download Plot"),
+                    textInput("filename_genesPca",label = "Save as...",value = "genesPca.pdf"))),
               column(
                 width = 6,
-                h4("Points selected by clicking:"),
-                DT::dataTableOutput("pca_click_out"),
-                downloadButton('downloadData_click', 'Download clicked (or nearby) points')),
-              textInput("clickedPoints_filename","File name...")
+                h4("Zoomed window"),
+                plotOutput("genes_biplot_zoom",click="pcagenes_zoom_click"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genesZoom", "Download Plot"),
+                    textInput("filename_genesZoom",label = "Save as...",value = "genesPca_zoomed.pdf")))
+            ),
+            
+            fluidRow(
+              column(
+                width = 6,
+                h4("Profile explorer"),
+                
+                checkboxInput("zprofile","Display scaled expression values",value=TRUE),
+                plotOutput("genes_profileexplorer"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genesPca_profile", "Download Plot"),
+                    textInput("filename_genesPca_profile",label = "Save as...",value = "genesPca_profile.pdf")))
+              ,
+              column(
+                width = 6,
+                h4("Boxplot of selected gene"),
+                
+                plotOutput("genes_biplot_boxplot"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genesPca_countsplot", "Download Plot"),
+                    textInput("filename_genesPca_countsplot",label = "Save as...",value = "genesPca_countsplot.pdf")))
+            ),
+            
+            fluidRow(
+              column(
+                width = 6,
+                h4("Zoomed heatmap"),
+                plotOutput("heatzoom"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genesHeatmap","Download Plot"),
+                    textInput("filename_genesHeatmap",label = "Save as...",value = "genesHeatmap.pdf"))),
+              column(
+                width = 6,
+                h4("Zoomed interactive heatmap"),
+                fluidRow(radioButtons("heatmap_colv","Cluster samples",choices = list("Yes"=TRUE,"No"=FALSE),selected = TRUE)),
+                fluidRow(d3heatmapOutput("heatzoomd3")))),
+            
+            hr(),
+            box(
+              title = "Table export options", status = "primary", solidHeader = TRUE,
+              collapsible = TRUE, collapsed = TRUE, width = 12,
+              fluidRow(
+                column(
+                  width = 6,
+                  h4("Points selected by brushing - clicking and dragging:"),
+                  DT::dataTableOutput("pca_brush_out"),
+                  downloadButton('downloadData_brush', 'Download brushed points'),
+                  textInput("brushedPoints_filename","File name...")),
+                column(
+                  width = 6,
+                  h4("Points selected by clicking:"),
+                  DT::dataTableOutput("pca_click_out"),
+                  downloadButton('downloadData_click', 'Download clicked (or nearby) points')),
+                textInput("clickedPoints_filename","File name...")
+              )
             )
-          )
+          ),
+          conditionalPanel(
+            condition="output.checkrlt",
+            h2("You did not create the rlt object yet. Please go the main tab and generate it"))
         ),
         # ui panel gene finder -------------------------------------------------------
         tabPanel(
           "Gene Finder",
           icon = icon("crosshairs"),
-          fluidRow(
-            h1("GeneFinder"),
-            wellPanel(
-              width=5,
-              textInput("genefinder",label = "Type in the name of the gene to search",value = NULL),
-              shinyBS::bsTooltip(
-                "genefinder", paste0(
-                  "Type in the name of the gene to search. If no annotation is ",
-                  "provided, you need to use IDs that are the row names of the ",
-                  "objects you are using - count matrix, SummarizedExperiments ",
-                  "or similar. If an annotation is provided, that also contains ",
-                  "gene symbols or similar, the gene finder tries to find the ",
-                  "name and the ID, and it suggests if some characters are in a ",
-                  "different case"),
-                "right", options = list(container = "body")),
-              checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
-              checkboxInput("addsamplelabels","Annotate sample labels to the dots in the plot",value=TRUE)),
-            
-            #               fluidRow(
-            #                 column(
-            #                   width = 6,
-            #                   uiOutput("ui_selectID")
-            #                 ),
-            #                 column(
-            #                   width = 6,
-            #                   uiOutput("ui_selectName")
-            #                 )
-            #               ),
-            # verbatimTextOutput("debugf"),
-            
-            verbatimTextOutput("searchresult"),
-            verbatimTextOutput("debuggene"),
-            
-            # plotOutput("newgenefinder_plot"),
-            column(
-              width = 8,
-              plotOutput("genefinder_plot"),
-              div(align = "right", style = "margin-right:15px; margin-bottom:10px",
-                  downloadButton("download_genefinder_countsplot", "Download Plot"),
-                  textInput("filename_genefinder_countsplot",label = "Save as...",value = "pcae_genefinder.pdf"))),
-            column(
-              width = 4,
-              DT::dataTableOutput("genefinder_table"),
-              downloadButton("download_genefinder_countstable", "Download Table")
+          conditionalPanel(
+            condition="!output.checkdds",
+            fluidRow(
+              h1("GeneFinder"),
+              wellPanel(
+                width=5,
+                textInput("genefinder",label = "Type in the name of the gene to search",value = NULL),
+                shinyBS::bsTooltip(
+                  "genefinder", paste0(
+                    "Type in the name of the gene to search. If no annotation is ",
+                    "provided, you need to use IDs that are the row names of the ",
+                    "objects you are using - count matrix, SummarizedExperiments ",
+                    "or similar. If an annotation is provided, that also contains ",
+                    "gene symbols or similar, the gene finder tries to find the ",
+                    "name and the ID, and it suggests if some characters are in a ",
+                    "different case"),
+                  "right", options = list(container = "body")),
+                checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
+                checkboxInput("addsamplelabels","Annotate sample labels to the dots in the plot",value=TRUE)),
+              
+              #               fluidRow(
+              #                 column(
+              #                   width = 6,
+              #                   uiOutput("ui_selectID")
+              #                 ),
+              #                 column(
+              #                   width = 6,
+              #                   uiOutput("ui_selectName")
+              #                 )
+              #               ),
+              # verbatimTextOutput("debugf"),
+              
+              verbatimTextOutput("searchresult"),
+              verbatimTextOutput("debuggene"),
+              
+              # plotOutput("newgenefinder_plot"),
+              column(
+                width = 8,
+                plotOutput("genefinder_plot"),
+                div(align = "right", style = "margin-right:15px; margin-bottom:10px",
+                    downloadButton("download_genefinder_countsplot", "Download Plot"),
+                    textInput("filename_genefinder_countsplot",label = "Save as...",value = "pcae_genefinder.pdf"))),
+              column(
+                width = 4,
+                DT::dataTableOutput("genefinder_table"),
+                downloadButton("download_genefinder_countstable", "Download Table")
+              )
             )
+          ),
+          conditionalPanel(
+            condition="output.checkdds",
+            h2("You did not create the dds object yet. Please go the main tab and generate it")
           )
         ),
         # ui panel pca2go -------------------------------------------------------
         tabPanel(
           "PCA2GO",
           icon = icon("magic"),
-          h1("pca2go - Functional annotation of Principal Components"),
-          h4("Functions enriched in the genes with high loadings on the selected principal components"),
-          # verbatimTextOutput("enrichinfo"),
-          wellPanel(column(
-            width = 6,
-            uiOutput("ui_selectspecies")
-          ),
-          column(
-            width = 6,
-            uiOutput("ui_inputtype")
-          ),
-          
-          shinyBS::bsTooltip(
-            "ui_selectspecies", 
-            paste0("Select the species for the functional enrichment analysis, ",
-                   "choosing among the ones currently supported by limma::goana. ",
-                   "Alternatively, for other species, it can be possible to use one ",
-                   "of the available annotation packages in Bioconductor, and pre-",
-                   "computing the pca2go object in advance"),
-            "bottom", options = list(container = "body")),
-          verbatimTextOutput("speciespkg"),
-          checkboxInput("compact_pca2go","Display compact tables",value=FALSE),
-          shinyBS::bsTooltip(
-            "compact_pca2go", 
-            paste0("Should I display all the columns? If the information content of the ",
-                   "tables is somehow too much for the screen width, as it can be for ",
-                   "objects generated by pca2go with the topGO routines, the app can ",
-                   "display just an essential subset of the columns"),
-            "bottom", options = list(container = "body")),
-          
-          uiOutput("ui_computePCA2GO"),
-          shinyBS::bsTooltip(
-            "ui_computePCA2GO", 
-            paste0("Compute a pca2go object, using the limma::goana function, ",
-                   "after selecting the species of the experiment under investigation"),
-            "bottom", options = list(container = "body"))),
-          
-          fluidRow(
-            column(width = 3),
+          conditionalPanel(
+            condition="!output.checkrlt",
+            
+            h1("pca2go - Functional annotation of Principal Components"),
+            h4("Functions enriched in the genes with high loadings on the selected principal components"),
+            # verbatimTextOutput("enrichinfo"),
+            wellPanel(column(
+              width = 6,
+              uiOutput("ui_selectspecies")
+            ),
             column(
               width = 6,
-              DT::dataTableOutput("dt_pcver_pos")),
-            column(width = 3)
+              uiOutput("ui_inputtype")
+            ),
+            
+            shinyBS::bsTooltip(
+              "ui_selectspecies", 
+              paste0("Select the species for the functional enrichment analysis, ",
+                     "choosing among the ones currently supported by limma::goana. ",
+                     "Alternatively, for other species, it can be possible to use one ",
+                     "of the available annotation packages in Bioconductor, and pre-",
+                     "computing the pca2go object in advance"),
+              "bottom", options = list(container = "body")),
+            verbatimTextOutput("speciespkg"),
+            checkboxInput("compact_pca2go","Display compact tables",value=FALSE),
+            shinyBS::bsTooltip(
+              "compact_pca2go", 
+              paste0("Should I display all the columns? If the information content of the ",
+                     "tables is somehow too much for the screen width, as it can be for ",
+                     "objects generated by pca2go with the topGO routines, the app can ",
+                     "display just an essential subset of the columns"),
+              "bottom", options = list(container = "body")),
+            
+            uiOutput("ui_computePCA2GO"),
+            shinyBS::bsTooltip(
+              "ui_computePCA2GO", 
+              paste0("Compute a pca2go object, using the limma::goana function, ",
+                     "after selecting the species of the experiment under investigation"),
+              "bottom", options = list(container = "body"))),
+            
+            fluidRow(
+              column(width = 3),
+              column(
+                width = 6,
+                DT::dataTableOutput("dt_pcver_pos")),
+              column(width = 3)
+            ),
+            
+            fluidRow(
+              column(4,
+                     DT::dataTableOutput("dt_pchor_neg")),
+              column(4,
+                     plotOutput("pca2go")),
+              column(4,
+                     DT::dataTableOutput("dt_pchor_pos"))
+            ),
+            fluidRow(
+              column(width = 3),
+              column(
+                width = 6,
+                DT::dataTableOutput("dt_pcver_neg")),
+              column(width = 3)
+            )
           ),
-          
-          fluidRow(
-            column(4,
-                   DT::dataTableOutput("dt_pchor_neg")),
-            column(4,
-                   plotOutput("pca2go")),
-            column(4,
-                   DT::dataTableOutput("dt_pchor_pos"))
-          ),
-          fluidRow(
-            column(width = 3),
-            column(
-              width = 6,
-              DT::dataTableOutput("dt_pcver_neg")),
-            column(width = 3)
-          )
+          conditionalPanel(
+            condition="output.checkrlt",
+            h2("You did not create the rlt object yet. Please go the main tab and generate it"))
         ),
         
         # ui panel multifactor exploration -----------------------------------------------------
         tabPanel(
           "Multifactor Exploration",
           icon = icon("th-large"),
-          h1("Multifactor exploration of datasets with 2 or more experimental factors"),
-          
-          verbatimTextOutput("intro_multifac"),
-          
-          wellPanel(fluidRow(
-            column(
-              width = 6,
-              uiOutput("covar1")
+          conditionalPanel(
+            condition="!output.checkrlt",
+            h1("Multifactor exploration of datasets with 2 or more experimental factors"),
+            
+            verbatimTextOutput("intro_multifac"),
+            
+            wellPanel(fluidRow(
+              column(
+                width = 6,
+                uiOutput("covar1")
+              ),
+              column(
+                width = 6,
+                uiOutput("covar2")
+              )
             ),
-            column(
-              width = 6,
-              uiOutput("covar2")
-            )
-          ),
-          fluidRow(
-            column(
-              width = 6,
-              uiOutput("c1levels")
+            fluidRow(
+              column(
+                width = 6,
+                uiOutput("c1levels")
+              ),
+              column(
+                width = 6,
+                uiOutput("c2levels")
+              )
             ),
-            column(
-              width = 6,
-              uiOutput("c2levels")
-            )
-          ),
-          fluidRow(
-            column(
-              width = 6,
-              uiOutput("colnames1"),
-              uiOutput("colnames2")
-            )
-          ),
-          
-          shinyBS::bsTooltip(
-            "covar1", paste0("Select the first experimental factor"),
-            "bottom", options = list(container = "body")),
-          shinyBS::bsTooltip(
-            "covar2", paste0("Select the second experimental factor"),
-            "bottom", options = list(container = "body")),
-          shinyBS::bsTooltip(
-            "c1levels", paste0("For factor 1, select two levels to contrast"),
-            "bottom", options = list(container = "body")),
-          shinyBS::bsTooltip(
-            "c2levels", paste0("For factor 2, select two or more levels to contrast"),
-            "bottom", options = list(container = "body")),
-          shinyBS::bsTooltip(
-            "colnames1", paste0("Combine samples belonging to Factor1-Level1 samples for each level in Factor 2"),
-            "bottom", options = list(container = "body")),
-          shinyBS::bsTooltip(
-            "colnames2", paste0("Combine samples belonging to Factor1-Level2 samples for each level in Factor 2"),
-            "bottom", options = list(container = "body"))),
-          
-          actionButton("composemat","Compose the matrix",icon=icon("spinner"),class = "btn btn-primary"),
-          shinyBS::bsTooltip(
-            "composemat", 
-            paste0("Select first two different experimental factors, for example ",
-                   "condition and tissue. For each factor, select two or more ",
-                   "levels. The corresponding samples which can be used are then displayed ",
-                   "in the select boxes. Select an equal number of samples for each of ",
-                   "the levels in factor 1, and then click the button to compute the ",
-                   "new matrix which will be used for the visualizations below"),
-            "bottom", options = list(container = "body")),
-          
-          wellPanel(fluidRow(
-            column(4,
-                   selectInput('pc_x_multifac', label = 'x-axis PC: ', choices = 1:8,
-                               selected = 1)
+            fluidRow(
+              column(
+                width = 6,
+                uiOutput("colnames1"),
+                uiOutput("colnames2")
+              )
             ),
-            column(4,
-                   selectInput('pc_y_multifac', label = 'y-axis PC: ', choices = 1:8,
-                               selected = 2)
-            ))),
-          
-          # fluidRow(verbatimTextOutput("multifacdebug")),
-          fluidRow(
-            column(6,
-                   plotOutput('pcamultifac',brush = 'pcamultifac_brush')),
-            column(6,
-                   plotOutput("multifaczoom"))
+            
+            shinyBS::bsTooltip(
+              "covar1", paste0("Select the first experimental factor"),
+              "bottom", options = list(container = "body")),
+            shinyBS::bsTooltip(
+              "covar2", paste0("Select the second experimental factor"),
+              "bottom", options = list(container = "body")),
+            shinyBS::bsTooltip(
+              "c1levels", paste0("For factor 1, select two levels to contrast"),
+              "bottom", options = list(container = "body")),
+            shinyBS::bsTooltip(
+              "c2levels", paste0("For factor 2, select two or more levels to contrast"),
+              "bottom", options = list(container = "body")),
+            shinyBS::bsTooltip(
+              "colnames1", paste0("Combine samples belonging to Factor1-Level1 samples for each level in Factor 2"),
+              "bottom", options = list(container = "body")),
+            shinyBS::bsTooltip(
+              "colnames2", paste0("Combine samples belonging to Factor1-Level2 samples for each level in Factor 2"),
+              "bottom", options = list(container = "body"))),
+            
+            actionButton("composemat","Compose the matrix",icon=icon("spinner"),class = "btn btn-primary"),
+            shinyBS::bsTooltip(
+              "composemat", 
+              paste0("Select first two different experimental factors, for example ",
+                     "condition and tissue. For each factor, select two or more ",
+                     "levels. The corresponding samples which can be used are then displayed ",
+                     "in the select boxes. Select an equal number of samples for each of ",
+                     "the levels in factor 1, and then click the button to compute the ",
+                     "new matrix which will be used for the visualizations below"),
+              "bottom", options = list(container = "body")),
+            
+            wellPanel(fluidRow(
+              column(4,
+                     selectInput('pc_x_multifac', label = 'x-axis PC: ', choices = 1:8,
+                                 selected = 1)
+              ),
+              column(4,
+                     selectInput('pc_y_multifac', label = 'y-axis PC: ', choices = 1:8,
+                                 selected = 2)
+              ))),
+            
+            # fluidRow(verbatimTextOutput("multifacdebug")),
+            fluidRow(
+              column(6,
+                     plotOutput('pcamultifac',brush = 'pcamultifac_brush')),
+              column(6,
+                     plotOutput("multifaczoom"))
+            ),
+            fluidRow(downloadButton('downloadData_brush_multifac', 'Download brushed points'),
+                     textInput("brushedPoints_filename_multifac","File name..."),
+                     DT::dataTableOutput('pcamultifac_out'))
           ),
-          fluidRow(downloadButton('downloadData_brush_multifac', 'Download brushed points'),
-                   textInput("brushedPoints_filename_multifac","File name..."),
-                   DT::dataTableOutput('pcamultifac_out'))
-          
+          conditionalPanel(
+            condition="output.checkrlt",
+            h2("You did not create the rlt object yet. Please go the main tab and generate it")
+          )
         ),
         # ui panel report editor -------------------------------------------------------
         tabPanel(
@@ -774,6 +818,17 @@ pcaExplorer <- function(dds=NULL,
     values$myannotation <- annotation
     
     user_settings <- reactiveValues(save_width = 15, save_height = 11)
+    
+    output$checkdds <- reactive({
+      is.null(values$mydds)
+    })
+    output$checkrlt<-reactive({
+      is.null(values$myrlt)
+    })
+    
+    outputOptions(output, 'checkdds', suspendWhenHidden=FALSE)
+    outputOptions(output, 'checkrlt', suspendWhenHidden=FALSE)
+    
     
     # server setup dataset --------------------------------------------------------
     if(!is.null(dds)){

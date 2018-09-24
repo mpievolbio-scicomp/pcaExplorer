@@ -41,14 +41,14 @@ hi_loadings <- function(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
   if(!is.null(annotation))
     names(geneloadings_extreme) <- annotation$gene_name[match(names(geneloadings_extreme),rownames(annotation))]
 
-  # barplot(geneloadings_extreme, las=2, col = c(rep("steelblue",topN),rep("coral",topN)),
-          # main=paste0(title, "PC", whichpc))
-  mydf <- data.frame(loadings=geneloadings_extreme,
-                     geneID=names(geneloadings_extreme),
-                     mycol = c(rep("steelblue",topN),rep("coral",topN)))
-  mydf$geneID <- factor(mydf$geneID, levels = mydf$geneID)
-  p <- ggplot(mydf,aes_string(x="geneID",y="loadings")) + geom_col(aes_string(fill = "mycol")) + theme_bw() +
-    theme(axis.text.x=element_text(angle = 90, vjust = 0.5)) + guides(fill = FALSE) + 
-    ggtitle(paste0(title, " - PC", whichpc))
-  p
+  barplot(geneloadings_extreme, las=2, col = c(rep("steelblue",topN),rep("coral",topN)),
+          main=paste0(title, "PC", whichpc))
+  # mydf <- data.frame(loadings=geneloadings_extreme,
+  #                    geneID=names(geneloadings_extreme),
+  #                    mycol = c(rep("steelblue",topN),rep("coral",topN)))
+  # mydf$geneID <- factor(mydf$geneID, levels = mydf$geneID)
+  # p <- ggplot(mydf,aes_string(x="geneID",y="loadings")) + geom_col(aes_string(fill = "mycol")) + theme_bw() +
+  #   theme(axis.text.x=element_text(angle = 90, vjust = 0.5)) + guides(fill = FALSE) + 
+  #   ggtitle(paste0(title, " - PC", whichpc))
+  # p
 }
