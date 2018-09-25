@@ -876,6 +876,7 @@ pcaExplorer <- function(dds=NULL,
                                 detail = "This step can take a little while",
                                 value = 0,{
                                   values$mydst <- vst(values$mydds)
+                                  values$transformation_type <- "vst"
                                 })
                  })
     
@@ -885,6 +886,7 @@ pcaExplorer <- function(dds=NULL,
                                 detail = "This step can take a little while",
                                 value = 0,{
                                   values$mydst <- rlog(values$mydds)
+                                  values$transformation_type <- "rlog"
                                 })
                  })
     
@@ -894,6 +896,7 @@ pcaExplorer <- function(dds=NULL,
                                 detail = "This step can take a little while",
                                 value = 0,{
                                   values$mydst <- normTransform(values$mydds)
+                                  values$transformation_type <- "shiftedlog"
                                 })
                  })
     
@@ -1111,7 +1114,7 @@ pcaExplorer <- function(dds=NULL,
         values$mydds <- estimateSizeFactors(values$mydds)
         incProgress(0.1,detail = "Generating DESeqTransform")
         values$mydst <- vst(values$mydds)
-        
+        values$transformation_type <- "vst"
         incProgress(0.7, detail = "Retrieving annotation")
         
         values$myannotation <- get_annotation_orgdb(values$mydds, "org.Hs.eg.db","ENSEMBL")
