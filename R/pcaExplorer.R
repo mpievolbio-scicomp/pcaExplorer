@@ -491,7 +491,7 @@ pcaExplorer <- function(dds=NULL,
                     "gene symbols or similar, the gene finder tries to find the ",
                     "name and the ID, and it suggests if some characters are in a ",
                     "different case"),
-                  "right", options = list(container = "body")),
+                  "bottom", options = list(container = "body")),
                 checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
                 checkboxInput("addsamplelabels","Annotate sample labels to the dots in the plot",value=TRUE)),
               
