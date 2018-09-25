@@ -705,7 +705,7 @@ pcaExplorer <- function(dds=NULL,
             column(
               width = 6,
               box(
-                title = "markdown options", status = "primary", solidHeader = TRUE, collapsible = TRUE, width = 9,
+                title = "markdown options", status = "primary", solidHeader = TRUE, collapsible = TRUE, collapsed = TRUE, width = 9,
                 radioButtons("rmd_dl_format", label = "Choose Format:", c("HTML" = "html", "R Markdown" = "rmd"), inline = TRUE),
                 textInput("report_title", "Title: "),
                 textInput("report_author", "Author: "),
@@ -720,7 +720,7 @@ pcaExplorer <- function(dds=NULL,
             column(
               width = 6,
               box(
-                title = "editor options", status = "primary", solidHeader = TRUE, collapsible = TRUE, width = 9,
+                title = "editor options", status = "primary", solidHeader = TRUE, collapsible = TRUE, collapsed = TRUE, width = 9,
                 checkboxInput("enableAutocomplete", "Enable AutoComplete", TRUE),
                 conditionalPanel(
                   "input.enableAutocomplete",
