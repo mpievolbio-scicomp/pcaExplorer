@@ -15,7 +15,9 @@ The data provided was used to construct the following objects
 ```{r}
 values$mydds
 
-values$myrlt
+values$mydst
+
+values$transformation_type
 
 head(values$myannotation)
 ```
@@ -34,7 +36,7 @@ if(input$countstable_unit=="raw_counts")
 if(input$countstable_unit=="normalized_counts")
   currentMat <- counts(values$mydds,normalized=TRUE)
 if(input$countstable_unit=="rlog_counts")
-  currentMat <- assay(values$myrlt)
+  currentMat <- assay(values$mydst)
 if(input$countstable_unit=="log10_counts")
   currentMat <- log10(1 + counts(values$mydds,normalized=TRUE))
 ```
@@ -47,14 +49,14 @@ This is how the samples cluster if we use euclidean distance on the rlog transfo
 
 ```{r}
 if (!is.null(input$color_by)){
-  expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+  expgroups <- as.data.frame(colData(values$mydst)[,input$color_by])
   # expgroups <- interaction(expgroups)
-  rownames(expgroups) <- colnames(values$myrlt)
+  rownames(expgroups) <- colnames(values$mydst)
   colnames(expgroups) <- input$color_by
 
-  pheatmap(as.matrix(dist(t(assay(values$myrlt)))),annotation_col = expgroups)
+  pheatmap(as.matrix(dist(t(assay(values$mydst)))),annotation_col = expgroups)
 } else {
-  pheatmap(as.matrix(dist(t(assay(values$myrlt)))))
+  pheatmap(as.matrix(dist(t(assay(values$mydst)))))
 }
 
 ```
@@ -107,7 +109,7 @@ cat("Counts are ranging from", min(counts(values$mydds)),"to",max(counts(values$
 This plot shows how the samples are related to each other by plotting PC `r input$pc_x` vs PC `r input$pc_y`, using the top `r input$pca_nrgenes` most variant genes
 
 ```{r}
-res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
+res <- pcaplot(values$mydst,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
                      text_labels = input$sample_labels,
                      point_size = input$pca_point_size, title="Samples PCA - zoom in",
@@ -120,9 +122,9 @@ res
 The scree plot helps determining the number of underlying principal components
 
 ```{r}
-rv <- rowVars(assay(values$myrlt))
+rv <- rowVars(assay(values$mydst))
 select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
-pca <- prcomp(t(assay(values$myrlt)[select, ]))
+pca <- prcomp(t(assay(values$mydst)[select, ]))
 
 res <- pcascree(pca,type = input$scree_type, pc_nr = input$scree_pcnr, title="Scree plot for the samples PCA")
 res <- res + theme_bw()
@@ -132,9 +134,9 @@ res
 The genes with the highest loadings in the selected principal components are the following
 
 ```{r}
-rv <- rowVars(assay(values$myrlt))
+rv <- rowVars(assay(values$mydst))
 select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
-pca <- prcomp(t(assay(values$myrlt)[select, ]))
+pca <- prcomp(t(assay(values$mydst)[select, ]))
 
 par(mfrow=c(2,1))
 hi_loadings(pca,whichpc = as.integer(input$pc_x),topN = input$ntophiload,annotation = values$myannotation)
@@ -147,16 +149,16 @@ This plot illustrates how the top `r input$pca_nrgenes` variant genes are distri
 
 ```{r}
 if(!is.null(input$color_by)) {
-        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        expgroups <- as.data.frame(colData(values$mydst)[,input$color_by])
         expgroups <- interaction(expgroups)
         expgroups <- factor(expgroups,levels=unique(expgroups))
 
       } else {
-        expgroups <- colnames(values$myrlt)
+        expgroups <- colnames(values$mydst)
       }
       colGroups <- colSel()[factor(expgroups)]
 
-res <- genespca(values$myrlt,
+res <- genespca(values$mydst,
                 ntop = input$pca_nrgenes,
                 choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                 biplot = TRUE,
@@ -173,7 +175,7 @@ For the selected genes, this is the overall profile across all samples
 
 ```{r}
 if(!is.null(input$pcagenes_brush) & length(input$color_by)>0)
-      geneprofiler(values$myrlt,
+      geneprofiler(values$mydst,
                    genelist = curData_brush()$ids,
                    intgroup = input$color_by,
                    plotZ = input$zprofile)
@@ -188,7 +190,7 @@ if(!is.null(input$pcagenes_brush))
   brushedObject <- curData_brush()
   if(nrow(brushedObject) > 1){
     selectedGenes <- brushedObject$ids
-    toplot <- assay(values$myrlt)[selectedGenes,]
+    toplot <- assay(values$mydst)[selectedGenes,]
     rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
   
     mycolss <- c("#313695","#4575b4","#74add1","#abd9e9","#e0f3f8","#fee090","#fdae61","#f46d43","#d73027","#a50026") # to be consistent with red/blue usual coding
@@ -204,7 +206,7 @@ if(!is.null(input$pcagenes_brush))
 This gene was selected in the interactive session.
 
 ```{r}
-anno_id <- rownames(values$myrlt)
+anno_id <- rownames(values$mydst)
       anno_gene <- values$myannotation$gene_name
 
       # if(is.null(input$color_by) & input$genefinder!="")
@@ -218,7 +220,7 @@ anno_id <- rownames(values$myrlt)
 if(input$genefinder!="") {
 
   if (input$genefinder %in% anno_id) {
-    selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+    selectedGene <- rownames(values$mydst)[match(input$genefinder,rownames(values$mydst))]
     selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
     }
     if (input$genefinder %in% anno_gene) {
