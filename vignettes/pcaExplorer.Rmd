@@ -102,12 +102,11 @@ citation("pcaExplorer")
 
 After loading the package, the `r Biocpkg("pcaExplorer")` app can be launched in different modes:
 
-- `pcaExplorer(dds = dds, rlt = rlt)`, where `dds` is a `DESeqDataSet` object and `rlt` is a `DESeqTransform`
+- `pcaExplorer(dds = dds, dst = dst)`, where `dds` is a `DESeqDataSet` object and `dst` is a `DESeqTransform`
 object, which were created during an existing session for the analysis of an RNA-seq
 dataset with the `r Biocpkg("DESeq2")` package
 
-- `pcaExplorer(dds = dds)`, where `dds` is a `DESeqDataSet` object. The `rlt` object is automatically 
-computed upon launch.
+- `pcaExplorer(dds = dds)`, where `dds` is a `DESeqDataSet` object. The `dst` object can be  automatically computed upon launch, choosing between rlog transformation, variance stabilizing transformations, or shifted logarithm transformation (with pseudocount = 1).
 
 - `pcaExplorer(countmatrix = countmatrix, coldata = coldata)`, where `countmatrix` is a count matrix, generated
 after assigning reads to features such as genes via tools such as `HTSeq-count` or `featureCounts`, and `coldata`
@@ -359,7 +358,7 @@ Then launch the app itself
 
 ```{r launchairway, eval=FALSE}
 pcaExplorer(dds = dds_airway,
-            rlt = rld_airway)
+            dst = rld_airway)
 ```
 
 The `annotation` for this dataset can be built by exploiting the `r Biocpkg("org.Hs.eg.db")` package
@@ -402,7 +401,7 @@ Then again, the app can be launched with
 
 ```{r launchairwayanno, eval=FALSE}
 pcaExplorer(dds = dds_airway,
-            rlt = rld_airway,
+            dst = rld_airway,
             annotation = annotation_airway) # or anno_df_orgdb, or anno_df_biomart
 ```
 
@@ -437,7 +436,7 @@ Launch the app for exploring this dataset with
 
 ```{r launchsimul, eval=FALSE}
 pcaExplorer(dds = dds_multifac,
-            rlt = rld_multifac)
+            dst = rld_multifac)
 ```
 
 When such a dataset is provided, the panel for multifactorial exploration is also usable at its best.
@@ -657,9 +656,9 @@ Plots the profile expression of a subset of genes, optionally as standardized va
 
 ```{r}
 dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
-rlt <- DESeq2::rlogTransformation(dds)
+dst <- DESeq2::rlogTransformation(dds)
 set.seed(42)
-geneprofiler(rlt,paste0("gene",sample(1:1000,20)), plotZ = FALSE)
+geneprofiler(dst,paste0("gene",sample(1:1000,20)), plotZ = FALSE)
 ```
 
 ## `get_annotation` and `get_annotation_orgdb`
