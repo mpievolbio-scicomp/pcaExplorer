@@ -6,7 +6,7 @@
 #' @param dds A \code{\link{DESeqDataSet}} object. If not provided, then a \code{countmatrix}
 #' and a \code{coldata} need to be provided. If none of the above is provided, it is possible
 #' to upload the data during the execution of the Shiny App
-#' @param rlt A \code{\link{DESeqTransform}} object. Can be computed from the \code{dds} object
+#' @param dst A \code{\link{DESeqTransform}} object. Can be computed from the \code{dds} object
 #' if left NULL. If none is provided, then a \code{countmatrix}
 #' and a \code{coldata} need to be provided. If none of the above is provided, it is possible
 #' to upload the data during the execution of the Shiny App
@@ -42,7 +42,7 @@
 #'
 #' @export
 pcaExplorer <- function(dds=NULL,
-                        rlt=NULL,
+                        dst=NULL,
                         countmatrix=NULL,
                         coldata=NULL,
                         pca2go=NULL,
@@ -198,6 +198,7 @@ pcaExplorer <- function(dds=NULL,
           "... or you can also ",
           actionButton("btn_loaddemo", "Load the demo airway data", icon = icon("play-circle"),
                        class = "btn btn-info"),br(), p(),
+          uiOutput("ui_computetransform"),
           
           
           # wellPanel(
@@ -293,7 +294,7 @@ pcaExplorer <- function(dds=NULL,
             verbatimTextOutput("detected_genes")),
           conditionalPanel(
             condition="output.checkrlt",
-            h2("You did not create the rlt object yet. Please go the main tab and generate it"))
+            h2("You did not create the dst object yet. Please go the main tab and generate it"))
           # DT::dataTableOutput("reads_samples"),
         ),
         # ui panel samples view -------------------------------------------------------
@@ -379,7 +380,7 @@ pcaExplorer <- function(dds=NULL,
           ),
           conditionalPanel(
             condition="output.checkrlt",
-            h2("You did not create the rlt object yet. Please go the main tab and generate it"))
+            h2("You did not create the dst object yet. Please go the main tab and generate it"))
         ),
         # ui panel genes view -------------------------------------------------------
         tabPanel(
@@ -468,7 +469,7 @@ pcaExplorer <- function(dds=NULL,
           ),
           conditionalPanel(
             condition="output.checkrlt",
-            h2("You did not create the rlt object yet. Please go the main tab and generate it"))
+            h2("You did not create the dst object yet. Please go the main tab and generate it"))
         ),
         # ui panel gene finder -------------------------------------------------------
         tabPanel(
@@ -598,7 +599,7 @@ pcaExplorer <- function(dds=NULL,
           ),
           conditionalPanel(
             condition="output.checkrlt",
-            h2("You did not create the rlt object yet. Please go the main tab and generate it"))
+            h2("You did not create the dst object yet. Please go the main tab and generate it"))
         ),
         
         # ui panel multifactor exploration -----------------------------------------------------
@@ -692,7 +693,7 @@ pcaExplorer <- function(dds=NULL,
           ),
           conditionalPanel(
             condition="output.checkrlt",
-            h2("You did not create the rlt object yet. Please go the main tab and generate it")
+            h2("You did not create the dst object yet. Please go the main tab and generate it")
           )
         ),
         # ui panel report editor -------------------------------------------------------
@@ -812,7 +813,7 @@ pcaExplorer <- function(dds=NULL,
     ## reactive values to use in the app
     values <- reactiveValues()
     values$mydds <- dds
-    values$myrlt <- rlt
+    values$mydst <- dst
     values$mycountmatrix <- countmatrix
     values$mymetadata <- coldata
     values$mypca2go <- pca2go
@@ -824,7 +825,7 @@ pcaExplorer <- function(dds=NULL,
       is.null(values$mydds)
     })
     output$checkrlt<-reactive({
-      is.null(values$myrlt)
+      is.null(values$mydst)
     })
     
     outputOptions(output, 'checkdds', suspendWhenHidden=FALSE)
@@ -839,19 +840,48 @@ pcaExplorer <- function(dds=NULL,
       if(is.null(sizeFactors(dds)))
         dds <- estimateSizeFactors(dds)
     }
-    if(!is.null(rlt)){
-      if(!is(rlt,"DESeqTransform"))
+    if(!is.null(dst)){
+      if(!is(dst,"DESeqTransform"))
         stop("dds must be a DESeqTransform object")
     }
     
-    # compute only rlt if dds is provided but not cm&coldata
-    if(!is.null(dds) & (is.null(countmatrix) & is.null(coldata)) & is.null(rlt)){
+    # compute only dst if dds is provided but not cm&coldata
+    if(!is.null(dds) & (is.null(countmatrix) & is.null(coldata)) & is.null(dst)){
       withProgress(message = "computing rlog transformed values...",
                    value = 0,
                    {
-                     values$myrlt <- rlogTransformation(dds)
+                     values$mydst <- rlogTransformation(dds)
                    })
     }
+    
+    observeEvent(input$btn_computevst,
+                 {
+                   withProgress(message="Computing the variance stabilized transformed data...",
+                                detail = "This step can take a little while",
+                                value = 0,{
+                                  values$vst_obj <- vst(values$dds_obj)
+                                })
+                 })
+    
+    observeEvent(input$btn_computerlog,
+                 {
+                   withProgress(message="Computing the rlog transformed data...",
+                                detail = "This step can take a little while",
+                                value = 0,{
+                                  values$vst_obj <- rlog(values$dds_obj)
+                                })
+                 })
+    
+    observeEvent(input$btn_computeshiftedlog,
+                 {
+                   withProgress(message="Computing the log2 transformed data...",
+                                detail = "This step can take a little while",
+                                value = 0,{
+                                  values$vst_obj <- normTransform(values$dds_obj)
+                                })
+                 })
+    
+    
     # server renderUI elements --------------------------------------------------------
     output$color_by <- renderUI({
       if(is.null(values$mydds))
@@ -969,8 +999,8 @@ pcaExplorer <- function(dds=NULL,
     createRLT <- reactive({
       if(is.null(countmatrix) | is.null(coldata))
         return(NULL)
-      rlt <- rlogTransformation(values$mydds)
-      return(rlt)
+      dst <- rlogTransformation(values$mydds)
+      return(dst)
     })
     
     observeEvent(createDDS,
@@ -982,7 +1012,7 @@ pcaExplorer <- function(dds=NULL,
     observeEvent(createRLT,
                  {
                    if(!is.null(values$mycountmatrix) & !is.null(values$mymetadata))
-                     values$myrlt <- createRLT()
+                     values$mydst <- createRLT()
                  })
     
     # useful when count matrix is uploaded by hand
@@ -1006,7 +1036,7 @@ pcaExplorer <- function(dds=NULL,
                        values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
                                                               colData = values$mymetadata,
                                                               design=~1)
-                       values$myrlt <- rlogTransformation(values$mydds)})
+                       values$mydst <- rlogTransformation(values$mydds)})
                    }
                  })
     
@@ -1019,7 +1049,7 @@ pcaExplorer <- function(dds=NULL,
                        values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
                                                               colData = values$mymetadata,
                                                               design=~1)
-                       values$myrlt <- rlogTransformation(values$mydds)})
+                       values$mydst <- rlogTransformation(values$mydds)})
                    }
                  })
     
@@ -1039,7 +1069,7 @@ pcaExplorer <- function(dds=NULL,
       values$mydds
     })
     output$showuploaded4 <- renderPrint({
-      values$myrlt
+      values$mydst
     })
     
     # load the demo data
@@ -1064,7 +1094,7 @@ pcaExplorer <- function(dds=NULL,
         incProgress(0.1,detail = "Computing size factors for normalization")
         values$mydds <- estimateSizeFactors(values$mydds)
         incProgress(0.1,detail = "Generating DESeqTransform")
-        values$myrlt <- rlogTransformation(values$mydds)
+        values$mydst <- rlogTransformation(values$mydds)
         
         incProgress(0.7, detail = "Retrieving annotation")
         
@@ -1078,11 +1108,11 @@ pcaExplorer <- function(dds=NULL,
       # return all say steelblue or all different
       
       if(!is.null(input$color_by)) {
-        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        expgroups <- as.data.frame(colData(values$mydst)[,input$color_by])
         expgroups <- interaction(expgroups)
       } else {
-        expgroups <- factor(colnames(values$myrlt))
-        # return(rep("steelblue",ncol(values$myrlt))) # to return all same
+        expgroups <- factor(colnames(values$mydst))
+        # return(rep("steelblue",ncol(values$mydst))) # to return all same
       }
       
       nrgroups <- length(levels(expgroups))
@@ -1090,7 +1120,7 @@ pcaExplorer <- function(dds=NULL,
       if(input$col_palette=="hue"){
         return(hue_pal()(nrgroups))
       }
-      # hue_pal()(ncol(values$myrlt)/2) # or somewhat other way
+      # hue_pal()(ncol(values$mydst)/2) # or somewhat other way
       if(input$col_palette=="set1"){
         if(nrgroups <= 9) { # max color nr allowed for set1
           return(brewer_pal(palette = "Set1")(nrgroups))
@@ -1098,7 +1128,7 @@ pcaExplorer <- function(dds=NULL,
           return(hue_pal()(nrgroups)) # plus print message?
         }
       }
-      # (ncol(values$myrlt)/2) # or somewhat other way
+      # (ncol(values$mydst)/2) # or somewhat other way
       if(input$col_palette=="rainbow"){
         return(rainbow(nrgroups))
       }
@@ -1129,7 +1159,7 @@ pcaExplorer <- function(dds=NULL,
       if(input$countstable_unit=="normalized_counts")
         return(counts(values$mydds,normalized=TRUE))
       if(input$countstable_unit=="rlog_counts")
-        return(assay(values$myrlt))
+        return(assay(values$mydst))
       if(input$countstable_unit=="log10_counts")
         return(log10(1 + counts(values$mydds,normalized=TRUE)))
       if(input$countstable_unit=="tpm_counts")
@@ -1156,7 +1186,7 @@ pcaExplorer <- function(dds=NULL,
       },
       content = function(file) {
         
-        anno_id <- rownames(values$myrlt)
+        anno_id <- rownames(values$mydst)
         anno_gene <- values$myannotation$gene_name
         
         if(is.null(input$color_by) & input$genefinder!="")
@@ -1169,7 +1199,7 @@ pcaExplorer <- function(dds=NULL,
           return(NULL)
         
         if (input$genefinder %in% anno_id) {
-          selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+          selectedGene <- rownames(values$mydst)[match(input$genefinder,rownames(values$mydst))]
           selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
         }
         if (input$genefinder %in% anno_gene) {
@@ -1235,14 +1265,14 @@ pcaExplorer <- function(dds=NULL,
     
     output$heatmapsampledist <- renderPlot({
       if (!is.null(input$color_by)){
-        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        expgroups <- as.data.frame(colData(values$mydst)[,input$color_by])
         # expgroups <- interaction(expgroups)
-        rownames(expgroups) <- colnames(values$myrlt)
+        rownames(expgroups) <- colnames(values$mydst)
         colnames(expgroups) <- input$color_by
         
-        pheatmap(as.matrix(dist(t(assay(values$myrlt)))),annotation_col = expgroups)
+        pheatmap(as.matrix(dist(t(assay(values$mydst)))),annotation_col = expgroups)
       } else {
-        pheatmap(as.matrix(dist(t(assay(values$myrlt)))))
+        pheatmap(as.matrix(dist(t(assay(values$mydst)))))
       }
     })
     
@@ -1275,7 +1305,7 @@ pcaExplorer <- function(dds=NULL,
     
     # server samples view --------------------------------------------------------
     output$samples_pca <- renderPlot({
-      res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
+      res <- pcaplot(values$mydst,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
                      text_labels = input$sample_labels,
                      point_size = input$pca_point_size, title="Samples PCA",
@@ -1294,7 +1324,7 @@ pcaExplorer <- function(dds=NULL,
       )
       # if(is.null(input$pca_brush))
       # return(ggplot() + annotate("text",label="zoom in by brushing",0,0) + theme_bw())
-      res <- pcaplot(values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
+      res <- pcaplot(values$mydst,intgroup = input$color_by,ntop = input$pca_nrgenes,
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
                      text_labels = input$sample_labels,
                      point_size = input$pca_point_size, title="Samples PCA - zoom in",
@@ -1310,9 +1340,9 @@ pcaExplorer <- function(dds=NULL,
     })
     
     output$samples_scree <- renderPlot({
-      rv <- rowVars(assay(values$myrlt))
+      rv <- rowVars(assay(values$mydst))
       select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
-      pca <- prcomp(t(assay(values$myrlt)[select, ]))
+      pca <- prcomp(t(assay(values$mydst)[select, ]))
       
       res <- pcascree(pca,type = input$scree_type, pc_nr = input$scree_pcnr, title="Scree plot for the samples PCA")
       res <- res + theme_bw()
@@ -1322,9 +1352,9 @@ pcaExplorer <- function(dds=NULL,
     
     
     output$geneshiload <- renderPlot({
-      rv <- rowVars(assay(values$myrlt))
+      rv <- rowVars(assay(values$mydst))
       select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
-      pca <- prcomp(t(assay(values$myrlt)[select, ]))
+      pca <- prcomp(t(assay(values$mydst)[select, ]))
       
       par(mfrow=c(2,1))
       hi_loadings(pca,whichpc = as.integer(input$pc_x),topN = input$ntophiload,annotation = values$myannotation)
@@ -1333,7 +1363,7 @@ pcaExplorer <- function(dds=NULL,
     })
     
     output$ui_outliersamples <- renderUI({
-      available_samples <- c("",colnames(values$myrlt))
+      available_samples <- c("",colnames(values$mydst))
       
       selectInput("outlierselection",label = "Select which sample(s) to remove - suspected outliers",choices = available_samples,multiple = TRUE)
       
@@ -1346,7 +1376,7 @@ pcaExplorer <- function(dds=NULL,
              message = "Select at least one sample to plot the new PCA where the selection is removed")
       )
       
-      currentrlt <- values$myrlt
+      currentrlt <- values$mydst
       allsamples <- colnames(currentrlt)
       
       outliersamples <- input$outlierselection
@@ -1366,23 +1396,23 @@ pcaExplorer <- function(dds=NULL,
     
     output$pca3d <- renderScatterplotThree({
       pcaplot3d(
-        values$myrlt,intgroup = input$color_by,ntop = input$pca_nrgenes,
+        values$mydst,intgroup = input$color_by,ntop = input$pca_nrgenes,
         pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),pcZ = as.integer(input$pc_z))
     })
     
     # server genes view ---------------------------------------------------------------
     output$genes_biplot <- renderPlot({
       if(!is.null(input$color_by)) {
-        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        expgroups <- as.data.frame(colData(values$mydst)[,input$color_by])
         expgroups <- interaction(expgroups)
         expgroups <- factor(expgroups,levels=unique(expgroups))
         
       } else {
-        expgroups <- colnames(values$myrlt)
+        expgroups <- colnames(values$mydst)
       }
       colGroups <- colSel()[factor(expgroups)]
       
-      res <- genespca(values$myrlt,
+      res <- genespca(values$mydst,
                       ntop = input$pca_nrgenes,
                       choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                       biplot = TRUE,
@@ -1404,15 +1434,15 @@ pcaExplorer <- function(dds=NULL,
       )
       
       if(!is.null(input$color_by)) {
-        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        expgroups <- as.data.frame(colData(values$mydst)[,input$color_by])
         expgroups <- interaction(expgroups)
         expgroups <- factor(expgroups,levels=unique(expgroups))
       } else {
-        expgroups <- colnames(values$myrlt)
+        expgroups <- colnames(values$mydst)
       }
       colGroups <- colSel()[factor(expgroups)]
       
-      res <- genespca(values$myrlt,
+      res <- genespca(values$mydst,
                       ntop = input$pca_nrgenes,
                       choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                       biplot = TRUE,
@@ -1446,7 +1476,7 @@ pcaExplorer <- function(dds=NULL,
         )
       )
       
-      geneprofiler(values$myrlt,
+      geneprofiler(values$mydst,
                    genelist = curData_brush()$ids,
                    intgroup = input$color_by,
                    plotZ = input$zprofile)
@@ -1533,7 +1563,7 @@ pcaExplorer <- function(dds=NULL,
     
     # for reading in the brushed/clicked points
     curData_brush <- reactive({
-      df2 <- genespca(values$myrlt,
+      df2 <- genespca(values$mydst,
                       ntop = input$pca_nrgenes,
                       choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                       biplot = TRUE,
@@ -1546,7 +1576,7 @@ pcaExplorer <- function(dds=NULL,
     })
     
     curData_click <- reactive({
-      df2 <- genespca(values$myrlt,
+      df2 <- genespca(values$mydst,
                       ntop = input$pca_nrgenes,
                       choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                       biplot = TRUE,
@@ -1563,7 +1593,7 @@ pcaExplorer <- function(dds=NULL,
     
     # data to be used for plotting the picked gene from the zoomed panel
     curData_zoomClick <- reactive({
-      df2 <- genespca(values$myrlt,
+      df2 <- genespca(values$mydst,
                       ntop = input$pca_nrgenes,
                       choices = c(as.integer(input$pc_x),as.integer(input$pc_y)),
                       biplot = TRUE,
@@ -1604,7 +1634,7 @@ pcaExplorer <- function(dds=NULL,
       )
       
       selectedGenes <- brushedObject$ids
-      toplot <- assay(values$myrlt)[selectedGenes,]
+      toplot <- assay(values$mydst)[selectedGenes,]
       rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
       
       mycolss <- c("#313695","#4575b4","#74add1","#abd9e9","#e0f3f8","#fee090","#fdae61","#f46d43","#d73027","#a50026") # to be consistent with red/blue usual coding
@@ -1629,7 +1659,7 @@ pcaExplorer <- function(dds=NULL,
         )
       )
       selectedGenes <- brushedObject$ids
-      toplot <- assay(values$myrlt)[selectedGenes,]
+      toplot <- assay(values$mydst)[selectedGenes,]
       rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
       # pheatmap(toplot,cluster_cols = as.logical(input$heatmap_colv))
       NMF::aheatmap(toplot,Colv = as.logical(input$heatmap_colv))
@@ -1642,7 +1672,7 @@ pcaExplorer <- function(dds=NULL,
     #     output$ui_selectID <- renderUI({
     #       allIDs <- withProgress(message = "loading the names in the UI",value = 0,
     #                              {
-    #                                rownames(values$myrlt)
+    #                                rownames(values$mydst)
     #                              }
     #
     #
@@ -1709,7 +1739,7 @@ pcaExplorer <- function(dds=NULL,
     #         # return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
     #
     # #       if (input$genefinder %in% anno_id) {
-    # #         selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+    # #         selectedGene <- rownames(values$mydst)[match(input$genefinder,rownames(values$mydst))]
     # #         selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
     # #       }
     # #       if (input$genefinder %in% anno_gene) {
@@ -1748,10 +1778,10 @@ pcaExplorer <- function(dds=NULL,
       if(input$genefinder=="")
         return("Type in the gene name/id you want to plot")
       
-      foundGeneID <- input$genefinder %in% rownames(values$myrlt)
+      foundGeneID <- input$genefinder %in% rownames(values$mydst)
       foundGeneName <- input$genefinder %in% values$myannotation$gene_name
       if(!foundGeneID){
-        foundGeneID <- toupper(input$genefinder) %in% toupper(rownames(values$myrlt))
+        foundGeneID <- toupper(input$genefinder) %in% toupper(rownames(values$mydst))
         if(foundGeneID){
           return(paste0("Maybe you mis-spelled the name of your gene. Did you mean ",
                         unique(rownames(values$myannotation)[which(toupper(input$genefinder)==toupper(rownames(values$myannotation)))]),"?"))
@@ -1773,14 +1803,14 @@ pcaExplorer <- function(dds=NULL,
             
           }}
       } else {
-        fg <- rownames(values$myannotation)[match(input$genefinder,rownames(values$myrlt))]
+        fg <- rownames(values$myannotation)[match(input$genefinder,rownames(values$mydst))]
         return(paste0("I found the gene! Plotting ", fg, " - ", values$myannotation$gene_name[match(fg,rownames(values$myannotation))],"..."))
         
       }
     })
     
     output$genefinder_plot <- renderPlot({
-      anno_id <- rownames(values$myrlt)
+      anno_id <- rownames(values$mydst)
       anno_gene <- values$myannotation$gene_name
       
       if(is.null(input$color_by) & input$genefinder!="")
@@ -1793,7 +1823,7 @@ pcaExplorer <- function(dds=NULL,
         return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
       
       if (input$genefinder %in% anno_id) {
-        selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+        selectedGene <- rownames(values$mydst)[match(input$genefinder,rownames(values$mydst))]
         selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
       }
       if (input$genefinder %in% anno_gene) {
@@ -1849,7 +1879,7 @@ pcaExplorer <- function(dds=NULL,
     })
     
     output$genefinder_table <- DT::renderDataTable({
-      anno_id <- rownames(values$myrlt)
+      anno_id <- rownames(values$mydst)
       anno_gene <- values$myannotation$gene_name
       
       if(is.null(input$color_by) & input$genefinder!="")
@@ -1862,7 +1892,7 @@ pcaExplorer <- function(dds=NULL,
         return(NULL)
       
       if (input$genefinder %in% anno_id) {
-        selectedGene <- rownames(values$myrlt)[match(input$genefinder,rownames(values$myrlt))]
+        selectedGene <- rownames(values$mydst)[match(input$genefinder,rownames(values$mydst))]
         selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
       }
       if (input$genefinder %in% anno_gene) {
@@ -1946,7 +1976,7 @@ pcaExplorer <- function(dds=NULL,
         message = "Computing the PCA2GO object...",
         value = 0,
         {
-          pcpc <- limmaquickpca2go(values$myrlt,background_genes = rownames(values$mydds),
+          pcpc <- limmaquickpca2go(values$mydst,background_genes = rownames(values$mydds),
                                    inputType = input$idtype,
                                    organism = gsub(".eg.db","",gsub("org.","",annopkg)))
         })
@@ -1965,7 +1995,7 @@ pcaExplorer <- function(dds=NULL,
           "Please provide a pca2go object to the app or alternatively click on the action button - could take some time to compute live!"
         )
       )
-      res <- pcaplot(values$myrlt,intgroup = input$color_by,
+      res <- pcaplot(values$mydst,intgroup = input$color_by,
                      ntop = attr(values$mypca2go,"n_genesforpca"),
                      pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),text_labels = input$sample_labels,
                      point_size = input$pca_point_size, title=paste0("PCA on the samples - ",attr(values$mypca2go,"n_genesforpca"), " genes used")
@@ -2027,7 +2057,7 @@ pcaExplorer <- function(dds=NULL,
     
     
     output$covar1 <- renderUI({
-      # if(is.null(values$myrlt))
+      # if(is.null(values$mydst))
       # return(NULL)
       poss_covars <- names(colData(values$mydds))
       selectInput('covar1', label = 'Select factor 1: ',
@@ -2035,7 +2065,7 @@ pcaExplorer <- function(dds=NULL,
     })
     
     output$covar2 <- renderUI({
-      # if(is.null(values$myrlt))
+      # if(is.null(values$mydst))
       # return(NULL)
       poss_covars <- names(colData(values$mydds))
       selectInput('covar2', label = 'Select factor 2: ',
@@ -2045,7 +2075,7 @@ pcaExplorer <- function(dds=NULL,
     output$c1levels <- renderUI({
       if(is.null(input$covar1))
         return(NULL)
-      fac1lev <- levels(colData(values$myrlt)[[input$covar1]])
+      fac1lev <- levels(colData(values$mydst)[[input$covar1]])
       selectInput('covar1levels', label = 'Factor 1 available levels: ',
                   choices = c(NULL, fac1lev), selected = NULL,multiple = TRUE) # actually 2
     })
@@ -2053,13 +2083,13 @@ pcaExplorer <- function(dds=NULL,
     output$c2levels <- renderUI({
       if(is.null(input$covar2))
         return(NULL)
-      fac2lev <- levels(colData(values$myrlt)[[input$covar2]])
+      fac2lev <- levels(colData(values$mydst)[[input$covar2]])
       selectInput('covar2levels', label = 'Factor 2 available levels: ',
                   choices = c(NULL, fac2lev), selected = NULL,multiple = TRUE) # 2 or more are allowed!
     })
     
     output$colnames1 <- renderUI({
-      if(is.null(values$myrlt))
+      if(is.null(values$mydst))
         return(NULL)
       if(is.null(input$covar1))
         return(NULL)
@@ -2072,12 +2102,12 @@ pcaExplorer <- function(dds=NULL,
       fac1_touse <- input$covar1levels
       fac2_touse <- input$covar2levels
       
-      preselected_fac1 <- colnames(values$myrlt)[colData(values$myrlt)[[fac1]] %in% fac1_touse]
-      preselected_fac2 <- colnames(values$myrlt)[colData(values$myrlt)[[fac2]] %in% fac2_touse]
+      preselected_fac1 <- colnames(values$mydst)[colData(values$mydst)[[fac1]] %in% fac1_touse]
+      preselected_fac2 <- colnames(values$mydst)[colData(values$mydst)[[fac2]] %in% fac2_touse]
       presel <- intersect(preselected_fac1,preselected_fac2)
-      mysamples <- colData(values$myrlt)[presel,] # check that the repl are balanced
+      mysamples <- colData(values$mydst)[presel,] # check that the repl are balanced
       
-      presel1 <- colnames(values$myrlt)[(colData(values$myrlt)[[fac1]] %in% fac1_touse[1]) & colData(values$myrlt)[[fac2]] %in% fac2_touse]
+      presel1 <- colnames(values$mydst)[(colData(values$mydst)[[fac1]] %in% fac1_touse[1]) & colData(values$mydst)[[fac2]] %in% fac2_touse]
       
       selectInput(
         'picksamples1', label = 'Combine samples from Factor1-Level1 in the selected order: ',
@@ -2086,7 +2116,7 @@ pcaExplorer <- function(dds=NULL,
     
     
     output$colnames2 <- renderUI({
-      if(is.null(values$myrlt))
+      if(is.null(values$mydst))
         return(NULL)
       if(is.null(input$covar1))
         return(NULL)
@@ -2099,18 +2129,18 @@ pcaExplorer <- function(dds=NULL,
       fac1_touse <- input$covar1levels
       fac2_touse <- input$covar2levels
       
-      preselected_fac1 <- colnames(values$myrlt)[colData(values$myrlt)[[fac1]] %in% fac1_touse]
-      preselected_fac2 <- colnames(values$myrlt)[colData(values$myrlt)[[fac2]] %in% fac2_touse]
+      preselected_fac1 <- colnames(values$mydst)[colData(values$mydst)[[fac1]] %in% fac1_touse]
+      preselected_fac2 <- colnames(values$mydst)[colData(values$mydst)[[fac2]] %in% fac2_touse]
       presel <- intersect(preselected_fac1,preselected_fac2)
-      mysamples <- colData(values$myrlt)[presel,] # check that the repl are balanced
+      mysamples <- colData(values$mydst)[presel,] # check that the repl are balanced
       
-      presel2 <- colnames(values$myrlt)[(colData(values$myrlt)[[fac1]] %in% fac1_touse[2]) & colData(values$myrlt)[[fac2]] %in% fac2_touse]
+      presel2 <- colnames(values$mydst)[(colData(values$mydst)[[fac1]] %in% fac1_touse[2]) & colData(values$mydst)[[fac2]] %in% fac2_touse]
       selectInput('picksamples2', label = 'Combine samples from Factor1-Level2 in the selected order: ',
                   choices = c(NULL, presel2), selected = NULL,multiple = TRUE)
     })
     
     composedMat <- eventReactive( input$composemat, {
-      exprmat <- t(assay(values$myrlt))
+      exprmat <- t(assay(values$mydst))
       exprmat <- exprmat[,rowSums(counts(values$mydds) > 5)>2]
       
       withProgress(message = "Composing the matrix...",
@@ -2127,11 +2157,11 @@ pcaExplorer <- function(dds=NULL,
       pcmat <- composedMat()
       aval <- 0.3
       fac2pal <- alpha(c("green","red","blue","orange","violet"),aval) # 5 are enough
-      # colData(values$myrlt)[input$covar2][rownames(pcmat),]
+      # colData(values$mydst)[input$covar2][rownames(pcmat),]
       max.type <- apply(pcmat[,1:(ncol(pcmat)/2)],2,which.max)
       
-      fac2_col <- factor(colData(values$myrlt)[input$covar2][rownames(pcmat),],
-                         levels=unique(as.character(colData(values$myrlt)[input$covar2][rownames(pcmat),])))
+      fac2_col <- factor(colData(values$mydst)[input$covar2][rownames(pcmat),],
+                         levels=unique(as.character(colData(values$mydst)[input$covar2][rownames(pcmat),])))
       tcol.justMax <- fac2pal[fac2_col][max.type]
       # tcol.justMax <- ifelse(max.type <= 4,"green",ifelse(max.type <= 8,"red",ifelse(max.type <= 12,"blue","orange")))
       
@@ -2406,14 +2436,14 @@ pcaExplorer <- function(dds=NULL,
       pdf(file)
       
       if (!is.null(input$color_by)){
-        expgroups <- as.data.frame(colData(values$myrlt)[,input$color_by])
+        expgroups <- as.data.frame(colData(values$mydst)[,input$color_by])
         # expgroups <- interaction(expgroups)
-        rownames(expgroups) <- colnames(values$myrlt)
+        rownames(expgroups) <- colnames(values$mydst)
         colnames(expgroups) <- input$color_by
         
-        pheatmap(as.matrix(dist(t(assay(values$myrlt)))),annotation_col = expgroups)
+        pheatmap(as.matrix(dist(t(assay(values$mydst)))),annotation_col = expgroups)
       } else {
-        pheatmap(as.matrix(dist(t(assay(values$myrlt)))))
+        pheatmap(as.matrix(dist(t(assay(values$mydst)))))
       }
       
       dev.off()
@@ -2448,9 +2478,9 @@ pcaExplorer <- function(dds=NULL,
     },
     content = function(file){
       pdf(file)
-      rv <- rowVars(assay(values$myrlt))
+      rv <- rowVars(assay(values$mydst))
       select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
-      pca <- prcomp(t(assay(values$myrlt)[select, ]))
+      pca <- prcomp(t(assay(values$mydst)[select, ]))
       
       par(mfrow=c(2,1))
       hi_loadings(pca,whichpc = as.integer(input$pc_x),topN = input$ntophiload,annotation = values$myannotation)
@@ -2482,7 +2512,7 @@ pcaExplorer <- function(dds=NULL,
       },
       content = function(file){
         pdf(file)
-        geneprofiler(values$myrlt,
+        geneprofiler(values$mydst,
                      genelist = curData_brush()$ids,
                      intgroup = input$color_by,
                      plotZ = input$zprofile)
@@ -2503,7 +2533,7 @@ pcaExplorer <- function(dds=NULL,
         pdf(file)
         brushedObject <- curData_brush()
         selectedGenes <- brushedObject$ids
-        toplot <- assay(values$myrlt)[selectedGenes,]
+        toplot <- assay(values$mydst)[selectedGenes,]
         rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
         aheatmap(toplot,Colv = as.logical(input$heatmap_colv))
         dev.off()
@@ -2548,7 +2578,7 @@ pcaExplorer <- function(dds=NULL,
           }
         }
     })
-  }) # end of pcaExplorer(dds,rlt,countmatrix,coldata,pca2go,annotation)
+  }) # end of pcaExplorer(dds,dst,countmatrix,coldata,pca2go,annotation)
   shinyApp(ui = pcaexplorer_ui, server = pcaexplorer_server)
 
 }
