@@ -76,6 +76,7 @@ pcaExplorer <- function(dds=NULL,
       # task menu for saving state to environment or binary data
       shinydashboard::dropdownMenu(
         type = "tasks",icon = icon("cog"),badgeStatus = NULL,
+        headerText = "pcaExplorer task menu",
         notificationItem(
           text = actionButton("exit_and_save","Exit pcaExplorer & save",
                               class = "btn_no_border",
@@ -184,15 +185,15 @@ pcaExplorer <- function(dds=NULL,
           uiOutput("upload_count_matrix"),
           shinyBS::bsTooltip(
             "upload_count_matrix", paste0("Select file containing the count matrix"),
-            "right", options = list(container = "body")),
+            "left", options = list(container = "body")),
           uiOutput("upload_metadata"),
           shinyBS::bsTooltip(
             "upload_metadata", paste0("Select file containing the samples metadata"),
-            "right", options = list(container = "body")),
+            "left", options = list(container = "body")),
           uiOutput("upload_annotation"),
           shinyBS::bsTooltip(
             "upload_annotation", paste0("Select file containing the annotation data"),
-            "right", options = list(container = "body")),
+            "left", options = list(container = "body")),
           br(),
           "... or you can also ",
           actionButton("btn_loaddemo", "Load the demo airway data", icon = icon("play-circle"),
