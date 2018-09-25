@@ -5,6 +5,10 @@
 * Added a `NEWS.md` file to track changes to the package
 * PCA plots now are correctly generated with fixed coordinates
 
+## Other notes
+
+* built project website via pkgdown
+
 # pcaExplorer 2.6.0
 
 ## New features

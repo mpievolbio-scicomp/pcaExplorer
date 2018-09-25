@@ -3,8 +3,9 @@ Type: Package
 Title: Interactive Visualization of RNA-seq Data Using a Principal Components Approach
 Version: 2.7.2
 Date: 2018-09-05
-Authors@R: c(person("Federico", "Marini", email =
-        "marinif@uni-mainz.de", role = c("aut", "cre")))
+Authors@R: c(person("Federico", "Marini", role = c("aut", "cre"), 
+        email ="marinif@uni-mainz.de", 
+        comment = c(ORCID = '0000-0003-3252-7758')))
 Maintainer: Federico Marini <marinif@uni-mainz.de>
 Description: This package provides functionality for interactive
         visualization of RNA-seq datasets based on Principal Components
