@@ -22,7 +22,7 @@ Imports: DESeq2, SummarizedExperiment, GenomicRanges, IRanges,
         methods
 Suggests: testthat, BiocStyle, airway, org.Hs.eg.db
 URL: https://github.com/federicomarini/pcaExplorer,
-        http://federicomarini.github.io/pcaExplorer/
+        https://federicomarini.github.io/pcaExplorer/
 BugReports: https://github.com/federicomarini/pcaExplorer/issues
 biocViews: Visualization, RNASeq, DimensionReduction,
         PrincipalComponent, QualityControl, GUI, ReportWriting
