@@ -6,7 +6,7 @@
 \alias{pcaExplorer-package}
 \title{pcaExplorer: analyzing time-lapse microscopy imaging, from detection to tracking}
 \usage{
-pcaExplorer(dds = NULL, rlt = NULL, countmatrix = NULL,
+pcaExplorer(dds = NULL, dst = NULL, countmatrix = NULL,
   coldata = NULL, pca2go = NULL, annotation = NULL)
 }
 \arguments{
@@ -14,7 +14,7 @@ pcaExplorer(dds = NULL, rlt = NULL, countmatrix = NULL,
 and a \code{coldata} need to be provided. If none of the above is provided, it is possible
 to upload the data during the execution of the Shiny App}
 
-\item{rlt}{A \code{\link{DESeqTransform}} object. Can be computed from the \code{dds} object
+\item{dst}{A \code{\link{DESeqTransform}} object. Can be computed from the \code{dds} object
 if left NULL. If none is provided, then a \code{countmatrix}
 and a \code{coldata} need to be provided. If none of the above is provided, it is possible
 to upload the data during the execution of the Shiny App}
