@@ -845,21 +845,37 @@ pcaExplorer <- function(dds=NULL,
         stop("dds must be a DESeqTransform object")
     }
     
-    # compute only dst if dds is provided but not cm&coldata
-    if(!is.null(dds) & (is.null(countmatrix) & is.null(coldata)) & is.null(dst)){
-      withProgress(message = "computing rlog transformed values...",
-                   value = 0,
-                   {
-                     values$mydst <- rlogTransformation(dds)
-                   })
-    }
+    # # compute only dst if dds is provided but not cm&coldata
+    # if(!is.null(dds) & (is.null(countmatrix) & is.null(coldata)) & is.null(dst)){
+    #   withProgress(message = "computing rlog transformed values...",
+    #                value = 0,
+    #                {
+    #                  values$mydst <- rlogTransformation(dds)
+    #                })
+    # }
+    
+    output$ui_computetransform <- renderUI({
+      if(is.null(values$mydds))
+        return(NULL)
+      tagList(
+        actionButton("btn_computevst",
+                     "Compute variance stabilized transformed data from the dds object",
+                     class = "btn btn-primary",icon = icon("spinner")),
+        actionButton("btn_computerlog",
+                     "Compute regularized logarithm transformed data from the dds object",
+                     class = "btn btn-primary",icon = icon("spinner")),
+        actionButton("btn_computeshiftedlog",
+                     "Compute log2 data (with pseudocount 1) from the dds object",
+                     class = "btn btn-primary",icon = icon("spinner"))
+      )
+    })
     
     observeEvent(input$btn_computevst,
                  {
                    withProgress(message="Computing the variance stabilized transformed data...",
                                 detail = "This step can take a little while",
                                 value = 0,{
-                                  values$vst_obj <- vst(values$dds_obj)
+                                  values$mydst <- vst(values$mydds)
                                 })
                  })
     
@@ -868,7 +884,7 @@ pcaExplorer <- function(dds=NULL,
                    withProgress(message="Computing the rlog transformed data...",
                                 detail = "This step can take a little while",
                                 value = 0,{
-                                  values$vst_obj <- rlog(values$dds_obj)
+                                  values$mydst <- rlog(values$mydds)
                                 })
                  })
     
@@ -877,7 +893,7 @@ pcaExplorer <- function(dds=NULL,
                    withProgress(message="Computing the log2 transformed data...",
                                 detail = "This step can take a little while",
                                 value = 0,{
-                                  values$vst_obj <- normTransform(values$dds_obj)
+                                  values$mydst <- normTransform(values$mydds)
                                 })
                  })
     
@@ -996,12 +1012,12 @@ pcaExplorer <- function(dds=NULL,
       return(dds)
     })
     
-    createRLT <- reactive({
-      if(is.null(countmatrix) | is.null(coldata))
-        return(NULL)
-      dst <- rlogTransformation(values$mydds)
-      return(dst)
-    })
+    # createRLT <- reactive({
+    #   if(is.null(countmatrix) | is.null(coldata))
+    #     return(NULL)
+    #   dst <- rlogTransformation(values$mydds)
+    #   return(dst)
+    # })
     
     observeEvent(createDDS,
                  {
@@ -1009,11 +1025,11 @@ pcaExplorer <- function(dds=NULL,
                      values$mydds <- createDDS()
                  })
     
-    observeEvent(createRLT,
-                 {
-                   if(!is.null(values$mycountmatrix) & !is.null(values$mymetadata))
-                     values$mydst <- createRLT()
-                 })
+    # observeEvent(createRLT,
+    #              {
+    #                if(!is.null(values$mycountmatrix) & !is.null(values$mymetadata))
+    #                  values$mydst <- createRLT()
+    #              })
     
     # useful when count matrix is uploaded by hand
     sneakpeek <- reactiveValues()
@@ -1094,7 +1110,7 @@ pcaExplorer <- function(dds=NULL,
         incProgress(0.1,detail = "Computing size factors for normalization")
         values$mydds <- estimateSizeFactors(values$mydds)
         incProgress(0.1,detail = "Generating DESeqTransform")
-        values$mydst <- rlogTransformation(values$mydds)
+        values$mydst <- vst(values$mydds)
         
         incProgress(0.7, detail = "Retrieving annotation")
         
