@@ -42,6 +42,6 @@
 #' Federico Marini \email{marinif@@uni-mainz.de}, 2016
 #'
 #' Maintainer: Federico Marini \email{marinif@@uni-mainz.de}
-#' @name pcaExplorer
+#' @name pcaExplorer-pkg
 #' @docType package
 NULL
