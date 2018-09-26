@@ -1,0 +1,22 @@
+citHeader("To cite the package 'pcaExplorer' in publications use:")
+
+citEntry(
+  entry        = "Article",
+  title        = "Development of Applications for Interactive and Reproducible Research: a Case Study",
+  journal      = "Genomics and Computational Biology",
+  author       = personList(as.person("Federico Marini"),
+                   as.person("Harald Binder")),
+  volume       = "3",
+	number       = "1",
+	year         = "2016",
+	issn         = "2365-7154",
+	pages        = "e39",
+	doi          = "10.18547/gcb.2017.vol3.iss1.e39, 10.18129/B9.bioc.pcaExplorer",
+  url          = "http://bioconductor.org/packages/pcaExplorer/",
+
+  textVersion  =
+  paste("Federico Marini, Harald Binder (2016).",
+        "Development of Applications for Interactive and Reproducible Research: a Case Study",
+        "URL http://bioconductor.org/packages/pcaExplorer/, https://genomicscomputbiol.org/ojs3/GCB/article/view/21",
+        "doi: 10.18547/gcb.2017.vol3.iss1.e39, 10.18129/B9.bioc.pcaExplorer")
+)
