@@ -11,7 +11,7 @@ citEntry(
 	year         = "2016",
 	issn         = "2365-7154",
 	pages        = "e39",
-	doi          = "10.18547/gcb.2017.vol3.iss1.e39, 10.18129/B9.bioc.pcaExplorer",
+	doi          = "10.18547/gcb.2017.vol3.iss1.e39",
   url          = "http://bioconductor.org/packages/pcaExplorer/",
 
   textVersion  =
