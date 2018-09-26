@@ -29,3 +29,35 @@ navbar:
     github:
       icon: fa-github fa-lg
       href: https://github.com/federicomarini/pcaExplorer
+
+reference:
+- title: The pcaExplorer package
+  desc: Main functions and info on the `pcaExplorer` package
+  contents:
+  - '`pcaExplorer-pkg`'
+  - '`pcaExplorer`'
+- title: Working with Principal Components
+  desc: Functions for working efficiently with Principal Components
+  contents:
+  - '`pcaplot`'
+  - '`pcaplot3d`'
+  - '`pcascree`'
+  - '`correlatePCs`'
+  - '`genespca`'
+  - '`hi_loadings`'
+  - '`plotPCcorrs`'
+- title: Annotation and Functional interpretation
+  desc: Functions for annotating and performing functional interpretation
+  contents:
+  - '`get_annotation`'
+  - '`get_annotation_orgdb`'
+  - '`topGOtable`'
+  - '`pca2go`'
+  - '`limmaquickpca2go`'
+- title: Expression data exploration
+  desc: ~
+  contents:
+  - '`pair_corr`'
+  - '`distro_expr`'
+  - '`geneprofiler`'
+  - '`makeExampleDESeqDataSet_multifac`'
