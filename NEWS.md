@@ -4,10 +4,16 @@
 
 * Added a `NEWS.md` file to track changes to the package
 * PCA plots now are correctly generated with fixed coordinates
+* Introduced use of conditionalPanels for better handling of errors in the app tabs
+* Added possibility to use different transformations, also reflected in the change of one of the main arguments (previously `rlt`, now `dst`, i.e. `DESeqTransform`): rlog, vst, shifted log, ... The transformation type is tracked in the reactive values. 
+* More modular loading of data, by splitting generation of `dds` and `dst`
 
 ## Other notes
 
-* built project website via pkgdown
+* Built project website via pkgdown, with customized reference structure
+* Correctly adding the resources to shinyBS, loaded via `.onLoad`, and also better placement for bstooltips
+* Editor options start collapsed in the Report Editor tab
+* Vignette and template report are updated to reflect the new parameter names
 
 # pcaExplorer 2.6.0
 
