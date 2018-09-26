@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.7.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.7.3</span>
       </span>
     </div>
 
@@ -113,13 +113,20 @@
 <ul>
 <li>Added a <code>NEWS.md</code> file to track changes to the package</li>
 <li>PCA plots now are correctly generated with fixed coordinates</li>
+<li>Introduced use of conditionalPanels for better handling of errors in the app tabs</li>
+<li>Added possibility to use different transformations, also reflected in the change of one of the main arguments (previously <code>rlt</code>, now <code>dst</code>, i.e. <code>DESeqTransform</code>): rlog, vst, shifted log, … The transformation type is tracked in the reactive values.</li>
+<li>More modular loading of data, by splitting generation of <code>dds</code> and <code>dst</code>
+</li>
 </ul>
 </div>
 <div id="other-notes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other-notes" class="anchor"></a>Other notes</h2>
 <ul>
-<li>built project website via pkgdown</li>
+<li>Built project website via pkgdown, with customized reference structure</li>
+<li>Correctly adding the resources to shinyBS, loaded via <code>.onLoad</code>, and also better placement for bstooltips</li>
+<li>Editor options start collapsed in the Report Editor tab</li>
+<li>Vignette and template report are updated to reflect the new parameter names</li>
 </ul>
 </div>
 </div>
