@@ -1,4 +1,4 @@
-# Section title
+# About this report
 
 This content has been loaded from the template report `.Rmd` file. Please edit it at your best convenience!
 
