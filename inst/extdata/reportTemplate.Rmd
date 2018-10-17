@@ -4,7 +4,8 @@ This content has been loaded from the template report `.Rmd` file. Please edit i
 
 ```{r setup, include=FALSE, eval = TRUE, echo = FALSE}
 opts_chunk$set(
-  echo=input$report_echo
+  echo=input$report_echo,
+  error=TRUE
 )
 ```
 
@@ -354,7 +355,7 @@ in the University Medical Center of the Johannes Gutenberg University Mainz.
 `pcaExplorer` is currently maintained by Federico Marini at the IMBEI (www.imbei.uni-mainz.de).
 You can contact him by clicking on the button below.
 
-<a href="mailto:mailto:marinif@uni-mainz.de" class="btn btn-primary">Federico Marini</a>
+<a href="mailto:mailto:marinif@uni-mainz.de?subject=[pcaExplorer_feedback]" class="btn btn-primary">Federico Marini</a>
 
 ## Code
 
