@@ -14,6 +14,8 @@
 * Correctly adding the resources to shinyBS, loaded via `.onLoad`, and also better placement for bstooltips
 * Editor options start collapsed in the Report Editor tab
 * Vignette and template report are updated to reflect the new parameter names
+* Uniformed style for ggplot2 plots
+* Better tooltip placement in the main page
 
 # pcaExplorer 2.6.0
 
