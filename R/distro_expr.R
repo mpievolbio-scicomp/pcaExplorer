@@ -26,5 +26,6 @@ distro_expr <- function(rld, plot_type="density") {
   if(plot_type=="density"){
     p <- ggplot(allrld,aes_string(x="rlogExpression")) + geom_density(aes_string(color="Sample"),alpha=0.1)
   }
+  p <- p + theme_bw()
   return(p)
 }

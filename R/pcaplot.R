@@ -146,6 +146,7 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
     # p
   }
   if(!is.null(title)) p <- p + ggtitle(title)
+  p <- p + theme_bw()
   p
 }
 
