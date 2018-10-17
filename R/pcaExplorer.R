@@ -2599,6 +2599,12 @@ pcaExplorer <- function(dds=NULL,
           # writeLines(tmp_content, fileConn)
           # close(fileConn)
           if(input$rmd_dl_format == "html") {
+            
+            # temporarily switch to the temp dir, in case you do not have write
+            # permission to the current working directory
+            owd <- setwd(tempdir())
+            on.exit(setwd(owd))
+            
             cat(tmp_content,file="tempreport.Rmd",sep="\n")
             rmarkdown::render(input = "tempreport.Rmd",
                               output_file = file,
