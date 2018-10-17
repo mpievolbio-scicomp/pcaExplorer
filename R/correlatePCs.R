@@ -14,9 +14,8 @@
 #' and for each principal component
 #'
 #' @examples
-#' library(DESeq2)
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
-#' rlt <- rlogTransformation(dds)
+#' rlt <- DESeq2::rlogTransformation(dds)
 #' pcaobj <- prcomp(t(assay(rlt)))
 #' correlatePCs(pcaobj,colData(dds))
 #'
