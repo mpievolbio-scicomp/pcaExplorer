@@ -182,22 +182,32 @@ pcaExplorer <- function(dds=NULL,
         # ui panel data upload -------------------------------------------------------
         tabPanel(
           "Data Upload", icon = icon("upload"),
-          uiOutput("upload_count_matrix"),
-          shinyBS::bsTooltip(
-            "upload_count_matrix", paste0("Select file containing the count matrix"),
-            "left", options = list(container = "body")),
-          uiOutput("upload_metadata"),
-          shinyBS::bsTooltip(
-            "upload_metadata", paste0("Select file containing the samples metadata"),
-            "left", options = list(container = "body")),
-          uiOutput("upload_annotation"),
-          shinyBS::bsTooltip(
-            "upload_annotation", paste0("Select file containing the annotation data"),
-            "left", options = list(container = "body")),
-          br(),
-          "... or you can also ",
-          actionButton("btn_loaddemo", "Load the demo airway data", icon = icon("play-circle"),
-                       class = "btn btn-info"),br(), p(),
+          fluidRow(
+            column(
+              width = 4,
+              uiOutput("upload_count_matrix"),
+              shinyBS::bsTooltip(
+                "upload_count_matrix", paste0("Select file containing the count matrix"),
+                "bottom", options = list(container = "body")),
+              uiOutput("upload_metadata"),
+              shinyBS::bsTooltip(
+                "upload_metadata", paste0("Select file containing the samples metadata"),
+                "bottom", options = list(container = "body")),
+              uiOutput("upload_annotation"),
+              shinyBS::bsTooltip(
+                "upload_annotation", paste0("Select file containing the annotation data"),
+                "bottom", options = list(container = "body")),
+              br(),
+              "... or you can also ",
+              actionButton("btn_loaddemo", "Load the demo airway data", 
+                           icon = icon("play-circle"),
+                           class = "btn btn-info"),
+              shinyBS::bsTooltip(
+                "btn_loaddemo", paste0("Clicking on this button will load the airway data as DESeqDataSet, apply the regularized log transformation, and prepare the annotation for displaying gene symbols"),
+                "bottom", options = list(container = "body"))
+            )
+          )
+          ,br(), p(),
           uiOutput("ui_computetransform"),
           
           
