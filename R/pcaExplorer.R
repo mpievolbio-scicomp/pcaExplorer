@@ -1243,10 +1243,15 @@ pcaExplorer <- function(dds=NULL,
       }
     )
     
-    
     output$corrplot <- renderPlot({
       if(input$compute_pairwisecorr)
-        pair_corr(current_countmat(),method=input$corr_method)
+        withProgress(
+          message = "Generating the scatterplot matrix...",
+          detail = "This operation can take a while to render all points",
+          value = 0,
+          {
+            pair_corr(current_countmat(),method=input$corr_method)
+          })
     })
     
     output$heatcorr <- renderPlot({
@@ -1255,18 +1260,20 @@ pcaExplorer <- function(dds=NULL,
     })
     
     output$pairwise_plotUI <- renderUI({
-      if(!input$compute_pairwisecorr) return()
-      
+      shiny::validate(
+        need(input$compute_pairwisecorr,
+        "Click on the Run button to generate the scatterplot matrix")
+      )
       plotOutput("corrplot", height = "1000px")
-      # )
     })
     
     output$heatcorr_plotUI <- renderUI({
-      if(!input$compute_pairwisecorr) return()
-      
+      shiny::validate(
+        need(input$compute_pairwisecorr,
+        "Click on the Run button to generate the heatmap")
+      )
       plotOutput("heatcorr")
     })
-    
     
     # overview on number of detected genes on different threshold types
     output$detected_genes <- renderPrint({
