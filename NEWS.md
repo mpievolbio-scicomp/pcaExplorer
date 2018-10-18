@@ -17,6 +17,10 @@
 * Uniformed style for ggplot2 plots
 * Better tooltip placement in the main page
 
+## Bug fixes
+
+* Fixed behavior of rendering inline the content of the report - did not work properly for server deployed instances
+
 # pcaExplorer 2.6.0
 
 ## New features
