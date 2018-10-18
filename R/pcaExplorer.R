@@ -2382,6 +2382,10 @@ pcaExplorer <- function(dds=NULL,
       input$updatepreview_button
       return(
         withProgress({
+          # temporarily switch to the temp dir, in case you do not have write
+          # permission to the current working directory
+          owd <- setwd(tempdir())
+          on.exit(setwd(owd))
           tmp_content <- paste0(rmd_yaml(),input$acereport_rmd,collapse = "\n")
           isolate(HTML(knit2html(text = tmp_content, fragment.only = TRUE, quiet = TRUE)))
         },
