@@ -94,7 +94,7 @@ pca2go <- function(se,
   rv <- rowVars(exprsData)
   dropped <- sum(rv==0)
   if (dropped > 0)
-    print(paste("Dropped", dropped, "genes with 0 variance"))
+    message(paste("Dropped", dropped, "genes with 0 variance"))
 
   exprsData <- exprsData[rv>0,]
 
@@ -102,7 +102,7 @@ pca2go <- function(se,
 
   p <- prcomp(t(exprsData), scale=scale, center=TRUE)
 
-  print("Ranking genes by the loadings ...")
+  message("Ranking genes by the loadings ...")
   probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
   probesPC1neg <- rankedGeneLoadings(p, pc=1,decreasing=FALSE)[1:loadings_ngenes]
   probesPC2pos <- rankedGeneLoadings(p, pc=2,decreasing=TRUE)[1:loadings_ngenes]
@@ -112,8 +112,8 @@ pca2go <- function(se,
   probesPC4pos <- rankedGeneLoadings(p, pc=4,decreasing=TRUE)[1:loadings_ngenes]
   probesPC4neg <- rankedGeneLoadings(p, pc=4,decreasing=FALSE)[1:loadings_ngenes]
 
-  print("Ranking genes by the loadings ... done!")
-  print("Extracting functional categories enriched in the gene subsets ...")
+  message("Ranking genes by the loadings ... done!")
+  message("Extracting functional categories enriched in the gene subsets ...")
   topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org,mapping = annopkg,...)
   topGOpc1neg <- topGOtable(probesPC1neg, BGids, annot = annFUN.org,mapping = annopkg,...)
   topGOpc2pos <- topGOtable(probesPC2pos, BGids, annot = annFUN.org,mapping = annopkg,...)
@@ -128,7 +128,7 @@ pca2go <- function(se,
                     PC3=list(posLoad=topGOpc3pos,negLoad=topGOpc3neg),
                     PC4=list(posLoad=topGOpc4pos,negLoad=topGOpc4neg)
   )
-  print("Extracting functional categories enriched in the gene subsets ... done!")
+  message("Extracting functional categories enriched in the gene subsets ... done!")
   attr(goEnrichs,"n_genesforpca") <- pca_ngenes
   return(goEnrichs)
 }
@@ -337,7 +337,7 @@ limmaquickpca2go <- function(se,
   rv <- rowVars(exprsData)
   dropped <- sum(rv==0)
   if (dropped > 0)
-    print(paste("Dropped", dropped, "genes with 0 variance"))
+    message(paste("Dropped", dropped, "genes with 0 variance"))
 
   exprsData <- exprsData[rv>0,]
 
@@ -345,7 +345,7 @@ limmaquickpca2go <- function(se,
 
   p <- prcomp(t(exprsData), scale=scale, center=TRUE)
 
-  print("Ranking genes by the loadings ...")
+  message("Ranking genes by the loadings ...")
   probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
   probesPC1neg <- rankedGeneLoadings(p, pc=1,decreasing=FALSE)[1:loadings_ngenes]
   probesPC2pos <- rankedGeneLoadings(p, pc=2,decreasing=TRUE)[1:loadings_ngenes]
@@ -365,9 +365,9 @@ limmaquickpca2go <- function(se,
   probesPC4pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC4pos, column="ENTREZID", keytype=inputType)
   probesPC4neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC4neg, column="ENTREZID", keytype=inputType)
   bg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = BGids, column="ENTREZID", keytype=inputType)
-  print("Ranking genes by the loadings ... done!")
+  message("Ranking genes by the loadings ... done!")
 
-  print("Extracting functional categories enriched in the gene subsets ...")
+  message("Extracting functional categories enriched in the gene subsets ...")
   quickGOpc1pos <- topGO(limma::goana(probesPC1pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("1")
   quickGOpc1neg <- topGO(limma::goana(probesPC1neg_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("2")
   quickGOpc2pos <- topGO(limma::goana(probesPC2pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("3")
@@ -391,7 +391,7 @@ limmaquickpca2go <- function(se,
                     PC3=list(posLoad=quickGOpc3pos,negLoad=quickGOpc3neg),
                     PC4=list(posLoad=quickGOpc4pos,negLoad=quickGOpc4neg)
   )
-  print("Extracting functional categories enriched in the gene subsets ... done!")
+  message("Extracting functional categories enriched in the gene subsets ... done!")
   attr(goEnrichs,"n_genesforpca") <- pca_ngenes
   return(goEnrichs)
 }
