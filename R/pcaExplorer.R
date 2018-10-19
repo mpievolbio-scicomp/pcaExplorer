@@ -2031,12 +2031,18 @@ pcaExplorer <- function(dds=NULL,
           "Please provide a pca2go object to the app or alternatively click on the action button - could take some time to compute live!"
         )
       )
-      res <- pcaplot(values$mydst,intgroup = input$color_by,
-                     ntop = attr(values$mypca2go,"n_genesforpca"),
-                     pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),text_labels = input$sample_labels,
-                     point_size = input$pca_point_size, title=paste0("PCA on the samples - ",attr(values$mypca2go,"n_genesforpca"), " genes used")
-                     
-      )
+      res <- 
+        pcaplot(
+          values$mydst,intgroup = input$color_by,
+          ntop = attr(values$mypca2go,"n_genesforpca"),
+          pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
+          text_labels = input$sample_labels,
+          point_size = input$pca_point_size, 
+          title=paste0(
+            "PCA on the samples - ",attr(values$mypca2go,"n_genesforpca"), " genes used"
+          ),
+          ellipse = input$pca_ellipse, ellipse.prob = input$pca_cislider
+        )
       res
     })
     
