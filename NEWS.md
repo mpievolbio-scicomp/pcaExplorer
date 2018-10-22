@@ -7,6 +7,7 @@
 * Introduced use of conditionalPanels for better handling of errors in the app tabs
 * Added possibility to use different transformations, also reflected in the change of one of the main arguments (previously `rlt`, now `dst`, i.e. `DESeqTransform`): rlog, vst, shifted log, ... The transformation type is tracked in the reactive values. 
 * More modular loading of data, by splitting generation of `dds` and `dst`
+* `pca2go` is now also picking values from the input widgets
 
 ## Other notes
 
@@ -16,6 +17,8 @@
 * Vignette and template report are updated to reflect the new parameter names
 * Uniformed style for ggplot2 plots
 * Better tooltip placement in the main page
+* Replaced `print` calls with more appropriate `message`s
+* Displaying user returned messages in long (plotting) operations
 
 ## Bug fixes
 
