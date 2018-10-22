@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.7.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.7.6</span>
       </span>
     </div>
 
@@ -117,6 +117,8 @@
 <li>Added possibility to use different transformations, also reflected in the change of one of the main arguments (previously <code>rlt</code>, now <code>dst</code>, i.e. <code>DESeqTransform</code>): rlog, vst, shifted log, … The transformation type is tracked in the reactive values.</li>
 <li>More modular loading of data, by splitting generation of <code>dds</code> and <code>dst</code>
 </li>
+<li>
+<code>pca2go</code> is now also picking values from the input widgets</li>
 </ul>
 </div>
 <div id="other-notes" class="section level2">
@@ -129,6 +131,8 @@
 <li>Vignette and template report are updated to reflect the new parameter names</li>
 <li>Uniformed style for ggplot2 plots</li>
 <li>Better tooltip placement in the main page</li>
+<li>Replaced <code>print</code> calls with more appropriate <code>message</code>s</li>
+<li>Displaying user returned messages in long (plotting) operations</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
