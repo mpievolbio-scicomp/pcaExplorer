@@ -62,7 +62,7 @@ the algorithm and the implementation in the topGO package" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.7.6</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.9.1</span>
       </span>
     </div>
 
@@ -119,7 +119,8 @@ the algorithm and the implementation in the topGO package</p>
     <pre class="usage"><span class='fu'>topGOtable</span>(<span class='no'>DEgenes</span>, <span class='no'>BGgenes</span>, <span class='kw'>ontology</span> <span class='kw'>=</span> <span class='st'>"BP"</span>, <span class='kw'>annot</span> <span class='kw'>=</span> <span class='no'>annFUN.org</span>,
   <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='st'>"org.Mm.eg.db"</span>, <span class='kw'>geneID</span> <span class='kw'>=</span> <span class='st'>"symbol"</span>, <span class='kw'>topTablerows</span> <span class='kw'>=</span> <span class='fl'>200</span>,
   <span class='kw'>fullNamesInRows</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>addGeneToTerms</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plotGraph</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>plotNodes</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>writeOutput</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>outputFile</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
+  <span class='kw'>plotNodes</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>writeOutput</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>outputFile</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>topGO_method2</span> <span class='kw'>=</span> <span class='st'>"elim"</span>, <span class='kw'>do_padj</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,11 +178,29 @@ the algorithm and the implementation in the topGO package</p>
       <th>outputFile</th>
       <td><p>Name of the file the result should be written into</p></td>
     </tr>
+    <tr>
+      <th>topGO_method2</th>
+      <td><p>Character, specifying which of the methods implemented by <code>topGO</code> should be used, in addition to the <code>classic</code> algorithm. Defaults to <code>elim</code></p></td>
+    </tr>
+    <tr>
+      <th>do_padj</th>
+      <td><p>Logical, whether to perform the adjustment on the p-values from the specific
+topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of 
+independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
+Ontology Terms</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A table containing the computed GO Terms and related enrichment scores</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Allowed values assumed by the <code>topGO_method2</code> parameter are one of the
+following: <code>elim</code>, <code>weight</code>, <code>weight01</code>, <code>lea</code>, 
+<code>parentchild</code>. For more details on this, please refer to the original 
+documentation of the <code>topGO</code> package itself</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -235,6 +254,8 @@ the algorithm and the implementation in the topGO package</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

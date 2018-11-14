@@ -1,3 +1,9 @@
+# pcaExplorer 2.10.0
+
+## New features
+
+* Added extra parameters to `topGOtable` to offer more control on the method used, and the option to correct the p-values for multiple testing (via FDR)
+
 # pcaExplorer 2.8.0
 
 ## New features
