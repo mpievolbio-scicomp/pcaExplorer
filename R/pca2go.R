@@ -166,6 +166,10 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #' @param writeOutput Logical, if TRUE additionally writes out the result to a file
 #' @param outputFile Name of the file the result should be written into
 #' @param topGO_method2 Character, specifying which of the methods implemented by \code{topGO} should be used, in addition to the \code{classic} algorithm. Defaults to \code{elim}
+#' @param do_padj Logical, whether to perform the adjustment on the p-values from the specific
+#' topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of 
+#' independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
+#' Ontology Terms
 #'
 #' @import topGO
 #'
@@ -212,12 +216,11 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #'
 #' @export
 topGOtable <- function(DEgenes,                  # Differentially expressed genes
-                       BGgenes,                 # background genes, normally = rownames(cds) or filtering to genes
-                       #  with at least 1 read - could also be ls(org.Mm.egGO)
+                       BGgenes,                 # background genes
                        ontology="BP",            # could use also "MF"
                        annot = annFUN.org,       # parameters for creating topGO object
                        mapping = "org.Mm.eg.db",
-                       geneID = "symbol" ,       # could also beID = "entrez")
+                       geneID = "symbol" ,       # could also beID = "entrez"
                        topTablerows = 200,
                        fullNamesInRows = TRUE,
                        addGeneToTerms=TRUE,
@@ -255,6 +258,8 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
   names(sTab)[which(names(sTab) == "p.value_method2")] <- paste0("p.value_",topGO_method2)
   
   # if FDR, then apply it here
+  if(do_padj)
+    sTab[[paste0("FDR_",topGO_method2)]] <- p.adjust(sTab[[paste0("p.value_",topGO_method2)]], method = "BH")
   
   # subset to specified number of rows
   sTab <- sTab[seq_len(topTablerows),]
