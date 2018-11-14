@@ -27,7 +27,7 @@ BugReports: https://github.com/federicomarini/pcaExplorer/issues
 biocViews: Visualization, RNASeq, DimensionReduction,
         PrincipalComponent, QualityControl, GUI, ReportWriting
 VignetteBuilder: knitr
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Encoding: UTF-8
 NeedsCompilation: no
 Author: Federico Marini [aut, cre]
