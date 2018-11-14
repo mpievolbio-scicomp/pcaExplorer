@@ -145,6 +145,11 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #'
 #' A wrapper for extracting functional GO terms enriched in the DE genes, based on
 #' the algorithm and the implementation in the topGO package
+#' 
+#' Allowed values assumed by the \code{topGO_method2} parameter are one of the
+#' following: \code{elim}, \code{weight}, \code{weight01}, \code{lea}, 
+#' \code{parentchild}. For more details on this, please refer to the original 
+#' documentation of the \code{topGO} package itself
 #'
 #' @param DEgenes A vector of (differentially expressed) genes
 #' @param BGgenes A vector of background genes, e.g. all (expressed) genes in the assays
@@ -160,6 +165,7 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #' @param plotNodes Number of nodes to plot
 #' @param writeOutput Logical, if TRUE additionally writes out the result to a file
 #' @param outputFile Name of the file the result should be written into
+#' @param topGO_method2 Character, specifying which of the methods implemented by \code{topGO} should be used, in addition to the \code{classic} algorithm. Defaults to \code{elim}
 #'
 #' @import topGO
 #'
@@ -216,8 +222,15 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
                        fullNamesInRows = TRUE,
                        addGeneToTerms=TRUE,
                        plotGraph=FALSE, plotNodes= 10,
-                       writeOutput=FALSE, outputFile="" #, outputToLatex=FALSE
+                       writeOutput=FALSE, outputFile="",
+                       topGO_method2 = "elim",
+                       do_padj = FALSE
 ) {
+  # checking the additional topGO_method2
+  topgo_methods <- c("elim", "weight", "weight01", "lea", "parentchild")
+  if(!(topGO_method2 %in% topgo_methods))
+     stop("Please provide one of the following topGO methods in addition to the classic method:\n",
+          paste(topgo_methods,collapse = ", "))
   # creating the vectors
   DEgenes_input <- factor(as.integer(BGgenes %in% DEgenes))
   names(DEgenes_input) <- BGgenes
@@ -230,15 +243,22 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
                 mapping = mapping,
                 ID = geneID)
   # performing the test(s)
-  resultFisher <- runTest(GOdata, algorithm = "elim", statistic = "fisher")
-  resultClassic <- runTest(GOdata,algorithm="classic",statistic = "fisher")
+  result_method2 <- runTest(GOdata, algorithm = topGO_method2, statistic = "fisher")
+  resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
   sTab <- GenTable(GOdata,
-                   p.value_elim=resultFisher,
-                   p.value_classic=resultClassic,
-                   orderBy= "p.value_elim",
-                   ranksOf= "p.value_classic",
-                   topNodes=topTablerows)
-
+                   p.value_method2 = result_method2,
+                   p.value_classic = resultClassic,
+                   orderBy = "p.value_method2",
+                   ranksOf = "p.value_classic",
+                   topNodes = length(score(resultClassic)))
+  
+  names(sTab)[which(names(sTab) == "p.value_method2")] <- paste0("p.value_",topGO_method2)
+  
+  # if FDR, then apply it here
+  
+  # subset to specified number of rows
+  sTab <- sTab[seq_len(topTablerows),]
+  
   if(fullNamesInRows){
     sTab$Term <- sapply(sTab$GO.ID ,function(go) { Term(GOTERM[[go]])})
   }
@@ -257,7 +277,7 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 
   # write all entries of the table
   if(writeOutput) write.table(sTab,file=outputFile,sep="\t",quote=FALSE,col.names=TRUE,row.names=FALSE)
-  if(plotGraph) showSigOfNodes(GOdata,topGO::score(resultFisher),firstSigNodes=plotNodes, useInfo="all")
+  if(plotGraph) showSigOfNodes(GOdata,topGO::score(result_method2),firstSigNodes=plotNodes, useInfo="all")
   #   if(outputToLatex) sTabSig <- xtable(apply(sTabSig[1:15,], 2, as.character)) # take a smaller subset
 
   # and returns the significant ones # or all, like here
