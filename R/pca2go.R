@@ -111,7 +111,7 @@ pca2go <- function(se,
   probesPC3neg <- rankedGeneLoadings(p, pc=3,decreasing=FALSE)[1:loadings_ngenes]
   probesPC4pos <- rankedGeneLoadings(p, pc=4,decreasing=TRUE)[1:loadings_ngenes]
   probesPC4neg <- rankedGeneLoadings(p, pc=4,decreasing=FALSE)[1:loadings_ngenes]
-
+  
   message("Ranking genes by the loadings ... done!")
   message("Extracting functional categories enriched in the gene subsets ...")
   topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org,mapping = annopkg,...)
@@ -259,7 +259,7 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
   
   # if FDR, then apply it here
   if(do_padj)
-    sTab[[paste0("FDR_",topGO_method2)]] <- p.adjust(sTab[[paste0("p.value_",topGO_method2)]], method = "BH")
+    sTab[[paste0("padj_BY_",topGO_method2)]] <- p.adjust(sTab[[paste0("p.value_",topGO_method2)]], method = "BY")
   
   # subset to specified number of rows
   sTab <- sTab[seq_len(topTablerows),]
