@@ -6,7 +6,8 @@
 \usage{
 pca2go(se, pca_ngenes = 10000, annotation = NULL,
   inputType = "geneSymbol", organism = "Mm", ensToGeneSymbol = FALSE,
-  loadings_ngenes = 500, background_genes = NULL, scale = FALSE, ...)
+  loadings_ngenes = 500, background_genes = NULL, scale = FALSE,
+  return_ranked_gene_loadings = FALSE, ...)
 }
 \arguments{
 \item{se}{A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
@@ -30,6 +31,9 @@ with the \code{annotation} provided}
 \item{background_genes}{Which genes to consider as background.}
 
 \item{scale}{Logical, defaults to FALSE, scale values for the PCA}
+
+\item{return_ranked_gene_loadings}{Logical, defaults to FALSE. If TRUE, simply returns
+a list containing the top ranked genes with hi loadings in each PC and in each direction}
 
 \item{...}{Further parameters to be passed to the topGO routine}
 }

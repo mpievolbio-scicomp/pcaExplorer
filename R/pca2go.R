@@ -17,6 +17,8 @@
 #' @param loadings_ngenes Number of genes to extract the loadings (in each direction)
 #' @param background_genes Which genes to consider as background.
 #' @param scale Logical, defaults to FALSE, scale values for the PCA
+#' @param return_ranked_gene_loadings Logical, defaults to FALSE. If TRUE, simply returns
+#' a list containing the top ranked genes with hi loadings in each PC and in each direction
 #' @param ... Further parameters to be passed to the topGO routine
 #'
 #' @return A nested list object containing for each principal component the terms enriched
@@ -61,6 +63,7 @@ pca2go <- function(se,
                    loadings_ngenes = 500,
                    background_genes = NULL,
                    scale = FALSE,
+                   return_ranked_gene_loadings = FALSE,
                    ... # further parameters to be passed to the topgo routine
                    ) {
 
@@ -112,6 +115,12 @@ pca2go <- function(se,
   probesPC4pos <- rankedGeneLoadings(p, pc=4,decreasing=TRUE)[1:loadings_ngenes]
   probesPC4neg <- rankedGeneLoadings(p, pc=4,decreasing=FALSE)[1:loadings_ngenes]
   
+  if(return_ranked_gene_loadings)
+    return(list(probesPC1pos,probesPC1neg,
+                probesPC2pos,probesPC2neg,
+                probesPC3pos,probesPC3neg,
+                probesPC4pos,probesPC4neg))
+
   message("Ranking genes by the loadings ... done!")
   message("Extracting functional categories enriched in the gene subsets ...")
   topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org,mapping = annopkg,...)
