@@ -63,7 +63,7 @@ the topGO package" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.9.2</span>
       </span>
     </div>
 
@@ -120,7 +120,8 @@ the <code>topGO</code> package</p>
 
     <pre class="usage"><span class='fu'>pca2go</span>(<span class='no'>se</span>, <span class='kw'>pca_ngenes</span> <span class='kw'>=</span> <span class='fl'>10000</span>, <span class='kw'>annotation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>inputType</span> <span class='kw'>=</span> <span class='st'>"geneSymbol"</span>, <span class='kw'>organism</span> <span class='kw'>=</span> <span class='st'>"Mm"</span>, <span class='kw'>ensToGeneSymbol</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>loadings_ngenes</span> <span class='kw'>=</span> <span class='fl'>500</span>, <span class='kw'>background_genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>loadings_ngenes</span> <span class='kw'>=</span> <span class='fl'>500</span>, <span class='kw'>background_genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_ranked_gene_loadings</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,6 +165,11 @@ with the <code>annotation</code> provided</p></td>
     <tr>
       <th>scale</th>
       <td><p>Logical, defaults to FALSE, scale values for the PCA</p></td>
+    </tr>
+    <tr>
+      <th>return_ranked_gene_loadings</th>
+      <td><p>Logical, defaults to FALSE. If TRUE, simply returns
+a list containing the top ranked genes with hi loadings in each PC and in each direction</p></td>
     </tr>
     <tr>
       <th>...</th>

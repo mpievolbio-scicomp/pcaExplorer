@@ -2,7 +2,8 @@
 
 ## New features
 
-* Added extra parameters to `topGOtable` to offer more control on the method used, and the option to correct the p-values for multiple testing (via FDR)
+* Added extra parameters to `topGOtable` to offer more control on the method used, and the option to correct the p-values for multiple testing (via the Benjamini-Yekutieli procedure)
+* `pca2go` has now an option to return (early) a list with vectors of genes with high loadings
 
 # pcaExplorer 2.8.0
 
