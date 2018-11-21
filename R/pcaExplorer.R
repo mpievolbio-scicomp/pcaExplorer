@@ -487,8 +487,8 @@ pcaExplorer <- function(dds=NULL,
           icon = icon("crosshairs"),
           conditionalPanel(
             condition="!output.checkdds",
+            p(h1("GeneFinder")),
             fluidRow(
-              h1("GeneFinder"),
               wellPanel(
                 width=5,
                 textInput("genefinder",label = "Type in the name of the gene to search",value = NULL),
@@ -711,6 +711,7 @@ pcaExplorer <- function(dds=NULL,
           "Report Editor",
           icon = icon("pencil"),
           
+          h1("Report Editor"),
           fluidRow(
             column(
               width = 6,
