@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.9.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.9.3</span>
       </span>
     </div>
 
@@ -74,7 +74,7 @@
                         <h4 class="author">
 <strong>Federico Marini</strong> (<a href="mailto:marinif@uni-mainz.de">marinif@uni-mainz.de</a>) and <strong>Harald Binder</strong> Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz  Center for Thrombosis and Hemostasis (CTH), Mainz</h4>
             
-            <h4 class="date">16 November 2018</h4>
+            <h4 class="date">21 November 2018</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/federicomarini/pcaExplorer/blob/master/vignettes/pcaExplorer.Rmd"><code>vignettes/pcaExplorer.Rmd</code></a></small>
       <div class="hidden name"><code>pcaExplorer.Rmd</code></div>
@@ -87,7 +87,7 @@
       <p><em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em> provides functionality for interactive visualization of RNA-seq datasets based on Principal Components Analysis. Such methods allow for quick information extraction and effective data exploration. A Shiny application encapsulates the whole analysis, and is developed to become a practical companion for any RNA-seq dataset. This app supports reproducible research with state saving and automated report generation.</p>
     </div>
     
-<p><br><strong>Package</strong>: <em>pcaExplorer</em><br><strong>Authors</strong>: Federico Marini [aut, cre]<br><strong>Version</strong>: 2.9.1<br><strong>Compiled date</strong>: 2018-11-16<br><strong>License</strong>: MIT + file LICENSE<br></p>
+<p><br><strong>Package</strong>: <em>pcaExplorer</em><br><strong>Authors</strong>: Federico Marini [aut, cre]<br><strong>Version</strong>: 2.9.2<br><strong>Compiled date</strong>: 2018-11-21<br><strong>License</strong>: MIT + file LICENSE<br></p>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelector("h1").className = "title";
@@ -658,10 +658,10 @@ colData names(2): condition tissue</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rld_simu &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds_simu)
 rld2_simu &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds2_simu)
 <span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld_simu,<span class="dt">intgroup =</span> <span class="kw">c</span>(<span class="st">"condition"</span>,<span class="st">"tissue"</span>)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Simulated data - Big condition effect, small tissue effect"</span>)</code></pre></div>
+<span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Simulated data - Big condition effect, small tissue effect"</span>)</code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-makedataset-1.png" width="700" style="display: block; margin: auto;"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld2_simu,<span class="dt">intgroup =</span> <span class="kw">c</span>(<span class="st">"condition"</span>,<span class="st">"tissue"</span>)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Simulated data - Small condition effect, bigger tissue effect"</span>)</code></pre></div>
+<span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Simulated data - Small condition effect, bigger tissue effect"</span>)</code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-makedataset-2.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="distro_expr" class="section level2">
@@ -742,7 +742,7 @@ other attached packages:
  [7] BiocParallel_1.17.1         matrixStats_0.54.0         
  [9] GenomicRanges_1.35.1        GenomeInfoDb_1.19.1        
 [11] IRanges_2.17.1              S4Vectors_0.21.5           
-[13] pcaExplorer_2.9.1           bigmemory_4.5.33           
+[13] pcaExplorer_2.9.2           bigmemory_4.5.33           
 [15] Biobase_2.43.0              BiocGenerics_0.29.1        
 [17] knitr_1.20                  BiocStyle_2.11.0           
 
