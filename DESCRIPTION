@@ -1,7 +1,7 @@
 Package: pcaExplorer
 Type: Package
 Title: Interactive Visualization of RNA-seq Data Using a Principal Components Approach
-Version: 2.9.3
+Version: 2.9.4
 Date: 2018-11-21
 Authors@R: c(person("Federico", "Marini", role = c("aut", "cre"), 
         email ="marinif@uni-mainz.de", 
@@ -24,7 +24,7 @@ Suggests: testthat, BiocStyle, airway, org.Hs.eg.db
 URL: https://github.com/federicomarini/pcaExplorer,
         https://federicomarini.github.io/pcaExplorer/
 BugReports: https://github.com/federicomarini/pcaExplorer/issues
-biocViews: Visualization, RNASeq, DimensionReduction,
+biocViews: ImmunoOncology, Visualization, RNASeq, DimensionReduction,
         PrincipalComponent, QualityControl, GUI, ReportWriting
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
