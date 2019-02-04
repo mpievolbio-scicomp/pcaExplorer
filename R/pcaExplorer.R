@@ -286,6 +286,10 @@ pcaExplorer <- function(dds=NULL,
             fluidRow(
               column(
                 width=8,
+                selectInput(inputId = "sampledist_distance", label = "Select the distance method to use:",
+                            choices = 
+                              c(Euclidean="euclidean", Manhattan = "manhattan", `Correlation-based` = "cor"),
+                            selected = "euclidean"),
                 plotOutput("heatmapsampledist"),
                 div(align = "right", style = "margin-right:15px; margin-bottom:10px",
                     downloadButton("download_samplessamplesheat", "Download Plot"),
@@ -1381,15 +1385,23 @@ pcaExplorer <- function(dds=NULL,
     
     
     output$heatmapsampledist <- renderPlot({
+      if(input$sampledist_distance == "euclidean") {
+        mydistmat <- as.matrix(dist(t(assay(values$mydst))))
+      } else if(input$sampledist_distance == "manhattan") {
+        mydistmat <- as.matrix(dist(t(assay(values$mydst)),method = "manhattan"))
+      } else {
+        # corr based
+        mydistmat <- as.matrix(1 - cor(assay(values$mydst)))
+      }
       if (!is.null(input$color_by)){
         expgroups <- as.data.frame(colData(values$mydst)[,input$color_by])
         # expgroups <- interaction(expgroups)
         rownames(expgroups) <- colnames(values$mydst)
         colnames(expgroups) <- input$color_by
         
-        pheatmap(as.matrix(dist(t(assay(values$mydst)))),annotation_col = expgroups)
+        pheatmap(mydistmat,annotation_col = expgroups)
       } else {
-        pheatmap(as.matrix(dist(t(assay(values$mydst)))))
+        pheatmap(mydistmat)
       }
     })
     
