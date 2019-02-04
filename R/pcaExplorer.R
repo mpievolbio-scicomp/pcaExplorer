@@ -211,10 +211,12 @@ pcaExplorer <- function(dds=NULL,
           uiOutput("ui_computetransform"),
           
           h4("Preview on the uploaded data"),
-          uiOutput("ui_showcm"),
-          uiOutput("ui_showmetadata"),
-          uiOutput("ui_showdds"),
-          uiOutput("ui_showannotation")
+          splitLayout(
+            uiOutput("ui_showcm"),
+            uiOutput("ui_showmetadata"),
+            uiOutput("ui_showdds"),
+            uiOutput("ui_showannotation")
+          )
         ),
         
         # ui panel instructions -------------------------------------------------------
