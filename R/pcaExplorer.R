@@ -200,6 +200,7 @@ pcaExplorer <- function(dds=NULL,
               # help button?
               br(), br(), br(),
               uiOutput("ui_createDDS"),
+              actionButton("help_format",label = "",icon = icon("question")),
               verbatimTextOutput("debugdebug")
             )),
           fluidRow(
@@ -1115,6 +1116,16 @@ pcaExplorer <- function(dds=NULL,
       if (is.null(values$mycountmatrix) | is.null(values$mymetadata))
         return(NULL)
       actionButton("button_diydds","Generate the dds and dst objects", class = "btn btn-success")
+    })
+    
+    observeEvent(input$help_format, {
+      showModal(modalDialog(
+        title = "Help on the format of the input data",
+        h4("the content"),
+        easyClose = TRUE,
+        footer = NULL,
+        size = "l"
+      ))
     })
     
     output$debugdebug <- renderPrint({
