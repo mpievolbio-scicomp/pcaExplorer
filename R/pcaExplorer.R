@@ -210,20 +210,13 @@ pcaExplorer <- function(dds=NULL,
           ,br(), p(),
           uiOutput("ui_computetransform"),
           
-          
-          # wellPanel(
-          #   checkboxInput("header_ct", "Header", TRUE),
-          #   radioButtons("sep_ct", "Separator", c( Tab="\t",Comma=",", Semicolon=";", Space = " "), selected = "\t", inline = TRUE)
-          #
-          # ),
-          # ## TODO: replace with heuristics for detecting separator with a guess
-          p("Preview on the uploaded data"),
-          
-          uiOutput("printdds"),
-          uiOutput("printanno"),
-          # this last one will just be visible if the user uploads the count matrix separately via button
-          DT::dataTableOutput("sneakpeekcm")
+          h4("Preview on the uploaded data"),
+          uiOutput("ui_showcm"),
+          uiOutput("ui_showmetadata"),
+          uiOutput("ui_showdds"),
+          uiOutput("ui_showannotation")
         ),
+        
         # ui panel instructions -------------------------------------------------------
         tabPanel(
           "Instructions",  icon = icon("info-circle"),
@@ -1023,31 +1016,94 @@ pcaExplorer <- function(dds=NULL,
       return(annodata)
     })
     
-    output$printdds <- renderUI({
+    output$ui_showcm <- renderUI({
+      shiny::validate(
+        need(!is.null(values$mycountmatrix),
+             "No count matrix provided, please upload it or pass it as a parameter"
+        )
+      )
+      actionButton(inputId = "show_cm",label = "Show count matrix", class = "btn btn-success")
+    })
+    
+    output$ui_showmetadata<- renderUI({
+      shiny::validate(
+        need(!is.null(values$mymetadata),
+             "No sample metadata provided, please upload it or pass it as a parameter"
+        )
+      )
+      actionButton(inputId = "show_metadata",label = "Show sample metadata", class = "btn btn-success")
+    })
+    
+    output$ui_showdds <- renderUI({
       shiny::validate(
         need(!is.null(values$mydds),
-             "Upload your dataset, as a count matrix or passing it as a parameter, as well as the design information"
+             "No dds object provided or computed, please upload its components (count matrix and metadata) or pass it as a parameter"
         )
       )
-      verbatimTextOutput("ddsprint")
+      actionButton(inputId = "show_dds",label = "Show dds object", class = "btn btn-success")
     })
     
-    output$ddsprint <- renderPrint({
-      values$mydds
-    })
-    
-    output$printanno <- renderUI({
+    output$ui_showannotation <- renderUI({
       shiny::validate(
         need(!is.null(values$myannotation),
-             "Upload your annotation table as a matrix/data frame or passing it as a parameter"
+             "No gene annotation provided, please upload it or pass it as a parameter"
         )
       )
-      DT::dataTableOutput("annoprint")
+      actionButton(inputId = "show_annotation",label = "Show gene annotation", class = "btn btn-success")
     })
     
-    output$annoprint <- DT::renderDataTable({
-      DT::datatable(values$myannotation,options = list(pageLength=10))
+    # output$ddsprint <- renderPrint({
+    #   values$mydds
+    # })
+    
+    observeEvent(input$show_cm, {
+      showModal(modalDialog(
+        title = "Preview - Count matrix",
+        DT::renderDataTable(values$mycountmatrix),
+        easyClose = TRUE,
+        footer = NULL,
+        size = "l"
+      ))
     })
+    observeEvent(input$show_metadata, {
+      showModal(modalDialog(
+        title = "Preview - Sample metadata",
+        DT::renderDataTable(values$mymetadata),
+        easyClose = TRUE,
+        footer = NULL,
+        size = "l"
+      ))
+    })
+    observeEvent(input$show_dds, {
+      showModal(modalDialog(
+        title = "Preview - dds object",
+        renderPrint(values$mydds),
+        easyClose = TRUE,
+        footer = NULL
+      ))
+    })
+    observeEvent(input$show_annotation, {
+      showModal(modalDialog(
+        title = "Preview - gene annotation",
+        DT::renderDataTable(values$myannotation),
+        easyClose = TRUE,
+        footer = NULL,
+        size = "l"
+      ))
+    })
+    
+    # output$printanno <- renderUI({
+    #   shiny::validate(
+    #     need(!is.null(values$myannotation),
+    #          "Upload your annotation table as a matrix/data frame or passing it as a parameter"
+    #     )
+    #   )
+    #   DT::dataTableOutput("annoprint")
+    # })
+    # 
+    # output$annoprint <- DT::renderDataTable({
+    #   DT::datatable(values$myannotation,options = list(pageLength=10))
+    # })
     
     createDDS <- reactive({
       if(is.null(countmatrix) | is.null(coldata))
@@ -1080,15 +1136,15 @@ pcaExplorer <- function(dds=NULL,
     #              })
     
     # useful when count matrix is uploaded by hand
-    sneakpeek <- reactiveValues()
-    observeEvent(input$uploadcmfile,
-                 {
-                   sneakpeek$cm <- readCountmatrix()
-                 })
-    
-    output$sneakpeekcm <- DT::renderDataTable({
-      head(sneakpeek$cm,10)
-    })
+####    sneakpeek <- reactiveValues()
+####    observeEvent(input$uploadcmfile,
+####                 {
+####                   sneakpeek$cm <- readCountmatrix()
+####                 })
+####    
+####    output$sneakpeekcm <- DT::renderDataTable({
+####      head(sneakpeek$cm,10)
+####    })
     
     # as in http://stackoverflow.com/questions/29716868/r-shiny-how-to-get-an-reactive-data-frame-updated-each-time-pressing-an-actionb
     observeEvent(input$uploadcmfile,
