@@ -1,8 +1,12 @@
 #' Pairwise scatter and correlation plot of counts
 #'
 #' @param df A data frame, containing the (raw/normalized/transformed) counts
+#' @param log Logical, whether to convert the input values to log2 (with addition
+#' of a pseudocount). Defaults to FALSE.
 #' @param method Character string, one of \code{pearson} (default), \code{kendall}, or
 #' \code{spearman} as in \code{cor}
+#' @param use_subset Logical value. If TRUE, only 1000 values per sample will be used
+#' to speed up the plotting operations.
 #'
 #' @return A plot with pairwise scatter plots and correlation coefficients
 #' @export
@@ -15,7 +19,16 @@
 #'                                              colData = colData(airway),
 #'                                              design=~dex+cell)
 #' pair_corr(counts(dds_airway)[1:100,]) # use just a subset for the example
-pair_corr <- function(df,method="pearson") {
+pair_corr <- function(df, log = FALSE, method="pearson", use_subset = TRUE) {
+  if(log) {
+    df <- log2(1 + df)
+  }
+  
+  if(use_subset) {
+    set.seed(42)
+    df <- df[sample(1:nrow(df),min(nrow(df),1000)),]
+  }
+  
   # get min and max count values for axis range.
   rangeMin <- min(df)
   rangeMax <- max(df)
@@ -35,16 +48,17 @@ pair_corr <- function(df,method="pearson") {
     txt <- format(c(r, 0.123456789), digits=digits)[1]
     txt <- paste(prefix, txt, sep="")
 
-    # if (FALSE) {
-    #   # color text based on r value and change size of text also based on r value (larger text for larger r value).
-    #   if (missing(cex.cor)) cex.cor = labelSize/strwidth(txt)
-    #   text(0.5, 0.5, txt, cex=cex.cor*r, col=zColors[r*100])
-    # } else {
+    # color text based on r value and change size of text also based on r value (larger text for larger r value).
+    cex.cor = labelSize/strwidth(txt)
     # color text based on r value (red is r=1).
-    text(0.5, 0.5, txt, cex=labelSize, col=zColors[r*100])
-    # }
+    text(0.5, 0.5, txt, cex=cex.cor * r * 0.7, col=zColors[r*100])
   }
-  par(mar = c(0,0,0,0))
+  # par(mar = c(0,0,0,0))
 
-  pairs(df, pch=20, col=alpha("black", 0.4),cex.labels=labelSize, main=title, upper.panel=panel.cor, ylim=c(rangeMin,rangeMax), xlim=c(rangeMin,rangeMax))
+  pairs(df, pch=20, col=alpha("black", 0.4),
+        cex.labels=labelSize, 
+        main=title, 
+        upper.panel=panel.cor, 
+        xlim=c(rangeMin,rangeMax),
+        ylim=c(rangeMin,rangeMax))
 }
