@@ -1178,20 +1178,6 @@ pcaExplorer <- function(dds=NULL,
                    values$myannotation <- readAnnotation()
                  })
     
-    
-    output$showuploaded1 <- renderPrint({
-      head(values$mycountmatrix)
-    })
-    output$showuploaded2 <- renderPrint({
-      values$mymetadata
-    })
-    output$showuploaded3 <- renderPrint({
-      values$mydds
-    })
-    output$showuploaded4 <- renderPrint({
-      values$mydst
-    })
-    
     # load the demo data
     observeEvent(input$btn_loaddemo,withProgress(
       message = "Loading demo data...",
