@@ -1061,7 +1061,8 @@ pcaExplorer <- function(dds=NULL,
     observeEvent(input$show_cm, {
       showModal(modalDialog(
         title = "Preview - Count matrix",
-        DT::renderDataTable(values$mycountmatrix),
+        div(style = "display:block;overflow-y:auto; overflow-x:auto;",
+            DT::renderDataTable(values$mycountmatrix)),
         easyClose = TRUE,
         footer = NULL,
         size = "l"
@@ -1070,7 +1071,8 @@ pcaExplorer <- function(dds=NULL,
     observeEvent(input$show_metadata, {
       showModal(modalDialog(
         title = "Preview - Sample metadata",
-        DT::renderDataTable(values$mymetadata),
+        div(style = "display:block;overflow-y:auto; overflow-x:auto;",
+            DT::renderDataTable(values$mymetadata)),
         easyClose = TRUE,
         footer = NULL,
         size = "l"
@@ -1087,7 +1089,8 @@ pcaExplorer <- function(dds=NULL,
     observeEvent(input$show_annotation, {
       showModal(modalDialog(
         title = "Preview - gene annotation",
-        DT::renderDataTable(values$myannotation),
+        div(style = "display:block;overflow-y:auto; overflow-x:auto;",
+            DT::renderDataTable(values$myannotation)),
         easyClose = TRUE,
         footer = NULL,
         size = "l"
