@@ -187,16 +187,16 @@ pcaExplorer <- function(dds=NULL,
               width = 4,
               uiOutput("upload_count_matrix"),
               shinyBS::bsTooltip(
-                "upload_count_matrix", paste0("Select file containing the count matrix"),
-                "bottom", options = list(container = "body")),
+                "upload_count_matrix", paste0("Select the file containing the count matrix"),
+                "right", options = list(container = "body")),
               uiOutput("upload_metadata"),
               shinyBS::bsTooltip(
-                "upload_metadata", paste0("Select file containing the samples metadata"),
-                "bottom", options = list(container = "body")),
+                "upload_metadata", paste0("Select the file containing the samples metadata"),
+                "right", options = list(container = "body")),
               uiOutput("upload_annotation"),
               shinyBS::bsTooltip(
-                "upload_annotation", paste0("Select file containing the annotation data"),
-                "bottom", options = list(container = "body")),
+                "upload_annotation", paste0("Select the file containing the annotation data"),
+                "right", options = list(container = "body")),
               br(),
               "... or you can also ",
               actionButton("btn_loaddemo", "Load the demo airway data", 
@@ -926,11 +926,22 @@ pcaExplorer <- function(dds=NULL,
       if (!is.null(dds) | !is.null(countmatrix)) {
         NULL
       } else {
-        return(fileInput(inputId = "uploadcmfile",
-                         label = "Upload a count matrix file",
-                         accept = c("text/csv", "text/comma-separated-values",
-                                    "text/tab-separated-values", "text/plain",
-                                    ".csv", ".tsv"), multiple = FALSE))
+        return(
+          tagList(
+            wellPanel(
+              fileInput(inputId = "uploadcmfile",
+                        label = "Upload a count matrix file",
+                        accept = c("text/csv", "text/comma-separated-values",
+                                   "text/tab-separated-values", "text/plain",
+                                   ".csv", ".tsv"), multiple = FALSE),
+              radioButtons(inputId="uploadcm_sep", 
+                           label="Separator",
+                           choices=c(Comma=",", Semicolon=";",Tab="\t"),
+                           selected='\t',
+                           inline = TRUE)
+            )
+          )
+        )
       }
     })
     
@@ -938,7 +949,7 @@ pcaExplorer <- function(dds=NULL,
       if (is.null(input$uploadcmfile))
         return(NULL)
       cm <- utils::read.delim(input$uploadcmfile$datapath, header = TRUE,
-                              as.is = TRUE, sep = "\t", quote = "",
+                              as.is = TRUE, sep = input$uploadcm_sep, quote = "",
                               row.names = 1, # https://github.com/federicomarini/pcaExplorer/issues/1
                               ## TODO: tell the user to use tsv, or use heuristics
                               ## to check what is most frequently occurring separation character? -> see sepGuesser.R
@@ -951,11 +962,23 @@ pcaExplorer <- function(dds=NULL,
       if (!is.null(dds) | !is.null(coldata)) {
         NULL
       } else {
-        return(fileInput(inputId = "uploadmetadatafile",
-                         label = "Upload a sample metadata matrix file",
-                         accept = c("text/csv", "text/comma-separated-values",
+        return(
+          tagList(
+            wellPanel(
+              fileInput(inputId = "uploadmetadatafile",
+                        label = "Upload a sample metadata matrix file",
+                        accept = c("text/csv", "text/comma-separated-values",
                                     "text/tab-separated-values", "text/plain",
-                                    ".csv", ".tsv"), multiple = FALSE))
+                                    ".csv", ".tsv"), multiple = FALSE,
+                        width = "80%"), 
+              radioButtons(inputId="uploadmeta_sep", 
+                           label="Separator",
+                           choices=c(Comma=",", Semicolon=";",Tab="\t"),
+                           selected='\t',
+                           inline = TRUE)
+              )
+          )
+        )
       }
     })
     
@@ -963,7 +986,7 @@ pcaExplorer <- function(dds=NULL,
       if (is.null(input$uploadmetadatafile))
         return(NULL)
       coldata <- utils::read.delim(input$uploadmetadatafile$datapath, header = TRUE,
-                                   as.is = TRUE, sep = "\t", quote = "",
+                                   as.is = TRUE, sep = input$uploadmeta_sep, quote = "",
                                    check.names = FALSE)
       return(coldata)
     })
@@ -972,11 +995,22 @@ pcaExplorer <- function(dds=NULL,
       if (!is.null(annotation)) {
         NULL
       } else {
-        return(fileInput(inputId = "uploadannotationfile",
+        return(
+          tagList(
+            wellPanel(
+              fileInput(inputId = "uploadannotationfile",
                          label = "Upload an annotation file",
                          accept = c("text/csv", "text/comma-separated-values",
                                     "text/tab-separated-values", "text/plain",
-                                    ".csv", ".tsv"), multiple = FALSE))
+                                    ".csv", ".tsv"), multiple = FALSE),
+              radioButtons(inputId="uploadanno_sep", 
+                           label="Separator",
+                           choices=c(Comma=",", Semicolon=";",Tab="\t"),
+                           selected='\t',
+                           inline = TRUE)
+            )
+          )
+        )
       }
     })
     
@@ -984,7 +1018,7 @@ pcaExplorer <- function(dds=NULL,
       if (is.null(input$uploadannotationfile))
         return(NULL)
       annodata <- utils::read.delim(input$uploadannotationfile$datapath, header = TRUE,
-                                    as.is = TRUE, sep = "\t", quote = "",
+                                    as.is = TRUE, sep = input$uploadanno_sep, quote = "",
                                     check.names = FALSE)
       return(annodata)
     })
