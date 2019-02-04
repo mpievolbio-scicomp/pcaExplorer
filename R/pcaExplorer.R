@@ -257,7 +257,13 @@ pcaExplorer <- function(dds=NULL,
             downloadButton("downloadData","Download", class = "btn btn-success"),
             hr(),
             h3("Sample to sample scatter plots"),
-            selectInput("corr_method","Correlation method palette",choices = list("pearson","spearman")),
+            selectInput("corr_method","Correlation method palette",
+                        choices = list("pearson","spearman","kendall")),
+            checkboxInput(inputId = "corr_uselogs",label = "Use log2 values for plot axes and values",
+                          value = TRUE),
+            checkboxInput(inputId = "corr_usesubset",label = "Use a subset of max 1000 genes (quicker to plot)",
+                          value = TRUE),
+            
             p("Compute sample to sample correlations on the normalized counts - warning, it can take a while to plot all points (depending mostly on the number of samples you provided)."),
             actionButton("compute_pairwisecorr", "Run", class = "btn btn-primary"),
             uiOutput("pairwise_plotUI"),
@@ -1324,7 +1330,8 @@ pcaExplorer <- function(dds=NULL,
           detail = "This operation can take a while to render all points",
           value = 0,
           {
-            pair_corr(current_countmat(),method=input$corr_method)
+            pair_corr(current_countmat(),method=input$corr_method,log = input$corr_uselogs,
+                      use_subset = input$corr_usesubset)
           })
     })
     
