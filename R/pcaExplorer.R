@@ -188,11 +188,23 @@ pcaExplorer <- function(dds=NULL,
               uiOutput("upload_count_matrix"),
               shinyBS::bsTooltip(
                 "upload_count_matrix", paste0("Select the file containing the count matrix"),
-                "right", options = list(container = "body")),
+                "right", options = list(container = "body"))),
+            column(
+              width = 4,
               uiOutput("upload_metadata"),
               shinyBS::bsTooltip(
                 "upload_metadata", paste0("Select the file containing the samples metadata"),
-                "right", options = list(container = "body")),
+                "right", options = list(container = "body"))),
+            column(
+              width = 3,
+              # help button?
+              br(), br(), br(),
+              uiOutput("ui_createDDS"),
+              verbatimTextOutput("debugdebug")
+            )),
+          fluidRow(
+            column(
+              width = 4,
               uiOutput("upload_annotation"),
               shinyBS::bsTooltip(
                 "upload_annotation", paste0("Select the file containing the annotation data"),
@@ -928,7 +940,8 @@ pcaExplorer <- function(dds=NULL,
                         label = "Upload a count matrix file",
                         accept = c("text/csv", "text/comma-separated-values",
                                    "text/tab-separated-values", "text/plain",
-                                   ".csv", ".tsv"), multiple = FALSE),
+                                   ".csv", ".tsv"), multiple = FALSE,
+                        width = "80%"),
               radioButtons(inputId="uploadcm_sep", 
                            label="Separator",
                            choices=c(Comma=",", Semicolon=";",Tab="\t"),
@@ -994,10 +1007,11 @@ pcaExplorer <- function(dds=NULL,
           tagList(
             wellPanel(
               fileInput(inputId = "uploadannotationfile",
-                         label = "Upload an annotation file",
-                         accept = c("text/csv", "text/comma-separated-values",
-                                    "text/tab-separated-values", "text/plain",
-                                    ".csv", ".tsv"), multiple = FALSE),
+                        label = "Upload an annotation file",
+                        accept = c("text/csv", "text/comma-separated-values",
+                                   "text/tab-separated-values", "text/plain",
+                                   ".csv", ".tsv"), multiple = FALSE,
+                        width = "80%"),
               radioButtons(inputId="uploadanno_sep", 
                            label="Separator",
                            choices=c(Comma=",", Semicolon=";",Tab="\t"),
@@ -1097,85 +1111,48 @@ pcaExplorer <- function(dds=NULL,
       ))
     })
     
-    # output$printanno <- renderUI({
-    #   shiny::validate(
-    #     need(!is.null(values$myannotation),
-    #          "Upload your annotation table as a matrix/data frame or passing it as a parameter"
-    #     )
-    #   )
-    #   DT::dataTableOutput("annoprint")
-    # })
-    # 
-    # output$annoprint <- DT::renderDataTable({
-    #   DT::datatable(values$myannotation,options = list(pageLength=10))
-    # })
-    
-    createDDS <- reactive({
-      if(is.null(countmatrix) | is.null(coldata))
+    output$ui_createDDS <- renderUI({
+      if (is.null(values$mycountmatrix) | is.null(values$mymetadata))
         return(NULL)
-      
-      dds <- DESeqDataSetFromMatrix(countData = countmatrix,
-                                    colData = coldata,
-                                    design=~1)
-      dds <- estimateSizeFactors(dds)
-      return(dds)
+      actionButton("button_diydds","Generate the dds and dst objects", class = "btn btn-success")
     })
     
-    # createRLT <- reactive({
-    #   if(is.null(countmatrix) | is.null(coldata))
-    #     return(NULL)
-    #   dst <- rlogTransformation(values$mydds)
-    #   return(dst)
-    # })
+    output$debugdebug <- renderPrint({
+      print((ncol(values$mycountmatrix) == nrow(values$mymetadata)))
+    })
     
-    observeEvent(createDDS,
+    observeEvent(input$button_diydds,
                  {
-                   if(!is.null(values$mycountmatrix) & !is.null(values$mymetadata))
-                     values$mydds <- createDDS()
-                 })
+                   withProgress(message="Computing the objects...",value = 0,{
+                     if(ncol(values$mycountmatrix) == nrow(values$mymetadata)) {
+                       values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
+                                                              colData = values$mymetadata,
+                                                              design=~1)
+                       
+                       incProgress(0.1,detail = "Computing size factors for normalization")
+                       values$mydds <- estimateSizeFactors(values$mydds)
+                       incProgress(0.1,detail = "Generating DESeqTransform")
+                       values$mydst <- vst(values$mydds)
+                       values$transformation_type <- "vst"
+                     } else {
+                       showNotification("You possibly uploaded/provided non matching count data and samples metadata, please inspect these objects in the preview modals below.",
+                                        type = "warning")
+                     }
+                   })
+                 }
+                 
+    )
     
-    # observeEvent(createRLT,
-    #              {
-    #                if(!is.null(values$mycountmatrix) & !is.null(values$mymetadata))
-    #                  values$mydst <- createRLT()
-    #              })
-    
-    # useful when count matrix is uploaded by hand
-####    sneakpeek <- reactiveValues()
-####    observeEvent(input$uploadcmfile,
-####                 {
-####                   sneakpeek$cm <- readCountmatrix()
-####                 })
-####    
-####    output$sneakpeekcm <- DT::renderDataTable({
-####      head(sneakpeek$cm,10)
-####    })
     
     # as in http://stackoverflow.com/questions/29716868/r-shiny-how-to-get-an-reactive-data-frame-updated-each-time-pressing-an-actionb
     observeEvent(input$uploadcmfile,
                  {
                    values$mycountmatrix <- readCountmatrix()
-                   if(!is.null(values$mymetadata)){
-                     withProgress(message="Computing the objects...",value = 0,{
-                       
-                       values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
-                                                              colData = values$mymetadata,
-                                                              design=~1)
-                       values$mydst <- rlogTransformation(values$mydds)})
-                   }
                  })
     
     observeEvent(input$uploadmetadatafile,
                  {
                    values$mymetadata <- readMetadata()
-                   if(!is.null(values$mycountmatrix)){
-                     withProgress(message="Computing the objects...",value = 0,{
-                       
-                       values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
-                                                              colData = values$mymetadata,
-                                                              design=~1)
-                       values$mydst <- rlogTransformation(values$mydds)})
-                   }
                  })
     
     observeEvent(input$uploadannotationfile,
