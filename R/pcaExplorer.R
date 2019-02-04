@@ -1107,28 +1107,32 @@ pcaExplorer <- function(dds=NULL,
       message = "Loading demo data...",
       detail = "Generating DESeqDataSet", value = 0,
       {
-        requireNamespace("airway",quietly = TRUE)
-        data(airway,package="airway",envir = environment())
-        
-        cm_airway <- assay(airway)
-        ed_airway <- as.data.frame(colData(airway))
-        
-        values$mycountmatrix <- cm_airway
-        values$mymetadata <- ed_airway
-        
-        # just to be sure, overwrite the annotation and the rest
-        
-        values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
-                                               colData = values$mymetadata,
-                                               design=~cell + dex)
-        incProgress(0.1,detail = "Computing size factors for normalization")
-        values$mydds <- estimateSizeFactors(values$mydds)
-        incProgress(0.1,detail = "Generating DESeqTransform")
-        values$mydst <- vst(values$mydds)
-        values$transformation_type <- "vst"
-        incProgress(0.7, detail = "Retrieving annotation")
-        
-        values$myannotation <- get_annotation_orgdb(values$mydds, "org.Hs.eg.db","ENSEMBL")
+        aw <- requireNamespace("airway",quietly = TRUE)
+        if(aw) {
+          data(airway,package="airway",envir = environment())
+          
+          cm_airway <- assay(airway)
+          ed_airway <- as.data.frame(colData(airway))
+          
+          values$mycountmatrix <- cm_airway
+          values$mymetadata <- ed_airway
+          
+          # just to be sure, overwrite the annotation and the rest
+          
+          values$mydds <- DESeqDataSetFromMatrix(countData = values$mycountmatrix,
+                                                 colData = values$mymetadata,
+                                                 design=~cell + dex)
+          incProgress(0.1,detail = "Computing size factors for normalization")
+          values$mydds <- estimateSizeFactors(values$mydds)
+          incProgress(0.1,detail = "Generating DESeqTransform")
+          values$mydst <- vst(values$mydds)
+          values$transformation_type <- "vst"
+          incProgress(0.7, detail = "Retrieving annotation")
+          
+          values$myannotation <- get_annotation_orgdb(values$mydds, "org.Hs.eg.db","ENSEMBL")
+        } else {
+          showNotification("The 'airway' package is currently not installed. Please do so by executing BiocManager::install('airway') before launching pcaExplorer",type = "warning")
+        }
       })
     )
     
