@@ -835,8 +835,13 @@ pcaExplorer <- function(dds=NULL,
     )
     
     if(!is.null(dds)){
-      if(is.null(sizeFactors(dds)))
+      if(is.null(sizeFactors(dds))) {
+        withProgress({
         dds <- estimateSizeFactors(dds)
+        },
+        message = "Calculating size factors...",
+        detail = "Using the DESeq normalization method.")
+      }
     }
     
     ## reactive values to use in the app
@@ -850,6 +855,11 @@ pcaExplorer <- function(dds=NULL,
     
     user_settings <- reactiveValues(save_width = 15, save_height = 11)
     
+    if(!is.null(dds)){
+      # if provided as dds, can fill in the count matrix and metadata
+      values$mycountmatrix <- counts(dds)
+      values$mymetadata <- colData(dds)
+    }
     output$checkdds <- reactive({
       is.null(values$mydds)
     })
@@ -866,8 +876,13 @@ pcaExplorer <- function(dds=NULL,
       if(!is(dds,"DESeqDataSet"))
         stop("dds must be a DESeqDataSet object. If it is a simple counts matrix, provide it to the countmatrix parameter!")
       
-      if(is.null(sizeFactors(dds)))
-        dds <- estimateSizeFactors(dds)
+      if(is.null(sizeFactors(dds))) {
+        withProgress({
+          dds <- estimateSizeFactors(dds)
+        },
+        message = "Calculating size factors...",
+        detail = "Using the DESeq normalization method.")
+      }
     }
     if(!is.null(dst)){
       if(!is(dst,"DESeqTransform"))
@@ -1125,7 +1140,7 @@ pcaExplorer <- function(dds=NULL,
     output$ui_createDDS <- renderUI({
       if (is.null(values$mycountmatrix) | is.null(values$mymetadata))
         return(NULL)
-      actionButton("button_diydds","Generate the dds and dst objects", class = "btn btn-success")
+      actionButton("button_diydds", label = HTML("Generate the dds and </br>dst objects"), class = "btn btn-success")
     })
     
     observeEvent(input$help_format, {
