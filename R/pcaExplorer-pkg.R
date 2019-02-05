@@ -32,6 +32,7 @@
 #' @import threejs
 #' @import biomaRt
 #' @importFrom pheatmap pheatmap
+#' @importFrom base64enc dataURI
 #' @importFrom tidyr gather
 #' @import knitr
 #' @import rmarkdown
