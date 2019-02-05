@@ -4,13 +4,19 @@
 \alias{pair_corr}
 \title{Pairwise scatter and correlation plot of counts}
 \usage{
-pair_corr(df, method = "pearson")
+pair_corr(df, log = FALSE, method = "pearson", use_subset = TRUE)
 }
 \arguments{
 \item{df}{A data frame, containing the (raw/normalized/transformed) counts}
 
+\item{log}{Logical, whether to convert the input values to log2 (with addition
+of a pseudocount). Defaults to FALSE.}
+
 \item{method}{Character string, one of \code{pearson} (default), \code{kendall}, or
 \code{spearman} as in \code{cor}}
+
+\item{use_subset}{Logical value. If TRUE, only 1000 values per sample will be used
+to speed up the plotting operations.}
 }
 \value{
 A plot with pairwise scatter plots and correlation coefficients
