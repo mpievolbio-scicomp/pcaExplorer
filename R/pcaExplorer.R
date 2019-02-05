@@ -529,22 +529,9 @@ pcaExplorer <- function(dds=NULL,
                 checkboxInput("ylimZero","Set y axis limit to 0",value=TRUE),
                 checkboxInput("addsamplelabels","Annotate sample labels to the dots in the plot",value=TRUE)),
               
-              #               fluidRow(
-              #                 column(
-              #                   width = 6,
-              #                   uiOutput("ui_selectID")
-              #                 ),
-              #                 column(
-              #                   width = 6,
-              #                   uiOutput("ui_selectName")
-              #                 )
-              #               ),
-              # verbatimTextOutput("debugf"),
-              
               verbatimTextOutput("searchresult"),
               verbatimTextOutput("debuggene"),
               
-              # plotOutput("newgenefinder_plot"),
               column(
                 width = 8,
                 plotOutput("genefinder_plot"),
@@ -895,15 +882,6 @@ pcaExplorer <- function(dds=NULL,
         stop("dds must be a DESeqTransform object")
     }
     
-    # # compute only dst if dds is provided but not cm&coldata
-    # if(!is.null(dds) & (is.null(countmatrix) & is.null(coldata)) & is.null(dst)){
-    #   withProgress(message = "computing rlog transformed values...",
-    #                value = 0,
-    #                {
-    #                  values$mydst <- rlogTransformation(dds)
-    #                })
-    # }
-    
     output$ui_computetransform <- renderUI({
       if(is.null(values$mydds))
         return(NULL)
@@ -992,10 +970,7 @@ pcaExplorer <- function(dds=NULL,
       cm <- utils::read.delim(input$uploadcmfile$datapath, header = TRUE,
                               as.is = TRUE, sep = input$uploadcm_sep, quote = "",
                               row.names = 1, # https://github.com/federicomarini/pcaExplorer/issues/1
-                              ## TODO: tell the user to use tsv, or use heuristics
-                              ## to check what is most frequently occurring separation character? -> see sepGuesser.R
                               check.names = FALSE)
-      
       return(cm)
     })
     
@@ -1258,7 +1233,6 @@ pcaExplorer <- function(dds=NULL,
       })
     )
     
-    
     colSel <- reactive({
       # find out how many colors to generate: if no factor is selected, either
       # return all say steelblue or all different
@@ -1290,7 +1264,6 @@ pcaExplorer <- function(dds=NULL,
       }
     })
     
-    
     output$sessioninfo <- renderPrint({
       sessionInfo()
     })
@@ -1320,7 +1293,6 @@ pcaExplorer <- function(dds=NULL,
         return(log10(1 + counts(values$mydds,normalized=TRUE)))
       if(input$countstable_unit=="tpm_counts")
         return(NULL) ## TODO!: assumes length of genes/exons as known, and is currently not required in the dds
-      
     })
     
     output$showcountmat <- DT::renderDataTable({
@@ -1426,7 +1398,6 @@ pcaExplorer <- function(dds=NULL,
       cat("Counts are ranging from", min(counts(values$mydds)),"to",max(counts(values$mydds)))
     })
     
-    
     output$heatmapsampledist <- renderPlot({
       if(input$sampledist_distance == "euclidean") {
         mydistmat <- as.matrix(dist(t(assay(values$mydst))))
@@ -1447,7 +1418,6 @@ pcaExplorer <- function(dds=NULL,
         pheatmap(mydistmat)
       }
     })
-    
     
     output$reads_barplot <- renderPlot({
       rr <- colSums(counts(values$mydds))/1e6
@@ -1471,9 +1441,6 @@ pcaExplorer <- function(dds=NULL,
       print(colSums(counts(values$mydds)))
       summary(colSums(counts(values$mydds))/1e6)
     })
-    
-    
-    
     
     # server samples view --------------------------------------------------------
     output$samples_pca <- renderPlot({
@@ -1522,7 +1489,6 @@ pcaExplorer <- function(dds=NULL,
       res
     })
     
-    
     output$geneshiload <- renderPlot({
       rv <- rowVars(assay(values$mydst))
       select <- order(rv, decreasing = TRUE)[seq_len(min(input$pca_nrgenes,length(rv)))]
@@ -1538,7 +1504,6 @@ pcaExplorer <- function(dds=NULL,
       available_samples <- c("",colnames(values$mydst))
       
       selectInput("outlierselection",label = "Select which sample(s) to remove - suspected outliers",choices = available_samples,multiple = TRUE)
-      
     })
     
     output$samples_outliersremoved <- renderPlot({
@@ -1596,7 +1561,6 @@ pcaExplorer <- function(dds=NULL,
       res
     })
     
-    
     output$genes_biplot_zoom <- renderPlot({
       shiny::validate(
         need(
@@ -1633,7 +1597,6 @@ pcaExplorer <- function(dds=NULL,
       res
     })
     
-    
     output$genes_profileexplorer <- renderPlot({
       shiny::validate(
         need(
@@ -1647,14 +1610,11 @@ pcaExplorer <- function(dds=NULL,
           "Select an experimental factor in the Group/color by element in the sidebar"
         )
       )
-      
       geneprofiler(values$mydst,
                    genelist = curData_brush()$ids,
                    intgroup = input$color_by,
                    plotZ = input$zprofile)
-      
     })
-    
     
     output$genes_biplot_boxplot <- renderPlot({
       shiny::validate(
@@ -1669,7 +1629,6 @@ pcaExplorer <- function(dds=NULL,
           "Click the plot above to generate the boxplot for the selected gene"
         )
       )
-      
       selectedGene <- curData_zoomClick()$ids
       selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
       # plotCounts(dds_cleaner,)
@@ -1695,8 +1654,6 @@ pcaExplorer <- function(dds=NULL,
         } else {
           res <- res + scale_y_log10(name="Normalized counts - log10 scale")
         }
-        
-        
         
         res <- res +
           labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
@@ -1732,7 +1689,6 @@ pcaExplorer <- function(dds=NULL,
       }
     })
     
-    
     # for reading in the brushed/clicked points
     curData_brush <- reactive({
       df2 <- genespca(values$mydst,
@@ -1762,7 +1718,6 @@ pcaExplorer <- function(dds=NULL,
       res
     })
     
-    
     # data to be used for plotting the picked gene from the zoomed panel
     curData_zoomClick <- reactive({
       df2 <- genespca(values$mydst,
@@ -1779,7 +1734,6 @@ pcaExplorer <- function(dds=NULL,
       res
     })
     
-    
     output$pca_brush_out <- DT::renderDataTable({
       datatable(curData_brush(),options = list(pageLength = 50))
     })
@@ -1788,7 +1742,6 @@ pcaExplorer <- function(dds=NULL,
       datatable(curData_click(),options = list(pageLength = 50))
     })
     
-    
     output$heatzoomd3 <- renderD3heatmap({
       shiny::validate(
         need(
@@ -1796,7 +1749,6 @@ pcaExplorer <- function(dds=NULL,
           "Brush the main panel above to generate a heatmap"
         )
       )
-      
       brushedObject <- curData_brush()
       shiny::validate(
         need(
@@ -1813,7 +1765,6 @@ pcaExplorer <- function(dds=NULL,
       
       d3heatmap(toplot,Colv = as.logical(input$heatmap_colv),colors = mycolss)
     })
-    
     
     output$heatzoom <- renderPlot({
       shiny::validate(
@@ -1838,111 +1789,6 @@ pcaExplorer <- function(dds=NULL,
       ## aheatmap is actually consistent in displaying the clusters with most of other heatmap packages
       ## keep in mind: pheatmap does somehow a better job if scaling/centering
     })
-    
-    
-    #     displayed by default, with possibility to select from gene id provided as row names of the objects
-    #     output$ui_selectID <- renderUI({
-    #       allIDs <- withProgress(message = "loading the names in the UI",value = 0,
-    #                              {
-    #                                rownames(values$mydst)
-    #                              }
-    #
-    #
-    #       )
-    #       selectInput("selectID",label = "Select ID",choices = c("",allIDs),selected=NULL)
-    #     })
-    #     # additionally displayed if an annotation is provided
-    #     output$ui_selectName <- renderUI({
-    #       shiny::validate(
-    #         need(
-    #           !is.null(values$myannotation),
-    #           "If you provide an annotation table, you could search by the corresponding name/ID"
-    #         )
-    #       )
-    #
-    #       selectInput("selectName",label = "Select gene name",choices = c("",values$myannotation$gene_name),selected=NULL)
-    #       # selectInput("selectName")
-    #     })
-    #
-    #     output$debugf <- renderPrint({
-    #       input$selectID
-    #     })
-    
-    
-    #     output$newgenefinder_plot <- renderPlot({
-    #       if (input$selectID == "")
-    #         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-    #
-    #
-    #       if(!is.null(values$myannotation)){
-    #         if(input$selectName != "") {
-    #           selectedGeneName <- input$selectName
-    #           selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$selectName)]
-    #         } else {
-    #           if (input$selectID == "") {
-    #             return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-    #           } else {
-    #             selectedGene <- input$selectID
-    #             selectedGeneName <- ifelse(!is.null(values$myannotation),
-    #                                        values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))],
-    #                                        "")
-    #           }
-    #         }
-    #       } else if (input$selectID != ""){
-    #         selectedGene <- input$selectID
-    #         selectedGeneName <- ifelse(!is.null(values$myannotation),
-    #                                    values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))],
-    #                                    "")
-    #       } else {
-    #         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-    #       }
-    #
-    #
-    #       anno_id <- rownames(values$myannotation)
-    #       anno_gene <- values$myannotation$gene_name
-    #
-    #       if(is.null(input$color_by))
-    #         return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
-    # #       if(is.null(input$color_by) & (input$selectName=="" | input$selectID ==""))
-    # #         return(ggplot() + annotate("text",label="Select a gene and a factor to plot gene",0,0) + theme_bw())
-    # #       if((input$selectName=="" | input$selectID ==""))
-    # #         return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-    #       # if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
-    #         # return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
-    #
-    # #       if (input$genefinder %in% anno_id) {
-    # #         selectedGene <- rownames(values$mydst)[match(input$genefinder,rownames(values$mydst))]
-    # #         selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
-    # #       }
-    # #       if (input$genefinder %in% anno_gene) {
-    # #         selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
-    # #         if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
-    # #         selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
-    # #       }
-    #
-    #
-    #
-    #
-    #
-    #       genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
-    #
-    #       onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
-    #       genedata$plotby <- interaction(onlyfactors)
-    #
-    #       p <- ggplot(genedata,aes(x=plotby,y=count,fill=plotby)) + geom_boxplot() + labs(title=paste0("Normalized counts for ",selectedGeneName," - ",selectedGene)) +  scale_x_discrete(name="") + geom_jitter(aes(x=plotby,y=count),position = position_jitter(width = 0.1)) + scale_fill_discrete(name="Experimental\nconditions")
-    #
-    #       if(input$ylimZero)
-    #       {
-    #         p <- p + scale_y_log10(name="Normalized counts - log10 scale",limits=c(1,max(genedata$count)))
-    #       } else {
-    #         p <- p + scale_y_log10(name="Normalized counts - log10 scale")
-    #       }
-    #       exportPlots$genefinder <- p
-    #
-    #       p
-    #     })
-    #
-    
     
     # server gene finder ---------------------------------------------------------------
     output$searchresult <- renderPrint({
@@ -2076,7 +1922,6 @@ pcaExplorer <- function(dds=NULL,
       genedata
     })
     
-    
     # server pca2go ---------------------------------------------------------------
     output$ui_computePCA2GO <- renderUI({
       if(is.null(pca2go))
@@ -2112,23 +1957,17 @@ pcaExplorer <- function(dds=NULL,
       }
     })
     
-    
     output$speciespkg <- renderText({
-      
       if(!is.null(pca2go))
         return("pca2go object provided")
-      
       if(!is.null(values$mypca2go))
         return("pca2go object computed or provided")
-      
       shiny::validate(
         need(input$speciesSelect!="",
              "Select a species - requires the corresponding annotation package"
         )
       )
-      
       annopkg <- annoSpecies_df$pkg[annoSpecies_df$species==input$speciesSelect]
-      
       shiny::validate(
         need(require(annopkg,character.only=TRUE),
              paste0("The package ",annopkg, " is not installed/available. Try installing it with BiocManager::install('",annopkg,"')"))
@@ -2183,7 +2022,6 @@ pcaExplorer <- function(dds=NULL,
       res
     })
     
-    
     output$dt_pchor_pos <- DT::renderDataTable({
       if(is.null(values$mypca2go)) return(datatable(NULL))
       goe <- values$mypca2go[[paste0("PC",input$pc_x)]][["posLoad"]]
@@ -2233,7 +2071,6 @@ pcaExplorer <- function(dds=NULL,
         )
       return("Refer to the Instructions section if you need help on using this section")
     })
-    
     
     output$covar1 <- renderUI({
       # if(is.null(values$mydst))
@@ -2293,7 +2130,6 @@ pcaExplorer <- function(dds=NULL,
         choices = c(NULL, presel1), selected = NULL,multiple = TRUE)
     })
     
-    
     output$colnames2 <- renderUI({
       if(is.null(values$mydst))
         return(NULL)
@@ -2331,7 +2167,6 @@ pcaExplorer <- function(dds=NULL,
       pcmat
     })
     
-    
     obj3 <- reactive({
       pcmat <- composedMat()
       aval <- 0.3
@@ -2358,7 +2193,6 @@ pcaExplorer <- function(dds=NULL,
       return(list(pcmat,tcol,tcol2))
     })
     
-    
     output$pcamultifac <- renderPlot({
       pcmat <- obj3()[[1]]
       tcol <- obj3()[[2]]
@@ -2382,7 +2216,6 @@ pcaExplorer <- function(dds=NULL,
       points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
       points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)
     })
-    
     
     output$multifaczoom <- renderPlot({
       if(is.null(input$pcamultifac_brush)) return(NULL)
@@ -2410,12 +2243,6 @@ pcaExplorer <- function(dds=NULL,
       points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)
       
     })
-    
-    
-    #       output$plot_brushinfo <- renderPrint({
-    #         cat("input$pcagenes_brush:\n")
-    #         str(input$pcagenes_brush)
-    #       })
     
     curData_brush_multifac <- reactive({
       pcmat <- obj3()[[1]]
@@ -2449,11 +2276,9 @@ pcaExplorer <- function(dds=NULL,
       res
     })
     
-    
     output$pcamultifac_out <- DT::renderDataTable({
       datatable(curData_brush_multifac())
     })
-    
     
     output$downloadData_brush_multifac <- downloadHandler(
       filename = function() { paste(input$brushedPoints_filename_multifac, '.csv', sep='') },
@@ -2466,7 +2291,6 @@ pcaExplorer <- function(dds=NULL,
         write.csv(data, file, quote=FALSE)
       }
     )
-    
     
     # server report editor ---------------------------------------------------------
     ### yaml generation
@@ -2769,7 +2593,6 @@ pcaExplorer <- function(dds=NULL,
     })
   }) # end of pcaExplorer(dds,dst,countmatrix,coldata,pca2go,annotation)
   shinyApp(ui = pcaexplorer_ui, server = pcaexplorer_server)
-
 }
 
 footer <- function(){
