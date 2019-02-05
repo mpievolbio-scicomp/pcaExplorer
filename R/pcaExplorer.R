@@ -1049,7 +1049,7 @@ pcaExplorer <- function(dds=NULL,
              "No count matrix provided, please upload it or pass it as a parameter"
         )
       )
-      actionButton(inputId = "show_cm",label = "Show count matrix", class = "btn btn-success")
+      actionButton(inputId = "show_cm",label = HTML("Show </br>count matrix"), class = "btn btn-success")
     })
     
     output$ui_showmetadata<- renderUI({
@@ -1058,7 +1058,7 @@ pcaExplorer <- function(dds=NULL,
              "No sample metadata provided, please upload it or pass it as a parameter"
         )
       )
-      actionButton(inputId = "show_metadata",label = "Show sample metadata", class = "btn btn-success")
+      actionButton(inputId = "show_metadata",label = HTML("Show </br>sample metadata"), class = "btn btn-success")
     })
     
     output$ui_showdds <- renderUI({
@@ -1067,7 +1067,7 @@ pcaExplorer <- function(dds=NULL,
              "No dds object provided or computed, please upload its components (count matrix and metadata) or pass it as a parameter"
         )
       )
-      actionButton(inputId = "show_dds",label = "Show dds object", class = "btn btn-success")
+      actionButton(inputId = "show_dds",label = HTML("Show </br><code>dds</code> object"), class = "btn btn-success")
     })
     
     output$ui_showannotation <- renderUI({
@@ -1076,7 +1076,7 @@ pcaExplorer <- function(dds=NULL,
              "No gene annotation provided, please upload it or pass it as a parameter"
         )
       )
-      actionButton(inputId = "show_annotation",label = "Show gene annotation", class = "btn btn-success")
+      actionButton(inputId = "show_annotation",label =  HTML("Show </br>gene annotation"), class = "btn btn-success")
     })
     
     # output$ddsprint <- renderPrint({
@@ -1097,7 +1097,7 @@ pcaExplorer <- function(dds=NULL,
       showModal(modalDialog(
         title = "Preview - Sample metadata",
         div(style = "display:block;overflow-y:auto; overflow-x:auto;",
-            DT::renderDataTable(values$mymetadata)),
+            DT::renderDataTable(as.data.frame(values$mymetadata))),
         easyClose = TRUE,
         footer = NULL,
         size = "l"
