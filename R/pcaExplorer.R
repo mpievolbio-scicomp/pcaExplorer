@@ -218,8 +218,8 @@ pcaExplorer <- function(dds=NULL,
               br(),
               "... or you can also ",
               actionButton("btn_loaddemo", "Load the demo airway data", 
-                           icon = icon("play-circle"),
-                           class = "btn btn-info"),
+                           icon = icon("play-circle"),style="color: #0092AC"),
+                           # class = "btn btn-info"),
               shinyBS::bsTooltip(
                 "btn_loaddemo", paste0("Clicking on this button will load the airway data as DESeqDataSet, apply the regularized log transformation, and prepare the annotation for displaying gene symbols"),
                 "bottom", options = list(container = "body"))
@@ -327,8 +327,8 @@ pcaExplorer <- function(dds=NULL,
             verbatimTextOutput("detected_genes")),
           conditionalPanel(
             condition="output.checkrlt",
-            h2("You did not create the dst object yet. Please go the main tab and generate it"))
-          # DT::dataTableOutput("reads_samples"),
+            h2("You did not create the dst object yet. Please go the main tab and generate it")
+          )
         ),
         # ui panel samples view -------------------------------------------------------
         tabPanel(
@@ -454,8 +454,9 @@ pcaExplorer <- function(dds=NULL,
                 plotOutput("genes_profileexplorer"),
                 div(align = "right", style = "margin-right:15px; margin-bottom:10px",
                     downloadButton("download_genesPca_profile", "Download Plot"),
-                    textInput("filename_genesPca_profile",label = "Save as...",value = "genesPca_profile.pdf")))
-              ,
+                    textInput("filename_genesPca_profile",label = "Save as...",value = "genesPca_profile.pdf")
+                )
+              ),
               column(
                 width = 6,
                 h4("Boxplot of selected gene"),
@@ -907,14 +908,15 @@ pcaExplorer <- function(dds=NULL,
       if(is.null(values$mydds))
         return(NULL)
       tagList(
+        h4("Select one of the following transformations for your count data:"),
         actionButton("btn_computevst",
-                     "Compute variance stabilized transformed data from the dds object",
+                     HTML("Compute variance stabilized </br>transformed data from the <code>dds</code> object"),
                      class = "btn btn-primary",icon = icon("spinner")),
         actionButton("btn_computerlog",
-                     "Compute regularized logarithm transformed data from the dds object",
+                     HTML("Compute regularized logarithm </br>transformed data from the <code>dds</code> object"),
                      class = "btn btn-primary",icon = icon("spinner")),
         actionButton("btn_computeshiftedlog",
-                     "Compute log2 data (with pseudocount 1) from the dds object",
+                     HTML("Compute log2 data (with pseudocount 1)</br> from the <code>dds</code> object"),
                      class = "btn btn-primary",icon = icon("spinner"))
       )
     })
