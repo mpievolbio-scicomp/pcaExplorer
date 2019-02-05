@@ -200,7 +200,12 @@ pcaExplorer <- function(dds=NULL,
               # help button?
               br(), br(), br(),
               uiOutput("ui_createDDS"),
-              actionButton("help_format",label = "",icon = icon("question")),
+              actionButton("help_format",label = "",icon = icon("question-circle"),
+                           style="color: #0092AC; background-color: #FFFFFF; border-color: #FFFFFF"),
+              shinyBS::bsTooltip(
+                "help_format", 
+                "How to provide your input data in pcaExplorer",
+                "bottom", options = list(container = "body")),
               verbatimTextOutput("debugdebug")
             )),
           fluidRow(
@@ -1152,8 +1157,18 @@ pcaExplorer <- function(dds=NULL,
     
     observeEvent(input$help_format, {
       showModal(modalDialog(
-        title = "Help on the format of the input data",
-        h4("the content"),
+        title = "Format specifications for pcaExplorer",
+        tags$li("pcaExplorer accepts only text files, either comma, semicolon, or tab-separated"),
+        tags$li(""),
+        tags$li("for count data: features are in the rows, samples are stored in the columns"),
+        tags$li("for the metadata: "),
+        tags$li("for the gene annotation:"),
+        
+        h4("Example:"),
+        tags$img(
+          src = base64enc::dataURI(file = system.file("www", "newsnap_01_upload.png",package = "pcaExplorer"), mime = "image/png"),
+          width = 600
+        ),
         easyClose = TRUE,
         footer = NULL,
         size = "l"
