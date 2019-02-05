@@ -223,7 +223,7 @@ pcaExplorer <- function(dds=NULL,
           ,br(), p(),
           uiOutput("ui_computetransform"),
           
-          h4("Preview on the uploaded data"),
+          h4("Preview on the available data"),
           splitLayout(
             uiOutput("ui_showcm"),
             uiOutput("ui_showmetadata"),
@@ -1033,7 +1033,7 @@ pcaExplorer <- function(dds=NULL,
           tagList(
             wellPanel(
               fileInput(inputId = "uploadannotationfile",
-                        label = "Upload an annotation file",
+                        label = "Upload an annotation file (optional)",
                         accept = c("text/csv", "text/comma-separated-values",
                                    "text/tab-separated-values", "text/plain",
                                    ".csv", ".tsv"), multiple = FALSE,
@@ -1140,7 +1140,14 @@ pcaExplorer <- function(dds=NULL,
     output$ui_createDDS <- renderUI({
       if (is.null(values$mycountmatrix) | is.null(values$mymetadata))
         return(NULL)
-      actionButton("button_diydds", label = HTML("Generate the dds and </br>dst objects"), class = "btn btn-success")
+      tagList(
+        actionButton("button_diydds", label = HTML("Generate the dds and </br>dst objects"), class = "btn btn-success"),
+        shinyBS::bsTooltip(
+        "button_diydds", 
+        paste0("This will create the dds object, normalize it using the DESeq method, and generate ",
+               "a DESeqTransform object, where variance stabilized values are stored by default."),
+        "bottom", options = list(container = "body"))
+      )
     })
     
     observeEvent(input$help_format, {
@@ -1170,6 +1177,10 @@ pcaExplorer <- function(dds=NULL,
                        incProgress(0.1,detail = "Generating DESeqTransform")
                        values$mydst <- vst(values$mydds)
                        values$transformation_type <- "vst"
+                       showNotification("All objects required for the next steps have been computed, good to go!",
+                                        type = "message")
+                       if(is.null(values$myannotation))
+                         showNotification("You might want to provide a gene annotation object, it can help increase the readability of the remainder functions (gene symbols can be displayed instead of ENSEMBL/Entrez ids, ...).")
                      } else {
                        showNotification("You possibly uploaded/provided non matching count data and samples metadata, please inspect these objects in the preview modals below.",
                                         type = "warning")
@@ -2118,6 +2129,7 @@ pcaExplorer <- function(dds=NULL,
       annopkg <- annoSpecies_df$pkg[annoSpecies_df$species==input$speciesSelect]
       withProgress(
         message = "Computing the PCA2GO object...",
+        detail = "This operation can take a while.",
         value = 0,
         {
           pcpc <- limmaquickpca2go(values$mydst,background_genes = rownames(values$mydds),
