@@ -46,3 +46,13 @@
 #' @name pcaExplorer-pkg
 #' @docType package
 NULL
+
+.onAttach <- function(libname, pkgname) {
+  pkgVersion <- packageDescription("pcaExplorer", fields="Version")
+  msg <- paste0("Welcome to pcaExplorer v", pkgVersion, "\n\n")
+  citation <- paste0("If you use pcaExplorer in your work, please cite:\n\n",
+                     "Federico Marini, Harald Binder\n",
+                     "pcaExplorer: an R/Bioconductor package for interacting with RNA-seq principal components\n",
+                     "biorXiv, 2018 - ndoi:10.1101/493551\n")
+  packageStartupMessage(paste0(msg, citation))
+}
