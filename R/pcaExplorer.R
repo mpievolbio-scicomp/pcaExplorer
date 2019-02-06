@@ -1135,16 +1135,11 @@ pcaExplorer <- function(dds=NULL,
     observeEvent(input$help_format, {
       showModal(modalDialog(
         title = "Format specifications for pcaExplorer",
-        tags$li("pcaExplorer accepts only text files, either comma, semicolon, or tab-separated"),
-        tags$li(""),
-        tags$li("for count data: features are in the rows, samples are stored in the columns"),
-        tags$li("for the metadata: "),
-        tags$li("for the gene annotation:"),
-        
+        includeMarkdown(system.file("extdata", "datainput.md",package = "pcaExplorer")),
         h4("Example:"),
         tags$img(
           src = base64enc::dataURI(file = system.file("www", "help_dataformats.png",package = "pcaExplorer"), mime = "image/png"),
-          width = 600
+          width = 750
         ),
         easyClose = TRUE,
         footer = NULL,
@@ -1227,6 +1222,8 @@ pcaExplorer <- function(dds=NULL,
           incProgress(0.7, detail = "Retrieving annotation")
           
           values$myannotation <- get_annotation_orgdb(values$mydds, "org.Hs.eg.db","ENSEMBL")
+          showNotification("All objects required for the next steps have been computed, good to go!",
+                           type = "message")
         } else {
           showNotification("The 'airway' package is currently not installed. Please do so by executing BiocManager::install('airway') before launching pcaExplorer",type = "warning")
         }
