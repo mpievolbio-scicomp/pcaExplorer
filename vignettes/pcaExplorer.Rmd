@@ -112,7 +112,8 @@ Additional parameters and objects that can be provided to the main `r Biocpkg("p
   Although this likely provides more general (and probably less informative) functions, it is a good compromise for quickly obtaining a further data interpretation.
 
 - `annotation`, a data frame object, with `row.names` as gene identifiers (e.g. ENSEMBL ids) identical to the row names of the count matrix or `dds` object, and an extra column `gene_name`, containing e.g. HGNC-based gene symbols. 
-  This can be used for making information extraction easier, as ENSEMBL ids (a usual choice when assigning reads to features) do not provide an immediate readout for which gene they refer to. This can be either passed as a parameter when launching the app, or also uploaded as a tab separated text file. 
+  This can be used for making information extraction easier, as ENSEMBL ids (a usual choice when assigning reads to features) do not provide an immediate readout for which gene they refer to.
+  This can be either passed as a parameter when launching the app, or also uploaded as a text file (either tab, comma, or semicolon-separated). 
   The package provides two functions, `get_annotation` and `get_annotation_orgdb`, as a convenient wrapper to obtain the updated annotation information, respectively from `biomaRt` or via the `org.XX.eg.db` packages.
   
 ## Up and running with `r Biocpkg("pcaExplorer")`
