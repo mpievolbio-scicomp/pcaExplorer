@@ -40,6 +40,8 @@ set.seed(42)
 opts_chunk$set(comment=NA,
                fig.align="center",
                warning=FALSE)
+stopifnot(requireNamespace("htmltools"))
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 ```
 
 # Getting started
@@ -292,10 +294,14 @@ if (!requireNamespace("BiocManager", quietly=TRUE))
 BiocManager::install("airway")
 ```
 
-This package provides a `RangedSummarizedExperiment` object of read counts in genes for an RNA-Seq experiment on four human airway smooth muscle cell lines treated with dexamethasone. 
+The `r Biocpkg("airway")` package provides a `RangedSummarizedExperiment` object of read counts in genes for an RNA-Seq experiment on four human airway smooth muscle cell lines treated with dexamethasone. 
 More details such as gene models and count quantifications can be found in the `r Biocpkg("airway")` package vignette. 
 
-To run `r Biocpkg("pcaExplorer")` on this dataset, the following commands are required. 
+The easiest way to explore the `r Biocpkg("airway")` dataset is by clicking on the dedicated button in the **Data Upload** panel.
+
+<button id="btn_loaddemo" type="button" class="btn btn-default action-button shiny-bound-input" style="color: #0092AC" data-original-title="" title=""><i class="fa fa-play-circle"></i> Load the demo airway data</button>
+
+Otherwise, to run `r Biocpkg("pcaExplorer")` on this dataset from the terminal/RStudio IDE, the following commands are required. 
 First, prepare the objects to be passed as parameters of `r Biocpkg("pcaExplorer")`.
 
 ```{r loadairway, message=FALSE}
