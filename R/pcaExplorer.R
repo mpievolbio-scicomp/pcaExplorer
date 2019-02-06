@@ -205,8 +205,8 @@ pcaExplorer <- function(dds=NULL,
               shinyBS::bsTooltip(
                 "help_format", 
                 "How to provide your input data in pcaExplorer",
-                "bottom", options = list(container = "body")),
-              verbatimTextOutput("debugdebug")
+                "bottom", options = list(container = "body"))
+#####              ,verbatimTextOutput("debugdebug")
             )),
           fluidRow(
             column(
@@ -1143,7 +1143,7 @@ pcaExplorer <- function(dds=NULL,
         
         h4("Example:"),
         tags$img(
-          src = base64enc::dataURI(file = system.file("www", "newsnap_01_upload.png",package = "pcaExplorer"), mime = "image/png"),
+          src = base64enc::dataURI(file = system.file("www", "help_dataformats.png",package = "pcaExplorer"), mime = "image/png"),
           width = 600
         ),
         easyClose = TRUE,
@@ -1152,9 +1152,9 @@ pcaExplorer <- function(dds=NULL,
       ))
     })
     
-    output$debugdebug <- renderPrint({
-      print((ncol(values$mycountmatrix) == nrow(values$mymetadata)))
-    })
+#####    output$debugdebug <- renderPrint({
+#####      print((ncol(values$mycountmatrix) == nrow(values$mymetadata)))
+#####    })
     
     observeEvent(input$button_diydds,
                  {
