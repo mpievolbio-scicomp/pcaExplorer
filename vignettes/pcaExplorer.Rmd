@@ -7,11 +7,12 @@ email: marinif@uni-mainz.de
 date: "`r doc_date()`"
 package: "`r pkg_ver('pcaExplorer')`"
 abstract: >
-  `r Biocpkg("pcaExplorer")` provides functionality for interactive visualization of RNA-seq datasets
-  based on Principal Components Analysis. Such methods allow for quick information 
-  extraction and effective data exploration. A Shiny application encapsulates the whole analysis, and
-  is developed to become a practical companion for any RNA-seq dataset. This app supports reproducible
-  research with state saving and automated report generation. 
+  `r Biocpkg("pcaExplorer")` provides functionality for interactive visualization 
+  of RNA-seq datasets based on Principal Components Analysis. Such methods allow 
+  for quick information extraction and effective data exploration. A Shiny 
+  application encapsulates the whole analysis, and is developed to become a practical
+  companion for any RNA-seq dataset. This app supports reproducible research with 
+  state saving and automated report generation. 
 output: 
   BiocStyle::html_document:
     fig_caption: TRUE
@@ -28,7 +29,7 @@ vignette: >
 **Authors**: `r packageDescription("pcaExplorer")[["Author"]]`<br />
 **Version**: `r packageDescription("pcaExplorer")$Version`<br />
 **Compiled date**: `r Sys.Date()`<br />
-**Last edited**: 2019-02-06<br />
+**Last edited**: 2019-02-08<br />
 **License**: `r packageDescription("pcaExplorer")[["License"]]`<br />
 
 ```{r style, echo = FALSE, results = 'asis'}
@@ -102,13 +103,14 @@ After loading the package, the `r Biocpkg("pcaExplorer")` app can be launched in
 - `pcaExplorer(dds = dds)`, where `dds` is a `DESeqDataSet` object. The `dst` object can be  automatically computed upon launch, choosing between rlog transformation, variance stabilizing transformations, or shifted logarithm transformation (with pseudocount = 1).
 
 - `pcaExplorer(countmatrix = countmatrix, coldata = coldata)`, where `countmatrix` is a count matrix, generated after assigning reads to features such as genes via tools such as `HTSeq-count` or `featureCounts`, and `coldata` is a data frame containing the experimental covariates of the experiments, such as condition, tissue, cell line, run batch and so on.
+  If the data is provided in this way, the user can click on the "Generate the dds and dst objects" button to complete the setup and enable the subsequent steps in the other panels.
 
 - `pcaExplorer()`, and then subsequently uploading the count matrix and the covariates data frame through the user interface. These files need to be formatted as tab, semicolon, or comma separated text files, all of which are common formats for storing such count values.
 
 Additional parameters and objects that can be provided to the main `r Biocpkg("pcaExplorer")` function are:
 
 - `pca2go`, which is an object created by the `pca2go` function, which scans the genes with high loadings in each principal component and each direction, and looks for functions (such as GO Biological Processes) that are enriched above the background. 
-  The offline `pca2go` function is based on the routines and algorithms of the `r Biocpkg("topGO")` package, but as an alternative, this object can be computed live during the execution of the app exploiting the `goana` function, provided by the `r Biocpkg("limma")` package. 
+  The offline `pca2go` function is based on the routines and algorithms of the `r Biocpkg("topGO")` package, but as an alternative, this object can be computed live during the execution of the app with `limmaquickpca2go` (which relies on the `goana` function provided by the `r Biocpkg("limma")` package). 
   Although this likely provides more general (and probably less informative) functions, it is a good compromise for quickly obtaining a further data interpretation.
 
 - `annotation`, a data frame object, with `row.names` as gene identifiers (e.g. ENSEMBL ids) identical to the row names of the count matrix or `dds` object, and an extra column `gene_name`, containing e.g. HGNC-based gene symbols. 
@@ -116,9 +118,15 @@ Additional parameters and objects that can be provided to the main `r Biocpkg("p
   This can be either passed as a parameter when launching the app, or also uploaded as a text file (either tab, comma, or semicolon-separated). 
   The package provides two functions, `get_annotation` and `get_annotation_orgdb`, as a convenient wrapper to obtain the updated annotation information, respectively from `biomaRt` or via the `org.XX.eg.db` packages.
   
-## Up and running with `r Biocpkg("pcaExplorer")`
+## How to provide your input data in `r Biocpkg("pcaExplorer")`
 
-[]todo[]
+`r Biocpkg("pcaExplorer")` supports a number of file formats when uploading the data via the filew input widgets. 
+Starting from version 2.9.5, we added functionality to select the separator character for each of the uploadable files. 
+An information box is also shown by clicking on the question mark icon in the Data upload panel, with detailed information (text, as well as screenshots of valid input files) on the format specification. 
+  
+
+
+
 
 # The controls sidebar
 
@@ -169,7 +177,7 @@ The available panels are described in the following subsections.
 
 These **file input** controls are available when no `dds` or `countmatrix` + `coldata` are provided. 
 Additionally, it is possible to upload the `annotation` data frame. 
-When the objects are already passed as parameters, a brief overview/summary for them is displayed.
+If the objects are already passed as parameters, or after they have been successfully uploaded, a brief overview/summary for them can be displayed, by clicking on each respective action button.
 
 <p align="center">
 <img src="newsnap_01_upload.png" style="width:800px;"/>
@@ -185,7 +193,7 @@ This is where you most likely are reading this text (otherwise in the package vi
 
 ## Counts Table
 
-Interactive tables for the raw, normalized or (r)log-transformed counts are shown in this tab.
+Interactive tables for the raw, normalized or transformed (rlog, variance stabilized, or shifted log) counts are shown in this tab.
 The user can also generate a sample-to-sample correlation scatter plot with the selected data.
 
 <p align="center">
