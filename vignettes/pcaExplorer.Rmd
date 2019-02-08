@@ -124,6 +124,19 @@ Additional parameters and objects that can be provided to the main `r Biocpkg("p
 Starting from version 2.9.5, we added functionality to select the separator character for each of the uploadable files. 
 An information box is also shown by clicking on the question mark icon in the Data upload panel, with detailed information (text, as well as screenshots of valid input files) on the format specification. 
   
+## Up and running with `r Biocpkg("pcaExplorer")`
+
+This section describes a use case, based on the dataset in the `r Biocpkg("airway")` package.
+This dataset consists of the gene-level expression measurements (as raw read counts) for an experiment where four different human airway smooth muscle cell lines are either treated with dexamethasone or left untreated. 
+
+The easiest way to explore the `r Biocpkg("airway")` dataset is by clicking on the dedicated button in the **Data Upload** panel.
+This action will:
+
+- load the `r Biocpkg("airway")` package
+- load the count matrix and the experimental metadata
+- compose the `dds` object and compute the variance stabilizing transformed expression values (stored in the `dst` object)
+- retrieve the gene annotation information via the `r Biocpkg("org.Hs.eg.db")`, adding gene symbols to the ENSEMBL ids
+
 
 
 
