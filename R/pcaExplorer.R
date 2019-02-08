@@ -229,11 +229,16 @@ pcaExplorer <- function(dds=NULL,
           uiOutput("ui_computetransform"),
           
           h4("Preview on the available data"),
-          splitLayout(
-            uiOutput("ui_showcm"),
-            uiOutput("ui_showmetadata"),
-            uiOutput("ui_showdds"),
-            uiOutput("ui_showannotation")
+          fluidRow(
+            column(
+              width = 10,
+              splitLayout(
+                uiOutput("ui_showcm"),
+                uiOutput("ui_showmetadata"),
+                uiOutput("ui_showdds"),
+                uiOutput("ui_showannotation")
+              )
+            )
           )
         ),
         
