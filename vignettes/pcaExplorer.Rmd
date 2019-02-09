@@ -127,7 +127,20 @@ An information box is also shown by clicking on the question mark icon in the Da
 ## Up and running with `r Biocpkg("pcaExplorer")`
 
 This section describes a use case, based on the dataset in the `r Biocpkg("airway")` package.
-This dataset consists of the gene-level expression measurements (as raw read counts) for an experiment where four different human airway smooth muscle cell lines are either treated with dexamethasone or left untreated. 
+If this package is not available on your machine, please install it by executing:
+
+```{r eval=FALSE}
+BiocManager::install("airway")
+```
+
+This dataset consists of the gene-level expression measurements (as raw read counts) for an experiment where four different human airway smooth muscle cell lines are either treated with dexamethasone or left untreated.
+
+To start the exploration, you just need the following lines:
+
+```{r, eval=FALSE}
+library(pcaExplorer)
+pcaExplorer()
+```
 
 The easiest way to explore the `r Biocpkg("airway")` dataset is by clicking on the dedicated button in the **Data Upload** panel.
 This action will:
@@ -135,9 +148,72 @@ This action will:
 - load the `r Biocpkg("airway")` package
 - load the count matrix and the experimental metadata
 - compose the `dds` object and compute the variance stabilizing transformed expression values (stored in the `dst` object)
-- retrieve the gene annotation information via the `r Biocpkg("org.Hs.eg.db")`, adding gene symbols to the ENSEMBL ids
+- retrieve the gene annotation information via the `r Biocpkg("org.Hs.eg.db")`, adding gene symbols to the ENSEMBL ids - this step is optional, but recommended for more human-readable identifiers to be used
+
+Once the preprocessing of the input is done, you should get a notification in the lower right corner that you're all set.
+You can check how each component looks like by clicking on its respective button, once they appeared in the lower half of the panel.
+
+You can proceed to explore the expression values of your dataset in the **Counts Table** tab.
+You can change the data type you are displaying between raw counts, normalized, or transformed, and plot their values in a scatterplot matrix to explore their sample-to-sample correlations.
+To do so, click on the `Run` action button. 
+The correlation values will also be displayed as a heatmap.
+
+Additional features, both for samples and for features, are displayed in the **Data overview** panel.
+A closer look at the metadata of the `airway` set highlights how each combination of cell type (`cell`) and dexamethasone treatment (`dex`) is represented by a single sequencing experiment.
+The 8 samples in the demo dataset are themselves a subsample of the [full GEO record](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52778), namely the ones non treated with albuterol (`alb` column).
+
+The relationsship among samples can be seen in the sample-to-sample heatmap.
+For example, by selecting the Manhattan distance metric, it is evident how the samples cluster by dex treatment, yet they show a dendrogram structure that recalls the 4 different cell types used.
+The total sum of counts per sample is displayed as a bar plot.
+
+Patterns can become clearer after selecting, in the **App settings** on the left, an experimental factor to group and color by: try selecting `dex`, for example. 
+If more than one covariate is selected, the interaction between these will be taken as a grouping factor.
+To remove one, simply click on it to highlight and press the del or backspace key to delete it.
+Try doing so by also clicking on `cell`, and then removing `dex` afterwards.
+
+Basic summary information is also displayed for the genes.
+In the count matrix provided, one can check how many genes were detected, by selecting a "Threshold on the row sums of the counts" or on the row means of the normalized counts (more stringent). 
+For example, selecting 5 in both cases, only 24345 genes have a total number of counts, summed by row, and 17745 genes have more than 5 counts (normalized) on average.
+
+The **Samples View** and the **Genes View** are the tabs where most results coming from Principal Component Analysis, either performed on the samples or on the genes, can be explored in depth.
+Assuming you selected `cell` in the "Group/color by" option on the left, the Samples PCA plot should clearly display how the cell type explain a considerable portion of the variability in the dataset (corresponding to the second PC).
+To check that `dex` treatment is the main source of variability, select that instead of `cell`.
+
+The scree plot on the right shows how many components should be retained for a satisfactory reduced dimension view of the original set, with their eigenvalues from largest to smallest.
+To explore the PCs other than the first and the second one, you can just select them in the x-axis PC and y-axis PC widgets in the left sidebar.
+
+If you brush (left-click and hold) on the PCA plot, you can display a zoomed version of it in the frame below.
+If you suspect some samples might be outliers (this is not the case in the `airway` set, still), you can select them in the dedicated plot, and give a first check on how the remainder of the samples would look like.
+On the right side, you can quickly check which genes show the top and bottom loadings, split by principal component. 
+Select one of each list and try to check them in the **Gene Finder** tab; try for example with *SPARCL1* and *DDX3Y*.
+While *SPARCL1* clearly shows a change in expression upon dexamethasone treatment, *DDX3Y* displays variability at the cell type level (select `cell` in the Group/color by widget): this gene is almost undetected in N061011 cells, and this high variance is what determines its high loading on the second principal component.
+You can see the single expression values in a table as well, and this information can be downloaded with a simple click.
+
+Back to the **Samples View**, you can experiment with the number of top variable genes to see how the results of PCA are in this case robust to a wide range of this value - this might not be the case with other datasets, and the simplicity of interacting with these parameters makes it easy to iterate in the exploration steps.
+
+Proceeding to the **Genes View**, you can see the dual of the Samples PCA: now the samples are displayed as arrows in the genes biplot, which can show which genes display a similar behaviour.
+You can capture this with a simple brushing action on the plot, and notice how their profiles throughout all samples are shown in the Profile explorer below; moreover, a static and an interactive heatmap, together with a table containing the underlying data, are generated in the rows below.
+
+Since we compute the gene annotation table as well, it's nice to read the gene symbols in the zoomed window (instead of the ENSEMBL ids).
+By clicking close enough to any of these genes, the expression values are plotted, in a similar fashion as in the **Gene Finder**.
+
+The tab **PCA2GO** helps you understanding which are the biological common themes (default: the Gene Ontology Biological Process terms) in the genes showing up in the top and in the bottom loadings for each principal component.
+Since we launched the `pcaExplorer` app without additional parameters, this information is not available, but can be computed live (this might take a while).
+Still, a previous call to `pca2go` is recommended, as it relies on the algorithm of the `r Biocpkg("topGO")` package: it will require some additional computing time, but it is likely to deliver more precise terms (i.e. in turn more relevant from the point of view of their biological relevance). To do so, you should exit the live session, compute this object, and provide it in the call to `pcaExplorer` (see more how to do so in Section).
 
 
+
+
+
+report editor
+
+
+.. list all actions one would do
+..
+recap finding from original paper somehow? check out?
+
+
+-> maybe standalone vignette?!
 
 
 
