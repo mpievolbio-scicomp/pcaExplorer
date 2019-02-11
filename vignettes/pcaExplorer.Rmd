@@ -1,11 +1,16 @@
 ---
-title: "pcaExplorer User Guide"
-author: "**Federico Marini** (marinif@uni-mainz.de) and **Harald Binder**</br>
-  Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz </br>
-  Center for Thrombosis and Hemostasis (CTH), Mainz"
-email: marinif@uni-mainz.de  
-date: "`r doc_date()`"
-package: "`r pkg_ver('pcaExplorer')`"
+title: >
+  pcaExplorer User Guide
+author: 
+- name: Federico Marini
+  affiliation: 
+  - &id1 Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz
+  - Center for Thrombosis and Hemostasis (CTH), Mainz
+  email: marinif@uni-mainz.de
+- name: Harald Binder
+  affiliation: *id1
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('pcaExplorer')`"
 abstract: >
   `r Biocpkg("pcaExplorer")` provides functionality for interactive visualization 
   of RNA-seq datasets based on Principal Components Analysis. Such methods allow 
@@ -15,6 +20,7 @@ abstract: >
   state saving and automated report generation. 
 output: 
   BiocStyle::html_document:
+    toc_float: true
     fig_caption: TRUE
 vignette: >
   %\VignetteIndexEntry{pcaExplorer User Guide}
@@ -185,8 +191,8 @@ To explore the PCs other than the first and the second one, you can just select 
 If you brush (left-click and hold) on the PCA plot, you can display a zoomed version of it in the frame below.
 If you suspect some samples might be outliers (this is not the case in the `airway` set, still), you can select them in the dedicated plot, and give a first check on how the remainder of the samples would look like.
 On the right side, you can quickly check which genes show the top and bottom loadings, split by principal component. 
-Select one of each list and try to check them in the **Gene Finder** tab; try for example with *SPARCL1* and *DDX3Y*.
-While *SPARCL1* clearly shows a change in expression upon dexamethasone treatment, *DDX3Y* displays variability at the cell type level (select `cell` in the Group/color by widget): this gene is almost undetected in N061011 cells, and this high variance is what determines its high loading on the second principal component.
+First, change the value in the input widget to 20; then, select one of each list and try to check them in the **Gene Finder** tab; try for example with *DUSP1*, *PER1*, and *DDX3Y*.
+While *DUSP1* and *PER1* clearly show a change in expression upon dexamethasone treatment (and indeed where reported among the well known glucocorticoid-responsive genes in the original publication of Himes et al., 2014), *DDX3Y* displays variability at the cell type level (select `cell` in the Group/color by widget): this gene is almost undetected in N061011 cells, and this high variance is what determines its high loading on the second principal component.
 You can see the single expression values in a table as well, and this information can be downloaded with a simple click.
 
 Back to the **Samples View**, you can experiment with the number of top variable genes to see how the results of PCA are in this case robust to a wide range of this value - this might not be the case with other datasets, and the simplicity of interacting with these parameters makes it easy to iterate in the exploration steps.
@@ -199,22 +205,20 @@ By clicking close enough to any of these genes, the expression values are plotte
 
 The tab **PCA2GO** helps you understanding which are the biological common themes (default: the Gene Ontology Biological Process terms) in the genes showing up in the top and in the bottom loadings for each principal component.
 Since we launched the `pcaExplorer` app without additional parameters, this information is not available, but can be computed live (this might take a while).
-Still, a previous call to `pca2go` is recommended, as it relies on the algorithm of the `r Biocpkg("topGO")` package: it will require some additional computing time, but it is likely to deliver more precise terms (i.e. in turn more relevant from the point of view of their biological relevance). To do so, you should exit the live session, compute this object, and provide it in the call to `pcaExplorer` (see more how to do so in Section).
+Still, a previous call to `pca2go` is recommended, as it relies on the algorithm of the `r Biocpkg("topGO")` package: it will require some additional computing time, but it is likely to deliver more precise terms (i.e. in turn more relevant from the point of view of their biological relevance). To do so, you should exit the live session, compute this object, and provide it in the call to `pcaExplorer` (see more how to do so in Section \@ref(pca2go-docs)).
 
+A typical session with `pcaExplorer` includes one or more iterations on each of these tabs.
+Once you are finished, you might want to store the results of your analysis in different formats.
+With `pcaExplorer` you can do all of the following:
 
-
-
-
-report editor
-
-
-.. list all actions one would do
-..
-recap finding from original paper somehow? check out?
+- save every plot and table by simply clicking on the respective button, below each element
+- save the state of the entire app and its reactive elements as a binary `.RData` file, as if it was a workspace (clicking on the cog icon in the right side of the task menu)
+- use the "Exit `pcaExplorer` and save" saves the state but in a specific environment of your R session, which you can later access by its name, which normally could look like `pcaExplorerState_YYYYMMDD_HHMMSS` (also accessible from the cog)
+- enjoy the beauty of reproducible research in the **Report Editor**: `pcaExplorer` comes with a template analysis, that picks the latest status of the app during your session, and combines these reactive values together in a R Markdown document, which you can first preview live in the app, and then download as standalone HTML file - to store or share.
+  This document stiches together narrative text, code, and output objects, and constitutes a compendium where all actions are recorded
 
 
 -> maybe standalone vignette?!
-
 
 
 # The controls sidebar
@@ -269,7 +273,7 @@ Additionally, it is possible to upload the `annotation` data frame.
 If the objects are already passed as parameters, or after they have been successfully uploaded, a brief overview/summary for them can be displayed, by clicking on each respective action button.
 
 <p align="center">
-<img src="newsnap_01_upload.png" style="width:800px;"/>
+<img src="newsnap_01_upload.png" style="width:1000px;"/>
 </p>
 
 ## Instructions
@@ -277,7 +281,7 @@ If the objects are already passed as parameters, or after they have been success
 This is where you most likely are reading this text (otherwise in the package vignette). 
 
 <p align="center">
-<img src="newsnap_02_instructions.png" style="width:800px;"/>
+<img src="newsnap_02_instructions.png" style="width:1000px;"/>
 </p>
 
 ## Counts Table
@@ -286,7 +290,7 @@ Interactive tables for the raw, normalized or transformed (rlog, variance stabil
 The user can also generate a sample-to-sample correlation scatter plot with the selected data.
 
 <p align="center">
-<img src="newsnap_03_countstable.png" style="width:800px;"/>
+<img src="newsnap_03_countstable.png" style="width:1000px;"/>
 </p>
 
 ## Data Overview
@@ -295,7 +299,7 @@ This panel displays information on the objects in use, either passed as paramete
 Displayed information comprise the design metadata, a sample to sample distance heatmap, the number of million of reads per sample and some basic summary for the counts.
 
 <p align="center">
-<img src="newsnap_04_overview.png" style="width:800px;"/>
+<img src="newsnap_04_overview.png" style="width:1000px;"/>
 </p>
 
 ## Samples View
@@ -305,7 +309,7 @@ Additionally, this section presents a PCA plot where it is possible to remove sa
 If needed, an interactive 3D visualization of the principal components is also available.
 
 <p align="center">
-<img src="newsnap_05_samples.png" style="width:800px;"/>
+<img src="newsnap_05_samples.png" style="width:1000px;"/>
 </p>
 
 ## Genes View
@@ -316,7 +320,7 @@ A static and an interactive heatmap are provided, including the subset of select
 These are also reported in `datatable` objects, accessible in the bottom part of the tab.
 
 <p align="center">
-<img src="newsnap_06_genes.png" style="width:800px;"/>
+<img src="newsnap_06_genes.png" style="width:1000px;"/>
 </p>
 
 ## GeneFinder
@@ -327,7 +331,7 @@ The graphic can be readily exported as it is, and this can be iterated on a shor
 For each of them, the underlying data is displayed in an interactive table, also exportable with a click.
 
 <p align="center">
-<img src="newsnap_07_finder.png" style="width:800px;"/>
+<img src="newsnap_07_finder.png" style="width:1000px;"/>
 </p>
 
 ## PCA2GO
@@ -337,7 +341,7 @@ It allows for the live computing of the object, that can otherwise provided as a
 The panel displays a PCA plot for the samples, surrounded on each side by the tables with the functions enriched in each component and direction.
 
 <p align="center">
-<img src="newsnap_08_pca2go.png" style="width:800px;"/>
+<img src="newsnap_08_pca2go.png" style="width:1000px;"/>
 </p>
 
 ## Multifactor Exploration
@@ -357,7 +361,7 @@ This representation is under active development, and it is promising for identif
 Zooming and exporting of the underlying genes is also allowed by brushing on the main plot.
 
 <p align="center">
-<img src="newsnap_09_multifac.png" style="width:800px;"/>
+<img src="newsnap_09_multifac.png" style="width:1000px;"/>
 </p>
 
 ## Report Editor
@@ -369,7 +373,7 @@ The editor supports R code autocompletion, making it easy to add new code chunks
 A preview is available in the tab itself, and the report can be generated, saved and subsequently shared with simple mouse clicks.
 
 <p align="center">
-<img src="newsnap_10_editor.png" style="width:800px;"/>
+<img src="newsnap_10_editor.png" style="width:1000px;"/>
 </p>
 
 ## About
@@ -378,7 +382,7 @@ Contains general information on `r Biocpkg("pcaExplorer")`, including the develo
 Information for citing `r Biocpkg("pcaExplorer")` is also reported.
 
 <p align="center">
-<img src="newsnap_11_about.png" style="width:800px;"/>
+<img src="newsnap_11_about.png" style="width:1000px;"/>
 </p>
 
 # Running `pcaExplorer` on published datasets
@@ -629,7 +633,7 @@ topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
                              geneID = "symbol")
 ```
 
-## `pca2go`
+## `pca2go` {#pca2go-docs}
 
 `pca2go` provides a functional interpretation of the principal components, by extracting the genes with the highest loadings for each PC, and then runs internally `topGOtable` on them for efficient functional enrichment analysis.
 This function requires a `DESeqTransform` object as main parameter.
