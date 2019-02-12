@@ -63,6 +63,12 @@ if (!requireNamespace("BiocManager", quietly=TRUE))
 BiocManager::install("pcaExplorer")
 ```
 
+To install `r Biocpkg("pcaExplorer")` with all its dependencies (i.e. also the ones listed in the `Suggests:` field of the `DESCRIPTION` file, which include the dataset from the `r Biocpkg("airway")` package), use this command instead:
+
+```{r installfull, eval=FALSE}
+BiocManager::install("pcaExplorer", dependencies = TRUE)
+```
+
 If you prefer, you can install and use the development version, which can be retrieved via Github (https://github.com/federicomarini/pcaExplorer). 
 To do so, use:
 
