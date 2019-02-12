@@ -1,9 +1,29 @@
 # pcaExplorer 2.10.0
 
+
+
+
+
+
+
 ## New features
 
 * Added extra parameters to `topGOtable` to offer more control on the method used, and the option to correct the p-values for multiple testing (via the Benjamini-Yekutieli procedure)
 * `pca2go` has now an option to return (early) a list with vectors of genes with high loadings
+* Better preview of the uploaded data with modal dialog windows triggered by buttons which appear once corresponding inputs are available
+* Improved notification system: in addition to the progress bar, info that all input is correctly specified, or suggest optional annotation loading
+* Added flexibility to select separator for each of the uploadable files
+* The pairwise correlation plots can now use logarithmic scale in the axes, use smaller subsets of the data for quicker inspection, and resizes the correlation info proportionally to its intensity
+* The sample to sample heatmap supports additionally manhattan and correlation-based distances
+* There is a new vignette with a detailed quick start, "Up and running with pcaExplorer", specifying how the workflow with `pcaExplorer` can look like, demonstrated on the `airway` dataset
+
+## Other notes
+
+* The computing of the required objects now requires the explicit action on the dedicated button, and the tooltip informs the user on what steps are taken (including normalization)
+* An information box has been added to provide detailed information on the required input formats
+* Added notification to specify how to install the airway package for demonstration purposes if not already available
+* Added startup message upon loading the package
+* The content in the Instructions tab is now contained in collapsible elements
 
 # pcaExplorer 2.8.0
 
