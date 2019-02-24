@@ -263,7 +263,7 @@ pcaExplorer <- function(dds=NULL,
                 icon=icon("book"),
                 onclick=ifelse(runLocal, "",
                                # Use web vignette, with varying paths depending on whether we're release or devel.
-                               sprintf("window.open('http://bioconductor.org/packages/%s/bioc/vignettes/pcaExplorer/inst/doc/basic.html', '_blank')",
+                               sprintf("window.open('http://bioconductor.org/packages/%s/bioc/vignettes/pcaExplorer/inst/doc/pcaExplorer.html', '_blank')",
                                        ifelse(unlist(packageVersion("pcaExplorer"))[2] %% 2L==0L, "release", "devel")
                                )
                 )
@@ -273,7 +273,7 @@ pcaExplorer <- function(dds=NULL,
                 icon=icon("rocket"),
                 onclick=ifelse(runLocal, "",
                                # Use web vignette, with varying paths depending on whether we're release or devel.
-                               sprintf("window.open('http://bioconductor.org/packages/%s/bioc/vignettes/pcaExplorer/inst/doc/basic.html', '_blank')",
+                               sprintf("window.open('http://bioconductor.org/packages/%s/bioc/vignettes/pcaExplorer/inst/doc/upandrunning.html', '_blank')",
                                        ifelse(unlist(packageVersion("pcaExplorer"))[2] %% 2L==0L, "release", "devel")
                                )
                 )
