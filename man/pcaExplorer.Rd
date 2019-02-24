@@ -5,7 +5,8 @@
 \title{Explore a dataset from a PCA perspective}
 \usage{
 pcaExplorer(dds = NULL, dst = NULL, countmatrix = NULL,
-  coldata = NULL, pca2go = NULL, annotation = NULL)
+  coldata = NULL, pca2go = NULL, annotation = NULL,
+  runLocal = TRUE)
 }
 \arguments{
 \item{dds}{A \code{\link{DESeqDataSet}} object. If not provided, then a \code{countmatrix}
@@ -30,6 +31,8 @@ to compute live during the execution of the Shiny App}
 
 \item{annotation}{A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
 and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols}
+
+\item{runLocal}{A logical indicating whether the app is to be run locally or remotely on a server, which determines how documentation will be accessed.}
 }
 \value{
 A Shiny App is launched for interactive data exploration
