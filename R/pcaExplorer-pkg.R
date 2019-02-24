@@ -53,6 +53,6 @@ NULL
   citation <- paste0("If you use pcaExplorer in your work, please cite:\n\n",
                      "Federico Marini, Harald Binder\n",
                      "pcaExplorer: an R/Bioconductor package for interacting with RNA-seq principal components\n",
-                     "biorXiv, 2018 - doi:https://doi.org/10.1101/493551\n")
+                     "biorXiv, 2018 - https://doi.org/10.1101/493551\n")
   packageStartupMessage(paste0(msg, citation))
 }
