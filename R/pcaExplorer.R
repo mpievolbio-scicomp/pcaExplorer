@@ -20,6 +20,7 @@
 #' to compute live during the execution of the Shiny App
 #' @param annotation A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
 #' and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols
+#' @param runLocal A logical indicating whether the app is to be run locally or remotely on a server, which determines how documentation will be accessed.
 #'
 #' @return A Shiny App is launched for interactive data exploration
 #'
@@ -46,7 +47,8 @@ pcaExplorer <- function(dds=NULL,
                         countmatrix=NULL,
                         coldata=NULL,
                         pca2go=NULL,
-                        annotation=NULL){
+                        annotation=NULL,
+                        runLocal=TRUE){
 
   if ( !requireNamespace('shiny',quietly = TRUE) ) {
     stop("pcaExplorer requires 'shiny'. Please install it using
@@ -245,7 +247,40 @@ pcaExplorer <- function(dds=NULL,
         # ui panel instructions -------------------------------------------------------
         tabPanel(
           "Instructions",  icon = icon("info-circle"),
-          includeMarkdown(system.file("extdata", "instructions.md",package = "pcaExplorer"))
+          fluidRow(
+            column(
+              width = 12,
+              h4("some other thing - i.e. the rendered markdown for the upNrunning vignette"),
+              shinyBS::bsCollapse(
+                id = "help_fulluserguide",open = NULL, 
+                shinyBS::bsCollapsePanel(
+                  "Full user guide",
+                  includeMarkdown(system.file("extdata", "instructions.md",package = "pcaExplorer"))
+                )
+              ),
+              actionButton(
+                'open_vignette_full', label="Open the full vignette",
+                icon=icon("book"),
+                onclick=ifelse(runLocal, "",
+                               # Use web vignette, with varying paths depending on whether we're release or devel.
+                               sprintf("window.open('http://bioconductor.org/packages/%s/bioc/vignettes/pcaExplorer/inst/doc/basic.html', '_blank')",
+                                       ifelse(unlist(packageVersion("pcaExplorer"))[2] %% 2L==0L, "release", "devel")
+                               )
+                )
+              ),
+              actionButton(
+                'open_vignette_quickstart', label="Open the up and running vignette",
+                icon=icon("rocket"),
+                onclick=ifelse(runLocal, "",
+                               # Use web vignette, with varying paths depending on whether we're release or devel.
+                               sprintf("window.open('http://bioconductor.org/packages/%s/bioc/vignettes/pcaExplorer/inst/doc/basic.html', '_blank')",
+                                       ifelse(unlist(packageVersion("pcaExplorer"))[2] %% 2L==0L, "release", "devel")
+                               )
+                )
+              )
+            )
+          )
+          
         ),
         # ui panel counts table -------------------------------------------------------
         tabPanel(
@@ -867,6 +902,25 @@ pcaExplorer <- function(dds=NULL,
     
     outputOptions(output, 'checkdds', suspendWhenHidden=FALSE)
     outputOptions(output, 'checkrlt', suspendWhenHidden=FALSE)
+    
+    if (runLocal) {
+      observeEvent(input$open_vignette_full, {
+        path <- system.file("doc", "pcaExplorer.html", package="pcaExplorer")
+        if (path=="") {
+          showNotification("this vignette has not been built on this system", type="error")
+        } else {
+          browseURL(path)
+        }
+      })
+      observeEvent(input$open_vignette_quickstart, {
+        path <- system.file("doc", "upandrunning.html", package="pcaExplorer")
+        if (path=="") {
+          showNotification("this vignette has not been built on this system", type="error")
+        } else {
+          browseURL(path)
+        }
+      })
+    }
     
     
     # server setup dataset --------------------------------------------------------
