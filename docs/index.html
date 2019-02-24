@@ -86,16 +86,45 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-
-
 <div id="pcaexplorer---interactive-exploration-of-principal-components-of-samples-and-genes-in-rna-seq-data" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#pcaexplorer---interactive-exploration-of-principal-components-of-samples-and-genes-in-rna-seq-data" class="anchor"></a>pcaExplorer - Interactive exploration of Principal Components of Samples and Genes in RNA-seq data</h1></div>
+<div id="software-status" class="section level2">
+<h2 class="hasAnchor">
+<a href="#software-status" class="anchor"></a>Software status</h2>
+<table class="table">
+<thead><tr class="header">
+<th align="center">Platforms</th>
+<th align="center">OS</th>
+<th align="center">R CMD check</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="center">Travis CI</td>
+<td align="center">Linux</td>
+<td align="center"><a href="https://travis-ci.org/federicomarini/pcaExplorer"><img src="https://travis-ci.org/federicomarini/pcaExplorer.svg?branch=master" alt="Travis CI build status"></a></td>
+</tr>
+<tr class="even">
+<td align="center">Bioc (<a href="http://bioconductor.org/packages/devel/bioc/html/pcaExplorer.html"><em>devel</em></a>)</td>
+<td align="center">Multiple</td>
+<td align="center"><a href="http://bioconductor.org/checkResults/devel/bioc-LATEST/pcaExplorer"><img src="http://bioconductor.org/shields/build/devel/bioc/pcaExplorer.svg" alt="Bioconductor-devel Build Status"></a></td>
+</tr>
+<tr class="odd">
+<td align="center">Bioc (<a href="http://bioconductor.org/packages/release/bioc/html/pcaExplorer.html"><em>release</em></a>)</td>
+<td align="center">Multiple</td>
+<td align="center"><a href="http://bioconductor.org/checkResults/release/bioc-LATEST/pcaExplorer"><img src="http://bioconductor.org/shields/build/release/bioc/pcaExplorer.svg" alt="Bioconductor-release Build Status"></a></td>
+</tr>
+</tbody>
+</table>
+<!-- 
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/federicomarini/pcaExplorer?svg=true)](https://ci.appveyor.com/project/federicomarini/pcaexplorer)
+-->
 <p><code>pcaExplorer</code> is a Bioconductor package containing a Shiny application for analyzing expression data in different conditions and experimental factors.</p>
 <p>It is a general-purpose interactive companion tool for RNA-seq analysis, which guides the user in exploring the Principal Components of the data under inspection.</p>
 <p><code>pcaExplorer</code> provides tools and functionality to detect outlier samples, genes that show particular patterns, and additionally provides a functional interpretation of the principal components for further quality assessment and hypothesis generation on the input data.</p>
 <p>Moreover, a novel visualization approach is presented to simultaneously assess the effect of more than one experimental factor on the expression levels.</p>
 <p>Thanks to its interactive/reactive design, it is designed to become a practical companion to any RNA-seq dataset analysis, making exploratory data analysis accessible also to the bench biologist, while providing additional insight also for the experienced data analyst.</p>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -137,7 +166,6 @@ devtools::install_github("federicomarini/pcaExplorer")</a></code></pre>
 </div>
 </div>
 </div>
-
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -177,9 +205,7 @@ devtools::install_github("federicomarini/pcaExplorer")</a></code></pre>
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/federicomarini/pcaExplorer"><img src="https://travis-ci.org/federicomarini/pcaExplorer.svg?branch=master" alt="Linux Build Status"></a></li>
 <li><a href="https://codecov.io/github/federicomarini/pcaExplorer?branch=master"><img src="https://codecov.io/github/federicomarini/pcaExplorer/coverage.svg?branch=master" alt="codecov.io"></a></li>
-<li><a href="https://ci.appveyor.com/project/federicomarini/pcaexplorer"><img src="https://ci.appveyor.com/api/projects/status/github/federicomarini/pcaExplorer?svg=true" alt="Windows Build status"></a></li>
 </ul>
 </div>
 </div>

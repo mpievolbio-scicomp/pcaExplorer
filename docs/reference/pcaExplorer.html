@@ -132,7 +132,8 @@ of Principal Components Analysis</p>
     </div>
 
     <pre class="usage"><span class='fu'>pcaExplorer</span>(<span class='kw'>dds</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dst</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>countmatrix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coldata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pca2go</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>annotation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>coldata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pca2go</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>annotation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>runLocal</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,6 +172,10 @@ to compute live during the execution of the Shiny App</p></td>
       <th>annotation</th>
       <td><p>A <code>data.frame</code> object, with row.names as gene identifiers (e.g. ENSEMBL ids)
 and a column, <code>gene_name</code>, containing e.g. HGNC-based gene symbols</p></td>
+    </tr>
+    <tr>
+      <th>runLocal</th>
+      <td><p>A logical indicating whether the app is to be run locally or remotely on a server, which determines how documentation will be accessed.</p></td>
     </tr>
     </table>
     
