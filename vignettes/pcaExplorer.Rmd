@@ -220,7 +220,8 @@ Should this assumption be violated, users can pre-compute these factors and stor
 
 ## Instructions
 
-This is where you most likely are reading this text (otherwise in the package vignette). 
+This is where you might be reading a version of the "Up and running with `r Biocpkg('pcaExplorer')`" vignette.
+Additionally, you can easily reach the fully rendered vignettes, either installed locally, or directly from the Bioconductor package page. 
 
 <p align="center">
 <img src="newsnap_02_instructions.png" style="width:1000px;"/>
