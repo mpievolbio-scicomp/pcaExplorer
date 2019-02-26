@@ -1,8 +1,18 @@
-[![Linux Build Status](https://travis-ci.org/federicomarini/pcaExplorer.svg?branch=master)](https://travis-ci.org/federicomarini/pcaExplorer)
-[![codecov.io](https://codecov.io/github/federicomarini/pcaExplorer/coverage.svg?branch=master)](https://codecov.io/github/federicomarini/pcaExplorer?branch=master)
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/federicomarini/pcaExplorer?svg=true)](https://ci.appveyor.com/project/federicomarini/pcaexplorer)
-
 # pcaExplorer - Interactive exploration of Principal Components of Samples and Genes in RNA-seq data
+
+## Software status
+
+| Platforms |  OS  | R CMD check |
+|:----------------:|:----------------:|:----------------:|
+| Travis CI | Linux | [![Travis CI build status](https://travis-ci.org/federicomarini/pcaExplorer.svg?branch=master)](https://travis-ci.org/federicomarini/pcaExplorer) |
+| Bioc ([_devel_](http://bioconductor.org/packages/devel/bioc/html/pcaExplorer.html)) | Multiple | [![Bioconductor-devel Build Status](http://bioconductor.org/shields/build/devel/bioc/pcaExplorer.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/pcaExplorer) |
+| Bioc ([_release_](http://bioconductor.org/packages/release/bioc/html/pcaExplorer.html)) | Multiple | [![Bioconductor-release Build Status](http://bioconductor.org/shields/build/release/bioc/pcaExplorer.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/pcaExplorer) |
+
+[![codecov.io](https://codecov.io/github/federicomarini/pcaExplorer/coverage.svg?branch=master)](https://codecov.io/github/federicomarini/pcaExplorer?branch=master)
+
+<!-- 
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/federicomarini/pcaExplorer?svg=true)](https://ci.appveyor.com/project/federicomarini/pcaexplorer)
+-->
 
 `pcaExplorer` is a Bioconductor package containing a Shiny application for
 analyzing expression data in different conditions and experimental factors. 
