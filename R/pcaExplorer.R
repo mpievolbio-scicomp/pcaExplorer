@@ -250,16 +250,17 @@ pcaExplorer <- function(dds=NULL,
           fluidRow(
             column(
               width = 12,
-              h4("some other thing - i.e. the rendered markdown for the upNrunning vignette"),
+              p("You can click on this collapsible element to display a quickstart guide."),
               shinyBS::bsCollapse(
                 id = "help_fulluserguide",open = NULL, 
                 shinyBS::bsCollapsePanel(
-                  "Full user guide",
-                  includeMarkdown(system.file("extdata", "instructions.md",package = "pcaExplorer"))
+                  "Up and running with pcaExplorer",
+                  includeMarkdown(system.file("extdata", "instructions_unr.md",package = "pcaExplorer"))
                 )
               ),
+              p("These buttons will open the fully rendered vignettes, either built locally or directly from the Bioconductor package page."),
               actionButton(
-                'open_vignette_full', label="Open the full vignette",
+                'open_vignette_full', label="Open the User Guide (main vignette)",
                 icon=icon("book"),
                 onclick=ifelse(runLocal, "",
                                # Use web vignette, with varying paths depending on whether we're release or devel.
@@ -269,7 +270,7 @@ pcaExplorer <- function(dds=NULL,
                 )
               ),
               actionButton(
-                'open_vignette_quickstart', label="Open the up and running vignette",
+                'open_vignette_quickstart', label="Open the 'Up and running' vignette",
                 icon=icon("rocket"),
                 onclick=ifelse(runLocal, "",
                                # Use web vignette, with varying paths depending on whether we're release or devel.
@@ -907,7 +908,7 @@ pcaExplorer <- function(dds=NULL,
       observeEvent(input$open_vignette_full, {
         path <- system.file("doc", "pcaExplorer.html", package="pcaExplorer")
         if (path=="") {
-          showNotification("this vignette has not been built on this system", type="error")
+          showNotification("This vignette (User Guide) has not been built on this system, please run pcaExplorer with runLocal=FALSE or install the package with the option to build the vignettes", type="error")
         } else {
           browseURL(path)
         }
@@ -915,7 +916,7 @@ pcaExplorer <- function(dds=NULL,
       observeEvent(input$open_vignette_quickstart, {
         path <- system.file("doc", "upandrunning.html", package="pcaExplorer")
         if (path=="") {
-          showNotification("this vignette has not been built on this system", type="error")
+          showNotification("This vignette (Up and running) has not been built on this system, please run pcaExplorer with runLocal=FALSE or install the package with the option to build the vignettes", type="error")
         } else {
           browseURL(path)
         }
