@@ -65,7 +65,7 @@ Once the preprocessing of the input is done, you should get a notification in th
 The whole preprocessing should take around 5-6 seconds (tested on a MacBook Pro, with i7 and 16 Gb RAM).
 You can check how each component looks like by clicking on its respective button, once they appeared in the lower half of the panel.
 
-```{r ss00, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss00, echo=FALSE, fig.cap="Overview of the Data Upload panel. After clicking on the 'Load the demo airway data' button, all widgets are automatically populated, and each data component (count matrix, experimental data, dds object, annotation) can be previewed in a modal window by clicking on its respective button."}
 knitr::include_graphics("unr_00_demo_loaded.png")
 ```
 
@@ -74,7 +74,7 @@ You can change the data type you are displaying between raw counts, normalized, 
 To try this, select for example "Normalized counts", change the correlation coefficient to "spearman", and click on the `Run` action button. 
 The correlation values will also be displayed as a heatmap.
 
-```{r ss01, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss01, echo=FALSE, fig.cap="Screenshot of the sample to sample scatter plot matrix. The user can select the correlation method to use, the option to plot values on log2 scales, and the possibility to use a subset of genes (to obtain a quicker overview if many samples are provided)."}
 knitr::include_graphics("unr_01_splom.png")
 ```
 
@@ -86,7 +86,7 @@ The relationship among samples can be seen in the sample-to-sample heatmap.
 For example, by selecting the Manhattan distance metric, it is evident how the samples cluster by dex treatment, yet they show a dendrogram structure that recalls the 4 different cell types used.
 The total sum of counts per sample is displayed as a bar plot.
 
-```{r ss02, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss02, echo=FALSE, fig.cap="Screenshot of the sample to sample heatmap. Selected is the Manhattan distance, but Euclidean and correlation-based distance are also provided as options. In this case, the user has also selected the dex and cell factors in the 'Group/color by' widget in the sidebar menu, and these covariates decorate the heatmap to facilitate identification of patterns."}
 knitr::include_graphics("unr_02_sts_heatmap.png")
 ```
 
@@ -99,7 +99,7 @@ Basic summary information is also displayed for the genes.
 In the count matrix provided, one can check how many genes were detected, by selecting a "Threshold on the row sums of the counts" or on the row means of the normalized counts (more stringent). 
 For example, selecting 5 in both cases, only 24345 genes have a total number of counts, summed by row, and 17745 genes have more than 5 counts (normalized) on average.
 
-```{r ss03, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss03, echo=FALSE, fig.cap="Screenshot of the Basic Summary of the counts in the Data Overview panel. General information are provided, together with an overview on detected genes according to different filtering criteria."}
 knitr::include_graphics("unr_03_summary_counts.png")
 ```
 
@@ -107,14 +107,14 @@ The **Samples View** and the **Genes View** are the tabs where most results comi
 Assuming you selected `cell` in the "Group/color by" option on the left, the Samples PCA plot should clearly display how the cell type explain a considerable portion of the variability in the dataset (corresponding to the second PC).
 To check that `dex` treatment is the main source of variability, select that instead of `cell`.
 
-```{r ss04a, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss04a, echo=FALSE, fig.cap="The Samples View panel. Displayed are a PCA plot (left) and the corresponding scree plot (right), with the samples colored and labeled by cell type - separating on the second principal component."}
 knitr::include_graphics("unr_04a_samplespca.png")
 ```
 
 The scree plot on the right shows how many components should be retained for a satisfactory reduced dimension view of the original set, with their eigenvalues from largest to smallest.
 To explore the PCs other than the first and the second one, you can just select them in the x-axis PC and y-axis PC widgets in the left sidebar.
 
-```{r ss04b, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss04b, echo=FALSE, fig.cap="PCA plot for the samples, colored by dexamethasone treatment. The dex factor is the main driver of the variability in the data, and samples separate nicely on the first principal component."}
 knitr::include_graphics("unr_04b_samples_dex.png")
 ```
 
@@ -123,21 +123,21 @@ If you suspect some samples might be outliers (this is not the case in the `airw
 On the right side, you can quickly check which genes show the top and bottom loadings, split by principal component. 
 First, change the value in the input widget to 20; then, select one of each list and try to check them in the **Gene Finder** tab; try for example with *DUSP1*, *PER1*, and *DDX3Y*.
 
-```{r ss05, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss05, echo=FALSE, fig.cap="Genes with highest loadings on the first and second principal components. The user can select how many top and bottom genes will be displayed, and the gene names are printed below each gene's contribution on each PC."}
 knitr::include_graphics("unr_05_loadings.png")
 ```
 
 While *DUSP1* and *PER1* clearly show a change in expression upon dexamethasone treatment (and indeed where reported among the well known glucocorticoid-responsive genes in the original publication of Himes et al., 2014), *DDX3Y* displays variability at the cell type level (select `cell` in the Group/color by widget): this gene is almost undetected in N061011 cells, and this high variance is what determines its high loading on the second principal component.
 
-```{r ss06a, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss06a, echo=FALSE, fig.cap="Plot of the gene expression levels of DUSP1. Points are split according to dex treatment, and both graphics and table are displayed."}
 knitr::include_graphics("unr_06a_genefinder_dusp1.png")
 ```
 
-```{r ss06b, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss06b, echo=FALSE, fig.cap="Plot of the gene expression levels of PER1. Points are split according to dex treatment."}
 knitr::include_graphics("unr_06b_genefinder_per1.png")
 ```
 
-```{r ss06c, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss06c, echo=FALSE, fig.cap="Plot of the gene expression levels of DDX3Y. Points are split according to cell type, as this gene was highly variable across this experimental factor - indeed, in one cell type it is barely detected."}
 knitr::include_graphics("unr_06c_genefinder_ddx3y.png")
 ```
 
@@ -148,7 +148,7 @@ Back to the **Samples View**, you can experiment with the number of top variable
 Proceeding to the **Genes View**, you can see the dual of the Samples PCA: now the samples are displayed as arrows in the genes biplot, which can show which genes display a similar behaviour.
 You can capture this with a simple brushing action on the plot, and notice how their profiles throughout all samples are shown in the Profile explorer below; moreover, a static and an interactive heatmap, together with a table containing the underlying data, are generated in the rows below.
 
-```{r ss07, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss07, echo=FALSE, fig.cap="The Genes View panel. Upper panel: the genes biplot, and its zoomed plot, with gene names displayed. Lower panel: the profile explorer of the selected subset of genes (corresponding to the zoomed window), and the boxplot for the gene selected by clicking close to a location in the zoomed window."}
 knitr::include_graphics("unr_07_genespca.png")
 ```
 
@@ -158,7 +158,7 @@ By clicking close enough to any of these genes, the expression values are plotte
 The tab **PCA2GO** helps you understanding which are the biological common themes (default: the Gene Ontology Biological Process terms) in the genes showing up in the top and in the bottom loadings for each principal component.
 Since we launched the `pcaExplorer` app without additional parameters, this information is not available, but can be computed live (this might take a while).
 
-```{r ss08, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss08, echo=FALSE, fig.cap="The PCA2GO panel. Four tables (2 per dimension, here only 3 are displayed) decorate the PCA plot in the middle, and display the top enriched functional categories in each subset of gene with high loadings."}
 knitr::include_graphics("unr_08_pca2go_topgo.png")
 ```
 
@@ -169,7 +169,7 @@ Still, a previous call to `pca2go` is recommended, as it relies on the algorithm
 A typical session with `pcaExplorer` includes one or more iterations on each of these tabs.
 Once you are finished, you might want to store the results of your analysis in different formats.
 
-```{r ss90, echo=FALSE, fig.cap="My first screenshot",out.width="80%"}
+```{r ss90, echo=FALSE, fig.cap="The pcaExplorer task menu. Buttons for saving the session to binary data or to a dedicated environment are displayed.",out.width="80%"}
 knitr::include_graphics("unr_90_exitsave.png")
 ```
 
@@ -182,7 +182,7 @@ With `pcaExplorer` you can do all of the following:
   This document stiches together narrative text, code, and output objects, and constitutes a compendium where all actions are recorded. 
   If you are familiar with R, you can edit that live, with support for autocompletion, in the "Edit report" tab.
 
-```{r ss99, echo=FALSE, fig.cap="My first screenshot"}
+```{r ss99, echo=FALSE, fig.cap="The Report Editor tab. The collapsible elements control general markdown and editor options, which are regarded when the report is compiled. Its content is specified in the Ace editor, integrated in the Shiny app."}
 knitr::include_graphics("unr_99_editreport.png")
 ```
 
