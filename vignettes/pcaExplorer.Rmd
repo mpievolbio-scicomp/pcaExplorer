@@ -35,7 +35,7 @@ vignette: >
 **Authors**: `r packageDescription("pcaExplorer")[["Author"]]`<br />
 **Version**: `r packageDescription("pcaExplorer")$Version`<br />
 **Compiled date**: `r Sys.Date()`<br />
-**Last edited**: 2019-02-08<br />
+**Last edited**: 2019-02-26<br />
 **License**: `r packageDescription("pcaExplorer")[["License"]]`<br />
 
 ```{r style, echo = FALSE, results = 'asis'}

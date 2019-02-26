@@ -250,14 +250,6 @@ pcaExplorer <- function(dds=NULL,
           fluidRow(
             column(
               width = 12,
-              p("You can click on this collapsible element to display a quickstart guide."),
-              shinyBS::bsCollapse(
-                id = "help_fulluserguide",open = NULL, 
-                shinyBS::bsCollapsePanel(
-                  "Up and running with pcaExplorer",
-                  includeMarkdown(system.file("extdata", "instructions_unr.md",package = "pcaExplorer"))
-                )
-              ),
               p("These buttons will open the fully rendered vignettes, either built locally or directly from the Bioconductor package page."),
               actionButton(
                 'open_vignette_full', label="Open the User Guide (main vignette)",
@@ -277,6 +269,15 @@ pcaExplorer <- function(dds=NULL,
                                sprintf("window.open('http://bioconductor.org/packages/%s/bioc/vignettes/pcaExplorer/inst/doc/upandrunning.html', '_blank')",
                                        ifelse(unlist(packageVersion("pcaExplorer"))[2] %% 2L==0L, "release", "devel")
                                )
+                )
+              ),
+              br(),br(),
+              p("Otherwise, you can click on the collapsible element below to display a quickstart guide."),
+              shinyBS::bsCollapse(
+                id = "help_fulluserguide",open = NULL, 
+                shinyBS::bsCollapsePanel(
+                  "Up and running with pcaExplorer",
+                  includeMarkdown(system.file("extdata", "instructions_unr.md",package = "pcaExplorer"))
                 )
               )
             )
