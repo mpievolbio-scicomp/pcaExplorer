@@ -23,6 +23,17 @@ vignette: >
   %\VignetteKeywords{Visualization, RNASeq, DimensionReduction, PrincipalComponent, QualityControl, GUI, ReportWriting}
 ---
 
+<!-- For rendering in-app: -->
+<!-- - change output format to -->
+<!-- --- -->
+<!-- output:  -->
+<!--   md_document: -->
+<!--     variant: markdown_github -->
+<!-- --- -->
+<!-- - replace links to imgs with github hosted to provide permanent link -->
+<!-- - enforce width="80%" for all imgs (50% for the smaller screenshot) -->
+<!-- - copy content to inst/extdata/instructions_unr.md -->
+
 # Setup
 
 First things first: install `r Biocpkg("pcaExplorer")` and load it into your R session.
