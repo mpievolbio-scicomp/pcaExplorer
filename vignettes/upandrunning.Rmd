@@ -59,7 +59,7 @@ This action will:
 - compose the `dds` object, normalize the expression values (using the robust method proposed by Anders and Huber in the original DESeq manuscript), and compute the variance stabilizing transformed expression values (stored in the `dst` object)
 - retrieve the gene annotation information via the `r Biocpkg("org.Hs.eg.db")`, adding gene symbols to the ENSEMBL ids - this step is optional, but recommended for more human-readable identifiers to be used.
 
-If you want to load your expression data, please refer to the `r Biocpkg("iSEE", vignette="pcaExplorer.html", label="User Guide")`, which contains detailed information on the formats your data have to respect.
+If you want to load your expression data, please refer to the `r Biocpkg("pcaExplorer", vignette="pcaExplorer.html", label="User Guide")`, which contains detailed information on the formats your data have to respect.
 
 Once the preprocessing of the input is done, you should get a notification in the lower right corner that you're all set.
 The whole preprocessing should take around 5-6 seconds (tested on a MacBook Pro, with i7 and 16 Gb RAM).

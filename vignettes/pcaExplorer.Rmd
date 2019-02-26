@@ -63,7 +63,7 @@ if (!requireNamespace("BiocManager", quietly=TRUE))
 BiocManager::install("pcaExplorer")
 ```
 
-To install `r Biocpkg("pcaExplorer")` with all its dependencies (i.e. also the ones listed in the `Suggests:` field of the `DESCRIPTION` file, which include the dataset from the `r Biocpkg("airway")` package), use this command instead:
+To install `r Biocpkg("pcaExplorer")` with all its dependencies (i.e. also the ones listed in the `Suggests:` field of the `DESCRIPTION` file, which include the dataset from the `r Biocpkg("airway")` package used as a demo), use this command instead:
 
 ```{r installfull, eval=FALSE}
 BiocManager::install("pcaExplorer", dependencies = TRUE)
@@ -148,7 +148,7 @@ In general, `r Biocpkg("pcaExplorer")` requires by default tab separated files:
   
 ## Up and running with `r Biocpkg("pcaExplorer")`
 
-We recommend users to switch to the `r Biocpkg("pcaExplorer", vignette="upandrunning.html", label="dedicated vignette"), entitled "Up and running with `r Biocpkg('pcaExplorer')`".
+We recommend users to switch to the `r Biocpkg("pcaExplorer", vignette="upandrunning.html", label="dedicated vignette")`, entitled "Up and running with `r Biocpkg('pcaExplorer')`".
 
 This document describes a use case for `r Biocpkg("pcaExplorer")`, based on the dataset in the `r Biocpkg("airway")` package.
 
@@ -212,7 +212,11 @@ This panel is where you can perform the preprocessing steps on the data you uplo
 
 - compose the `dds` object (if you provided `countmatrix` and `coldata`)
 - normalize the expression values (using the robust method proposed by Anders and Huber in the original DESeq manuscript)
-- compute the variance stabilizing transformed expression values (stored in the `dst` object)
+- compute the variance stabilizing transformed expression values (stored in the `dst` object).
+
+As a note regarding the normalization procedure: the normalization method (implemented in `estimateSizeFactors`) relies on the hypothesis that most of the genes are not differentially expressed across experimental groups, and this holds true for the majority of scenarios. 
+The `DESeqDataSet` object, which pcaExplorer takes as main data container, can still accommodate sample (and gene) specific normalization factors. 
+Should this assumption be violated, users can pre-compute these factors and store them in the input `dds` object. 
 
 ## Instructions
 

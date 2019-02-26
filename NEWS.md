@@ -1,11 +1,5 @@
 # pcaExplorer 2.10.0
 
-
-
-
-
-
-
 ## New features
 
 * Added extra parameters to `topGOtable` to offer more control on the method used, and the option to correct the p-values for multiple testing (via the Benjamini-Yekutieli procedure)
@@ -16,6 +10,8 @@
 * The pairwise correlation plots can now use logarithmic scale in the axes, use smaller subsets of the data for quicker inspection, and resizes the correlation info proportionally to its intensity
 * The sample to sample heatmap supports additionally manhattan and correlation-based distances
 * There is a new vignette with a detailed quick start, "Up and running with pcaExplorer", specifying how the workflow with `pcaExplorer` can look like, demonstrated on the `airway` dataset
+* In the Instructions panel, we added buttons to access the fully rendered documentation, either local or online if e.g. deployed to a server. Related to this, `pcaExplorer` has a new parameter, `runLocal`, to control this behavior
+
 
 ## Other notes
 
@@ -24,6 +20,7 @@
 * Added notification to specify how to install the airway package for demonstration purposes if not already available
 * Added startup message upon loading the package
 * The content in the Instructions tab is now contained in collapsible elements
+* The file formats accepted by `pcaExplorer` are now specified both in the vignette text, as well as in the app at runtime
 
 # pcaExplorer 2.8.0
 
