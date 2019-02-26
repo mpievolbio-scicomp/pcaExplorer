@@ -159,7 +159,7 @@ This action will:
 
 - load the `r Biocpkg("airway")` package
 - load the count matrix and the experimental metadata
-- compose the `dds` object and compute the variance stabilizing transformed expression values (stored in the `dst` object)
+- compose the `dds` object, normalize the expression values (using the robust method proposed by Anders and Huber in the original DESeq manuscript), and compute the variance stabilizing transformed expression values (stored in the `dst` object)
 - retrieve the gene annotation information via the `r Biocpkg("org.Hs.eg.db")`, adding gene symbols to the ENSEMBL ids - this step is optional, but recommended for more human-readable identifiers to be used
 
 Once the preprocessing of the input is done, you should get a notification in the lower right corner that you're all set.
