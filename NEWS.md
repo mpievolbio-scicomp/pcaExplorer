@@ -21,6 +21,7 @@
 * Added startup message upon loading the package
 * The content in the Instructions tab is now contained in collapsible elements
 * The file formats accepted by `pcaExplorer` are now specified both in the vignette text, as well as in the app at runtime
+* The content of the Instructions tab is now more compact, containing the rendered "Up and running with pcaExplorer" vignette. The full vignettes can be accessed via buttons in the same panel
 
 # pcaExplorer 2.8.0
 

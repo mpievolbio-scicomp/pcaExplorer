@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.9.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.9.5</span>
       </span>
     </div>
 
@@ -93,7 +93,7 @@
       </address>
                               <h4 class="author">Harald Binder</h4>
             <address class="author_afil">
-      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">24 February 2019</h4>
+      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">27 February 2019</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/federicomarini/pcaExplorer/blob/master/vignettes/pcaExplorer.Rmd"><code>vignettes/pcaExplorer.Rmd</code></a></small>
       <div class="hidden name"><code>pcaExplorer.Rmd</code></div>
@@ -107,7 +107,7 @@
       <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em> provides functionality for interactive visualization of RNA-seq datasets based on Principal Components Analysis. Such methods allow for quick information extraction and effective data exploration. A Shiny application encapsulates the whole analysis, and is developed to become a practical companion for any RNA-seq dataset. This app supports reproducible research with state saving and automated report generation.
     </div>
     
-<p><br><strong>Package</strong>: <em>pcaExplorer</em><br><strong>Authors</strong>: Federico Marini [aut, cre] (<a href="https://orcid.org/0000-0003-3252-7758" class="uri">https://orcid.org/0000-0003-3252-7758</a>)<br><strong>Version</strong>: 2.9.4<br><strong>Compiled date</strong>: 2019-02-24<br><strong>Last edited</strong>: 2019-02-08<br><strong>License</strong>: MIT + file LICENSE<br></p>
+<p><br><strong>Package</strong>: <em>pcaExplorer</em><br><strong>Authors</strong>: Federico Marini [aut, cre] (<a href="https://orcid.org/0000-0003-3252-7758" class="uri">https://orcid.org/0000-0003-3252-7758</a>)<br><strong>Version</strong>: 2.9.4<br><strong>Compiled date</strong>: 2019-02-27<br><strong>Last edited</strong>: 2019-02-26<br><strong>License</strong>: MIT + file LICENSE<br></p>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelector("h1").className = "title";
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ns-load">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly=</span><span class="ot">TRUE</span>))</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">    <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"BiocManager"</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="st">"pcaExplorer"</span>)</a></code></pre></div>
-<p>To install <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em> with all its dependencies (i.e. also the ones listed in the <code>Suggests:</code> field of the <code>DESCRIPTION</code> file, which include the dataset from the <em><a href="https://bioconductor.org/packages/3.9/airway">airway</a></em> package), use this command instead:</p>
+<p>To install <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em> with all its dependencies (i.e. also the ones listed in the <code>Suggests:</code> field of the <code>DESCRIPTION</code> file, which include the dataset from the <em><a href="https://bioconductor.org/packages/3.9/airway">airway</a></em> package used as a demo), use this command instead:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="st">"pcaExplorer"</span>, <span class="dt">dependencies =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>If you prefer, you can install and use the development version, which can be retrieved via Github (<a href="https://github.com/federicomarini/pcaExplorer" class="uri">https://github.com/federicomarini/pcaExplorer</a>). To do so, use:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"devtools"</span>)</a>
@@ -192,46 +192,20 @@ A BibTeX entry for LaTeX users is
 <h2 class="hasAnchor">
 <a href="#how-to-provide-your-input-data-in-pcaexplorer" class="anchor"></a>How to provide your input data in <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em>
 </h2>
-<p><em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em> supports a number of file formats when uploading the data via the filew input widgets. Starting from version 2.9.5, we added functionality to select the separator character for each of the uploadable files. An information box is also shown by clicking on the question mark icon in the Data upload panel, with detailed information (text, as well as screenshots of valid input files) on the format specification.</p>
+<p><em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em> supports a number of file formats when uploading the data via the file input widgets. Starting from version 2.9.5, we added functionality to select the separator character for each of the uploadable files. An information box is also shown by clicking on the question mark icon in the Data upload panel, with detailed information (text, as well as screenshots of valid input files) on the format specification.</p>
+<p>In general, <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em> requires by default tab separated files:</p>
+<ul>
+<li>the <code>countmatrix</code>: contains the expression matrix, with one gene per row and one sample per column; the first column should contain the gene identifiers, and the header (first row) specifies the sample names.</li>
+<li>the <code>coldata</code>: one sample per row, and one experimental covariate per column. Row names should be specified in the first column, and have to match the column names of the <code>countmatrix</code>. Column names will contain the specific experimental covariates.</li>
+<li>the <code>annotation</code> (optional): one gene per row, and one identifier type per column. Gene identifiers in the first column are identical to the row names of the <code>countmatrix</code> or <code>dds</code> objects. At least an extra column <code>gene_name</code>, containing e.g. HGNC-based gene symbols, needs to be provided.</li>
+</ul>
 </div>
 <div id="up-and-running-with-pcaexplorer" class="section level2">
 <h2 class="hasAnchor">
 <a href="#up-and-running-with-pcaexplorer" class="anchor"></a>Up and running with <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em>
 </h2>
-<p>This section describes a use case, based on the dataset in the <em><a href="https://bioconductor.org/packages/3.9/airway">airway</a></em> package. If this package is not available on your machine, please install it by executing:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="st">"airway"</span>)</a></code></pre></div>
-<p>This dataset consists of the gene-level expression measurements (as raw read counts) for an experiment where four different human airway smooth muscle cell lines are either treated with dexamethasone or left untreated.</p>
-<p>To start the exploration, you just need the following lines:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(pcaExplorer)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>()</a></code></pre></div>
-<p>The easiest way to explore the <em><a href="https://bioconductor.org/packages/3.9/airway">airway</a></em> dataset is by clicking on the dedicated button in the <strong>Data Upload</strong> panel. This action will:</p>
-<ul>
-<li>load the <em><a href="https://bioconductor.org/packages/3.9/airway">airway</a></em> package</li>
-<li>load the count matrix and the experimental metadata</li>
-<li>compose the <code>dds</code> object and compute the variance stabilizing transformed expression values (stored in the <code>dst</code> object)</li>
-<li>retrieve the gene annotation information via the <em><a href="https://bioconductor.org/packages/3.9/org.Hs.eg.db">org.Hs.eg.db</a></em>, adding gene symbols to the ENSEMBL ids - this step is optional, but recommended for more human-readable identifiers to be used</li>
-</ul>
-<p>Once the preprocessing of the input is done, you should get a notification in the lower right corner that you’re all set. You can check how each component looks like by clicking on its respective button, once they appeared in the lower half of the panel.</p>
-<p>You can proceed to explore the expression values of your dataset in the <strong>Counts Table</strong> tab. You can change the data type you are displaying between raw counts, normalized, or transformed, and plot their values in a scatterplot matrix to explore their sample-to-sample correlations. To do so, click on the <code>Run</code> action button. The correlation values will also be displayed as a heatmap.</p>
-<p>Additional features, both for samples and for features, are displayed in the <strong>Data overview</strong> panel. A closer look at the metadata of the <code>airway</code> set highlights how each combination of cell type (<code>cell</code>) and dexamethasone treatment (<code>dex</code>) is represented by a single sequencing experiment. The 8 samples in the demo dataset are themselves a subsample of the <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52778">full GEO record</a>, namely the ones non treated with albuterol (<code>alb</code> column).</p>
-<p>The relationsship among samples can be seen in the sample-to-sample heatmap. For example, by selecting the Manhattan distance metric, it is evident how the samples cluster by dex treatment, yet they show a dendrogram structure that recalls the 4 different cell types used. The total sum of counts per sample is displayed as a bar plot.</p>
-<p>Patterns can become clearer after selecting, in the <strong>App settings</strong> on the left, an experimental factor to group and color by: try selecting <code>dex</code>, for example. If more than one covariate is selected, the interaction between these will be taken as a grouping factor. To remove one, simply click on it to highlight and press the del or backspace key to delete it. Try doing so by also clicking on <code>cell</code>, and then removing <code>dex</code> afterwards.</p>
-<p>Basic summary information is also displayed for the genes. In the count matrix provided, one can check how many genes were detected, by selecting a “Threshold on the row sums of the counts” or on the row means of the normalized counts (more stringent). For example, selecting 5 in both cases, only 24345 genes have a total number of counts, summed by row, and 17745 genes have more than 5 counts (normalized) on average.</p>
-<p>The <strong>Samples View</strong> and the <strong>Genes View</strong> are the tabs where most results coming from Principal Component Analysis, either performed on the samples or on the genes, can be explored in depth. Assuming you selected <code>cell</code> in the “Group/color by” option on the left, the Samples PCA plot should clearly display how the cell type explain a considerable portion of the variability in the dataset (corresponding to the second PC). To check that <code>dex</code> treatment is the main source of variability, select that instead of <code>cell</code>.</p>
-<p>The scree plot on the right shows how many components should be retained for a satisfactory reduced dimension view of the original set, with their eigenvalues from largest to smallest. To explore the PCs other than the first and the second one, you can just select them in the x-axis PC and y-axis PC widgets in the left sidebar.</p>
-<p>If you brush (left-click and hold) on the PCA plot, you can display a zoomed version of it in the frame below. If you suspect some samples might be outliers (this is not the case in the <code>airway</code> set, still), you can select them in the dedicated plot, and give a first check on how the remainder of the samples would look like. On the right side, you can quickly check which genes show the top and bottom loadings, split by principal component. First, change the value in the input widget to 20; then, select one of each list and try to check them in the <strong>Gene Finder</strong> tab; try for example with <em>DUSP1</em>, <em>PER1</em>, and <em>DDX3Y</em>. While <em>DUSP1</em> and <em>PER1</em> clearly show a change in expression upon dexamethasone treatment (and indeed where reported among the well known glucocorticoid-responsive genes in the original publication of Himes et al., 2014), <em>DDX3Y</em> displays variability at the cell type level (select <code>cell</code> in the Group/color by widget): this gene is almost undetected in N061011 cells, and this high variance is what determines its high loading on the second principal component. You can see the single expression values in a table as well, and this information can be downloaded with a simple click.</p>
-<p>Back to the <strong>Samples View</strong>, you can experiment with the number of top variable genes to see how the results of PCA are in this case robust to a wide range of this value - this might not be the case with other datasets, and the simplicity of interacting with these parameters makes it easy to iterate in the exploration steps.</p>
-<p>Proceeding to the <strong>Genes View</strong>, you can see the dual of the Samples PCA: now the samples are displayed as arrows in the genes biplot, which can show which genes display a similar behaviour. You can capture this with a simple brushing action on the plot, and notice how their profiles throughout all samples are shown in the Profile explorer below; moreover, a static and an interactive heatmap, together with a table containing the underlying data, are generated in the rows below.</p>
-<p>Since we compute the gene annotation table as well, it’s nice to read the gene symbols in the zoomed window (instead of the ENSEMBL ids). By clicking close enough to any of these genes, the expression values are plotted, in a similar fashion as in the <strong>Gene Finder</strong>.</p>
-<p>The tab <strong>PCA2GO</strong> helps you understanding which are the biological common themes (default: the Gene Ontology Biological Process terms) in the genes showing up in the top and in the bottom loadings for each principal component. Since we launched the <code>pcaExplorer</code> app without additional parameters, this information is not available, but can be computed live (this might take a while). Still, a previous call to <code>pca2go</code> is recommended, as it relies on the algorithm of the <em><a href="https://bioconductor.org/packages/3.9/topGO">topGO</a></em> package: it will require some additional computing time, but it is likely to deliver more precise terms (i.e. in turn more relevant from the point of view of their biological relevance). To do so, you should exit the live session, compute this object, and provide it in the call to <code>pcaExplorer</code> (see more how to do so in Section @ref(pca2go-docs)).</p>
-<p>A typical session with <code>pcaExplorer</code> includes one or more iterations on each of these tabs. Once you are finished, you might want to store the results of your analysis in different formats. With <code>pcaExplorer</code> you can do all of the following:</p>
-<ul>
-<li>save every plot and table by simply clicking on the respective button, below each element</li>
-<li>save the state of the entire app and its reactive elements as a binary <code>.RData</code> file, as if it was a workspace (clicking on the cog icon in the right side of the task menu)</li>
-<li>use the “Exit <code>pcaExplorer</code> and save” saves the state but in a specific environment of your R session, which you can later access by its name, which normally could look like <code>pcaExplorerState_YYYYMMDD_HHMMSS</code> (also accessible from the cog)</li>
-<li>enjoy the beauty of reproducible research in the <strong>Report Editor</strong>: <code>pcaExplorer</code> comes with a template analysis, that picks the latest status of the app during your session, and combines these reactive values together in a R Markdown document, which you can first preview live in the app, and then download as standalone HTML file - to store or share. This document stiches together narrative text, code, and output objects, and constitutes a compendium where all actions are recorded</li>
-</ul>
-<p>-&gt; maybe standalone vignette?!</p>
+<p>We recommend users to switch to the <a href="https://bioconductor.org/packages/3.9/pcaExplorer/vignettes/upandrunning.html">dedicated vignette</a>, entitled “Up and running with <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em>”.</p>
+<p>This document describes a use case for <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em>, based on the dataset in the <em><a href="https://bioconductor.org/packages/3.9/airway">airway</a></em> package.</p>
 </div>
 </div>
 <div id="the-controls-sidebar" class="section level1">
@@ -298,11 +272,18 @@ A BibTeX entry for LaTeX users is
 <p>These <strong>file input</strong> controls are available when no <code>dds</code> or <code>countmatrix</code> + <code>coldata</code> are provided. Additionally, it is possible to upload the <code>annotation</code> data frame. If the objects are already passed as parameters, or after they have been successfully uploaded, a brief overview/summary for them can be displayed, by clicking on each respective action button.</p>
 <p align="center">
 <img src="newsnap_01_upload.png" style="width:1000px;"></p>
+<p>This panel is where you can perform the preprocessing steps on the data you uploaded/provided:</p>
+<ul>
+<li>compose the <code>dds</code> object (if you provided <code>countmatrix</code> and <code>coldata</code>)</li>
+<li>normalize the expression values (using the robust method proposed by Anders and Huber in the original DESeq manuscript)</li>
+<li>compute the variance stabilizing transformed expression values (stored in the <code>dst</code> object).</li>
+</ul>
+<p>As a note regarding the normalization procedure: the normalization method (implemented in <code>estimateSizeFactors</code>) relies on the hypothesis that most of the genes are not differentially expressed across experimental groups, and this holds true for the majority of scenarios. The <code>DESeqDataSet</code> object, which pcaExplorer takes as main data container, can still accommodate sample (and gene) specific normalization factors. Should this assumption be violated, users can pre-compute these factors and store them in the input <code>dds</code> object.</p>
 </div>
 <div id="instructions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#instructions" class="anchor"></a>Instructions</h2>
-<p>This is where you most likely are reading this text (otherwise in the package vignette).</p>
+<p>This is where you might be reading a version of the “Up and running with <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em>” vignette. Additionally, you can easily reach the fully rendered vignettes, either installed locally, or directly from the Bioconductor package page.</p>
 <p align="center">
 <img src="newsnap_02_instructions.png" style="width:1000px;"></p>
 </div>
@@ -378,22 +359,22 @@ A BibTeX entry for LaTeX users is
 <a href="#running-pcaexplorer-on-published-datasets" class="anchor"></a>Running <code>pcaExplorer</code> on published datasets</h1>
 <p>We can run <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em> for demonstration purpose on published datasets that are available as SummarizedExperiment in a Bioconductor experiment package.</p>
 <p>We will use the <em><a href="https://bioconductor.org/packages/3.9/airway">airway</a></em> dataset, which can be installed with this command:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ns-load">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly=</span><span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">    <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"BiocManager"</span>)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="st">"airway"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ns-load">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly=</span><span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">    <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"BiocManager"</span>)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="st">"airway"</span>)</a></code></pre></div>
 <p>The <em><a href="https://bioconductor.org/packages/3.9/airway">airway</a></em> package provides a <code>RangedSummarizedExperiment</code> object of read counts in genes for an RNA-Seq experiment on four human airway smooth muscle cell lines treated with dexamethasone. More details such as gene models and count quantifications can be found in the <em><a href="https://bioconductor.org/packages/3.9/airway">airway</a></em> package vignette.</p>
 <p>The easiest way to explore the <em><a href="https://bioconductor.org/packages/3.9/airway">airway</a></em> dataset is by clicking on the dedicated button in the <strong>Data Upload</strong> panel.</p>
 <button id="btn_loaddemo" type="button" class="btn btn-default action-button shiny-bound-input" style="color: #0092AC" data-original-title title>
 <i class="fa fa-play-circle"></i> Load the demo airway data
 </button>
 <p>Otherwise, to run <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em> on this dataset from the terminal/RStudio IDE, the following commands are required. First, prepare the objects to be passed as parameters of <em><a href="https://bioconductor.org/packages/3.9/pcaExplorer">pcaExplorer</a></em>.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(airway)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DESeq2)</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(airway)</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">dds_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet">DESeqDataSet</a></span>(airway,<span class="dt">design=</span> <span class="op">~</span><span class="st"> </span>cell <span class="op">+</span><span class="st"> </span>dex)</a>
-<a class="sourceLine" id="cb10-7" data-line-number="7">dds_airway</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(airway)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DESeq2)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(airway)</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">dds_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet">DESeqDataSet</a></span>(airway,<span class="dt">design=</span> <span class="op">~</span><span class="st"> </span>cell <span class="op">+</span><span class="st"> </span>dex)</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">dds_airway</a></code></pre></div>
 <pre><code>class: DESeqDataSet 
 dim: 64102 8 
 metadata(2): '' version
@@ -402,8 +383,8 @@ rownames(64102): ENSG00000000003 ENSG00000000005 ... LRG_98 LRG_99
 rowData names(0):
 colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
 colData names(9): SampleName cell ... Sample BioSample</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">rld_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds_airway)</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">rld_airway</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">rld_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds_airway)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">rld_airway</a></code></pre></div>
 <pre><code>class: DESeqTransform 
 dim: 64102 8 
 metadata(2): '' version
@@ -413,15 +394,15 @@ rowData names(7): baseMean baseVar ... dispFit rlogIntercept
 colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
 colData names(10): SampleName cell ... BioSample sizeFactor</code></pre>
 <p>Then launch the app itself.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>(<span class="dt">dds =</span> dds_airway,</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">            <span class="dt">dst =</span> rld_airway)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>(<span class="dt">dds =</span> dds_airway,</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">            <span class="dt">dst =</span> rld_airway)</a></code></pre></div>
 <p>The <code>annotation</code> for this dataset can be built by exploiting the <em><a href="https://bioconductor.org/packages/3.9/org.Hs.eg.db">org.Hs.eg.db</a></em> package.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(org.Hs.eg.db)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">genenames_airway &lt;-<span class="st"> </span><span class="kw">mapIds</span>(org.Hs.eg.db,<span class="dt">keys =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(dds_airway),<span class="dt">column =</span> <span class="st">"SYMBOL"</span>,<span class="dt">keytype=</span><span class="st">"ENSEMBL"</span>)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">annotation_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">gene_name =</span> genenames_airway,</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">                                <span class="dt">row.names =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(dds_airway),</a>
-<a class="sourceLine" id="cb15-5" data-line-number="5">                                <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(annotation_airway)                                </a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(org.Hs.eg.db)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">genenames_airway &lt;-<span class="st"> </span><span class="kw">mapIds</span>(org.Hs.eg.db,<span class="dt">keys =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(dds_airway),<span class="dt">column =</span> <span class="st">"SYMBOL"</span>,<span class="dt">keytype=</span><span class="st">"ENSEMBL"</span>)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">annotation_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">gene_name =</span> genenames_airway,</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">                                <span class="dt">row.names =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(dds_airway),</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">                                <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(annotation_airway)                                </a></code></pre></div>
 <pre><code>                gene_name
 ENSG00000000003    TSPAN6
 ENSG00000000005      TNMD
@@ -430,15 +411,15 @@ ENSG00000000457     SCYL3
 ENSG00000000460  C1orf112
 ENSG00000000938       FGR</code></pre>
 <p>or alternatively, by using the <code>get_annotation</code> or <code>get_annotation_orgdb</code> wrappers.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">anno_df_orgdb &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_annotation_orgdb.html">get_annotation_orgdb</a></span>(<span class="dt">dds =</span> dds_airway,</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">                                      <span class="dt">orgdb_species =</span> <span class="st">"org.Hs.eg.db"</span>,</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">                                      <span class="dt">idtype =</span> <span class="st">"ENSEMBL"</span>)</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb17-5" data-line-number="5">anno_df_biomart &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_annotation.html">get_annotation</a></span>(<span class="dt">dds =</span> dds_airway,</a>
-<a class="sourceLine" id="cb17-6" data-line-number="6">                                  <span class="dt">biomart_dataset =</span> <span class="st">"hsapiens_gene_ensembl"</span>,</a>
-<a class="sourceLine" id="cb17-7" data-line-number="7">                                  <span class="dt">idtype =</span> <span class="st">"ensembl_gene_id"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">anno_df_orgdb &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_annotation_orgdb.html">get_annotation_orgdb</a></span>(<span class="dt">dds =</span> dds_airway,</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">                                      <span class="dt">orgdb_species =</span> <span class="st">"org.Hs.eg.db"</span>,</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">                                      <span class="dt">idtype =</span> <span class="st">"ENSEMBL"</span>)</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">anno_df_biomart &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_annotation.html">get_annotation</a></span>(<span class="dt">dds =</span> dds_airway,</a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">                                  <span class="dt">biomart_dataset =</span> <span class="st">"hsapiens_gene_ensembl"</span>,</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">                                  <span class="dt">idtype =</span> <span class="st">"ensembl_gene_id"</span>)</a></code></pre></div>
 <pre><code>'select()' returned 1:many mapping between keys and columns</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(anno_df_orgdb)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(anno_df_orgdb)</a></code></pre></div>
 <pre><code>                        gene_id gene_name
 ENSG00000000003 ENSG00000000003    TSPAN6
 ENSG00000000005 ENSG00000000005      TNMD
@@ -447,9 +428,9 @@ ENSG00000000457 ENSG00000000457     SCYL3
 ENSG00000000460 ENSG00000000460  C1orf112
 ENSG00000000938 ENSG00000000938       FGR</code></pre>
 <p>Then again, the app can be launched with:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>(<span class="dt">dds =</span> dds_airway,</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">            <span class="dt">dst =</span> rld_airway,</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3">            <span class="dt">annotation =</span> annotation_airway) <span class="co"># or anno_df_orgdb, or anno_df_biomart</span></a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>(<span class="dt">dds =</span> dds_airway,</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">            <span class="dt">dst =</span> rld_airway,</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">            <span class="dt">annotation =</span> annotation_airway) <span class="co"># or anno_df_orgdb, or anno_df_biomart</span></a></code></pre></div>
 <p>If desired, alternatives can be used. See the well written annotation workflow available at the Bioconductor site (<a href="https://bioconductor.org/help/workflows/annotation/annotation/" class="uri">https://bioconductor.org/help/workflows/annotation/annotation/</a>).</p>
 </div>
 <div id="running-pcaexplorer-on-synthetic-datasets" class="section level1">
@@ -457,11 +438,11 @@ ENSG00000000938 ENSG00000000938       FGR</code></pre>
 <a href="#running-pcaexplorer-on-synthetic-datasets" class="anchor"></a>Running <code>pcaExplorer</code> on synthetic datasets</h1>
 <p>For testing and demonstration purposes, a function is also available to generate synthetic datasets whose counts are generated based on two or more experimental factors.</p>
 <p>This can be called with the command:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">dds_multifac &lt;-<span class="st"> </span><span class="kw"><a href="../reference/makeExampleDESeqDataSet_multifac.html">makeExampleDESeqDataSet_multifac</a></span>(<span class="dt">betaSD_condition =</span> <span class="dv">3</span>,<span class="dt">betaSD_tissue =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">dds_multifac &lt;-<span class="st"> </span><span class="kw"><a href="../reference/makeExampleDESeqDataSet_multifac.html">makeExampleDESeqDataSet_multifac</a></span>(<span class="dt">betaSD_condition =</span> <span class="dv">3</span>,<span class="dt">betaSD_tissue =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p>See all the available parameters by typing <code><a href="../reference/makeExampleDESeqDataSet_multifac.html">?makeExampleDESeqDataSet_multifac</a></code>. Credits are given to the initial implementation by Mike Love in the <em><a href="https://bioconductor.org/packages/3.9/DESeq2">DESeq2</a></em> package.</p>
 <p>The following steps run the app with the synthetic dataset.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">dds_multifac &lt;-<span class="st"> </span><span class="kw"><a href="../reference/makeExampleDESeqDataSet_multifac.html">makeExampleDESeqDataSet_multifac</a></span>(<span class="dt">betaSD_condition =</span> <span class="dv">1</span>,<span class="dt">betaSD_tissue =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">dds_multifac</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">dds_multifac &lt;-<span class="st"> </span><span class="kw"><a href="../reference/makeExampleDESeqDataSet_multifac.html">makeExampleDESeqDataSet_multifac</a></span>(<span class="dt">betaSD_condition =</span> <span class="dv">1</span>,<span class="dt">betaSD_tissue =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">dds_multifac</a></code></pre></div>
 <pre><code>class: DESeqDataSet 
 dim: 1000 12 
 metadata(1): version
@@ -471,8 +452,8 @@ rowData names(4): trueIntercept trueBeta_condition trueBeta_tissue
   trueDisp
 colnames(12): sample1 sample2 ... sample11 sample12
 colData names(2): condition tissue</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">rld_multifac &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds_multifac)</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">rld_multifac</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">rld_multifac &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds_multifac)</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">rld_multifac</a></code></pre></div>
 <pre><code>class: DESeqTransform 
 dim: 1000 12 
 metadata(1): version
@@ -482,12 +463,12 @@ rowData names(11): trueIntercept trueBeta_condition ... dispFit
   rlogIntercept
 colnames(12): sample1 sample2 ... sample11 sample12
 colData names(3): condition tissue sizeFactor</code></pre>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co">## checking how the samples cluster on the PCA plot</span></a>
-<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld_multifac,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"condition"</span>,<span class="st">"tissue"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co">## checking how the samples cluster on the PCA plot</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld_multifac,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"condition"</span>,<span class="st">"tissue"</span>))</a></code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/prepsimul-1.png" width="700" style="display: block; margin: auto;"></p>
 <p>Launch the app for exploring this dataset with:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>(<span class="dt">dds =</span> dds_multifac,</a>
-<a class="sourceLine" id="cb28-2" data-line-number="2">            <span class="dt">dst =</span> rld_multifac)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>(<span class="dt">dds =</span> dds_multifac,</a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">            <span class="dt">dst =</span> rld_multifac)</a></code></pre></div>
 <p>When such a dataset is provided, the panel for multifactorial exploration is also usable at its best.</p>
 </div>
 <div id="functions-exported-by-the-package-for-standalone-usage" class="section level1">
@@ -499,13 +480,13 @@ colData names(3): condition tissue sizeFactor</code></pre>
 <a href="#pcaplot" class="anchor"></a><code>pcaplot</code>
 </h2>
 <p><code>pcaplot</code> plots the sample PCA for <code>DESeqTransform</code> objects, such as rlog-transformed data. This is the workhorse of the Samples View tab.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld_airway,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"cell"</span>,<span class="st">"dex"</span>),<span class="dt">ntop =</span> <span class="dv">1000</span>,</a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">        <span class="dt">pcX =</span> <span class="dv">1</span>, <span class="dt">pcY =</span> <span class="dv">2</span>, <span class="dt">title =</span> <span class="st">"airway dataset PCA on samples - PC1 vs PC2"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld_airway,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"cell"</span>,<span class="st">"dex"</span>),<span class="dt">ntop =</span> <span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2">        <span class="dt">pcX =</span> <span class="dv">1</span>, <span class="dt">pcY =</span> <span class="dv">2</span>, <span class="dt">title =</span> <span class="st">"airway dataset PCA on samples - PC1 vs PC2"</span>)</a></code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-pcaplot-1.png" width="700" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># on a different set of principal components...</span></a>
-<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld_airway,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"dex"</span>),<span class="dt">ntop =</span> <span class="dv">1000</span>,</a>
-<a class="sourceLine" id="cb30-3" data-line-number="3">        <span class="dt">pcX =</span> <span class="dv">1</span>, <span class="dt">pcY =</span> <span class="dv">4</span>, <span class="dt">title =</span> <span class="st">"airway dataset PCA on samples - PC1 vs PC4"</span>,</a>
-<a class="sourceLine" id="cb30-4" data-line-number="4">        <span class="dt">ellipse =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># on a different set of principal components...</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld_airway,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"dex"</span>),<span class="dt">ntop =</span> <span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">        <span class="dt">pcX =</span> <span class="dv">1</span>, <span class="dt">pcY =</span> <span class="dv">4</span>, <span class="dt">title =</span> <span class="st">"airway dataset PCA on samples - PC1 vs PC4"</span>,</a>
+<a class="sourceLine" id="cb28-4" data-line-number="4">        <span class="dt">ellipse =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-pcaplot-2.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="pcaplot3d" class="section level2">
@@ -513,18 +494,18 @@ colData names(3): condition tissue sizeFactor</code></pre>
 <a href="#pcaplot3d" class="anchor"></a><code>pcaplot3d</code>
 </h2>
 <p>Same as for <code>pcaplot</code>, but it uses the <code>threejs</code> package for the 3d interactive view.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw"><a href="../reference/pcaplot3d.html">pcaplot3d</a></span>(rld_airway,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"cell"</span>,<span class="st">"dex"</span>),<span class="dt">ntop =</span> <span class="dv">1000</span>,</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">        <span class="dt">pcX =</span> <span class="dv">1</span>, <span class="dt">pcY =</span> <span class="dv">2</span>, <span class="dt">pcZ =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="co"># will open up in the viewer</span></a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw"><a href="../reference/pcaplot3d.html">pcaplot3d</a></span>(rld_airway,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"cell"</span>,<span class="st">"dex"</span>),<span class="dt">ntop =</span> <span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb29-2" data-line-number="2">        <span class="dt">pcX =</span> <span class="dv">1</span>, <span class="dt">pcY =</span> <span class="dv">2</span>, <span class="dt">pcZ =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="co"># will open up in the viewer</span></a></code></pre></div>
 </div>
 <div id="pcascree" class="section level2">
 <h2 class="hasAnchor">
 <a href="#pcascree" class="anchor"></a><code>pcascree</code>
 </h2>
 <p><code>pcascree</code> produces a scree plot of the PC computed on the samples. A <code>prcomp</code> object needs to be passed as main argument.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">pcaobj_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/prcomp">prcomp</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/t">t</a></span>(<span class="kw">assay</span>(rld_airway)))</a>
-<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="kw"><a href="../reference/pcascree.html">pcascree</a></span>(pcaobj_airway,<span class="dt">type=</span><span class="st">"pev"</span>,</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3">         <span class="dt">title=</span><span class="st">"Proportion of explained proportion of variance - airway dataset"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">pcaobj_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/prcomp">prcomp</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/t">t</a></span>(<span class="kw">assay</span>(rld_airway)))</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw"><a href="../reference/pcascree.html">pcascree</a></span>(pcaobj_airway,<span class="dt">type=</span><span class="st">"pev"</span>,</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">         <span class="dt">title=</span><span class="st">"Proportion of explained proportion of variance - airway dataset"</span>)</a></code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-pcascree-1.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="correlatepcs-and-plotpccorrs" class="section level2">
@@ -532,9 +513,9 @@ colData names(3): condition tissue sizeFactor</code></pre>
 <a href="#correlatepcs-and-plotpccorrs" class="anchor"></a><code>correlatePCs</code> and <code>plotPCcorrs</code>
 </h2>
 <p><code>correlatePCs</code> and <code>plotPCcorrs</code> respectively compute and plot significance of the (cor)relation of each covariate versus a principal component. The input for <code>correlatePCs</code> is a <code>prcomp</code> object.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">res_pcairway &lt;-<span class="st"> </span><span class="kw"><a href="../reference/correlatePCs.html">correlatePCs</a></span>(pcaobj_airway,<span class="kw">colData</span>(dds_airway))</a>
-<a class="sourceLine" id="cb33-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb33-3" data-line-number="3">res_pcairway</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">res_pcairway &lt;-<span class="st"> </span><span class="kw"><a href="../reference/correlatePCs.html">correlatePCs</a></span>(pcaobj_airway,<span class="kw">colData</span>(dds_airway))</a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb31-3" data-line-number="3">res_pcairway</a></code></pre></div>
 <pre><code>     SampleName       cell        dex albut       Run avgLength Experiment
 PC_1  0.4288799 0.68227033 0.02092134    NA 0.4288799 0.2554109  0.4288799
 PC_2  0.4288799 0.11161023 0.56370286    NA 0.4288799 0.1993592  0.4288799
@@ -545,7 +526,7 @@ PC_1 0.4288799 0.4288799
 PC_2 0.4288799 0.4288799
 PC_3 0.4288799 0.4288799
 PC_4 0.4288799 0.4288799</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw"><a href="../reference/plotPCcorrs.html">plotPCcorrs</a></span>(res_pcairway)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw"><a href="../reference/plotPCcorrs.html">plotPCcorrs</a></span>(res_pcairway)</a></code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-correlatepcs-1.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="hi_loadings" class="section level2">
@@ -553,8 +534,8 @@ PC_4 0.4288799 0.4288799</code></pre>
 <a href="#hi_loadings" class="anchor"></a><code>hi_loadings</code>
 </h2>
 <p><code>hi_loadings</code> extracts and optionally plots the genes with the highest loadings.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="co"># extract the table of the genes with high loadings</span></a>
-<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="kw"><a href="../reference/hi_loadings.html">hi_loadings</a></span>(pcaobj_airway,<span class="dt">topN =</span> <span class="dv">10</span>,<span class="dt">exprTable=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds_airway))</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="co"># extract the table of the genes with high loadings</span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2"><span class="kw"><a href="../reference/hi_loadings.html">hi_loadings</a></span>(pcaobj_airway,<span class="dt">topN =</span> <span class="dv">10</span>,<span class="dt">exprTable=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds_airway))</a></code></pre></div>
 <pre><code>                SRR1039508 SRR1039509 SRR1039512 SRR1039513 SRR1039516
 ENSG00000143127         11        108         24        485         41
 ENSG00000168309         12        274         35        451          1
@@ -597,8 +578,8 @@ ENSG00000124766        870       1851        301
 ENSG00000105989         24        382         46
 ENSG00000013293         75        562         74
 ENSG00000146250        123        439         60</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co"># or alternatively plot the values</span></a>
-<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw"><a href="../reference/hi_loadings.html">hi_loadings</a></span>(pcaobj_airway,<span class="dt">topN =</span> <span class="dv">10</span>,<span class="dt">annotation =</span> annotation_airway)</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="co"># or alternatively plot the values</span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="kw"><a href="../reference/hi_loadings.html">hi_loadings</a></span>(pcaobj_airway,<span class="dt">topN =</span> <span class="dv">10</span>,<span class="dt">annotation =</span> annotation_airway)</a></code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-hiloadings-1.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="genespca" class="section level2">
@@ -606,25 +587,25 @@ ENSG00000146250        123        439         60</code></pre>
 <a href="#genespca" class="anchor"></a><code>genespca</code>
 </h2>
 <p><code>genespca</code> computes and plots the principal components of the genes, eventually displaying the samples as in a typical biplot visualization. This is the function in action for the Genes View tab.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">groups_airway &lt;-<span class="st"> </span><span class="kw">colData</span>(dds_airway)<span class="op">$</span>dex</a>
-<a class="sourceLine" id="cb39-2" data-line-number="2">cols_airway &lt;-<span class="st"> </span>scales<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/scales/topics/hue_pal">hue_pal</a></span>()(<span class="dv">2</span>)[groups_airway]</a>
-<a class="sourceLine" id="cb39-3" data-line-number="3"><span class="co"># with many genes, do not plot the labels of the genes</span></a>
-<a class="sourceLine" id="cb39-4" data-line-number="4"><span class="kw"><a href="../reference/genespca.html">genespca</a></span>(rld_airway,<span class="dt">ntop=</span><span class="dv">5000</span>,</a>
-<a class="sourceLine" id="cb39-5" data-line-number="5">         <span class="dt">choices =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb39-6" data-line-number="6">         <span class="dt">arrowColors=</span>cols_airway,<span class="dt">groupNames=</span>groups_airway,</a>
-<a class="sourceLine" id="cb39-7" data-line-number="7">         <span class="dt">alpha =</span> <span class="fl">0.2</span>,</a>
-<a class="sourceLine" id="cb39-8" data-line-number="8">         <span class="dt">useRownamesAsLabels=</span><span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb39-9" data-line-number="9">         <span class="dt">varname.size =</span> <span class="dv">5</span></a>
-<a class="sourceLine" id="cb39-10" data-line-number="10">        )</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">groups_airway &lt;-<span class="st"> </span><span class="kw">colData</span>(dds_airway)<span class="op">$</span>dex</a>
+<a class="sourceLine" id="cb37-2" data-line-number="2">cols_airway &lt;-<span class="st"> </span>scales<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/scales/topics/hue_pal">hue_pal</a></span>()(<span class="dv">2</span>)[groups_airway]</a>
+<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="co"># with many genes, do not plot the labels of the genes</span></a>
+<a class="sourceLine" id="cb37-4" data-line-number="4"><span class="kw"><a href="../reference/genespca.html">genespca</a></span>(rld_airway,<span class="dt">ntop=</span><span class="dv">5000</span>,</a>
+<a class="sourceLine" id="cb37-5" data-line-number="5">         <span class="dt">choices =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb37-6" data-line-number="6">         <span class="dt">arrowColors=</span>cols_airway,<span class="dt">groupNames=</span>groups_airway,</a>
+<a class="sourceLine" id="cb37-7" data-line-number="7">         <span class="dt">alpha =</span> <span class="fl">0.2</span>,</a>
+<a class="sourceLine" id="cb37-8" data-line-number="8">         <span class="dt">useRownamesAsLabels=</span><span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb37-9" data-line-number="9">         <span class="dt">varname.size =</span> <span class="dv">5</span></a>
+<a class="sourceLine" id="cb37-10" data-line-number="10">        )</a></code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-genespca-1.png" width="700" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="co"># with a smaller number of genes, plot gene names included in the annotation</span></a>
-<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="kw"><a href="../reference/genespca.html">genespca</a></span>(rld_airway,<span class="dt">ntop=</span><span class="dv">100</span>,</a>
-<a class="sourceLine" id="cb40-3" data-line-number="3">         <span class="dt">choices =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb40-4" data-line-number="4">         <span class="dt">arrowColors=</span>cols_airway,<span class="dt">groupNames=</span>groups_airway,</a>
-<a class="sourceLine" id="cb40-5" data-line-number="5">         <span class="dt">alpha =</span> <span class="fl">0.7</span>,</a>
-<a class="sourceLine" id="cb40-6" data-line-number="6">         <span class="dt">varname.size =</span> <span class="dv">5</span>,</a>
-<a class="sourceLine" id="cb40-7" data-line-number="7">         <span class="dt">annotation =</span> annotation_airway</a>
-<a class="sourceLine" id="cb40-8" data-line-number="8">        )</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co"># with a smaller number of genes, plot gene names included in the annotation</span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw"><a href="../reference/genespca.html">genespca</a></span>(rld_airway,<span class="dt">ntop=</span><span class="dv">100</span>,</a>
+<a class="sourceLine" id="cb38-3" data-line-number="3">         <span class="dt">choices =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb38-4" data-line-number="4">         <span class="dt">arrowColors=</span>cols_airway,<span class="dt">groupNames=</span>groups_airway,</a>
+<a class="sourceLine" id="cb38-5" data-line-number="5">         <span class="dt">alpha =</span> <span class="fl">0.7</span>,</a>
+<a class="sourceLine" id="cb38-6" data-line-number="6">         <span class="dt">varname.size =</span> <span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb38-7" data-line-number="7">         <span class="dt">annotation =</span> annotation_airway</a>
+<a class="sourceLine" id="cb38-8" data-line-number="8">        )</a></code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-genespca-2.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="topgotable" class="section level2">
@@ -632,79 +613,79 @@ ENSG00000146250        123        439         60</code></pre>
 <a href="#topgotable" class="anchor"></a><code>topGOtable</code>
 </h2>
 <p><code>topGOtable</code> is a convenient wrapper for extracting functional GO terms enriched in a subset of genes (such as the differentially expressed genes), based on the algorithm and the implementation in the <em><a href="https://bioconductor.org/packages/3.9/topGO">topGO</a></em> package.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># example not run due to quite long runtime</span></a>
-<a class="sourceLine" id="cb41-2" data-line-number="2">dds_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/DESeq">DESeq</a></span>(dds_airway)</a>
-<a class="sourceLine" id="cb41-3" data-line-number="3">res_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/results">results</a></span>(dds_airway)</a>
-<a class="sourceLine" id="cb41-4" data-line-number="4">res_airway<span class="op">$</span>symbol &lt;-<span class="st"> </span><span class="kw">mapIds</span>(org.Hs.eg.db,</a>
-<a class="sourceLine" id="cb41-5" data-line-number="5">                            <span class="dt">keys=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/row.names">row.names</a></span>(res_airway),</a>
-<a class="sourceLine" id="cb41-6" data-line-number="6">                            <span class="dt">column=</span><span class="st">"SYMBOL"</span>,</a>
-<a class="sourceLine" id="cb41-7" data-line-number="7">                            <span class="dt">keytype=</span><span class="st">"ENSEMBL"</span>,</a>
-<a class="sourceLine" id="cb41-8" data-line-number="8">                            <span class="dt">multiVals=</span><span class="st">"first"</span>)</a>
-<a class="sourceLine" id="cb41-9" data-line-number="9">res_airway<span class="op">$</span>entrez &lt;-<span class="st"> </span><span class="kw">mapIds</span>(org.Hs.eg.db,</a>
-<a class="sourceLine" id="cb41-10" data-line-number="10">                            <span class="dt">keys=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/row.names">row.names</a></span>(res_airway),</a>
-<a class="sourceLine" id="cb41-11" data-line-number="11">                            <span class="dt">column=</span><span class="st">"ENTREZID"</span>,</a>
-<a class="sourceLine" id="cb41-12" data-line-number="12">                            <span class="dt">keytype=</span><span class="st">"ENSEMBL"</span>,</a>
-<a class="sourceLine" id="cb41-13" data-line-number="13">                            <span class="dt">multiVals=</span><span class="st">"first"</span>)</a>
-<a class="sourceLine" id="cb41-14" data-line-number="14">resOrdered &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(res_airway[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/order">order</a></span>(res_airway<span class="op">$</span>padj),])</a>
-<a class="sourceLine" id="cb41-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(resOrdered)</a>
-<a class="sourceLine" id="cb41-16" data-line-number="16"><span class="co"># extract DE genes</span></a>
-<a class="sourceLine" id="cb41-17" data-line-number="17">de_df &lt;-<span class="st"> </span>resOrdered[resOrdered<span class="op">$</span>padj <span class="op">&lt;</span><span class="st"> </span><span class="fl">.05</span> <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(resOrdered<span class="op">$</span>padj),]</a>
-<a class="sourceLine" id="cb41-18" data-line-number="18">de_symbols &lt;-<span class="st"> </span>de_df<span class="op">$</span>symbol</a>
-<a class="sourceLine" id="cb41-19" data-line-number="19"><span class="co"># extract background genes</span></a>
-<a class="sourceLine" id="cb41-20" data-line-number="20">bg_ids &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(dds_airway)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colSums">rowSums</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds_airway)) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</a>
-<a class="sourceLine" id="cb41-21" data-line-number="21">bg_symbols &lt;-<span class="st"> </span><span class="kw">mapIds</span>(org.Hs.eg.db,</a>
-<a class="sourceLine" id="cb41-22" data-line-number="22">                     <span class="dt">keys=</span>bg_ids,</a>
-<a class="sourceLine" id="cb41-23" data-line-number="23">                     <span class="dt">column=</span><span class="st">"SYMBOL"</span>,</a>
-<a class="sourceLine" id="cb41-24" data-line-number="24">                     <span class="dt">keytype=</span><span class="st">"ENSEMBL"</span>,</a>
-<a class="sourceLine" id="cb41-25" data-line-number="25">                     <span class="dt">multiVals=</span><span class="st">"first"</span>)</a>
-<a class="sourceLine" id="cb41-26" data-line-number="26"><span class="co"># run the function</span></a>
-<a class="sourceLine" id="cb41-27" data-line-number="27">topgoDE_airway &lt;-<span class="st"> </span><span class="kw"><a href="../reference/topGOtable.html">topGOtable</a></span>(de_symbols, bg_symbols,</a>
-<a class="sourceLine" id="cb41-28" data-line-number="28">                             <span class="dt">ontology =</span> <span class="st">"BP"</span>,</a>
-<a class="sourceLine" id="cb41-29" data-line-number="29">                             <span class="dt">mapping =</span> <span class="st">"org.Hs.eg.db"</span>,</a>
-<a class="sourceLine" id="cb41-30" data-line-number="30">                             <span class="dt">geneID =</span> <span class="st">"symbol"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co"># example not run due to quite long runtime</span></a>
+<a class="sourceLine" id="cb39-2" data-line-number="2">dds_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/DESeq">DESeq</a></span>(dds_airway)</a>
+<a class="sourceLine" id="cb39-3" data-line-number="3">res_airway &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/results">results</a></span>(dds_airway)</a>
+<a class="sourceLine" id="cb39-4" data-line-number="4">res_airway<span class="op">$</span>symbol &lt;-<span class="st"> </span><span class="kw">mapIds</span>(org.Hs.eg.db,</a>
+<a class="sourceLine" id="cb39-5" data-line-number="5">                            <span class="dt">keys=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/row.names">row.names</a></span>(res_airway),</a>
+<a class="sourceLine" id="cb39-6" data-line-number="6">                            <span class="dt">column=</span><span class="st">"SYMBOL"</span>,</a>
+<a class="sourceLine" id="cb39-7" data-line-number="7">                            <span class="dt">keytype=</span><span class="st">"ENSEMBL"</span>,</a>
+<a class="sourceLine" id="cb39-8" data-line-number="8">                            <span class="dt">multiVals=</span><span class="st">"first"</span>)</a>
+<a class="sourceLine" id="cb39-9" data-line-number="9">res_airway<span class="op">$</span>entrez &lt;-<span class="st"> </span><span class="kw">mapIds</span>(org.Hs.eg.db,</a>
+<a class="sourceLine" id="cb39-10" data-line-number="10">                            <span class="dt">keys=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/row.names">row.names</a></span>(res_airway),</a>
+<a class="sourceLine" id="cb39-11" data-line-number="11">                            <span class="dt">column=</span><span class="st">"ENTREZID"</span>,</a>
+<a class="sourceLine" id="cb39-12" data-line-number="12">                            <span class="dt">keytype=</span><span class="st">"ENSEMBL"</span>,</a>
+<a class="sourceLine" id="cb39-13" data-line-number="13">                            <span class="dt">multiVals=</span><span class="st">"first"</span>)</a>
+<a class="sourceLine" id="cb39-14" data-line-number="14">resOrdered &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(res_airway[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/order">order</a></span>(res_airway<span class="op">$</span>padj),])</a>
+<a class="sourceLine" id="cb39-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(resOrdered)</a>
+<a class="sourceLine" id="cb39-16" data-line-number="16"><span class="co"># extract DE genes</span></a>
+<a class="sourceLine" id="cb39-17" data-line-number="17">de_df &lt;-<span class="st"> </span>resOrdered[resOrdered<span class="op">$</span>padj <span class="op">&lt;</span><span class="st"> </span><span class="fl">.05</span> <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(resOrdered<span class="op">$</span>padj),]</a>
+<a class="sourceLine" id="cb39-18" data-line-number="18">de_symbols &lt;-<span class="st"> </span>de_df<span class="op">$</span>symbol</a>
+<a class="sourceLine" id="cb39-19" data-line-number="19"><span class="co"># extract background genes</span></a>
+<a class="sourceLine" id="cb39-20" data-line-number="20">bg_ids &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(dds_airway)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colSums">rowSums</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds_airway)) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb39-21" data-line-number="21">bg_symbols &lt;-<span class="st"> </span><span class="kw">mapIds</span>(org.Hs.eg.db,</a>
+<a class="sourceLine" id="cb39-22" data-line-number="22">                     <span class="dt">keys=</span>bg_ids,</a>
+<a class="sourceLine" id="cb39-23" data-line-number="23">                     <span class="dt">column=</span><span class="st">"SYMBOL"</span>,</a>
+<a class="sourceLine" id="cb39-24" data-line-number="24">                     <span class="dt">keytype=</span><span class="st">"ENSEMBL"</span>,</a>
+<a class="sourceLine" id="cb39-25" data-line-number="25">                     <span class="dt">multiVals=</span><span class="st">"first"</span>)</a>
+<a class="sourceLine" id="cb39-26" data-line-number="26"><span class="co"># run the function</span></a>
+<a class="sourceLine" id="cb39-27" data-line-number="27">topgoDE_airway &lt;-<span class="st"> </span><span class="kw"><a href="../reference/topGOtable.html">topGOtable</a></span>(de_symbols, bg_symbols,</a>
+<a class="sourceLine" id="cb39-28" data-line-number="28">                             <span class="dt">ontology =</span> <span class="st">"BP"</span>,</a>
+<a class="sourceLine" id="cb39-29" data-line-number="29">                             <span class="dt">mapping =</span> <span class="st">"org.Hs.eg.db"</span>,</a>
+<a class="sourceLine" id="cb39-30" data-line-number="30">                             <span class="dt">geneID =</span> <span class="st">"symbol"</span>)</a></code></pre></div>
 </div>
 <div id="pca2go-docs" class="section level2">
 <h2 class="hasAnchor">
 <a href="#pca2go-docs" class="anchor"></a><code>pca2go</code>
 </h2>
 <p><code>pca2go</code> provides a functional interpretation of the principal components, by extracting the genes with the highest loadings for each PC, and then runs internally <code>topGOtable</code> on them for efficient functional enrichment analysis. This function requires a <code>DESeqTransform</code> object as main parameter.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">pca2go_airway &lt;-<span class="st"> </span><span class="kw"><a href="../reference/pca2go.html">pca2go</a></span>(rld_airway,</a>
-<a class="sourceLine" id="cb42-2" data-line-number="2">                        <span class="dt">annotation =</span> annotation_airway,</a>
-<a class="sourceLine" id="cb42-3" data-line-number="3">                        <span class="dt">organism =</span> <span class="st">"Hs"</span>,</a>
-<a class="sourceLine" id="cb42-4" data-line-number="4">                        <span class="dt">ensToGeneSymbol =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb42-5" data-line-number="5">                        <span class="dt">background_genes =</span> bg_ids)</a>
-<a class="sourceLine" id="cb42-6" data-line-number="6"><span class="co"># for a smooth interactive exploration, use DT::datatable</span></a>
-<a class="sourceLine" id="cb42-7" data-line-number="7"><span class="kw">datatable</span>(pca2go_airway<span class="op">$</span>PC1<span class="op">$</span>posLoad)</a>
-<a class="sourceLine" id="cb42-8" data-line-number="8"><span class="co"># display it in the normal R session...</span></a>
-<a class="sourceLine" id="cb42-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(pca2go_airway<span class="op">$</span>PC1<span class="op">$</span>posLoad)</a>
-<a class="sourceLine" id="cb42-10" data-line-number="10"><span class="co"># ... or use it for running the app and display in the dedicated tab</span></a>
-<a class="sourceLine" id="cb42-11" data-line-number="11"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>(dds_airway,rld_airway,</a>
-<a class="sourceLine" id="cb42-12" data-line-number="12">            <span class="dt">pca2go =</span> pca2go_airway,</a>
-<a class="sourceLine" id="cb42-13" data-line-number="13">            <span class="dt">annotation =</span> annotation_airway)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">pca2go_airway &lt;-<span class="st"> </span><span class="kw"><a href="../reference/pca2go.html">pca2go</a></span>(rld_airway,</a>
+<a class="sourceLine" id="cb40-2" data-line-number="2">                        <span class="dt">annotation =</span> annotation_airway,</a>
+<a class="sourceLine" id="cb40-3" data-line-number="3">                        <span class="dt">organism =</span> <span class="st">"Hs"</span>,</a>
+<a class="sourceLine" id="cb40-4" data-line-number="4">                        <span class="dt">ensToGeneSymbol =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb40-5" data-line-number="5">                        <span class="dt">background_genes =</span> bg_ids)</a>
+<a class="sourceLine" id="cb40-6" data-line-number="6"><span class="co"># for a smooth interactive exploration, use DT::datatable</span></a>
+<a class="sourceLine" id="cb40-7" data-line-number="7"><span class="kw">datatable</span>(pca2go_airway<span class="op">$</span>PC1<span class="op">$</span>posLoad)</a>
+<a class="sourceLine" id="cb40-8" data-line-number="8"><span class="co"># display it in the normal R session...</span></a>
+<a class="sourceLine" id="cb40-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(pca2go_airway<span class="op">$</span>PC1<span class="op">$</span>posLoad)</a>
+<a class="sourceLine" id="cb40-10" data-line-number="10"><span class="co"># ... or use it for running the app and display in the dedicated tab</span></a>
+<a class="sourceLine" id="cb40-11" data-line-number="11"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>(dds_airway,rld_airway,</a>
+<a class="sourceLine" id="cb40-12" data-line-number="12">            <span class="dt">pca2go =</span> pca2go_airway,</a>
+<a class="sourceLine" id="cb40-13" data-line-number="13">            <span class="dt">annotation =</span> annotation_airway)</a></code></pre></div>
 </div>
 <div id="limmaquickpca2go" class="section level2">
 <h2 class="hasAnchor">
 <a href="#limmaquickpca2go" class="anchor"></a><code>limmaquickpca2go</code>
 </h2>
 <p><code>limmaquickpca2go</code> is an alternative to <code>pca2go</code>, used in the live running app, thanks to its fast implementation based on the <code><a href="https://www.rdocumentation.org/packages/limma/topics/goana">limma::goana</a></code> function.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">goquick_airway &lt;-<span class="st"> </span><span class="kw"><a href="../reference/limmaquickpca2go.html">limmaquickpca2go</a></span>(rld_airway,</a>
-<a class="sourceLine" id="cb43-2" data-line-number="2">                                   <span class="dt">pca_ngenes =</span> <span class="dv">10000</span>,</a>
-<a class="sourceLine" id="cb43-3" data-line-number="3">                                   <span class="dt">inputType =</span> <span class="st">"ENSEMBL"</span>,</a>
-<a class="sourceLine" id="cb43-4" data-line-number="4">                                   <span class="dt">organism =</span> <span class="st">"Hs"</span>)</a>
-<a class="sourceLine" id="cb43-5" data-line-number="5"><span class="co"># display it in the normal R session...</span></a>
-<a class="sourceLine" id="cb43-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(goquick_airway<span class="op">$</span>PC1<span class="op">$</span>posLoad)</a>
-<a class="sourceLine" id="cb43-7" data-line-number="7"><span class="co"># ... or use it for running the app and display in the dedicated tab</span></a>
-<a class="sourceLine" id="cb43-8" data-line-number="8"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>(dds_airway,rld_airway,</a>
-<a class="sourceLine" id="cb43-9" data-line-number="9">            <span class="dt">pca2go =</span> goquick_airway,</a>
-<a class="sourceLine" id="cb43-10" data-line-number="10">            <span class="dt">annotation =</span> annotation_airway)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">goquick_airway &lt;-<span class="st"> </span><span class="kw"><a href="../reference/limmaquickpca2go.html">limmaquickpca2go</a></span>(rld_airway,</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">                                   <span class="dt">pca_ngenes =</span> <span class="dv">10000</span>,</a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">                                   <span class="dt">inputType =</span> <span class="st">"ENSEMBL"</span>,</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">                                   <span class="dt">organism =</span> <span class="st">"Hs"</span>)</a>
+<a class="sourceLine" id="cb41-5" data-line-number="5"><span class="co"># display it in the normal R session...</span></a>
+<a class="sourceLine" id="cb41-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(goquick_airway<span class="op">$</span>PC1<span class="op">$</span>posLoad)</a>
+<a class="sourceLine" id="cb41-7" data-line-number="7"><span class="co"># ... or use it for running the app and display in the dedicated tab</span></a>
+<a class="sourceLine" id="cb41-8" data-line-number="8"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>(dds_airway,rld_airway,</a>
+<a class="sourceLine" id="cb41-9" data-line-number="9">            <span class="dt">pca2go =</span> goquick_airway,</a>
+<a class="sourceLine" id="cb41-10" data-line-number="10">            <span class="dt">annotation =</span> annotation_airway)</a></code></pre></div>
 </div>
 <div id="makeexampledeseqdataset_multifac" class="section level2">
 <h2 class="hasAnchor">
 <a href="#makeexampledeseqdataset_multifac" class="anchor"></a><code>makeExampleDESeqDataSet_multifac</code>
 </h2>
 <p><code>makeExampleDESeqDataSet_multifac</code> constructs a simulated <code>DESeqDataSet</code> of Negative Binomial dataset from different conditions. The fold changes between the conditions can be adjusted with the <code>betaSD_condition</code> and <code>betaSD_tissue</code> arguments.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">dds_simu &lt;-<span class="st"> </span><span class="kw"><a href="../reference/makeExampleDESeqDataSet_multifac.html">makeExampleDESeqDataSet_multifac</a></span>(<span class="dt">betaSD_condition =</span> <span class="dv">3</span>,<span class="dt">betaSD_tissue =</span> <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb44-2" data-line-number="2">dds_simu</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">dds_simu &lt;-<span class="st"> </span><span class="kw"><a href="../reference/makeExampleDESeqDataSet_multifac.html">makeExampleDESeqDataSet_multifac</a></span>(<span class="dt">betaSD_condition =</span> <span class="dv">3</span>,<span class="dt">betaSD_tissue =</span> <span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb42-2" data-line-number="2">dds_simu</a></code></pre></div>
 <pre><code>class: DESeqDataSet 
 dim: 1000 12 
 metadata(1): version
@@ -714,8 +695,8 @@ rowData names(4): trueIntercept trueBeta_condition trueBeta_tissue
   trueDisp
 colnames(12): sample1 sample2 ... sample11 sample12
 colData names(2): condition tissue</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">dds2_simu &lt;-<span class="st"> </span><span class="kw"><a href="../reference/makeExampleDESeqDataSet_multifac.html">makeExampleDESeqDataSet_multifac</a></span>(<span class="dt">betaSD_condition =</span> <span class="fl">0.5</span>,<span class="dt">betaSD_tissue =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb46-2" data-line-number="2">dds2_simu</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">dds2_simu &lt;-<span class="st"> </span><span class="kw"><a href="../reference/makeExampleDESeqDataSet_multifac.html">makeExampleDESeqDataSet_multifac</a></span>(<span class="dt">betaSD_condition =</span> <span class="fl">0.5</span>,<span class="dt">betaSD_tissue =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb44-2" data-line-number="2">dds2_simu</a></code></pre></div>
 <pre><code>class: DESeqDataSet 
 dim: 1000 12 
 metadata(1): version
@@ -725,13 +706,13 @@ rowData names(4): trueIntercept trueBeta_condition trueBeta_tissue
   trueDisp
 colnames(12): sample1 sample2 ... sample11 sample12
 colData names(2): condition tissue</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">rld_simu &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds_simu)</a>
-<a class="sourceLine" id="cb48-2" data-line-number="2">rld2_simu &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds2_simu)</a>
-<a class="sourceLine" id="cb48-3" data-line-number="3"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld_simu,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"condition"</span>,<span class="st">"tissue"</span>)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-4" data-line-number="4"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">"Simulated data - Big condition effect, small tissue effect"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">rld_simu &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds_simu)</a>
+<a class="sourceLine" id="cb46-2" data-line-number="2">rld2_simu &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds2_simu)</a>
+<a class="sourceLine" id="cb46-3" data-line-number="3"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld_simu,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"condition"</span>,<span class="st">"tissue"</span>)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb46-4" data-line-number="4"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Simulated data - Big condition effect, small tissue effect"</span>)</a></code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-makedataset-1.png" width="700" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld2_simu,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"condition"</span>,<span class="st">"tissue"</span>)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">"Simulated data - Small condition effect, bigger tissue effect"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="kw"><a href="../reference/pcaplot.html">pcaplot</a></span>(rld2_simu,<span class="dt">intgroup =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"condition"</span>,<span class="st">"tissue"</span>)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Simulated data - Small condition effect, bigger tissue effect"</span>)</a></code></pre></div>
 <p><img src="pcaExplorer_files/figure-html/func-makedataset-2.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="distro_expr" class="section level2">
@@ -739,45 +720,45 @@ colData names(2): condition tissue</code></pre>
 <a href="#distro_expr" class="anchor"></a><code>distro_expr</code>
 </h2>
 <p>Plots the distribution of expression values, either with density lines, boxplots or violin plots.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw"><a href="../reference/distro_expr.html">distro_expr</a></span>(rld_airway,<span class="dt">plot_type =</span> <span class="st">"density"</span>)</a>
-<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="kw"><a href="../reference/distro_expr.html">distro_expr</a></span>(rld_airway,<span class="dt">plot_type =</span> <span class="st">"violin"</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw"><a href="../reference/distro_expr.html">distro_expr</a></span>(rld_airway,<span class="dt">plot_type =</span> <span class="st">"boxplot"</span>)</a></code></pre></div>
-<p><img src="pcaExplorer_files/figure-html/unnamed-chunk-7-1.png" width="700" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw"><a href="../reference/distro_expr.html">distro_expr</a></span>(rld_airway,<span class="dt">plot_type =</span> <span class="st">"density"</span>)</a>
+<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="kw"><a href="../reference/distro_expr.html">distro_expr</a></span>(rld_airway,<span class="dt">plot_type =</span> <span class="st">"violin"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw"><a href="../reference/distro_expr.html">distro_expr</a></span>(rld_airway,<span class="dt">plot_type =</span> <span class="st">"boxplot"</span>)</a></code></pre></div>
+<p><img src="pcaExplorer_files/figure-html/unnamed-chunk-5-1.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="geneprofiler" class="section level2">
 <h2 class="hasAnchor">
 <a href="#geneprofiler" class="anchor"></a><code>geneprofiler</code>
 </h2>
 <p>Plots the profile expression of a subset of genes, optionally as standardized values.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">dds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/makeExampleDESeqDataSet_multifac.html">makeExampleDESeqDataSet_multifac</a></span>(<span class="dt">betaSD_condition =</span> <span class="dv">3</span>,<span class="dt">betaSD_tissue =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb52-2" data-line-number="2">dst &lt;-<span class="st"> </span>DESeq2<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds)</a>
-<a class="sourceLine" id="cb52-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">42</span>)</a>
-<a class="sourceLine" id="cb52-4" data-line-number="4"><span class="kw"><a href="../reference/geneprofiler.html">geneprofiler</a></span>(dst,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"gene"</span>,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>,<span class="dv">20</span>)), <span class="dt">plotZ =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">dds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/makeExampleDESeqDataSet_multifac.html">makeExampleDESeqDataSet_multifac</a></span>(<span class="dt">betaSD_condition =</span> <span class="dv">3</span>,<span class="dt">betaSD_tissue =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb50-2" data-line-number="2">dst &lt;-<span class="st"> </span>DESeq2<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlogTransformation</a></span>(dds)</a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">42</span>)</a>
+<a class="sourceLine" id="cb50-4" data-line-number="4"><span class="kw"><a href="../reference/geneprofiler.html">geneprofiler</a></span>(dst,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"gene"</span>,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>,<span class="dv">20</span>)), <span class="dt">plotZ =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <pre><code>you provided 20 unique identifiers
 20 out of 20 provided genes were found in the data</code></pre>
-<p><img src="pcaExplorer_files/figure-html/unnamed-chunk-8-1.png" width="700" style="display: block; margin: auto;"></p>
+<p><img src="pcaExplorer_files/figure-html/unnamed-chunk-6-1.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="get_annotation-and-get_annotation_orgdb" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get_annotation-and-get_annotation_orgdb" class="anchor"></a><code>get_annotation</code> and <code>get_annotation_orgdb</code>
 </h2>
 <p>These two wrapper functions retrieve the latest annotations for the <code>dds</code> object, to be used in the call to the <code>pcaExplorer</code> function. They use respectively the <code>biomaRt</code> package and the <code>org.XX.eg.db</code> packages.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1">anno_df_biomart &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_annotation.html">get_annotation</a></span>(<span class="dt">dds =</span> dds_airway,</a>
-<a class="sourceLine" id="cb54-2" data-line-number="2">                                  <span class="dt">biomart_dataset =</span> <span class="st">"hsapiens_gene_ensembl"</span>,</a>
-<a class="sourceLine" id="cb54-3" data-line-number="3">                                  <span class="dt">idtype =</span> <span class="st">"ensembl_gene_id"</span>)</a>
-<a class="sourceLine" id="cb54-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb54-5" data-line-number="5">anno_df_orgdb &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_annotation_orgdb.html">get_annotation_orgdb</a></span>(<span class="dt">dds =</span> dds_airway,</a>
-<a class="sourceLine" id="cb54-6" data-line-number="6">                                      <span class="dt">orgdb_species =</span> <span class="st">"org.Hs.eg.db"</span>,</a>
-<a class="sourceLine" id="cb54-7" data-line-number="7">                                      <span class="dt">idtype =</span> <span class="st">"ENSEMBL"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">anno_df_biomart &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_annotation.html">get_annotation</a></span>(<span class="dt">dds =</span> dds_airway,</a>
+<a class="sourceLine" id="cb52-2" data-line-number="2">                                  <span class="dt">biomart_dataset =</span> <span class="st">"hsapiens_gene_ensembl"</span>,</a>
+<a class="sourceLine" id="cb52-3" data-line-number="3">                                  <span class="dt">idtype =</span> <span class="st">"ensembl_gene_id"</span>)</a>
+<a class="sourceLine" id="cb52-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb52-5" data-line-number="5">anno_df_orgdb &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_annotation_orgdb.html">get_annotation_orgdb</a></span>(<span class="dt">dds =</span> dds_airway,</a>
+<a class="sourceLine" id="cb52-6" data-line-number="6">                                      <span class="dt">orgdb_species =</span> <span class="st">"org.Hs.eg.db"</span>,</a>
+<a class="sourceLine" id="cb52-7" data-line-number="7">                                      <span class="dt">idtype =</span> <span class="st">"ENSEMBL"</span>)</a></code></pre></div>
 </div>
 <div id="pair_corr" class="section level2">
 <h2 class="hasAnchor">
 <a href="#pair_corr" class="anchor"></a><code>pair_corr</code>
 </h2>
 <p>Plots the pairwise scatter plots and computes the correlation coefficient on the expression matrix provided.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co"># use a subset of the counts to reduce plotting time, it can be time consuming with many samples</span></a>
-<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="kw"><a href="../reference/pair_corr.html">pair_corr</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds_airway)[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>,])</a></code></pre></div>
-<p><img src="pcaExplorer_files/figure-html/unnamed-chunk-10-1.png" width="700" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># use a subset of the counts to reduce plotting time, it can be time consuming with many samples</span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="kw"><a href="../reference/pair_corr.html">pair_corr</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds_airway)[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>,])</a></code></pre></div>
+<p><img src="pcaExplorer_files/figure-html/unnamed-chunk-8-1.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div id="further-development" class="section level1">
@@ -789,7 +770,7 @@ colData names(2): condition tissue</code></pre>
 <div id="session-info" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session info</h1>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
 <pre><code>R Under development (unstable) (2018-11-21 r75637)
 Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS Sierra 10.12.6
