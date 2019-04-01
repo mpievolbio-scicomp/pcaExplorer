@@ -2413,18 +2413,20 @@ pcaExplorer <- function(dds=NULL,
     output$knitDoc <- renderUI({
       input$updatepreview_button
       return(
-        withProgress({
+        withProgress(
+          message = "Updating the report in the app body",
+          detail = "This can take some time",
+          {
           # temporarily switch to the temp dir, in case you do not have write
           # permission to the current working directory
           owd <- setwd(tempdir())
           on.exit(setwd(owd))
           tmp_content <- paste0(rmd_yaml(),input$acereport_rmd,collapse = "\n")
-          isolate(HTML(knit2html(text = tmp_content, fragment.only = TRUE, quiet = TRUE)))
-        },
-        ## TODO: I should just "render on the fly" the Rmd without messing with the folders...
-        message = "Updating the report in the app body",
-        detail = "This can take some time"
-        )
+          incProgress(0.5, detail = "Rendering report...")
+          htmlpreview <- knit2html(text = tmp_content, fragment.only = TRUE, quiet = TRUE)
+          incProgress(1)
+          isolate(HTML(htmlpreview))
+        })
       )
     })
     
