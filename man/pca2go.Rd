@@ -7,7 +7,7 @@
 pca2go(se, pca_ngenes = 10000, annotation = NULL,
   inputType = "geneSymbol", organism = "Mm", ensToGeneSymbol = FALSE,
   loadings_ngenes = 500, background_genes = NULL, scale = FALSE,
-  return_ranked_gene_loadings = FALSE, ...)
+  return_ranked_gene_loadings = FALSE, annopkg = NULL, ...)
 }
 \arguments{
 \item{se}{A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
@@ -34,6 +34,10 @@ with the \code{annotation} provided}
 
 \item{return_ranked_gene_loadings}{Logical, defaults to FALSE. If TRUE, simply returns
 a list containing the top ranked genes with hi loadings in each PC and in each direction}
+
+\item{annopkg}{String containing the name of the organism annotation package. Can be used to 
+override the \code{organism} parameter, e.g. in case of alternative identifiers used
+in the annotation package (Arabidopsis with TAIR)}
 
 \item{...}{Further parameters to be passed to the topGO routine}
 }
