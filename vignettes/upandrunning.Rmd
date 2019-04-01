@@ -197,6 +197,11 @@ With `pcaExplorer` you can do all of the following:
 knitr::include_graphics("unr_99_editreport.png")
 ```
 
+The functionality to display the report preview is based on `knit2html`, and some elements such as `DataTable` objects might not render correctly. 
+To render them correctly, please install the PhantomJS executable before launching the app. 
+This can be done by using the `r CRANpkg("webshot")` package and calling `webshot::install_phantomjs()` - HTML widgets will be rendered automatically as screenshots.
+Keep in mind that the fully rendered report (the one you can obtain with the "Generate & Save" button) is not affected by this, since it uses `rmarkdown::render()`.
+
 # Session Info {.unnumbered}
 
 ```{r sessioninfo}
