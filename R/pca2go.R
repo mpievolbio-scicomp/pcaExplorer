@@ -19,6 +19,9 @@
 #' @param scale Logical, defaults to FALSE, scale values for the PCA
 #' @param return_ranked_gene_loadings Logical, defaults to FALSE. If TRUE, simply returns
 #' a list containing the top ranked genes with hi loadings in each PC and in each direction
+#' @param annopkg String containing the name of the organism annotation package. Can be used to 
+#' override the \code{organism} parameter, e.g. in case of alternative identifiers used
+#' in the annotation package (Arabidopsis with TAIR)
 #' @param ... Further parameters to be passed to the topGO routine
 #'
 #' @return A nested list object containing for each principal component the terms enriched
@@ -64,10 +67,14 @@ pca2go <- function(se,
                    background_genes = NULL,
                    scale = FALSE,
                    return_ranked_gene_loadings = FALSE,
+                   annopkg = NULL,
                    ... # further parameters to be passed to the topgo routine
                    ) {
 
-  annopkg <- paste0("org.",organism,".eg.db")
+  # to force e.g. in case other identifiers are used, e.g. in Arabidopsis with TAIR
+  if(is.null(annopkg))
+    annopkg <- paste0("org.",organism,".eg.db")
+  
   if (!require(annopkg,character.only=TRUE)) {
     stop("The package",annopkg, "is not installed/available. Try installing it with BiocManager::install() ?")
   }
