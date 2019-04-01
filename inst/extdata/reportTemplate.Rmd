@@ -377,7 +377,7 @@ citation("pcaExplorer")
 sessionInfo()
 ```
 
-```{r}
+```{r, echo = FALSE}
 library(shiny)
 footertemplate <- function(){
   tags$div(
@@ -398,6 +398,6 @@ footertemplate <- function(){
 }
 ```
 
-```{r}
+```{r, echo = FALSE}
 footertemplate()
 ```
