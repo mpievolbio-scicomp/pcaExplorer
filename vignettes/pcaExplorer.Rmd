@@ -287,6 +287,32 @@ The panel displays a PCA plot for the samples, surrounded on each side by the ta
 <img src="newsnap_08_pca2go.png" style="width:1000px;"/>
 </p>
 
+### More on the `pca2go` parameter
+
+A note on the functionality provided by the PCA2GO tab: if it is not provided in the `pca2go` parameter, the user can still compute this object while using the app, and this is done using `limma::goana`. 
+The implementation of this function supports a few organism packages, which cover many use cases (human, mouse, rat, fruit fly, or chimpanzee), but some use cases are not directly covered (e.g. if you are working with plants like Arabidopsis Thaliana).
+
+For example, with a dataset from Arabidopsis where the genes are encoded as TAIR (The Arabidopsis Information Resource) identifiers, one would ideally call the following commands
+
+```{r eval=FALSE}
+BiocManager::install("org.At.tair.db")
+library("org.At.tair.db")
+# skipping the steps where you normally would generate your dds_at object...
+dds_at
+vst_at <- DESeq2::vst(dds_at)
+anno_at <- get_annotation_orgdb(dds_at,"org.At.tair.db", idtype = "TAIR")
+# subset the background to include only the expressed genes
+bg_ids <- rownames(dds_at)[rowSums(counts(dds_at)) > 0]
+library(topGO)
+pca2go_at <- pca2go(vst_at,
+                    annotation = anno_at,
+                    annopkg = "org.At.tair.db",
+                    ensToGeneSymbol = TRUE,
+                    background_genes = bg_ids)
+# and finally, with all the objects prepared...
+pcaExplorer(dds = dds_at, dst = vst_at, annotation = anno_at, pca2go = pca2go_at)
+```
+
 ## Multifactor Exploration
 
 This panel allows for the multifactor exploration of datasets with 2 or more experimental factors. 
@@ -318,6 +344,11 @@ A preview is available in the tab itself, and the report can be generated, saved
 <p align="center">
 <img src="newsnap_10_editor.png" style="width:1000px;"/>
 </p>
+
+The functionality to display the report preview is based on `knit2html`, and some elements such as `DataTable` objects might not render correctly. 
+To render them correctly, please install the PhantomJS executable before launching the app. 
+This can be done by using the `r CRANpkg("webshot")` package and calling `webshot::install_phantomjs()` - HTML widgets will be rendered automatically as screenshots.
+Keep in mind that the fully rendered report (the one you can obtain with the "Generate & Save" button) is not affected by this, since it uses `rmarkdown::render()`.
 
 ## About
 
