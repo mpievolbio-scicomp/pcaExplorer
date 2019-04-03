@@ -124,7 +124,8 @@ pcaExplorer <- function(dds=NULL,
           "right", options = list(container = "body")),
         numericInput('pca_label_size', label = 'Labels size: ', value = 2,min = 1,max = 8),
         shinyBS::bsTooltip(
-          "pca_label_size", paste0("Size of the labels for the samples in the principal components plots"),
+          "pca_label_size", paste0("Size of the labels for the samples in the principal components plots. ",
+                                   "This also controls the size of the gene labels in the Genes View panel."),
           "right", options = list(container = "body")),
         numericInput('pca_point_size', label = 'Points size: ', value = 2,min = 1,max = 8),
         shinyBS::bsTooltip(

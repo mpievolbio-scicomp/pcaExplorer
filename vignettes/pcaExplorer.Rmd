@@ -168,7 +168,8 @@ By hovering over with the mouse, the user can receive additional information on 
 - **Group/color by** - Select the group of samples to stratify the analysis. Can also assume multiple values.
 - **Nr of (most variant) genes** - Number of genes to select for computing the principal components. The top n genes are selected ranked by their variance inter-samples
 - **Alpha** - Color transparency for the plots. Can assume values from 0 (transparent) to 1 (opaque)
-- **Labels size** - Size of the labels for the samples in the principal components plots
+- **Labels size** - Size of the labels for the samples in the principal components plots.
+  This parameter also controls the size of the gene labels, which are displayed in the Genes View once the user has brushed an area in the main plot.
 - **Points size** - Size of the points to be plotted in the principal components plots
 - **Variable name size** - Size of the labels for the genes PCA - correspond to the samples names
 - **Scaling factor** - Scale value for resizing the arrow corresponding to the variables in the PCA for the genes. It should be used for mere visualization purposes
