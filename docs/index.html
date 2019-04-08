@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.9.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.9.6</span>
       </span>
     </div>
 
@@ -144,8 +144,8 @@ devtools::install_github("federicomarini/pcaExplorer")</a></code></pre>
 <pre><code><a href="https://www.rdocumentation.org/packages/base/topics/library">library("pcaExplorer")</a></code></pre>
 <p>The <code>pcaExplorer</code> app can be launched in different modes:</p>
 <ul>
-<li><p><code><a href="reference/pcaExplorer.html">pcaExplorer(dds = dds, rld = rld)</a></code>, where <code>dds</code> is a <code>DESeqDataSet</code> object and <code>rld</code> is a <code>DESeqTransform</code> object, which were created during an existing session for the analysis of an RNA-seq dataset with the <code>DESeq2</code> package</p></li>
-<li><p><code><a href="reference/pcaExplorer.html">pcaExplorer(dds = dds)</a></code>, where <code>dds</code> is a <code>DESeqDataSet</code> object. The <code>rld</code> object is automatically computed upon launch.</p></li>
+<li><p><code><a href="reference/pcaExplorer.html">pcaExplorer(dds = dds, dst = dst)</a></code>, where <code>dds</code> is a <code>DESeqDataSet</code> object and <code>dst</code> is a <code>DESeqTransform</code> object, which were created during an existing session for the analysis of an RNA-seq dataset with the <code>DESeq2</code> package</p></li>
+<li><p><code><a href="reference/pcaExplorer.html">pcaExplorer(dds = dds)</a></code>, where <code>dds</code> is a <code>DESeqDataSet</code> object. The <code>dst</code> object is automatically computed upon launch.</p></li>
 <li><p><code><a href="reference/pcaExplorer.html">pcaExplorer(countmatrix = countmatrix, coldata = coldata)</a></code>, where <code>countmatrix</code> is a count matrix, generated after assigning reads to features such as genes via tools such as <code>HTSeq-count</code> or <code>featureCounts</code>, and <code>coldata</code> is a data frame containing the experimental covariates of the experiments, such as condition, tissue, cell line, run batch and so on.</p></li>
 <li><p><code><a href="reference/pcaExplorer.html">pcaExplorer()</a></code>, and then subsequently uploading the count matrix and the covariates data frame through the user interface. These files need to be formatted as tab separated files, which is a common format for storing such count values.</p></li>
 </ul>

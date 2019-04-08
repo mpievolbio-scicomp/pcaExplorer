@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.9.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.9.6</span>
       </span>
     </div>
 
@@ -136,6 +136,7 @@
 <li>The sample to sample heatmap supports additionally manhattan and correlation-based distances</li>
 <li>There is a new vignette with a detailed quick start, “Up and running with pcaExplorer”, specifying how the workflow with <code>pcaExplorer</code> can look like, demonstrated on the <code>airway</code> dataset</li>
 <li>In the Instructions panel, we added buttons to access the fully rendered documentation, either local or online if e.g. deployed to a server. Related to this, <code>pcaExplorer</code> has a new parameter, <code>runLocal</code>, to control this behavior</li>
+<li>An additional parameter, <code>annopkg</code>, has been added to <code><a href="../reference/pca2go.html">pca2go()</a></code> to override the behavior with the <code>organism</code> parameter (this is useful when the name of the annotation package is not conform to the classical <code>org.Xx.eg.db</code>, e.g. for Arabidopsis Thaliana); a detailed use case has been added in the main vignette</li>
 </ul>
 </div>
 <div id="other-notes" class="section level2">
@@ -149,6 +150,7 @@
 <li>The content in the Instructions tab is now contained in collapsible elements</li>
 <li>The file formats accepted by <code>pcaExplorer</code> are now specified both in the vignette text, as well as in the app at runtime</li>
 <li>The content of the Instructions tab is now more compact, containing the rendered “Up and running with pcaExplorer” vignette. The full vignettes can be accessed via buttons in the same panel</li>
+<li>Added instructions to install phantomJS via the <code>webshot</code> package - would raise an error when previewing the report</li>
 </ul>
 </div>
 </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot distribution of expression values — distro_expr • pcaExplorer</title>
+<title>TODOs/wishlist of features • pcaExplorer</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -25,15 +25,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script>
 
 
 
-<meta property="og:title" content="Plot distribution of expression values — distro_expr" />
-
-<meta property="og:description" content="Plot distribution of expression values" />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="TODOs/wishlist of features" />
 
 
 
@@ -50,7 +47,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -62,7 +59,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">pcaExplorer</a>
+        <a class="navbar-link" href="index.html">pcaExplorer</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.9.6</span>
       </span>
     </div>
@@ -70,16 +67,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/pcaExplorer.html">User guide</a>
+  <a href="articles/pcaExplorer.html">User guide</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -89,13 +86,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/upandrunning.html">Up and running with `r Biocpkg("pcaExplorer")`
+      <a href="articles/upandrunning.html">Up and running with `r Biocpkg("pcaExplorer")`
 </a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -116,57 +113,24 @@
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-    <h1>Plot distribution of expression values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/federicomarini/pcaExplorer/blob/master/R/distro_expr.R'><code>R/distro_expr.R</code></a></small>
-    <div class="hidden name"><code>distro_expr.Rd</code></div>
+      <h1>TODOs/wishlist of features</h1>
     </div>
 
-    <div class="ref-description">
-    
-    <p>Plot distribution of expression values</p>
-    
-    </div>
+<div id="todoswishlist-of-features" class="section level1">
 
-    <pre class="usage"><span class='fu'>distro_expr</span>(<span class='no'>rld</span>, <span class='kw'>plot_type</span> <span class='kw'>=</span> <span class='st'>"density"</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>rld</th>
-      <td><p>A <code>DESeqTransform</code> object.</p></td>
-    </tr>
-    <tr>
-      <th>plot_type</th>
-      <td><p>Character, choose one of <code>boxplot</code>, <code>violin</code> or
-<code>density</code>. Defaults to <code>density</code></p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A plot with the distribution of the expression values</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>3</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>rlt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DESeq2</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/rlog'>rlogTransformation</a></span>(<span class='no'>dds</span>)
-<span class='fu'>distro_expr</span>(<span class='no'>rlt</span>)</div><div class='img'><img src='distro_expr-1.png' alt='' width='700' height='433' /></div></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-  </div>
+<ul>
+<li>improved export of pca2go</li>
+<li>track down pheatmap now showing up - maybe this one? <a href="https://groups.google.com/forum/#!topic/shiny-discuss/H2Vt6ax32W8" class="uri">https://groups.google.com/forum/#!topic/shiny-discuss/H2Vt6ax32W8</a>
+</li>
+</ul>
 </div>
+
+  </div>
+
+</div>
+
 
       <footer>
       <div class="copyright">

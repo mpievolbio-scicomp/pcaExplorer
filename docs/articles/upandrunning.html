@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.9.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.9.6</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@
       </address>
                               <h4 class="author">Harald Binder</h4>
             <address class="author_afil">
-      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">27 February 2019</h4>
+      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">8 April 2019</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/federicomarini/pcaExplorer/blob/master/vignettes/upandrunning.Rmd"><code>vignettes/upandrunning.Rmd</code></a></small>
       <div class="hidden name"><code>upandrunning.Rmd</code></div>
@@ -234,6 +234,7 @@ The pcaExplorer task menu. Buttons for saving the session to binary data or to a
 The Report Editor tab. The collapsible elements control general markdown and editor options, which are regarded when the report is compiled. Its content is specified in the Ace editor, integrated in the Shiny app.
 </p>
 </div>
+<p>The functionality to display the report preview is based on <code>knit2html</code>, and some elements such as <code>DataTable</code> objects might not render correctly. To render them correctly, please install the PhantomJS executable before launching the app. This can be done by using the <em><a href="https://CRAN.R-project.org/package=webshot">webshot</a></em> package and calling <code><a href="https://www.rdocumentation.org/packages/webshot/topics/install_phantomjs">webshot::install_phantomjs()</a></code> - HTML widgets will be rendered automatically as screenshots. Keep in mind that the fully rendered report (the one you can obtain with the “Generate &amp; Save” button) is not affected by this, since it uses <code><a href="https://www.rdocumentation.org/packages/rmarkdown/topics/render">rmarkdown::render()</a></code>.</p>
 </div>
 <div id="session-info" class="section level1 unnumbered">
 <h1 class="hasAnchor">
@@ -257,16 +258,16 @@ The Report Editor tab. The collapsible elements control general markdown and edi
 ## [1] BiocStyle_2.11.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.0         rstudioapi_0.9.0   knitr_1.21        
+##  [1] Rcpp_1.0.1         rstudioapi_0.10    knitr_1.22        
 ##  [4] xml2_1.2.0         magrittr_1.5       roxygen2_6.1.1    
-##  [7] MASS_7.3-51.1      R6_2.4.0           rlang_0.3.1       
-## [10] highr_0.7          stringr_1.4.0      tools_3.6.0       
+##  [7] MASS_7.3-51.2      R6_2.4.0           rlang_0.3.2       
+## [10] highr_0.8          stringr_1.4.0      tools_3.6.0       
 ## [13] xfun_0.5           png_0.1-7          htmltools_0.3.6   
 ## [16] commonmark_1.7     yaml_2.2.0         digest_0.6.18     
-## [19] assertthat_0.2.0   rprojroot_1.3-2    bookdown_0.9      
+## [19] assertthat_0.2.1   rprojroot_1.3-2    bookdown_0.9      
 ## [22] pkgdown_1.3.0      crayon_1.3.4       BiocManager_1.30.4
-## [25] fs_1.2.6           memoise_1.1.0      evaluate_0.13     
-## [28] rmarkdown_1.11     stringi_1.3.1      compiler_3.6.0    
+## [25] fs_1.2.7           memoise_1.1.0      evaluate_0.13     
+## [28] rmarkdown_1.12     stringi_1.4.3      compiler_3.6.0    
 ## [31] desc_1.2.0         backports_1.1.3</code></pre>
 </div>
   </div>
