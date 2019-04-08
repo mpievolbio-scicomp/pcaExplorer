@@ -2,6 +2,9 @@
 
 This content has been loaded from the template report `.Rmd` file. Please edit it at your best convenience!
 
+If you are viewing this report in the Preview, you might require the installation of the PhantomJS to render correctly some HTML widgets. 
+This can be done by using the `r BiocStyle::CRANpkg("webshot")` package and calling `webshot::install_phantomjs()`
+
 ```{r setup, include=FALSE, eval = TRUE, echo = FALSE}
 opts_chunk$set(
   echo=input$report_echo,
@@ -42,7 +45,7 @@ if(input$countstable_unit=="log10_counts")
   currentMat <- log10(1 + counts(values$mydds,normalized=TRUE))
 ```
 
-```{r}
+```{r, warning=FALSE}
 DT::datatable(currentMat)
 ```
 
