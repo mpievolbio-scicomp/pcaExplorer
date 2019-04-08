@@ -61,11 +61,11 @@ library("pcaExplorer")
 
 The `pcaExplorer` app can be launched in different modes:
 
-- `pcaExplorer(dds = dds, rld = rld)`, where `dds` is a `DESeqDataSet` object and `rld` is a `DESeqTransform`
+- `pcaExplorer(dds = dds, dst = dst)`, where `dds` is a `DESeqDataSet` object and `dst` is a `DESeqTransform`
 object, which were created during an existing session for the analysis of an RNA-seq
 dataset with the `DESeq2` package
 
-- `pcaExplorer(dds = dds)`, where `dds` is a `DESeqDataSet` object. The `rld` object is automatically 
+- `pcaExplorer(dds = dds)`, where `dds` is a `DESeqDataSet` object. The `dst` object is automatically 
 computed upon launch.
 
 - `pcaExplorer(countmatrix = countmatrix, coldata = coldata)`, where `countmatrix` is a count matrix, generated
