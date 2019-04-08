@@ -11,7 +11,7 @@
 * The sample to sample heatmap supports additionally manhattan and correlation-based distances
 * There is a new vignette with a detailed quick start, "Up and running with pcaExplorer", specifying how the workflow with `pcaExplorer` can look like, demonstrated on the `airway` dataset
 * In the Instructions panel, we added buttons to access the fully rendered documentation, either local or online if e.g. deployed to a server. Related to this, `pcaExplorer` has a new parameter, `runLocal`, to control this behavior
-
+* An additional parameter, `annopkg`, has been added to `pca2go()` to override the behavior with the `organism` parameter (this is useful when the name of the annotation package is not conform to the classical `org.Xx.eg.db`, e.g. for Arabidopsis Thaliana); a detailed use case has been added in the main vignette
 
 ## Other notes
 
@@ -22,6 +22,7 @@
 * The content in the Instructions tab is now contained in collapsible elements
 * The file formats accepted by `pcaExplorer` are now specified both in the vignette text, as well as in the app at runtime
 * The content of the Instructions tab is now more compact, containing the rendered "Up and running with pcaExplorer" vignette. The full vignettes can be accessed via buttons in the same panel
+* Added instructions to install phantomJS via the `webshot` package - would raise an error when previewing the report
 
 # pcaExplorer 2.8.0
 
