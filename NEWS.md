@@ -1,3 +1,9 @@
+# pcaExplorer 2.12.0
+
+## Other notes
+
+* The type of the columns in the data.frame returned by `topGOtable` are now correctly referring to the type they contain - e.g. the p values are now stored as numeric values
+
 # pcaExplorer 2.10.0
 
 ## New features
