@@ -273,6 +273,9 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
   
   names(sTab)[which(names(sTab) == "p.value_method2")] <- paste0("p.value_",topGO_method2)
   
+  sTab[["p.value_classic"]] <- as.numeric(sTab[["p.value_classic"]])
+  sTab[[paste0("p.value_",topGO_method2)]] <- as.numeric(sTab[[paste0("p.value_",topGO_method2)]])
+  
   # if FDR, then apply it here
   if(do_padj)
     sTab[[paste0("padj_BY_",topGO_method2)]] <- p.adjust(sTab[[paste0("p.value_",topGO_method2)]], method = "BY")
