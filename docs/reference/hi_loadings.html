@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.2</span>
       </span>
     </div>
 
@@ -170,59 +170,7 @@ and a column, <code>gene_name</code>, containing e.g. HGNC-based gene symbols</p
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD</span> <span class='kw'>=</span> <span class='fl'>3</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>rlt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DESeq2</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/rlog'>rlogTransformation</a></span>(<span class='no'>dds</span>)
-<span class='no'>pcaobj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/prcomp'>prcomp</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='kw pkg'>SummarizedExperiment</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>assay</a></span>(<span class='no'>rlt</span>)))
-<span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div><div class='img'><img src='hi_loadings-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>exprTable</span><span class='kw'>=</span><span class='no'>dds</span>)</div><div class='output co'>#&gt; class: DESeqDataSet 
-#&gt; dim: 20 12 
-#&gt; metadata(1): version
-#&gt; assays(1): counts
-#&gt; rownames(20): gene300 gene88 ... gene961 gene444
-#&gt; rowData names(4): trueIntercept trueBeta_condition trueBeta_tissue
-#&gt;   trueDisp
-#&gt; colnames(12): sample1 sample2 ... sample11 sample12
-#&gt; colData names(2): condition tissue</div><div class='input'><span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>exprTable</span><span class='kw'>=</span><span class='fu'>counts</span>(<span class='no'>dds</span>))</div><div class='output co'>#&gt;         sample1 sample2 sample3 sample4 sample5 sample6 sample7 sample8 sample9
-#&gt; gene300      16       6      10       2       0       1    1351     526    1211
-#&gt; gene88       30      77      24      46       8      37    8591    6193   11330
-#&gt; gene427      45      64      42      76      60     124    4956    3260    2321
-#&gt; gene415     109     129      49      51     125     130   19543   18247   13509
-#&gt; gene305       1       5       0       0       0       0    1732     321      19
-#&gt; gene838      27       5      10       7       7       7    2112    4368    3959
-#&gt; gene239       9       6       3       1       1       0     903    3410      74
-#&gt; gene758      49      13      39      30      38      58    8797   12405    3412
-#&gt; gene917      15      21      33      32      14       5   12829   27023   14151
-#&gt; gene766       3       6      16       8      10       4    3819    3015    3545
-#&gt; gene496     347     297     299     398     258     374       0       3       2
-#&gt; gene4        90      53      27     102     152      72       0       0       0
-#&gt; gene558     233      71     211     170     126      90       3       1       0
-#&gt; gene361      42      29      31      88      61     196       0       0       0
-#&gt; gene795     172     162      79     186     146      60       1       5       0
-#&gt; gene124     105      39      57     143      81     182       0       3       0
-#&gt; gene54       39      82      63      39      27      67       1       0       0
-#&gt; gene204      47      62     116      81     125      84       1       1       1
-#&gt; gene961      71      91      89      79     129      93       0       2       1
-#&gt; gene444      13      35      56      80      62      15       0       0       0
-#&gt;         sample10 sample11 sample12
-#&gt; gene300      441      227      449
-#&gt; gene88      2797      542     3383
-#&gt; gene427    19699    18154    24313
-#&gt; gene415     4508    11323    10913
-#&gt; gene305       81      219       14
-#&gt; gene838      430     1477     1446
-#&gt; gene239      158      346     3642
-#&gt; gene758    17233    16278    10338
-#&gt; gene917     6588     1753      730
-#&gt; gene766     1388     3942     2556
-#&gt; gene496        4        5        2
-#&gt; gene4          1        0        0
-#&gt; gene558        1        2        1
-#&gt; gene361        0        1        0
-#&gt; gene795        1        2        1
-#&gt; gene124        1        1        1
-#&gt; gene54         0        0        0
-#&gt; gene204        0        1        2
-#&gt; gene961        2        1        2
-#&gt; gene444        1        0        1</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD</span> <span class='kw'>=</span> <span class='fl'>3</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='error'>Error in makeExampleDESeqDataSet_multifac(betaSD = 3, betaSD_tissue = 1): could not find function "makeExampleDESeqDataSet_multifac"</span></div><div class='input'><span class='no'>rlt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DESeq2</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/rlog'>rlogTransformation</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='error'>Error in ncol(object): object 'dds' not found</span></div><div class='input'><span class='no'>pcaobj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/prcomp'>prcomp</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='kw pkg'>SummarizedExperiment</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>assay</a></span>(<span class='no'>rlt</span>)))</div><div class='output co'>#&gt; <span class='error'>Error in SummarizedExperiment::assay(rlt): object 'rlt' not found</span></div><div class='input'><span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div><div class='output co'>#&gt; <span class='error'>Error in hi_loadings(pcaobj, topN = 20): could not find function "hi_loadings"</span></div><div class='input'><span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>exprTable</span><span class='kw'>=</span><span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='error'>Error in hi_loadings(pcaobj, topN = 10, exprTable = dds): could not find function "hi_loadings"</span></div><div class='input'><span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>exprTable</span><span class='kw'>=</span><span class='fu'>counts</span>(<span class='no'>dds</span>))</div><div class='output co'>#&gt; <span class='error'>Error in hi_loadings(pcaobj, topN = 10, exprTable = counts(dds)): could not find function "hi_loadings"</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

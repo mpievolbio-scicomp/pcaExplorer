@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.2</span>
       </span>
     </div>
 
@@ -157,11 +157,7 @@ the pvalue instead of the p value itself</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>DESeq2</span>)
-<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>3</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>rlt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/rlog'>rlogTransformation</a></span>(<span class='no'>dds</span>)
-<span class='no'>pcaobj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/prcomp'>prcomp</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='fu'>assay</span>(<span class='no'>rlt</span>)))
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='correlatePCs.html'>correlatePCs</a></span>(<span class='no'>pcaobj</span>,<span class='fu'>colData</span>(<span class='no'>dds</span>))
-<span class='fu'>plotPCcorrs</span>(<span class='no'>res</span>)</div><div class='img'><img src='plotPCcorrs-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>3</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='error'>Error in makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1): could not find function "makeExampleDESeqDataSet_multifac"</span></div><div class='input'><span class='no'>rlt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/rlog'>rlogTransformation</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='error'>Error in ncol(object): object 'dds' not found</span></div><div class='input'><span class='no'>pcaobj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/prcomp'>prcomp</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='fu'>assay</span>(<span class='no'>rlt</span>)))</div><div class='output co'>#&gt; <span class='error'>Error in assay(rlt): object 'rlt' not found</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='correlatePCs.html'>correlatePCs</a></span>(<span class='no'>pcaobj</span>,<span class='fu'>colData</span>(<span class='no'>dds</span>))</div><div class='output co'>#&gt; <span class='error'>Error in correlatePCs(pcaobj, colData(dds)): could not find function "correlatePCs"</span></div><div class='input'><span class='fu'>plotPCcorrs</span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; <span class='error'>Error in plotPCcorrs(res): could not find function "plotPCcorrs"</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

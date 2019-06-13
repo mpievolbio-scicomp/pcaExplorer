@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.2</span>
       </span>
     </div>
 
@@ -173,7 +173,7 @@ to speed up the plotting operations.</p></td>
 #&gt; colData names(9): SampleName cell ... Sample BioSample</div><div class='input'><span class='no'>dds_airway</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DESeq2</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assay</span>(<span class='no'>airway</span>),
                                              <span class='kw'>colData</span> <span class='kw'>=</span> <span class='fu'>colData</span>(<span class='no'>airway</span>),
                                              <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>dex</span>+<span class='no'>cell</span>)
-<span class='fu'>pair_corr</span>(<span class='fu'>counts</span>(<span class='no'>dds_airway</span>)[<span class='fl'>1</span>:<span class='fl'>100</span>,]) <span class='co'># use just a subset for the example</span></div><div class='img'><img src='pair_corr-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'>pair_corr</span>(<span class='fu'>counts</span>(<span class='no'>dds_airway</span>)[<span class='fl'>1</span>:<span class='fl'>100</span>,]) <span class='co'># use just a subset for the example</span></div><div class='output co'>#&gt; <span class='error'>Error in pair_corr(counts(dds_airway)[1:100, ]): could not find function "pair_corr"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

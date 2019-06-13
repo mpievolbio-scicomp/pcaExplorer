@@ -65,7 +65,7 @@ and the betaSD_tissue arguments." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.2</span>
       </span>
     </div>
 
@@ -190,25 +190,7 @@ to Mike Love for the nice initial implementation</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'>makeExampleDESeqDataSet_multifac</span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>3</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>dds</span></div><div class='output co'>#&gt; class: DESeqDataSet 
-#&gt; dim: 1000 12 
-#&gt; metadata(1): version
-#&gt; assays(1): counts
-#&gt; rownames(1000): gene1 gene2 ... gene999 gene1000
-#&gt; rowData names(4): trueIntercept trueBeta_condition trueBeta_tissue
-#&gt;   trueDisp
-#&gt; colnames(12): sample1 sample2 ... sample11 sample12
-#&gt; colData names(2): condition tissue</div><div class='input'><span class='no'>dds2</span> <span class='kw'>&lt;-</span> <span class='fu'>makeExampleDESeqDataSet_multifac</span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>1</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>4</span>)
-<span class='no'>dds2</span></div><div class='output co'>#&gt; class: DESeqDataSet 
-#&gt; dim: 1000 12 
-#&gt; metadata(1): version
-#&gt; assays(1): counts
-#&gt; rownames(1000): gene1 gene2 ... gene999 gene1000
-#&gt; rowData names(4): trueIntercept trueBeta_condition trueBeta_tissue
-#&gt;   trueDisp
-#&gt; colnames(12): sample1 sample2 ... sample11 sample12
-#&gt; colData names(2): condition tissue</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'>makeExampleDESeqDataSet_multifac</span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>3</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='error'>Error in makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1): could not find function "makeExampleDESeqDataSet_multifac"</span></div><div class='input'><span class='no'>dds</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'dds' not found</span></div><div class='input'><span class='no'>dds2</span> <span class='kw'>&lt;-</span> <span class='fu'>makeExampleDESeqDataSet_multifac</span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>1</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; <span class='error'>Error in makeExampleDESeqDataSet_multifac(betaSD_condition = 1, betaSD_tissue = 4): could not find function "makeExampleDESeqDataSet_multifac"</span></div><div class='input'><span class='no'>dds2</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'dds2' not found</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
