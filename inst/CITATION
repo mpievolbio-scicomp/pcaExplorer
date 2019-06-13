@@ -2,21 +2,22 @@ citHeader("To cite the package 'pcaExplorer' in publications use:")
 
 citEntry(
   entry        = "Article",
-  title        = "Development of Applications for Interactive and Reproducible Research: a Case Study",
-  journal      = "Genomics and Computational Biology",
+  title        = "pcaExplorer: an R/Bioconductor package for interacting with RNA-seq principal components",
+  journal      = "BMC Bioinformatics",
   author       = personList(as.person("Federico Marini"),
                    as.person("Harald Binder")),
-  volume       = "3",
+  volume       = "20",
 	number       = "1",
-	year         = "2016",
-	issn         = "2365-7154",
-	pages        = "e39",
-	doi          = "10.18547/gcb.2017.vol3.iss1.e39",
+	pages        = "331",
+	year         = "2019",
+	month        = "Jun",
+	day          = "13",
+	doi          = "10.1186/s12859-019-2879-1",
   url          = "http://bioconductor.org/packages/pcaExplorer/",
 
   textVersion  =
-  paste("Federico Marini, Harald Binder (2016).",
-        "Development of Applications for Interactive and Reproducible Research: a Case Study",
-        "URL http://bioconductor.org/packages/pcaExplorer/, https://genomicscomputbiol.org/ojs3/GCB/article/view/21",
-        "doi: 10.18547/gcb.2017.vol3.iss1.e39, 10.18129/B9.bioc.pcaExplorer")
+  paste0("Federico Marini, Harald Binder (2019). ",
+        "pcaExplorer: an R/Bioconductor package for interacting with RNA-seq principal components\n",
+        "URL http://bioconductor.org/packages/pcaExplorer/, https://doi.org/10.1186/s12859-019-2879-1\n",
+        "doi: 10.1186/s12859-019-2879-1, 10.18129/B9.bioc.pcaExplorer")
 )
