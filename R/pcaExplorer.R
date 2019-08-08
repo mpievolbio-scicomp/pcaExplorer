@@ -822,7 +822,8 @@ pcaExplorer <- function(dds=NULL,
             tabPanel("Edit report",
                      icon = icon("pencil-square-o"),
                      aceEditor("acereport_rmd", mode="markdown",theme = "solarized_light",autoComplete = "live",
-                               value=readLines(system.file("extdata", "reportTemplate.Rmd",package = "pcaExplorer")),
+                               value="_Initialization of the_ `pcaExplorer` _report generation..._",
+                               placeholder = "You can enter some code and text in R Markdown format",
                                height="800px"))
           )
         ),
