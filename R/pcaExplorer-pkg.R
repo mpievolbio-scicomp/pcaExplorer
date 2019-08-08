@@ -28,7 +28,8 @@
 #' @import ggplot2
 #' @import ggrepel
 #' @importFrom DT datatable
-#' @import shinyAce
+#' @importFrom shinyAce aceAutocomplete aceEditor getAceModes getAceThemes
+#' updateAceEditor
 #' @import threejs
 #' @import biomaRt
 #' @importFrom pheatmap pheatmap
