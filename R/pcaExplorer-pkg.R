@@ -24,9 +24,9 @@
 #' @import GO.db
 #' @import shiny
 #' @import shinydashboard
-#' @importFrom shinyBS bsTooltip
+#' @importFrom shinyBS bsTooltip bsCollapse bsCollapsePanel
 #' @import ggplot2
-#' @import ggrepel
+#' @importFrom ggrepel geom_label_repel
 #' @importFrom DT datatable
 #' @importFrom shinyAce aceAutocomplete aceEditor getAceModes getAceThemes
 #' updateAceEditor
