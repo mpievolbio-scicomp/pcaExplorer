@@ -1,8 +1,13 @@
 # pcaExplorer 2.12.0
 
+## Bug fixes
+
+* Fixed an error in the initialization of the app due to a new behavior introduced by `shinyAce` in version >= 0.4.0
+
 ## Other notes
 
 * The type of the columns in the data.frame returned by `topGOtable` are now correctly referring to the type they contain - e.g. the p values are now stored as numeric values
+* Citation now refers to the published manuscript - https://doi.org/10.1186/s12859-019-2879-1
 
 # pcaExplorer 2.10.0
 
