@@ -849,6 +849,7 @@ pcaExplorer <- function(dds=NULL,
   ) 
   
   # server definition -------------------------------------------------------
+  #nocov start
   pcaexplorer_server <- shinyServer(function(input, output, session) {
     # server setup reactives --------------------------------------------------------
     ## placeholder for the figures to export
@@ -2654,6 +2655,7 @@ pcaExplorer <- function(dds=NULL,
         }
     })
   }) # end of pcaExplorer(dds,dst,countmatrix,coldata,pca2go,annotation)
+  #nocov end
   shinyApp(ui = pcaexplorer_ui, server = pcaexplorer_server)
 }
 
