@@ -7,3 +7,4 @@
 .circleci
 _pkgdown.yml
 docs/*
+^docs$
