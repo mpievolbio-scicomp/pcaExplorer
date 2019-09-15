@@ -228,7 +228,9 @@ pcaExplorer <- function(dds=NULL,
                 "bottom", options = list(container = "body"))
             )
           )
-          ,br(), p(),
+          ,
+          br(),
+          p(),
           uiOutput("ui_computetransform"),
           
           h4("Preview on the available data"),
