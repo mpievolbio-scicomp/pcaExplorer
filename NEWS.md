@@ -3,6 +3,7 @@
 ## Bug fixes
 
 * Fixed an error in the initialization of the app due to a new behavior introduced by `shinyAce` in version >= 0.4.0
+* `topGOtable` does not generate rows with NAs if providing a too high number for the categories to report
 
 ## Other notes
 
