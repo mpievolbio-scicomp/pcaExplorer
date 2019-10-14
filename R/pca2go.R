@@ -281,6 +281,7 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
     sTab[[paste0("padj_BY_",topGO_method2)]] <- p.adjust(sTab[[paste0("p.value_",topGO_method2)]], method = "BY")
   
   # subset to specified number of rows
+  topTablerows <- min(nrow(sTab), topTablerows)
   sTab <- sTab[seq_len(topTablerows),]
   
   if(fullNamesInRows){
