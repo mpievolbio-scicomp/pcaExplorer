@@ -5,9 +5,16 @@
 \title{Functional interpretation of the principal components, based on simple
 overrepresentation analysis}
 \usage{
-limmaquickpca2go(se, pca_ngenes = 10000, inputType = "ENSEMBL",
-  organism = "Mm", loadings_ngenes = 500, background_genes = NULL,
-  scale = FALSE, ...)
+limmaquickpca2go(
+  se,
+  pca_ngenes = 10000,
+  inputType = "ENSEMBL",
+  organism = "Mm",
+  loadings_ngenes = 500,
+  background_genes = NULL,
+  scale = FALSE,
+  ...
+)
 }
 \arguments{
 \item{se}{A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},

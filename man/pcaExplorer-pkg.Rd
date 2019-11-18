@@ -3,7 +3,6 @@
 \docType{package}
 \name{pcaExplorer-pkg}
 \alias{pcaExplorer-pkg}
-\alias{pcaExplorer-pkg-package}
 \title{pcaExplorer: analyzing time-lapse microscopy imaging, from detection to tracking}
 \description{
 pcaExplorer provides functionality for interactive visualization of RNA-seq datasets

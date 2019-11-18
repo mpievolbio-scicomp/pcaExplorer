@@ -4,9 +4,19 @@
 \alias{pcaplot}
 \title{Sample PCA plot for transformed data}
 \usage{
-pcaplot(x, intgroup = "condition", ntop = 500, returnData = FALSE,
-  title = NULL, pcX = 1, pcY = 2, text_labels = TRUE,
-  point_size = 3, ellipse = TRUE, ellipse.prob = 0.95)
+pcaplot(
+  x,
+  intgroup = "condition",
+  ntop = 500,
+  returnData = FALSE,
+  title = NULL,
+  pcX = 1,
+  pcY = 2,
+  text_labels = TRUE,
+  point_size = 3,
+  ellipse = TRUE,
+  ellipse.prob = 0.95
+)
 }
 \arguments{
 \item{x}{A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},

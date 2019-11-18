@@ -4,11 +4,23 @@
 \alias{topGOtable}
 \title{Extract functional terms enriched in the DE genes, based on topGO}
 \usage{
-topGOtable(DEgenes, BGgenes, ontology = "BP", annot = annFUN.org,
-  mapping = "org.Mm.eg.db", geneID = "symbol", topTablerows = 200,
-  fullNamesInRows = TRUE, addGeneToTerms = TRUE, plotGraph = FALSE,
-  plotNodes = 10, writeOutput = FALSE, outputFile = "",
-  topGO_method2 = "elim", do_padj = FALSE)
+topGOtable(
+  DEgenes,
+  BGgenes,
+  ontology = "BP",
+  annot = annFUN.org,
+  mapping = "org.Mm.eg.db",
+  geneID = "symbol",
+  topTablerows = 200,
+  fullNamesInRows = TRUE,
+  addGeneToTerms = TRUE,
+  plotGraph = FALSE,
+  plotNodes = 10,
+  writeOutput = FALSE,
+  outputFile = "",
+  topGO_method2 = "elim",
+  do_padj = FALSE
+)
 }
 \arguments{
 \item{DEgenes}{A vector of (differentially expressed) genes}

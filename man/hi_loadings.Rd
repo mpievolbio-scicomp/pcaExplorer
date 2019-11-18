@@ -4,8 +4,14 @@
 \alias{hi_loadings}
 \title{Extract genes with highest loadings}
 \usage{
-hi_loadings(pcaobj, whichpc = 1, topN = 10, exprTable = NULL,
-  annotation = NULL, title = "Top/bottom loadings")
+hi_loadings(
+  pcaobj,
+  whichpc = 1,
+  topN = 10,
+  exprTable = NULL,
+  annotation = NULL,
+  title = "Top/bottom loadings"
+)
 }
 \arguments{
 \item{pcaobj}{A \code{prcomp} object}

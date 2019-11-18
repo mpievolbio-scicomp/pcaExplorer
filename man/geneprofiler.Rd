@@ -4,8 +4,7 @@
 \alias{geneprofiler}
 \title{Extract and plot the expression profile of genes}
 \usage{
-geneprofiler(se, genelist = NULL, intgroup = "condition",
-  plotZ = FALSE)
+geneprofiler(se, genelist = NULL, intgroup = "condition", plotZ = FALSE)
 }
 \arguments{
 \item{se}{A \code{\link{DESeqDataSet}} object, or a

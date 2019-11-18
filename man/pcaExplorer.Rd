@@ -4,9 +4,15 @@
 \alias{pcaExplorer}
 \title{Explore a dataset from a PCA perspective}
 \usage{
-pcaExplorer(dds = NULL, dst = NULL, countmatrix = NULL,
-  coldata = NULL, pca2go = NULL, annotation = NULL,
-  runLocal = TRUE)
+pcaExplorer(
+  dds = NULL,
+  dst = NULL,
+  countmatrix = NULL,
+  coldata = NULL,
+  pca2go = NULL,
+  annotation = NULL,
+  runLocal = TRUE
+)
 }
 \arguments{
 \item{dds}{A \code{\link{DESeqDataSet}} object. If not provided, then a \code{countmatrix}

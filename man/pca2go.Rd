@@ -4,10 +4,20 @@
 \alias{pca2go}
 \title{Functional interpretation of the principal components}
 \usage{
-pca2go(se, pca_ngenes = 10000, annotation = NULL,
-  inputType = "geneSymbol", organism = "Mm", ensToGeneSymbol = FALSE,
-  loadings_ngenes = 500, background_genes = NULL, scale = FALSE,
-  return_ranked_gene_loadings = FALSE, annopkg = NULL, ...)
+pca2go(
+  se,
+  pca_ngenes = 10000,
+  annotation = NULL,
+  inputType = "geneSymbol",
+  organism = "Mm",
+  ensToGeneSymbol = FALSE,
+  loadings_ngenes = 500,
+  background_genes = NULL,
+  scale = FALSE,
+  return_ranked_gene_loadings = FALSE,
+  annopkg = NULL,
+  ...
+)
 }
 \arguments{
 \item{se}{A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
