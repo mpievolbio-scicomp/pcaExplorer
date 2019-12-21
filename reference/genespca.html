@@ -70,7 +70,7 @@ the samples as in a typical biplot visualization." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.13.0</span>
       </span>
     </div>
 
@@ -135,15 +135,36 @@ the samples as in a typical biplot visualization." />
 the samples as in a typical biplot visualization.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>genespca</span>(<span class='no'>x</span>, <span class='no'>ntop</span>, <span class='kw'>choices</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>), <span class='kw'>arrowColors</span> <span class='kw'>=</span> <span class='st'>"steelblue"</span>,
-  <span class='kw'>groupNames</span> <span class='kw'>=</span> <span class='st'>"group"</span>, <span class='kw'>biplot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pc.biplot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>obs.scale</span> <span class='kw'>=</span> <span class='fl'>1</span> - <span class='no'>scale</span>, <span class='kw'>var.scale</span> <span class='kw'>=</span> <span class='no'>scale</span>, <span class='kw'>groups</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ellipse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ellipse.prob</span> <span class='kw'>=</span> <span class='fl'>0.68</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>labels.size</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>var.axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>circle</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>circle.prob</span> <span class='kw'>=</span> <span class='fl'>0.69</span>, <span class='kw'>varname.size</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>varname.adjust</span> <span class='kw'>=</span> <span class='fl'>1.5</span>,
-  <span class='kw'>varname.abbrev</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>returnData</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>coordEqual</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>scaleArrow</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>useRownamesAsLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>point_size</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>annotation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>genespca</span>(
+  <span class='no'>x</span>,
+  <span class='no'>ntop</span>,
+  <span class='kw'>choices</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+  <span class='kw'>arrowColors</span> <span class='kw'>=</span> <span class='st'>"steelblue"</span>,
+  <span class='kw'>groupNames</span> <span class='kw'>=</span> <span class='st'>"group"</span>,
+  <span class='kw'>biplot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>pc.biplot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>obs.scale</span> <span class='kw'>=</span> <span class='fl'>1</span> - <span class='no'>scale</span>,
+  <span class='kw'>var.scale</span> <span class='kw'>=</span> <span class='no'>scale</span>,
+  <span class='kw'>groups</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ellipse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ellipse.prob</span> <span class='kw'>=</span> <span class='fl'>0.68</span>,
+  <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>labels.size</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>var.axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>circle</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>circle.prob</span> <span class='kw'>=</span> <span class='fl'>0.69</span>,
+  <span class='kw'>varname.size</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+  <span class='kw'>varname.adjust</span> <span class='kw'>=</span> <span class='fl'>1.5</span>,
+  <span class='kw'>varname.abbrev</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>returnData</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>coordEqual</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>scaleArrow</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>useRownamesAsLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>point_size</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>annotation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -292,11 +313,11 @@ such as the transformed counts of RNA-seq experiments</p>
 <span class='no'>rlt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='no'>dds</span>)
 <span class='no'>groups</span> <span class='kw'>&lt;-</span> <span class='fu'>colData</span>(<span class='no'>dds</span>)$<span class='no'>condition</span>
 <span class='no'>groups</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>groups</span>,<span class='kw'>levels</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>groups</span>))
-<span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>scales</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/scales/man/hue_pal.html'>hue_pal</a></span>()(<span class='fl'>2</span>)[<span class='no'>groups</span>]
+<span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>scales</span><span class='kw ns'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/hue_pal.html'>hue_pal</a></span>()(<span class='fl'>2</span>)[<span class='no'>groups</span>]
 <span class='fu'>genespca</span>(<span class='no'>rlt</span>,<span class='kw'>ntop</span><span class='kw'>=</span><span class='fl'>100</span>,<span class='kw'>arrowColors</span><span class='kw'>=</span><span class='no'>cols</span>,<span class='kw'>groupNames</span><span class='kw'>=</span><span class='no'>groups</span>)</div><div class='img'><img src='genespca-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='no'>groups_multi</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/interaction.html'>interaction</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='fu'>colData</span>(<span class='no'>rlt</span>)[,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"condition"</span>,<span class='st'>"tissue"</span>)]))
 <span class='no'>groups_multi</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>groups_multi</span>,<span class='kw'>levels</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>groups_multi</span>))
-<span class='no'>cols_multi</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>scales</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/scales/man/hue_pal.html'>hue_pal</a></span>()(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>groups_multi</span>)))[<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>groups_multi</span>)]
+<span class='no'>cols_multi</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>scales</span><span class='kw ns'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/hue_pal.html'>hue_pal</a></span>()(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>groups_multi</span>)))[<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>groups_multi</span>)]
 <span class='fu'>genespca</span>(<span class='no'>rlt</span>,<span class='kw'>ntop</span><span class='kw'>=</span><span class='fl'>100</span>,<span class='kw'>arrowColors</span><span class='kw'>=</span><span class='no'>cols_multi</span>,<span class='kw'>groupNames</span><span class='kw'>=</span><span class='no'>groups_multi</span>)</div><div class='img'><img src='genespca-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>

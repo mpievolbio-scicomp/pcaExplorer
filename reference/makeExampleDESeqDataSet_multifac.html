@@ -71,7 +71,7 @@ and the betaSD_tissue arguments." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.13.0</span>
       </span>
     </div>
 
@@ -137,10 +137,16 @@ The fold changes between the conditions can be adjusted with the <code>betaSD_co
 and the <code>betaSD_tissue</code> arguments.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>makeExampleDESeqDataSet_multifac</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>m</span> <span class='kw'>=</span> <span class='fl'>12</span>,
-  <span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>interceptMean</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>interceptSD</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>dispMeanRel</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fl'>4</span>/<span class='no'>x</span> + <span class='fl'>0.1</span>,
-  <span class='kw'>sizeFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='no'>m</span>))</pre>
+    <pre class="usage"><span class='fu'>makeExampleDESeqDataSet_multifac</span>(
+  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+  <span class='kw'>m</span> <span class='kw'>=</span> <span class='fl'>12</span>,
+  <span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>interceptMean</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+  <span class='kw'>interceptSD</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>dispMeanRel</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fl'>4</span>/<span class='no'>x</span> + <span class='fl'>0.1</span>,
+  <span class='kw'>sizeFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='no'>m</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
