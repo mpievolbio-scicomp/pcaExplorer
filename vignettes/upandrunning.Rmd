@@ -34,6 +34,10 @@ vignette: >
 <!-- - enforce width="80%" for all imgs (50% for the smaller screenshot) -->
 <!-- - copy content to inst/extdata/instructions_unr.md -->
 
+```{r}
+knitr::opts_chunk$set(crop = NULL)
+```
+
 # Setup
 
 First things first: install `r Biocpkg("pcaExplorer")` and load it into your R session.
