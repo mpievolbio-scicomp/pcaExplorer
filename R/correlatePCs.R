@@ -15,35 +15,33 @@
 #'
 #' @examples
 #' library(DESeq2)
-#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
 #' rlt <- DESeq2::rlogTransformation(dds)
 #' pcaobj <- prcomp(t(assay(rlt)))
-#' correlatePCs(pcaobj,colData(dds))
-#'
+#' correlatePCs(pcaobj, colData(dds))
 #'
 #' @export
-correlatePCs <- function(pcaobj,coldata,pcs=1:4){
+correlatePCs <- function(pcaobj, coldata, pcs = 1:4) {
   # split the analysis for continuous and categorial
-  coldataTypes <- sapply(coldata,class)
+  coldataTypes <- sapply(coldata, class)
   # extract the scores from the pc object
   x <- pcaobj$x
 
   # do it until 1:4 PCs
-  res <- matrix(NA,nrow=length(pcs),ncol = ncol(coldata))
+  res <- matrix(NA, nrow = length(pcs), ncol = ncol(coldata))
 
   colnames(res) <- colnames(coldata)
-  rownames(res) <- paste0("PC_",pcs)
+  rownames(res) <- paste0("PC_", pcs)
 
-  for (i in 1:ncol(res)){
+  for (i in 1:ncol(res)) {
     # for each covariate...
-    for(j in pcs){
-      if(coldataTypes[i] %in% c("factor","character"))
-      {
-        if(length(levels(coldata[,i])) > 1) {
-          res[j,i] <- kruskal.test(x[,j],coldata[,i])$p.value
+    for (j in pcs) {
+      if (coldataTypes[i] %in% c("factor", "character")) {
+        if (length(levels(coldata[, i])) > 1) {
+          res[j, i] <- kruskal.test(x[, j], coldata[, i])$p.value
         }
-      }else {
-        res[j,i] <- cor.test(x[,j],coldata[,i],method="spearman")$p.value
+      } else {
+        res[j, i] <- cor.test(x[, j], coldata[, i], method = "spearman")$p.value
       }
     }
   }
@@ -65,20 +63,20 @@ correlatePCs <- function(pcaobj,coldata,pcs=1:4){
 #'
 #' @examples
 #' library(DESeq2)
-#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
 #' rlt <- rlogTransformation(dds)
 #' pcaobj <- prcomp(t(assay(rlt)))
-#' res <- correlatePCs(pcaobj,colData(dds))
+#' res <- correlatePCs(pcaobj, colData(dds))
 #' plotPCcorrs(res)
 #'
 #' @export
-plotPCcorrs <- function(pccorrs,pc=1,logp=TRUE) {
-  selectedPC <- paste0("PC_",pc)
-  pvals <- pccorrs[selectedPC,]
+plotPCcorrs <- function(pccorrs, pc = 1, logp = TRUE) {
+  selectedPC <- paste0("PC_", pc)
+  pvals <- pccorrs[selectedPC, ]
 
-  if(logp) pvals <- -log10(pvals)
+  if (logp) pvals <- -log10(pvals)
 
-  barplot(pvals,las=2, col="steelblue",
-          main=paste0("Significance of the relations between PC ",pc," vs covariates"),
-          ylab=ifelse(logp,"-log10(pval)","pval"))
+  barplot(pvals, las = 2, col = "steelblue",
+          main = paste0("Significance of the relations between PC ", pc, " vs covariates"),
+          ylab = ifelse(logp, "-log10(pval)", "pval"))
 }
