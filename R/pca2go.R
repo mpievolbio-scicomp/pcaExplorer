@@ -75,15 +75,15 @@ pca2go <- function(se,
   if (is.null(annopkg))
     annopkg <- paste0("org.", organism, ".eg.db")
   
-  if (!require(annopkg,character.only = TRUE)) {
+  if (!require(annopkg, character.only = TRUE)) {
     stop("The package", annopkg, "is not installed/available. Try installing it with BiocManager::install() ?")
   }
   exprsData <- assay(se)
 
   if (is.null(background_genes)) {
-    if (is(se,"DESeqDataSet")) {
+    if (is(se, "DESeqDataSet")) {
       BGids <- rownames(se)[rowSums(counts(se)) > 0]
-    } else if(is(se,"DESeqTransform")){
+    } else if (is(se, "DESeqTransform")) {
       BGids <- rownames(se)[rowSums(assay(se)) != 0]
     } else {
       BGids <- rownames(se)
@@ -130,14 +130,14 @@ pca2go <- function(se,
 
   message("Ranking genes by the loadings ... done!")
   message("Extracting functional categories enriched in the gene subsets ...")
-  topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org,mapping = annopkg, ...)
-  topGOpc1neg <- topGOtable(probesPC1neg, BGids, annot = annFUN.org,mapping = annopkg, ...)
-  topGOpc2pos <- topGOtable(probesPC2pos, BGids, annot = annFUN.org,mapping = annopkg, ...)
-  topGOpc2neg <- topGOtable(probesPC2neg, BGids, annot = annFUN.org,mapping = annopkg, ...)
-  topGOpc3pos <- topGOtable(probesPC3pos, BGids, annot = annFUN.org,mapping = annopkg, ...)
-  topGOpc3neg <- topGOtable(probesPC3neg, BGids, annot = annFUN.org,mapping = annopkg, ...)
-  topGOpc4pos <- topGOtable(probesPC4pos, BGids, annot = annFUN.org,mapping = annopkg, ...)
-  topGOpc4neg <- topGOtable(probesPC4neg, BGids, annot = annFUN.org,mapping = annopkg, ...)
+  topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc1neg <- topGOtable(probesPC1neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc2pos <- topGOtable(probesPC2pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc2neg <- topGOtable(probesPC2neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc3pos <- topGOtable(probesPC3pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc3neg <- topGOtable(probesPC3neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc4pos <- topGOtable(probesPC4pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc4neg <- topGOtable(probesPC4neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
 
   goEnrichs <- list(PC1 = list(posLoad = topGOpc1pos, negLoad = topGOpc1neg),
                     PC2 = list(posLoad = topGOpc2pos, negLoad = topGOpc2neg),
@@ -150,8 +150,7 @@ pca2go <- function(se,
 }
 
 
-rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
-{
+rankedGeneLoadings <- function(x, pc = 1, decreasing = TRUE) {
   # works directly on the prcomp object
   return(rownames(x$rotation)[order(x$rotation[, pc], decreasing = decreasing)])
 }
@@ -236,7 +235,7 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
                        ontology = "BP",            # could use also "MF"
                        annot = annFUN.org,       # parameters for creating topGO object
                        mapping = "org.Mm.eg.db",
-                       geneID = "symbol" ,       # could also beID = "entrez"
+                       geneID = "symbol",       # could also beID = "entrez"
                        topTablerows = 200,
                        fullNamesInRows = TRUE,
                        addGeneToTerms = TRUE,
@@ -285,16 +284,17 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
   topTablerows <- min(nrow(sTab), topTablerows)
   sTab <- sTab[seq_len(topTablerows), ]
   
-  if (fullNamesInRows){
-    sTab$Term <- sapply(sTab$GO.ID, function(go) {Term(GOTERM[[go]])})
+  if (fullNamesInRows) {
+    sTab$Term <- sapply(sTab$GO.ID, function(go) {
+      Term(GOTERM[[go]])
+    })
   }
 
   if (addGeneToTerms) {
     # adapted from an elegant one liner found here: https://support.bioconductor.org/p/65856/
     SignificantGenes <- sigGenes(GOdata)
-    sTab$genes <- sapply(sTab$GO.ID, function(x)
-    {
-      genes<-genesInTerm(GOdata, x)
+    sTab$genes <- sapply(sTab$GO.ID, function(x) {
+      genes <- genesInTerm(GOdata, x)
       tmp <- genes[[1]][genes[[1]] %in% SignificantGenes]
     })
     # coerce the list to a comma separated vector
@@ -303,7 +303,7 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 
   # write all entries of the table
   if (writeOutput) write.table(sTab, file = outputFile, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
-  if (plotGraph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plotNodes, useInfo="all")
+  if (plotGraph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plotNodes, useInfo = "all")
   #   if(outputToLatex) sTabSig <- xtable(apply(sTabSig[1:15,], 2, as.character)) # take a smaller subset
 
   # and returns the significant ones # or all, like here
@@ -368,7 +368,7 @@ limmaquickpca2go <- function(se,
   if (is.null(background_genes)) {
     if (is(se, "DESeqDataSet")) {
       BGids <- rownames(se)[rowSums(counts(se)) > 0]
-    } else if (is(se, "DESeqTransform")){
+    } else if (is(se, "DESeqTransform")) {
       BGids <- rownames(se)[rowSums(assay(se)) != 0]
     } else {
       BGids <- rownames(se)
@@ -414,14 +414,14 @@ limmaquickpca2go <- function(se,
   message("Ranking genes by the loadings ... done!")
 
   message("Extracting functional categories enriched in the gene subsets ...")
-  quickGOpc1pos <- topGO(limma::goana(probesPC1pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("1")
-  quickGOpc1neg <- topGO(limma::goana(probesPC1neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("2")
-  quickGOpc2pos <- topGO(limma::goana(probesPC2pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("3")
-  quickGOpc2neg <- topGO(limma::goana(probesPC2neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("4")
-  quickGOpc3pos <- topGO(limma::goana(probesPC3pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("5")
-  quickGOpc3neg <- topGO(limma::goana(probesPC3neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("6")
-  quickGOpc4pos <- topGO(limma::goana(probesPC4pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("7")
-  quickGOpc4neg <- topGO(limma::goana(probesPC4neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("8")
+  quickGOpc1pos <- topGO(limma::goana(probesPC1pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number = 200); message("1")
+  quickGOpc1neg <- topGO(limma::goana(probesPC1neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number = 200); message("2")
+  quickGOpc2pos <- topGO(limma::goana(probesPC2pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number = 200); message("3")
+  quickGOpc2neg <- topGO(limma::goana(probesPC2neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number = 200); message("4")
+  quickGOpc3pos <- topGO(limma::goana(probesPC3pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number = 200); message("5")
+  quickGOpc3neg <- topGO(limma::goana(probesPC3neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number = 200); message("6")
+  quickGOpc4pos <- topGO(limma::goana(probesPC4pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number = 200); message("7")
+  quickGOpc4neg <- topGO(limma::goana(probesPC4neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number = 200); message("8")
 
   quickGOpc1pos <- quickGOpc1pos[order(quickGOpc1pos$P.DE), ]
   quickGOpc1neg <- quickGOpc1neg[order(quickGOpc1neg$P.DE), ]
