@@ -49,23 +49,23 @@ pcaExplorer <- function(dds = NULL,
                         pca2go = NULL,
                         annotation = NULL,
                         runLocal = TRUE) {
-
+  
   if (!requireNamespace("shiny", quietly = TRUE)) {
     stop("pcaExplorer requires 'shiny'. Please install it using
          install.packages('shiny')")
   }
-
+  
   # get modes and themes for the ace editor
   modes <- shinyAce::getAceModes()
   themes <- shinyAce::getAceThemes()
-
+  
   # create environment for storing inputs and values
   ## i need the assignment like this to export it up one level - i.e. "globally"
   pcaexplorer_env <<- new.env(parent = emptyenv())
-
+  
   ## upload max 300mb files - can be changed if necessary
   options(shiny.maxRequestSize = 300 * 1024^2)
-
+  
   # ui definition -----------------------------------------------------------
   pcaexplorer_ui <- shinydashboard::dashboardPage(
     # header definition -----------------------------------------------------------
@@ -177,7 +177,7 @@ pcaExplorer <- function(dds = NULL,
                         }
                         ")
         )
-        ),
+      ),
       
       # ui main tabBox -------------------------------------------------------
       tabBox(
@@ -209,7 +209,7 @@ pcaExplorer <- function(dds = NULL,
                 "help_format", 
                 "How to provide your input data in pcaExplorer",
                 "bottom", options = list(container = "body"))
-#####              ,verbatimTextOutput("debugdebug")
+              #####              ,verbatimTextOutput("debugdebug")
             )),
           fluidRow(
             column(
@@ -222,7 +222,7 @@ pcaExplorer <- function(dds = NULL,
               "... or you can also ",
               actionButton("btn_loaddemo", "Load the demo airway data", 
                            icon = icon("play-circle"), style = "color: #0092AC"),
-                           # class = "btn btn-info"),
+              # class = "btn btn-info"),
               shinyBS::bsTooltip(
                 "btn_loaddemo", paste0("Clicking on this button will load the airway data as DESeqDataSet, apply the regularized log transformation, and prepare the annotation for displaying gene symbols"),
                 "bottom", options = list(container = "body"))
@@ -271,7 +271,7 @@ pcaExplorer <- function(dds = NULL,
                                  # Use web vignette, with varying paths depending on whether we're release or devel.
                                  sprintf("window.open('http://bioconductor.org/packages/%s/bioc/vignettes/pcaExplorer/inst/doc/upandrunning.html', '_blank')",
                                          ifelse(unlist(packageVersion("pcaExplorer"))[2] %% 2L == 0L, "release", "devel")
-                               )
+                                 )
                 )
               ),
               br(), br(),
@@ -877,7 +877,7 @@ pcaExplorer <- function(dds = NULL,
     if (!is.null(dds)) {
       if (is.null(sizeFactors(dds))) {
         withProgress({
-        dds <- estimateSizeFactors(dds)
+          dds <- estimateSizeFactors(dds)
         },
         message = "Calculating size factors...",
         detail = "Using the DESeq normalization method.")
@@ -966,22 +966,22 @@ pcaExplorer <- function(dds = NULL,
     })
     
     observeEvent(input$btn_computevst, {
-                   withProgress(message = "Computing the variance stabilized transformed data...",
-                                detail = "This step can take a little while",
-                                value = 0, {
-                                  values$mydst <- vst(values$mydds)
-                                  values$transformation_type <- "vst"
-                                })
-                 })
+      withProgress(message = "Computing the variance stabilized transformed data...",
+                   detail = "This step can take a little while",
+                   value = 0, {
+                     values$mydst <- vst(values$mydds)
+                     values$transformation_type <- "vst"
+                   })
+    })
     
     observeEvent(input$btn_computerlog, {
-                   withProgress(message = "Computing the rlog transformed data...",
-                                detail = "This step can take a little while",
-                                value = 0, {
-                                  values$mydst <- rlog(values$mydds)
-                                  values$transformation_type <- "rlog"
-                                })
-                 })
+      withProgress(message = "Computing the rlog transformed data...",
+                   detail = "This step can take a little while",
+                   value = 0, {
+                     values$mydst <- rlog(values$mydds)
+                     values$transformation_type <- "rlog"
+                   })
+    })
     
     observeEvent(input$btn_computeshiftedlog,
                  {
@@ -1048,15 +1048,15 @@ pcaExplorer <- function(dds = NULL,
               fileInput(inputId = "uploadmetadatafile",
                         label = "Upload a sample metadata matrix file",
                         accept = c("text/csv", "text/comma-separated-values",
-                                    "text/tab-separated-values", "text/plain",
-                                    ".csv", ".tsv"), multiple = FALSE,
+                                   "text/tab-separated-values", "text/plain",
+                                   ".csv", ".tsv"), multiple = FALSE,
                         width = "80%"), 
               radioButtons(inputId = "uploadmeta_sep", 
                            label = "Separator",
                            choices = c(Comma = ",", Semicolon = ";", Tab = "\t"),
                            selected = "\t",
                            inline = TRUE)
-              )
+            )
           )
         )
       }
@@ -1189,10 +1189,10 @@ pcaExplorer <- function(dds = NULL,
       tagList(
         actionButton("button_diydds", label = HTML("Generate the dds and </br>dst objects"), class = "btn btn-success"),
         shinyBS::bsTooltip(
-        "button_diydds", 
-        paste0("This will create the dds object, normalize it using the DESeq method, and generate ",
-               "a DESeqTransform object, where variance stabilized values are stored by default."),
-        "bottom", options = list(container = "body"))
+          "button_diydds", 
+          paste0("This will create the dds object, normalize it using the DESeq method, and generate ",
+                 "a DESeqTransform object, where variance stabilized values are stored by default."),
+          "bottom", options = list(container = "body"))
       )
     })
     
@@ -1211,9 +1211,9 @@ pcaExplorer <- function(dds = NULL,
       ))
     })
     
-#####    output$debugdebug <- renderPrint({
-#####      print((ncol(values$mycountmatrix) == nrow(values$mymetadata)))
-#####    })
+    #####    output$debugdebug <- renderPrint({
+    #####      print((ncol(values$mycountmatrix) == nrow(values$mymetadata)))
+    #####    })
     
     observeEvent(input$button_diydds,
                  {
@@ -1423,7 +1423,7 @@ pcaExplorer <- function(dds = NULL,
     output$pairwise_plotUI <- renderUI({
       shiny::validate(
         need(input$compute_pairwisecorr,
-        "Click on the Run button to generate the scatterplot matrix")
+             "Click on the Run button to generate the scatterplot matrix")
       )
       plotOutput("corrplot", height = "1000px")
     })
@@ -1431,7 +1431,7 @@ pcaExplorer <- function(dds = NULL,
     output$heatcorr_plotUI <- renderUI({
       shiny::validate(
         need(input$compute_pairwisecorr,
-        "Click on the Run button to generate the heatmap")
+             "Click on the Run button to generate the heatmap")
       )
       plotOutput("heatcorr")
     })
@@ -2422,16 +2422,16 @@ pcaExplorer <- function(dds = NULL,
           message = "Updating the report in the app body",
           detail = "This can take some time",
           {
-          # temporarily switch to the temp dir, in case you do not have write
-          # permission to the current working directory
-          owd <- setwd(tempdir())
-          on.exit(setwd(owd))
-          tmp_content <- paste0(rmd_yaml(), input$acereport_rmd, collapse = "\n")
-          incProgress(0.5, detail = "Rendering report...")
-          htmlpreview <- knit2html(text = tmp_content, fragment.only = TRUE, quiet = TRUE)
-          incProgress(1)
-          isolate(HTML(htmlpreview))
-        })
+            # temporarily switch to the temp dir, in case you do not have write
+            # permission to the current working directory
+            owd <- setwd(tempdir())
+            on.exit(setwd(owd))
+            tmp_content <- paste0(rmd_yaml(), input$acereport_rmd, collapse = "\n")
+            incProgress(0.5, detail = "Rendering report...")
+            htmlpreview <- knit2html(text = tmp_content, fragment.only = TRUE, quiet = TRUE)
+            incProgress(1)
+            isolate(HTML(htmlpreview))
+          })
       )
     })
     
@@ -2655,7 +2655,8 @@ pcaExplorer <- function(dds = NULL,
                               quiet = TRUE)
           }
         }
-    })
+      }
+    )
   }) # end of pcaExplorer(dds,dst,countmatrix,coldata,pca2go,annotation)
   #nocov end
   shinyApp(ui = pcaexplorer_ui, server = pcaexplorer_server)
