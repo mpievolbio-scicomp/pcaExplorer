@@ -38,14 +38,14 @@
 #' rld_airway <- rlogTransformation(dds_airway)
 #' # constructing the annotation object
 #' anno_df <- data.frame(gene_id = rownames(dds_airway),
-#'                       stringsAsFactors=FALSE)
+#'                       stringsAsFactors = FALSE)
 #' library("AnnotationDbi")
 #' library("org.Hs.eg.db")
 #' anno_df$gene_name <- mapIds(org.Hs.eg.db,
-#'                             keys=anno_df$gene_id,
-#'                             column="SYMBOL",
-#'                             keytype="ENSEMBL",
-#'                             multiVals="first")
+#'                             keys = anno_df$gene_id,
+#'                             column = "SYMBOL",
+#'                             keytype = "ENSEMBL",
+#'                             multiVals = "first")
 #' rownames(anno_df) <- anno_df$gene_id
 #' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
 #' library(topGO)
@@ -72,19 +72,19 @@ pca2go <- function(se,
                    ) {
 
   # to force e.g. in case other identifiers are used, e.g. in Arabidopsis with TAIR
-  if(is.null(annopkg))
-    annopkg <- paste0("org.",organism,".eg.db")
+  if (is.null(annopkg))
+    annopkg <- paste0("org.", organism, ".eg.db")
   
-  if (!require(annopkg,character.only=TRUE)) {
-    stop("The package",annopkg, "is not installed/available. Try installing it with BiocManager::install() ?")
+  if (!require(annopkg,character.only = TRUE)) {
+    stop("The package", annopkg, "is not installed/available. Try installing it with BiocManager::install() ?")
   }
   exprsData <- assay(se)
 
-  if(is.null(background_genes)) {
-    if(is(se,"DESeqDataSet")) {
-      BGids <- rownames(se)[rowSums(counts(se))>0]
+  if (is.null(background_genes)) {
+    if (is(se,"DESeqDataSet")) {
+      BGids <- rownames(se)[rowSums(counts(se)) > 0]
     } else if(is(se,"DESeqTransform")){
-      BGids <- rownames(se)[rowSums(assay(se))!=0]
+      BGids <- rownames(se)[rowSums(assay(se)) != 0]
     } else {
       BGids <- rownames(se)
     }
@@ -92,60 +92,60 @@ pca2go <- function(se,
     BGids <- background_genes
   }
 
-  exprsData <- assay(se)[order(rowVars(assay(se)),decreasing=TRUE),]
-  exprsData <- exprsData[1:pca_ngenes,]
+  exprsData <- assay(se)[order(rowVars(assay(se)), decreasing = TRUE), ]
+  exprsData <- exprsData[1:pca_ngenes, ]
 
   ## convert ensembl to gene symbol ids
-  if(ensToGeneSymbol & !(is.null(annotation))) {
-    rownames(exprsData) <- annotation$gene_name[match(rownames(exprsData),rownames(annotation))]
-    BGids <- annotation$gene_name[match(BGids,rownames(annotation))]
+  if (ensToGeneSymbol & !(is.null(annotation))) {
+    rownames(exprsData) <- annotation$gene_name[match(rownames(exprsData), rownames(annotation))]
+    BGids <- annotation$gene_name[match(BGids, rownames(annotation))]
   }
 
   rv <- rowVars(exprsData)
-  dropped <- sum(rv==0)
+  dropped <- sum(rv == 0)
   if (dropped > 0)
     message(paste("Dropped", dropped, "genes with 0 variance"))
 
-  exprsData <- exprsData[rv>0,]
+  exprsData <- exprsData[rv > 0, ]
 
-  message("After subsetting/filtering for invariant genes, working on a ",nrow(exprsData),"x",ncol(exprsData)," expression matrix\n")
+  message("After subsetting/filtering for invariant genes, working on a ", nrow(exprsData), "x", ncol(exprsData), " expression matrix\n")
 
-  p <- prcomp(t(exprsData), scale=scale, center=TRUE)
+  p <- prcomp(t(exprsData), scale = scale, center = TRUE)
 
   message("Ranking genes by the loadings ...")
-  probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC1neg <- rankedGeneLoadings(p, pc=1,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC2pos <- rankedGeneLoadings(p, pc=2,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC2neg <- rankedGeneLoadings(p, pc=2,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC3pos <- rankedGeneLoadings(p, pc=3,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC3neg <- rankedGeneLoadings(p, pc=3,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC4pos <- rankedGeneLoadings(p, pc=4,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC4neg <- rankedGeneLoadings(p, pc=4,decreasing=FALSE)[1:loadings_ngenes]
+  probesPC1pos <- rankedGeneLoadings(p, pc = 1, decreasing = TRUE)[1:loadings_ngenes]
+  probesPC1neg <- rankedGeneLoadings(p, pc = 1, decreasing = FALSE)[1:loadings_ngenes]
+  probesPC2pos <- rankedGeneLoadings(p, pc = 2, decreasing = TRUE)[1:loadings_ngenes]
+  probesPC2neg <- rankedGeneLoadings(p, pc = 2, decreasing = FALSE)[1:loadings_ngenes]
+  probesPC3pos <- rankedGeneLoadings(p, pc = 3, decreasing = TRUE)[1:loadings_ngenes]
+  probesPC3neg <- rankedGeneLoadings(p, pc = 3, decreasing = FALSE)[1:loadings_ngenes]
+  probesPC4pos <- rankedGeneLoadings(p, pc = 4, decreasing = TRUE)[1:loadings_ngenes]
+  probesPC4neg <- rankedGeneLoadings(p, pc = 4, decreasing = FALSE)[1:loadings_ngenes]
   
-  if(return_ranked_gene_loadings)
-    return(list(probesPC1pos,probesPC1neg,
-                probesPC2pos,probesPC2neg,
-                probesPC3pos,probesPC3neg,
-                probesPC4pos,probesPC4neg))
+  if (return_ranked_gene_loadings)
+    return(list(probesPC1pos, probesPC1neg,
+                probesPC2pos, probesPC2neg,
+                probesPC3pos, probesPC3neg,
+                probesPC4pos, probesPC4neg))
 
   message("Ranking genes by the loadings ... done!")
   message("Extracting functional categories enriched in the gene subsets ...")
-  topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org,mapping = annopkg,...)
-  topGOpc1neg <- topGOtable(probesPC1neg, BGids, annot = annFUN.org,mapping = annopkg,...)
-  topGOpc2pos <- topGOtable(probesPC2pos, BGids, annot = annFUN.org,mapping = annopkg,...)
-  topGOpc2neg <- topGOtable(probesPC2neg, BGids, annot = annFUN.org,mapping = annopkg,...)
-  topGOpc3pos <- topGOtable(probesPC3pos, BGids, annot = annFUN.org,mapping = annopkg,...)
-  topGOpc3neg <- topGOtable(probesPC3neg, BGids, annot = annFUN.org,mapping = annopkg,...)
-  topGOpc4pos <- topGOtable(probesPC4pos, BGids, annot = annFUN.org,mapping = annopkg,...)
-  topGOpc4neg <- topGOtable(probesPC4neg, BGids, annot = annFUN.org,mapping = annopkg,...)
+  topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org,mapping = annopkg, ...)
+  topGOpc1neg <- topGOtable(probesPC1neg, BGids, annot = annFUN.org,mapping = annopkg, ...)
+  topGOpc2pos <- topGOtable(probesPC2pos, BGids, annot = annFUN.org,mapping = annopkg, ...)
+  topGOpc2neg <- topGOtable(probesPC2neg, BGids, annot = annFUN.org,mapping = annopkg, ...)
+  topGOpc3pos <- topGOtable(probesPC3pos, BGids, annot = annFUN.org,mapping = annopkg, ...)
+  topGOpc3neg <- topGOtable(probesPC3neg, BGids, annot = annFUN.org,mapping = annopkg, ...)
+  topGOpc4pos <- topGOtable(probesPC4pos, BGids, annot = annFUN.org,mapping = annopkg, ...)
+  topGOpc4neg <- topGOtable(probesPC4neg, BGids, annot = annFUN.org,mapping = annopkg, ...)
 
-  goEnrichs <- list(PC1=list(posLoad=topGOpc1pos,negLoad=topGOpc1neg),
-                    PC2=list(posLoad=topGOpc2pos,negLoad=topGOpc2neg),
-                    PC3=list(posLoad=topGOpc3pos,negLoad=topGOpc3neg),
-                    PC4=list(posLoad=topGOpc4pos,negLoad=topGOpc4neg)
+  goEnrichs <- list(PC1 = list(posLoad = topGOpc1pos, negLoad = topGOpc1neg),
+                    PC2 = list(posLoad = topGOpc2pos, negLoad = topGOpc2neg),
+                    PC3 = list(posLoad = topGOpc3pos, negLoad = topGOpc3neg),
+                    PC4 = list(posLoad = topGOpc4pos, negLoad = topGOpc4neg)
   )
   message("Extracting functional categories enriched in the gene subsets ... done!")
-  attr(goEnrichs,"n_genesforpca") <- pca_ngenes
+  attr(goEnrichs, "n_genesforpca") <- pca_ngenes
   return(goEnrichs)
 }
 
@@ -205,24 +205,24 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #' library("AnnotationDbi")
 #' library("org.Hs.eg.db")
 #' res_airway$symbol <- mapIds(org.Hs.eg.db,
-#'                             keys=row.names(res_airway),
-#'                             column="SYMBOL",
-#'                             keytype="ENSEMBL",
-#'                             multiVals="first")
+#'                             keys = row.names(res_airway),
+#'                             column = "SYMBOL",
+#'                             keytype = "ENSEMBL",
+#'                             multiVals = "first")
 #' res_airway$entrez <- mapIds(org.Hs.eg.db,
-#'                             keys=row.names(res_airway),
-#'                             column="ENTREZID",
-#'                             keytype="ENSEMBL",
-#'                             multiVals="first")
+#'                             keys = row.names(res_airway),
+#'                             column = "ENTREZID",
+#'                             keytype = "ENSEMBL",
+#'                             multiVals = "first")
 #' resOrdered <- as.data.frame(res_airway[order(res_airway$padj),])
 #' de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
 #' de_symbols <- de_df$symbol
 #' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
 #' bg_symbols <- mapIds(org.Hs.eg.db,
-#'                      keys=bg_ids,
-#'                      column="SYMBOL",
-#'                      keytype="ENSEMBL",
-#'                      multiVals="first")
+#'                      keys = bg_ids,
+#'                      column = "SYMBOL",
+#'                      keytype = "ENSEMBL",
+#'                      multiVals = "first")
 #' library(topGO)
 #' topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
 #'                              ontology = "BP",
@@ -233,23 +233,24 @@ rankedGeneLoadings <- function (x, pc = 1, decreasing = TRUE)
 #' @export
 topGOtable <- function(DEgenes,                  # Differentially expressed genes
                        BGgenes,                 # background genes
-                       ontology="BP",            # could use also "MF"
+                       ontology = "BP",            # could use also "MF"
                        annot = annFUN.org,       # parameters for creating topGO object
                        mapping = "org.Mm.eg.db",
                        geneID = "symbol" ,       # could also beID = "entrez"
                        topTablerows = 200,
                        fullNamesInRows = TRUE,
-                       addGeneToTerms=TRUE,
-                       plotGraph=FALSE, plotNodes= 10,
-                       writeOutput=FALSE, outputFile="",
+                       addGeneToTerms = TRUE,
+                       plotGraph = FALSE, 
+                       plotNodes = 10,
+                       writeOutput = FALSE, 
+                       outputFile = "",
                        topGO_method2 = "elim",
-                       do_padj = FALSE
-) {
+                       do_padj = FALSE) {
   # checking the additional topGO_method2
   topgo_methods <- c("elim", "weight", "weight01", "lea", "parentchild")
-  if(!(topGO_method2 %in% topgo_methods))
+  if (!(topGO_method2 %in% topgo_methods))
      stop("Please provide one of the following topGO methods in addition to the classic method:\n",
-          paste(topgo_methods,collapse = ", "))
+          paste(topgo_methods, collapse = ", "))
   # creating the vectors
   DEgenes_input <- factor(as.integer(BGgenes %in% DEgenes))
   names(DEgenes_input) <- BGgenes
@@ -271,24 +272,24 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
                    ranksOf = "p.value_classic",
                    topNodes = length(score(resultClassic)))
   
-  names(sTab)[which(names(sTab) == "p.value_method2")] <- paste0("p.value_",topGO_method2)
+  names(sTab)[which(names(sTab) == "p.value_method2")] <- paste0("p.value_", topGO_method2)
   
   sTab[["p.value_classic"]] <- as.numeric(sTab[["p.value_classic"]])
-  sTab[[paste0("p.value_",topGO_method2)]] <- as.numeric(sTab[[paste0("p.value_",topGO_method2)]])
+  sTab[[paste0("p.value_", topGO_method2)]] <- as.numeric(sTab[[paste0("p.value_", topGO_method2)]])
   
   # if FDR, then apply it here
-  if(do_padj)
-    sTab[[paste0("padj_BY_",topGO_method2)]] <- p.adjust(sTab[[paste0("p.value_",topGO_method2)]], method = "BY")
+  if (do_padj)
+    sTab[[paste0("padj_BY_", topGO_method2)]] <- p.adjust(sTab[[paste0("p.value_", topGO_method2)]], method = "BY")
   
   # subset to specified number of rows
   topTablerows <- min(nrow(sTab), topTablerows)
-  sTab <- sTab[seq_len(topTablerows),]
+  sTab <- sTab[seq_len(topTablerows), ]
   
-  if(fullNamesInRows){
-    sTab$Term <- sapply(sTab$GO.ID ,function(go) { Term(GOTERM[[go]])})
+  if (fullNamesInRows){
+    sTab$Term <- sapply(sTab$GO.ID, function(go) {Term(GOTERM[[go]])})
   }
 
-  if(addGeneToTerms) {
+  if (addGeneToTerms) {
     # adapted from an elegant one liner found here: https://support.bioconductor.org/p/65856/
     SignificantGenes <- sigGenes(GOdata)
     sTab$genes <- sapply(sTab$GO.ID, function(x)
@@ -297,12 +298,12 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
       tmp <- genes[[1]][genes[[1]] %in% SignificantGenes]
     })
     # coerce the list to a comma separated vector
-    sTab$genes <- unlist(lapply(sTab$genes,function(arg) paste(arg,collapse=",")))
+    sTab$genes <- unlist(lapply(sTab$genes, function(arg) paste(arg, collapse = ",")))
   }
 
   # write all entries of the table
-  if(writeOutput) write.table(sTab,file=outputFile,sep="\t",quote=FALSE,col.names=TRUE,row.names=FALSE)
-  if(plotGraph) showSigOfNodes(GOdata,topGO::score(result_method2),firstSigNodes=plotNodes, useInfo="all")
+  if (writeOutput) write.table(sTab, file = outputFile, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+  if (plotGraph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plotNodes, useInfo="all")
   #   if(outputToLatex) sTabSig <- xtable(apply(sTabSig[1:15,], 2, as.character)) # take a smaller subset
 
   # and returns the significant ones # or all, like here
@@ -339,7 +340,7 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 #' library(limma)
 #' data(airway)
 #' airway
-#' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+#' dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 #' \dontrun{
 #' rld_airway <- rlogTransformation(dds_airway)
 #' goquick_airway <- limmaquickpca2go(rld_airway,
@@ -350,25 +351,25 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 #'
 #' @export
 limmaquickpca2go <- function(se,
-                        pca_ngenes = 10000,
-                        inputType = "ENSEMBL",
-                        organism = "Mm",
-                        loadings_ngenes = 500,
-                        background_genes = NULL,
-                        scale = FALSE,
-                        ... # further parameters to be passed to the topgo routine
-){
-  annopkg <- paste0("org.",organism,".eg.db")
-  if (!require(annopkg,character.only=TRUE)) {
-    stop("The package",annopkg, "is not installed/available. Try installing it with BiocManager::install() ?")
+                             pca_ngenes = 10000,
+                             inputType = "ENSEMBL",
+                             organism = "Mm",
+                             loadings_ngenes = 500,
+                             background_genes = NULL,
+                             scale = FALSE,
+                             ... # further parameters to be passed to the topgo routine
+                             ) {
+  annopkg <- paste0("org.", organism, ".eg.db")
+  if (!require(annopkg, character.only = TRUE)) {
+    stop("The package", annopkg, "is not installed/available. Try installing it with BiocManager::install() ?")
   }
   exprsData <- assay(se)
 
-  if(is.null(background_genes)) {
-    if(is(se,"DESeqDataSet")) {
-      BGids <- rownames(se)[rowSums(counts(se))>0]
-    } else if(is(se,"DESeqTransform")){
-      BGids <- rownames(se)[rowSums(assay(se))!=0]
+  if (is.null(background_genes)) {
+    if (is(se, "DESeqDataSet")) {
+      BGids <- rownames(se)[rowSums(counts(se)) > 0]
+    } else if (is(se, "DESeqTransform")){
+      BGids <- rownames(se)[rowSums(assay(se)) != 0]
     } else {
       BGids <- rownames(se)
     }
@@ -376,67 +377,67 @@ limmaquickpca2go <- function(se,
     BGids <- background_genes
   }
 
-  exprsData <- assay(se)[order(rowVars(assay(se)),decreasing=TRUE),]
-  exprsData <- exprsData[1:pca_ngenes,]
+  exprsData <- assay(se)[order(rowVars(assay(se)), decreasing = TRUE), ]
+  exprsData <- exprsData[1:pca_ngenes, ]
 
   rv <- rowVars(exprsData)
-  dropped <- sum(rv==0)
+  dropped <- sum(rv == 0)
   if (dropped > 0)
     message(paste("Dropped", dropped, "genes with 0 variance"))
 
-  exprsData <- exprsData[rv>0,]
+  exprsData <- exprsData[rv > 0, ]
 
-  message("After subsetting/filtering for invariant genes, working on a ",nrow(exprsData),"x",ncol(exprsData)," expression matrix\n")
+  message("After subsetting/filtering for invariant genes, working on a ", nrow(exprsData), "x", ncol(exprsData), " expression matrix\n")
 
-  p <- prcomp(t(exprsData), scale=scale, center=TRUE)
+  p <- prcomp(t(exprsData), scale = scale, center = TRUE)
 
   message("Ranking genes by the loadings ...")
-  probesPC1pos <- rankedGeneLoadings(p, pc=1,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC1neg <- rankedGeneLoadings(p, pc=1,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC2pos <- rankedGeneLoadings(p, pc=2,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC2neg <- rankedGeneLoadings(p, pc=2,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC3pos <- rankedGeneLoadings(p, pc=3,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC3neg <- rankedGeneLoadings(p, pc=3,decreasing=FALSE)[1:loadings_ngenes]
-  probesPC4pos <- rankedGeneLoadings(p, pc=4,decreasing=TRUE)[1:loadings_ngenes]
-  probesPC4neg <- rankedGeneLoadings(p, pc=4,decreasing=FALSE)[1:loadings_ngenes]
+  probesPC1pos <- rankedGeneLoadings(p, pc = 1, decreasing = TRUE)[1:loadings_ngenes]
+  probesPC1neg <- rankedGeneLoadings(p, pc = 1, decreasing = FALSE)[1:loadings_ngenes]
+  probesPC2pos <- rankedGeneLoadings(p, pc = 2, decreasing = TRUE)[1:loadings_ngenes]
+  probesPC2neg <- rankedGeneLoadings(p, pc = 2, decreasing = FALSE)[1:loadings_ngenes]
+  probesPC3pos <- rankedGeneLoadings(p, pc = 3, decreasing = TRUE)[1:loadings_ngenes]
+  probesPC3neg <- rankedGeneLoadings(p, pc = 3, decreasing = FALSE)[1:loadings_ngenes]
+  probesPC4pos <- rankedGeneLoadings(p, pc = 4, decreasing = TRUE)[1:loadings_ngenes]
+  probesPC4neg <- rankedGeneLoadings(p, pc = 4, decreasing = FALSE)[1:loadings_ngenes]
 
   ## convert ensembl to entrez ids
-  probesPC1pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC1pos, column="ENTREZID", keytype=inputType)
-  probesPC1neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC1neg, column="ENTREZID", keytype=inputType)
-  probesPC2pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC2pos, column="ENTREZID", keytype=inputType)
-  probesPC2neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC2neg, column="ENTREZID", keytype=inputType)
-  probesPC3pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC3pos, column="ENTREZID", keytype=inputType)
-  probesPC3neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC3neg, column="ENTREZID", keytype=inputType)
-  probesPC4pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC4pos, column="ENTREZID", keytype=inputType)
-  probesPC4neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = probesPC4neg, column="ENTREZID", keytype=inputType)
-  bg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text=annopkg)), keys = BGids, column="ENTREZID", keytype=inputType)
+  probesPC1pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text = annopkg)), keys = probesPC1pos, column = "ENTREZID", keytype = inputType)
+  probesPC1neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text = annopkg)), keys = probesPC1neg, column = "ENTREZID", keytype = inputType)
+  probesPC2pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text = annopkg)), keys = probesPC2pos, column = "ENTREZID", keytype = inputType)
+  probesPC2neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text = annopkg)), keys = probesPC2neg, column = "ENTREZID", keytype = inputType)
+  probesPC3pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text = annopkg)), keys = probesPC3pos, column = "ENTREZID", keytype = inputType)
+  probesPC3neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text = annopkg)), keys = probesPC3neg, column = "ENTREZID", keytype = inputType)
+  probesPC4pos_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text = annopkg)), keys = probesPC4pos, column = "ENTREZID", keytype = inputType)
+  probesPC4neg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text = annopkg)), keys = probesPC4neg, column = "ENTREZID", keytype = inputType)
+  bg_ENTREZ <- AnnotationDbi::mapIds(eval(parse(text = annopkg)), keys = BGids, column = "ENTREZID", keytype = inputType)
   message("Ranking genes by the loadings ... done!")
 
   message("Extracting functional categories enriched in the gene subsets ...")
-  quickGOpc1pos <- topGO(limma::goana(probesPC1pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("1")
-  quickGOpc1neg <- topGO(limma::goana(probesPC1neg_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("2")
-  quickGOpc2pos <- topGO(limma::goana(probesPC2pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("3")
-  quickGOpc2neg <- topGO(limma::goana(probesPC2neg_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("4")
-  quickGOpc3pos <- topGO(limma::goana(probesPC3pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("5")
-  quickGOpc3neg <- topGO(limma::goana(probesPC3neg_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("6")
-  quickGOpc4pos <- topGO(limma::goana(probesPC4pos_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("7")
-  quickGOpc4neg <- topGO(limma::goana(probesPC4neg_ENTREZ, bg_ENTREZ, species = organism),ontology="BP",number=200);message("8")
+  quickGOpc1pos <- topGO(limma::goana(probesPC1pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("1")
+  quickGOpc1neg <- topGO(limma::goana(probesPC1neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("2")
+  quickGOpc2pos <- topGO(limma::goana(probesPC2pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("3")
+  quickGOpc2neg <- topGO(limma::goana(probesPC2neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("4")
+  quickGOpc3pos <- topGO(limma::goana(probesPC3pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("5")
+  quickGOpc3neg <- topGO(limma::goana(probesPC3neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("6")
+  quickGOpc4pos <- topGO(limma::goana(probesPC4pos_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("7")
+  quickGOpc4neg <- topGO(limma::goana(probesPC4neg_ENTREZ, bg_ENTREZ, species = organism), ontology = "BP", number=200); message("8")
 
-  quickGOpc1pos <- quickGOpc1pos[order(quickGOpc1pos$P.DE),]
-  quickGOpc1neg <- quickGOpc1neg[order(quickGOpc1neg$P.DE),]
-  quickGOpc2pos <- quickGOpc2pos[order(quickGOpc2pos$P.DE),]
-  quickGOpc2neg <- quickGOpc2neg[order(quickGOpc2neg$P.DE),]
-  quickGOpc3pos <- quickGOpc3pos[order(quickGOpc3pos$P.DE),]
-  quickGOpc3neg <- quickGOpc3neg[order(quickGOpc3neg$P.DE),]
-  quickGOpc4pos <- quickGOpc4pos[order(quickGOpc4pos$P.DE),]
-  quickGOpc4neg <- quickGOpc4neg[order(quickGOpc4neg$P.DE),]
+  quickGOpc1pos <- quickGOpc1pos[order(quickGOpc1pos$P.DE), ]
+  quickGOpc1neg <- quickGOpc1neg[order(quickGOpc1neg$P.DE), ]
+  quickGOpc2pos <- quickGOpc2pos[order(quickGOpc2pos$P.DE), ]
+  quickGOpc2neg <- quickGOpc2neg[order(quickGOpc2neg$P.DE), ]
+  quickGOpc3pos <- quickGOpc3pos[order(quickGOpc3pos$P.DE), ]
+  quickGOpc3neg <- quickGOpc3neg[order(quickGOpc3neg$P.DE), ]
+  quickGOpc4pos <- quickGOpc4pos[order(quickGOpc4pos$P.DE), ]
+  quickGOpc4neg <- quickGOpc4neg[order(quickGOpc4neg$P.DE), ]
 
-  goEnrichs <- list(PC1=list(posLoad=quickGOpc1pos,negLoad=quickGOpc1neg),
-                    PC2=list(posLoad=quickGOpc2pos,negLoad=quickGOpc2neg),
-                    PC3=list(posLoad=quickGOpc3pos,negLoad=quickGOpc3neg),
-                    PC4=list(posLoad=quickGOpc4pos,negLoad=quickGOpc4neg)
+  goEnrichs <- list(PC1 = list(posLoad = quickGOpc1pos, negLoad = quickGOpc1neg),
+                    PC2 = list(posLoad = quickGOpc2pos, negLoad = quickGOpc2neg),
+                    PC3 = list(posLoad = quickGOpc3pos, negLoad = quickGOpc3neg),
+                    PC4 = list(posLoad = quickGOpc4pos, negLoad = quickGOpc4neg)
   )
   message("Extracting functional categories enriched in the gene subsets ... done!")
-  attr(goEnrichs,"n_genesforpca") <- pca_ngenes
+  attr(goEnrichs, "n_genesforpca") <- pca_ngenes
   return(goEnrichs)
 }

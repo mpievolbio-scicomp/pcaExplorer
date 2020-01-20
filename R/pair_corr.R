@@ -17,16 +17,16 @@
 #' airway
 #' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
 #'                                              colData = colData(airway),
-#'                                              design=~dex+cell)
-#' pair_corr(counts(dds_airway)[1:100,]) # use just a subset for the example
-pair_corr <- function(df, log = FALSE, method="pearson", use_subset = TRUE) {
-  if(log) {
+#'                                              design = ~dex+cell)
+#' pair_corr(counts(dds_airway)[1:100, ]) # use just a subset for the example
+pair_corr <- function(df, log = FALSE, method = "pearson", use_subset = TRUE) {
+  if (log) {
     df <- log2(1 + df)
   }
   
-  if(use_subset) {
+  if (use_subset) {
     set.seed(42)
-    df <- df[sample(1:nrow(df),min(nrow(df),1000)),]
+    df <- df[sample(1:nrow(df), min(nrow(df), 1000)), ]
   }
   
   # get min and max count values for axis range.
@@ -35,30 +35,30 @@ pair_corr <- function(df, log = FALSE, method="pearson", use_subset = TRUE) {
 
   colorFunction <- colorRamp(c("black", "red"))
   # colorFunction() expects values from 0 to 1.
-  zMatrix <- colorFunction(seq(0,1,by=.01))
+  zMatrix <- colorFunction(seq(0, 1, by = .01))
   # zColors goes from 1 to 100.
-  zColors <- sort(rgb(zMatrix[,1], zMatrix[,2], zMatrix[,3], maxColorValue=255))
+  zColors <- sort(rgb(zMatrix[, 1], zMatrix[, 2], zMatrix[, 3], maxColorValue = 255))
   labelSize <- 1
   title <- "Pairwise Correlations"
   # Modified from R pairs() documentation
-  panel.cor <- function(x, y, digits=2, prefix="", cex.cor, ...) {
+  panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...) {
     usr <- par("usr"); on.exit(par(usr))
     par(usr = c(0, 1, 0, 1))
-    r <- abs(cor(x, y,method = method))
-    txt <- format(c(r, 0.123456789), digits=digits)[1]
-    txt <- paste(prefix, txt, sep="")
+    r <- abs(cor(x, y, method = method))
+    txt <- format(c(r, 0.123456789), digits = digits)[1]
+    txt <- paste(prefix, txt, sep = "")
 
     # color text based on r value and change size of text also based on r value (larger text for larger r value).
-    cex.cor = labelSize/strwidth(txt)
+    cex.cor <- labelSize / strwidth(txt)
     # color text based on r value (red is r=1).
-    text(0.5, 0.5, txt, cex=cex.cor * r * 0.7, col=zColors[r*100])
+    text(0.5, 0.5, txt, cex = cex.cor * r * 0.7, col = zColors[r * 100])
   }
   # par(mar = c(0,0,0,0))
 
-  pairs(df, pch=20, col=alpha("black", 0.4),
-        cex.labels=labelSize, 
-        main=title, 
-        upper.panel=panel.cor, 
-        xlim=c(rangeMin,rangeMax),
-        ylim=c(rangeMin,rangeMax))
+  pairs(df, pch = 20, col = alpha("black", 0.4),
+        cex.labels = labelSize,
+        main = title,
+        upper.panel = panel.cor,
+        xlim = c(rangeMin, rangeMax),
+        ylim = c(rangeMin, rangeMax))
 }

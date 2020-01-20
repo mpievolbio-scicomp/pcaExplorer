@@ -22,9 +22,9 @@
 #' @return An object created by \code{ggplot}, which can be assigned and further customized.
 #'
 #' @examples
-#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
 #' rlt <- DESeq2::rlogTransformation(dds)
-#' pcaplot(rlt, ntop=200)
+#' pcaplot(rlt, ntop = 200)
 #'
 #' @export
 pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
@@ -108,11 +108,11 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
 #' @return An object created by \code{ggplot}, which can be assigned and further customized.
 #'
 #' @examples
-#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
 #' rlt <- DESeq2::rlogTransformation(dds)
 #' pcaobj <- prcomp(t(SummarizedExperiment::assay(rlt)))
-#' pcascree(pcaobj,type="pev")
-#' pcascree(pcaobj,type="cev",title="Cumulative explained proportion of variance - Test dataset")
+#' pcascree(pcaobj, type = "pev")
+#' pcascree(pcaobj, type = "cev", title = "Cumulative explained proportion of variance - Test dataset")
 #'
 #' @export
 pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
@@ -175,9 +175,9 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
 #' @export
 #'
 #' @examples
-#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
 #' rlt <- DESeq2::rlogTransformation(dds)
-#' pcaplot3d(rlt, ntop=200)
+#' pcaplot3d(rlt, ntop = 200)
 pcaplot3d <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
                      pcX = 1, pcY = 2, pcZ = 3, text_labels=TRUE,point_size=3)
 {
