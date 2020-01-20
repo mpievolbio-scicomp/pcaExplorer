@@ -23,29 +23,30 @@
 #'  metadata columns.  Note that the true betas are provided on the log2 scale.
 #'
 #' @examples
-#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+#' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
 #' dds
-#' dds2 <- makeExampleDESeqDataSet_multifac(betaSD_condition = 1,betaSD_tissue = 4)
+#' dds2 <- makeExampleDESeqDataSet_multifac(betaSD_condition = 1, betaSD_tissue = 4)
 #' dds2
 #'
 #' @export
-makeExampleDESeqDataSet_multifac <- function (n = 1000, m = 12,
-                                              betaSD_condition = 1,
-                                              betaSD_tissue = 3,
-                                              interceptMean = 4,
-                                              interceptSD = 2,
-                                              dispMeanRel = function(x) 4/x + 0.1,
-                                              sizeFactors = rep(1,m))
-{
+makeExampleDESeqDataSet_multifac <- function(n = 1000,
+                                             m = 12,
+                                             betaSD_condition = 1,
+                                             betaSD_tissue = 3,
+                                             interceptMean = 4,
+                                             interceptSD = 2,
+                                             dispMeanRel = function(x) 4/x + 0.1,
+                                             sizeFactors = rep(1, m)) {
   beta <- cbind(rnorm(n, interceptMean, interceptSD),
-                rnorm(n,0, betaSD_condition),
-                rnorm(n,0,betaSD_tissue)) # added a tissue covariate
+                rnorm(n, 0, betaSD_condition),
+                rnorm(n, 0, betaSD_tissue)) # added a tissue covariate
 
   dispersion <- dispMeanRel(2^(beta[, 1]))
-  colData <- S4Vectors::DataFrame(condition = factor(rep(c("A", "B"),
-                                              times = c(ceiling(m/2), floor(m/2)))),
-                       tissue = factor(rep(
-                         rep(c("t1", "t2"),times = c(ceiling(m/4), floor(m/4))),2))
+  colData <- S4Vectors::DataFrame(
+    condition = factor(rep(c("A", "B"),
+                           times = c(ceiling(m/2), floor(m/2)))),
+    tissue = factor(rep(
+      rep(c("t1", "t2"), times = c(ceiling(m/4), floor(m/4))), 2))
   )
   x <- if (m > 1) {
     model.matrix(~colData$condition + colData$tissue)
@@ -68,8 +69,8 @@ makeExampleDESeqDataSet_multifac <- function (n = 1000, m = 12,
   object <- DESeqDataSetFromMatrix(countData = countData, colData = colData,
                                    design = design, rowRanges = rowRanges)
   trueVals <- DataFrame(trueIntercept = beta[, 1],
-                        trueBeta_condition = beta[,2],
-                        trueBeta_tissue = beta[,3],
+                        trueBeta_condition = beta[, 2],
+                        trueBeta_tissue = beta[, 3],
                         trueDisp = dispersion)
   mcols(trueVals) <- DataFrame(type = rep("input", ncol(trueVals)),
                                description = c("simulated intercept values",

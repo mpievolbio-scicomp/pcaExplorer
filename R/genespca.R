@@ -131,7 +131,7 @@ genespca <- function(x,
       df.u <- df.u * nobs.factor
     }
 
-    r <- sqrt(qchisq(circle.prob, df = 2)) * prod(colMeans(df.u^2))^(1/4)
+    r <- sqrt(qchisq(circle.prob, df = 2)) * prod(colMeans(df.u^2)) ^ (1/4)
     v.scale <- rowSums(v^2)
     df.v <- r * df.v / sqrt(max(v.scale))
     if (obs.scale == 0) {
