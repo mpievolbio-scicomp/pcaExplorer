@@ -121,16 +121,16 @@ such as the transformed counts of RNA-seq experiments
 \examples{
 
 library(DESeq2)
-dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
 rlt <- rlogTransformation(dds)
 groups <- colData(dds)$condition
-groups <- factor(groups,levels=unique(groups))
+groups <- factor(groups, levels = unique(groups))
 cols <- scales::hue_pal()(2)[groups]
-genespca(rlt,ntop=100,arrowColors=cols,groupNames=groups)
+genespca(rlt, ntop=100, arrowColors = cols, groupNames = groups)
 
-groups_multi <- interaction(as.data.frame(colData(rlt)[,c("condition","tissue")]))
-groups_multi <- factor(groups_multi,levels=unique(groups_multi))
+groups_multi <- interaction(as.data.frame(colData(rlt)[, c("condition", "tissue")]))
+groups_multi <- factor(groups_multi, levels = unique(groups_multi))
 cols_multi <- scales::hue_pal()(length(levels(groups_multi)))[factor(groups_multi)]
-genespca(rlt,ntop=100,arrowColors=cols_multi,groupNames=groups_multi)
+genespca(rlt, ntop = 100, arrowColors = cols_multi, groupNames = groups_multi)
 
 }

@@ -19,7 +19,7 @@ A plot with the distribution of the expression values
 Plot distribution of expression values
 }
 \examples{
-dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
 rlt <- DESeq2::rlogTransformation(dds)
 distro_expr(rlt)
 }

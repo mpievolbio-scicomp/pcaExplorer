@@ -28,8 +28,8 @@ data(airway)
 airway
 dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
                                              colData = colData(airway),
-                                             design=~dex+cell)
+                                             design = ~dex+cell)
 \dontrun{
-get_annotation_orgdb(dds_airway,"org.Hs.eg.db","ENSEMBL")
+get_annotation_orgdb(dds_airway, "org.Hs.eg.db", "ENSEMBL")
 }
 }

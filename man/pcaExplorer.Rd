@@ -53,11 +53,11 @@ data(airway)
 airway
 dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
                                              colData = colData(airway),
-                                             design=~dex+cell)
+                                             design = ~dex+cell)
 \dontrun{
 rld_airway <- DESeq2::rlogTransformation(dds_airway)
 
-pcaExplorer(dds_airway,rld_airway)
+pcaExplorer(dds_airway, rld_airway)
 
 pcaExplorer(countmatrix = counts(dds_airway), coldata = colData(dds_airway))
 

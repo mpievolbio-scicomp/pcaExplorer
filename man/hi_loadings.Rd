@@ -36,11 +36,11 @@ A ggplot2 object, or a \code{matrix}, if \code{exprTable} is not null
 Extract genes with highest loadings
 }
 \examples{
-dds <- makeExampleDESeqDataSet_multifac(betaSD = 3,betaSD_tissue = 1)
+dds <- makeExampleDESeqDataSet_multifac(betaSD = 3, betaSD_tissue = 1)
 rlt <- DESeq2::rlogTransformation(dds)
 pcaobj <- prcomp(t(SummarizedExperiment::assay(rlt)))
 hi_loadings(pcaobj, topN = 20)
-hi_loadings(pcaobj, topN = 10, exprTable=dds)
-hi_loadings(pcaobj, topN = 10, exprTable=counts(dds))
+hi_loadings(pcaobj, topN = 10, exprTable = dds)
+hi_loadings(pcaobj, topN = 10, exprTable = counts(dds))
 
 }

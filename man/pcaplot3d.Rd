@@ -50,7 +50,7 @@ A html-based visualization of the 3d PCA plot
 Plots the results of PCA on a 3-dimensional space, interactively
 }
 \examples{
-dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
 rlt <- DESeq2::rlogTransformation(dds)
-pcaplot3d(rlt, ntop=200)
+pcaplot3d(rlt, ntop = 200)
 }

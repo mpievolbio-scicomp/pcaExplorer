@@ -30,6 +30,6 @@ data(airway)
 airway
 dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
                                              colData = colData(airway),
-                                             design=~dex+cell)
-pair_corr(counts(dds_airway)[1:100,]) # use just a subset for the example
+                                             design = ~dex+cell)
+pair_corr(counts(dds_airway)[1:100, ]) # use just a subset for the example
 }

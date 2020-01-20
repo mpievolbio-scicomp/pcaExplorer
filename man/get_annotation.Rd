@@ -27,8 +27,8 @@ data(airway)
 airway
 dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
                                              colData = colData(airway),
-                                             design=~dex+cell)
+                                             design = ~dex+cell)
 \dontrun{
-get_annotation(dds_airway,"hsapiens_gene_ensembl","ensembl_gene_id")
+get_annotation(dds_airway, "hsapiens_gene_ensembl", "ensembl_gene_id")
 }
 }

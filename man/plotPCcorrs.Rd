@@ -23,10 +23,10 @@ Plots the significance of the (cor)relation of each covariate vs a principal com
 }
 \examples{
 library(DESeq2)
-dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3,betaSD_tissue = 1)
+dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
 rlt <- rlogTransformation(dds)
 pcaobj <- prcomp(t(assay(rlt)))
-res <- correlatePCs(pcaobj,colData(dds))
+res <- correlatePCs(pcaobj, colData(dds))
 plotPCcorrs(res)
 
 }
