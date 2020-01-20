@@ -49,7 +49,7 @@
 NULL
 
 .onAttach <- function(libname, pkgname) {
-  pkgVersion <- packageDescription("pcaExplorer", fields="Version")
+  pkgVersion <- packageDescription("pcaExplorer", fields = "Version")
   msg <- paste0("Welcome to pcaExplorer v", pkgVersion, "\n\n")
   citation <- paste0("If you use pcaExplorer in your work, please cite:\n\n",
                      "Federico Marini, Harald Binder\n",

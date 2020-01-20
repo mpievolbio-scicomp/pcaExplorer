@@ -27,12 +27,12 @@
 #' pcaplot(rlt, ntop = 200)
 #'
 #' @export
-pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title=NULL,
-                    pcX = 1, pcY = 2,text_labels=TRUE,point_size=3,
-                    ellipse=TRUE,ellipse.prob=0.95) # customized principal components
+pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title = NULL,
+                    pcX = 1, pcY = 2, text_labels = TRUE, point_size = 3,
+                    ellipse = TRUE, ellipse.prob = 0.95) # customized principal components
 {
   rv <- rowVars(assay(x))
-  select <- order(rv, decreasing = TRUE)[seq_len(min(ntop,length(rv)))]
+  select <- order(rv, decreasing = TRUE)[seq_len(min(ntop, length(rv)))]
   pca <- prcomp(t(assay(x)[select, ]))
 
   percentVar <- pca$sdev^2/sum(pca$sdev^2)
@@ -44,8 +44,8 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
   group <- factor(apply(intgroup.df, 1, paste, collapse = " : "))
   d <- data.frame(PC1 = pca$x[, pcX], PC2 = pca$x[, pcY], group = group,
                   intgroup.df, names = colnames(x))
-  colnames(d)[1] <- paste0("PC",pcX)
-  colnames(d)[2] <- paste0("PC",pcY)
+  colnames(d)[1] <- paste0("PC", pcX)
+  colnames(d)[2] <- paste0("PC", pcY)
 
   if (returnData) {
     attr(d, "percentVar") <- percentVar[1:2]
@@ -53,39 +53,39 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
   }
 
   # clever way of positioning the labels - worked good, then no need with ggrepel
-  d$hjust <- ifelse((sign(d[,paste0("PC",pcX)])==1),0.9,0.1)# (1 + varname.adjust * sign(PC1))/2)
+  d$hjust <- ifelse((sign(d[, paste0("PC", pcX)]) == 1), 0.9, 0.1)# (1 + varname.adjust * sign(PC1))/2)
 
-  g <- ggplot(data = d, aes_string(x = paste0("PC",pcX), y = paste0("PC",pcY), color = "group")) +
+  g <- ggplot(data = d, aes_string(x = paste0("PC", pcX), y = paste0("PC", pcY), color = "group")) +
     geom_point(size = point_size) +
-    xlab(paste0("PC",pcX,": ", round(percentVar[pcX] * 100,digits = 2), "% variance")) +
-    ylab(paste0("PC",pcY,": ", round(percentVar[pcY] * 100,digits = 2), "% variance"))
+    xlab(paste0("PC", pcX, ": ", round(percentVar[pcX] * 100, digits = 2), "% variance")) +
+    ylab(paste0("PC", pcY ,": ", round(percentVar[pcY] * 100, digits = 2), "% variance"))
 
   ## plot confidence ellipse
   # credit to vince vu, author of ggbiplot
-  if(ellipse) {
+  if (ellipse) {
     theta <- c(seq(-pi, pi, length = 50), seq(pi, -pi, length = 50))
     circle <- cbind(cos(theta), sin(theta))
 
-    ell <- ddply(d, 'group', function(x) {
-      if(nrow(x) <= 2) {
+    ell <- ddply(d, "group", function(x) {
+      if (nrow(x) <= 2) {
         return(NULL)
       }
-      sigma <- var(cbind(x[[paste0("PC",pcX)]], x[[paste0("PC",pcY)]]))
-      mu <- c(mean(x[[paste0("PC",pcX)]]), mean(x[[paste0("PC",pcY)]]))
+      sigma <- var(cbind(x[[paste0("PC", pcX)]], x[[paste0("PC", pcY)]]))
+      mu <- c(mean(x[[paste0("PC", pcX)]]), mean(x[[paste0("PC", pcY)]]))
       ed <- sqrt(qchisq(ellipse.prob, df = 2))
       data.frame(sweep(circle %*% chol(sigma) * ed, 2, mu, FUN = '+'),
                  groups = x$group[1])
     })
     # names(ell)[1:2] <- c('xvar', 'yvar')
-    if(nrow(ell)>0) {
-      g <- g + geom_path(data = ell, aes_string(x="X1",y="X2",color = "groups", group = "groups"))
+    if (nrow(ell) > 0) {
+      g <- g + geom_path(data = ell, aes_string(x = "X1", y = "X2", color = "groups", group = "groups"))
     }
   }
 
-  if(text_labels)
-    g <- g + geom_label_repel(mapping = aes_string(label="names",fill="group"),
-                              color="white", show.legend = TRUE) 
-  if(!is.null(title)) g <- g + ggtitle(title)
+  if (text_labels)
+    g <- g + geom_label_repel(mapping = aes_string(label = "names", fill = "group"),
+                              color = "white", show.legend = TRUE) 
+  if (!is.null(title)) g <- g + ggtitle(title)
   g <- g + theme_bw()
   # as in http://www.huber.embl.de/msmb/Chap-Graphics.html
   # "well-made PCA plots usually have a width that’s larger than the height"
@@ -195,9 +195,9 @@ pcaplot3d <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE
   d <- data.frame(PC1 = pca$x[, pcX], PC2 = pca$x[, pcY], PC3 = pca$x[,pcZ],
                   group = group,
                   intgroup.df, names = colnames(x))
-  colnames(d)[1] <- paste0("PC",pcX,": ", round(percentVar[pcX] * 100,digits = 2), "% variance")
-  colnames(d)[2] <- paste0("PC",pcY,": ", round(percentVar[pcY] * 100,digits = 2), "% variance")
-  colnames(d)[3] <- paste0("PC",pcZ,": ", round(percentVar[pcZ] * 100,digits = 2), "% variance")
+  colnames(d)[1] <- paste0("PC", pcX, ": ", round(percentVar[pcX] * 100,digits = 2), "% variance")
+  colnames(d)[2] <- paste0("PC", pcY, ": ", round(percentVar[pcY] * 100,digits = 2), "% variance")
+  colnames(d)[3] <- paste0("PC", pcZ, ": ", round(percentVar[pcZ] * 100,digits = 2), "% variance")
 
   if (returnData) {
     attr(d, "percentVar") <- percentVar[1:3]
@@ -207,9 +207,9 @@ pcaplot3d <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE
   nrgroups <- length(levels(d$group))
   cols <- hue_pal()(nrgroups)[d$group]
 
-  scatterplot3js(as.matrix(d[,1:3]),
+  scatterplot3js(as.matrix(d[, 1:3]),
                  color = cols,
                  # renderer = "canvas",
                  size = 1.3,
-                 labels = rownames(d),label.margin="50px 50px 50px 50px")
+                 labels = rownames(d), label.margin ="50px 50px 50px 50px")
 }
