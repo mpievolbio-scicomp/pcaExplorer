@@ -160,10 +160,10 @@ the pvalue instead of the p value itself</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DESeq2</span>)
-<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>3</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='no'>rlt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='no'>dds</span>)
 <span class='no'>pcaobj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'>assay</span>(<span class='no'>rlt</span>)))
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='correlatePCs.html'>correlatePCs</a></span>(<span class='no'>pcaobj</span>,<span class='fu'>colData</span>(<span class='no'>dds</span>))
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='correlatePCs.html'>correlatePCs</a></span>(<span class='no'>pcaobj</span>, <span class='fu'>colData</span>(<span class='no'>dds</span>))
 <span class='fu'>plotPCcorrs</span>(<span class='no'>res</span>)</div><div class='img'><img src='plotPCcorrs-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>

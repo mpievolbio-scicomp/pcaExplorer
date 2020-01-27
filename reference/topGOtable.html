@@ -252,24 +252,24 @@ documentation of the <code>topGO</code> package itself</p>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"AnnotationDbi"</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"org.Hs.eg.db"</span>)
 <span class='no'>res_airway</span>$<span class='no'>symbol</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html'>mapIds</a></span>(<span class='no'>org.Hs.eg.db</span>,
-                            <span class='kw'>keys</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='no'>res_airway</span>),
-                            <span class='kw'>column</span><span class='kw'>=</span><span class='st'>"SYMBOL"</span>,
-                            <span class='kw'>keytype</span><span class='kw'>=</span><span class='st'>"ENSEMBL"</span>,
-                            <span class='kw'>multiVals</span><span class='kw'>=</span><span class='st'>"first"</span>)
+                            <span class='kw'>keys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='no'>res_airway</span>),
+                            <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"SYMBOL"</span>,
+                            <span class='kw'>keytype</span> <span class='kw'>=</span> <span class='st'>"ENSEMBL"</span>,
+                            <span class='kw'>multiVals</span> <span class='kw'>=</span> <span class='st'>"first"</span>)
 <span class='no'>res_airway</span>$<span class='no'>entrez</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html'>mapIds</a></span>(<span class='no'>org.Hs.eg.db</span>,
-                            <span class='kw'>keys</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='no'>res_airway</span>),
-                            <span class='kw'>column</span><span class='kw'>=</span><span class='st'>"ENTREZID"</span>,
-                            <span class='kw'>keytype</span><span class='kw'>=</span><span class='st'>"ENSEMBL"</span>,
-                            <span class='kw'>multiVals</span><span class='kw'>=</span><span class='st'>"first"</span>)
+                            <span class='kw'>keys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='no'>res_airway</span>),
+                            <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"ENTREZID"</span>,
+                            <span class='kw'>keytype</span> <span class='kw'>=</span> <span class='st'>"ENSEMBL"</span>,
+                            <span class='kw'>multiVals</span> <span class='kw'>=</span> <span class='st'>"first"</span>)
 <span class='no'>resOrdered</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>res_airway</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='no'>res_airway</span>$<span class='no'>padj</span>),])
 <span class='no'>de_df</span> <span class='kw'>&lt;-</span> <span class='no'>resOrdered</span>[<span class='no'>resOrdered</span>$<span class='no'>padj</span> <span class='kw'>&lt;</span> <span class='fl'>.05</span> <span class='kw'>&amp;</span> !<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>resOrdered</span>$<span class='no'>padj</span>),]
 <span class='no'>de_symbols</span> <span class='kw'>&lt;-</span> <span class='no'>de_df</span>$<span class='no'>symbol</span>
 <span class='no'>bg_ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>dds_airway</span>)[<span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowSums</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/counts.html'>counts</a></span>(<span class='no'>dds_airway</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>]
 <span class='no'>bg_symbols</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html'>mapIds</a></span>(<span class='no'>org.Hs.eg.db</span>,
-                     <span class='kw'>keys</span><span class='kw'>=</span><span class='no'>bg_ids</span>,
-                     <span class='kw'>column</span><span class='kw'>=</span><span class='st'>"SYMBOL"</span>,
-                     <span class='kw'>keytype</span><span class='kw'>=</span><span class='st'>"ENSEMBL"</span>,
-                     <span class='kw'>multiVals</span><span class='kw'>=</span><span class='st'>"first"</span>)
+                     <span class='kw'>keys</span> <span class='kw'>=</span> <span class='no'>bg_ids</span>,
+                     <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"SYMBOL"</span>,
+                     <span class='kw'>keytype</span> <span class='kw'>=</span> <span class='st'>"ENSEMBL"</span>,
+                     <span class='kw'>multiVals</span> <span class='kw'>=</span> <span class='st'>"first"</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>topGO</span>)
 <span class='no'>topgoDE_airway</span> <span class='kw'>&lt;-</span> <span class='fu'>topGOtable</span>(<span class='no'>de_symbols</span>, <span class='no'>bg_symbols</span>,
                              <span class='kw'>ontology</span> <span class='kw'>=</span> <span class='st'>"BP"</span>,

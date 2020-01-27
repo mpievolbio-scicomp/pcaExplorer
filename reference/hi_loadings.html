@@ -179,10 +179,10 @@ and a column, <code>gene_name</code>, containing e.g. HGNC-based gene symbols</p
     <p>A ggplot2 object, or a <code>matrix</code>, if <code>exprTable</code> is not null</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD</span> <span class='kw'>=</span> <span class='fl'>3</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+    <pre class="examples"><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='no'>rlt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DESeq2</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='no'>dds</span>)
 <span class='no'>pcaobj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='kw pkg'>SummarizedExperiment</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html'>assay</a></span>(<span class='no'>rlt</span>)))
-<span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div><div class='img'><img src='hi_loadings-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>exprTable</span><span class='kw'>=</span><span class='no'>dds</span>)</div><div class='output co'>#&gt; class: DESeqDataSet 
+<span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div><div class='img'><img src='hi_loadings-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>exprTable</span> <span class='kw'>=</span> <span class='no'>dds</span>)</div><div class='output co'>#&gt; class: DESeqDataSet 
 #&gt; dim: 20 12 
 #&gt; metadata(1): version
 #&gt; assays(1): counts
@@ -190,7 +190,7 @@ and a column, <code>gene_name</code>, containing e.g. HGNC-based gene symbols</p
 #&gt; rowData names(4): trueIntercept trueBeta_condition trueBeta_tissue
 #&gt;   trueDisp
 #&gt; colnames(12): sample1 sample2 ... sample11 sample12
-#&gt; colData names(2): condition tissue</div><div class='input'><span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>exprTable</span><span class='kw'>=</span><span class='fu'>counts</span>(<span class='no'>dds</span>))</div><div class='output co'>#&gt;         sample1 sample2 sample3 sample4 sample5 sample6 sample7 sample8 sample9
+#&gt; colData names(2): condition tissue</div><div class='input'><span class='fu'>hi_loadings</span>(<span class='no'>pcaobj</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>exprTable</span> <span class='kw'>=</span> <span class='fu'>counts</span>(<span class='no'>dds</span>))</div><div class='output co'>#&gt;         sample1 sample2 sample3 sample4 sample5 sample6 sample7 sample8 sample9
 #&gt; gene300      16       6      10       2       0       1    1351     526    1211
 #&gt; gene88       30      77      24      46       8      37    8591    6193   11330
 #&gt; gene427      45      64      42      76      60     124    4956    3260    2321

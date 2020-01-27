@@ -175,8 +175,8 @@ to speed up the plotting operations.</p></td>
 #&gt; colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
 #&gt; colData names(9): SampleName cell ... Sample BioSample</div><div class='input'><span class='no'>dds_airway</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DESeq2</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assay</span>(<span class='no'>airway</span>),
                                              <span class='kw'>colData</span> <span class='kw'>=</span> <span class='fu'>colData</span>(<span class='no'>airway</span>),
-                                             <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>dex</span>+<span class='no'>cell</span>)
-<span class='fu'>pair_corr</span>(<span class='fu'>counts</span>(<span class='no'>dds_airway</span>)[<span class='fl'>1</span>:<span class='fl'>100</span>,]) <span class='co'># use just a subset for the example</span></div><div class='img'><img src='pair_corr-1.png' alt='' width='700' height='433' /></div></pre>
+                                             <span class='kw'>design</span> <span class='kw'>=</span> ~<span class='no'>dex</span>+<span class='no'>cell</span>)
+<span class='fu'>pair_corr</span>(<span class='fu'>counts</span>(<span class='no'>dds_airway</span>)[<span class='fl'>1</span>:<span class='fl'>100</span>, ]) <span class='co'># use just a subset for the example</span></div><div class='img'><img src='pair_corr-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

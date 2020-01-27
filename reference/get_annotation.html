@@ -170,9 +170,9 @@
 #&gt; colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
 #&gt; colData names(9): SampleName cell ... Sample BioSample</div><div class='input'><span class='no'>dds_airway</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DESeq2</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assay</span>(<span class='no'>airway</span>),
                                              <span class='kw'>colData</span> <span class='kw'>=</span> <span class='fu'>colData</span>(<span class='no'>airway</span>),
-                                             <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>dex</span>+<span class='no'>cell</span>)
+                                             <span class='kw'>design</span> <span class='kw'>=</span> ~<span class='no'>dex</span>+<span class='no'>cell</span>)
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>get_annotation</span>(<span class='no'>dds_airway</span>,<span class='st'>"hsapiens_gene_ensembl"</span>,<span class='st'>"ensembl_gene_id"</span>)
+<span class='fu'>get_annotation</span>(<span class='no'>dds_airway</span>, <span class='st'>"hsapiens_gene_ensembl"</span>, <span class='st'>"ensembl_gene_id"</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

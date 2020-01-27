@@ -176,15 +176,14 @@ and for each principal component</p>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    aperm, apply, rowsum</span></div><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>3</span>,<span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+#&gt; <span class='message'>    aperm, apply, rowsum</span></div><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='no'>rlt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DESeq2</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='no'>dds</span>)
 <span class='no'>pcaobj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'>assay</span>(<span class='no'>rlt</span>)))
-<span class='fu'>correlatePCs</span>(<span class='no'>pcaobj</span>,<span class='fu'>colData</span>(<span class='no'>dds</span>))</div><div class='output co'>#&gt;        condition      tissue
+<span class='fu'>correlatePCs</span>(<span class='no'>pcaobj</span>, <span class='fu'>colData</span>(<span class='no'>dds</span>))</div><div class='output co'>#&gt;        condition      tissue
 #&gt; PC_1 0.003947752 0.630954041
 #&gt; PC_2 0.748774042 0.003947752
 #&gt; PC_3 0.748774042 0.748774042
 #&gt; PC_4 0.748774042 0.748774042</div><div class='input'>
-
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

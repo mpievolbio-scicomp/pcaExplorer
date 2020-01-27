@@ -95,7 +95,7 @@
       </address>
                               <h4 class="author">Harald Binder</h4>
             <address class="author_afil">
-      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">21 December 2019</h4>
+      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">27 January 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/federicomarini/pcaExplorer/blob/master/vignettes/upandrunning.Rmd"><code>vignettes/upandrunning.Rmd</code></a></small>
       <div class="hidden name"><code>upandrunning.Rmd</code></div>
@@ -115,22 +115,23 @@
 <!-- - replace links to imgs with github hosted to provide permanent link -->
 <!-- - enforce width="80%" for all imgs (50% for the smaller screenshot) -->
 <!-- - copy content to inst/extdata/instructions_unr.md -->
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">knitr<span class="op">::</span>opts_chunk<span class="op">$</span><span class="kw">set</span>(<span class="dt">crop =</span> <span class="ot">NULL</span>)</a></code></pre></div>
 <div id="setup" class="section level1">
 <h1 class="hasAnchor">
 <a href="#setup" class="anchor"></a>Setup</h1>
 <p>First things first: install <em><a href="https://bioconductor.org/packages/3.11/pcaExplorer">pcaExplorer</a></em> and load it into your R session. You should receive a message notification if this is completed without errors.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"pcaExplorer"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"pcaExplorer"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"pcaExplorer"</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"pcaExplorer"</span>)</a></code></pre></div>
 <p>This document describes a use case for <em><a href="https://bioconductor.org/packages/3.11/pcaExplorer">pcaExplorer</a></em>, based on the dataset in the <em><a href="https://bioconductor.org/packages/3.11/airway">airway</a></em> package. If this package is not available on your machine, please install it by executing:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"airway"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"airway"</span>)</a></code></pre></div>
 <p>This dataset consists of the gene-level expression measurements (as raw read counts) for an experiment where four different human airway smooth muscle cell lines are either treated with dexamethasone or left untreated.</p>
 </div>
 <div id="start-exploring---the-beauty-of-interactivity" class="section level1">
 <h1 class="hasAnchor">
 <a href="#start-exploring---the-beauty-of-interactivity" class="anchor"></a>Start exploring - the beauty of interactivity</h1>
 <p>To start the exploration, you just need the following lines:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"pcaExplorer"</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"pcaExplorer"</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>()</a></code></pre></div>
 <p>The easiest way to explore the <em><a href="https://bioconductor.org/packages/3.11/airway">airway</a></em> dataset is by clicking on the dedicated button in the <strong>Data Upload</strong> panel. This action will:</p>
 <ul>
 <li>load the <em><a href="https://bioconductor.org/packages/3.11/airway">airway</a></em> package</li>
@@ -242,8 +243,8 @@ The Report Editor tab. The collapsible elements control general markdown and edi
 <div id="session-info" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a></code></pre></div>
-<pre><code>## R Under development (unstable) (2019-12-20 r77607)
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a></code></pre></div>
+<pre><code>## R Under development (unstable) (2020-01-27 r77729)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 16.04.6 LTS
 ## 
@@ -263,18 +264,18 @@ The Report Editor tab. The collapsible elements control general markdown and edi
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] BiocStyle_2.15.2
+## [1] BiocStyle_2.15.5
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.3          knitr_1.26          magrittr_1.5       
-##  [4] MASS_7.3-51.5       R6_2.4.1            rlang_0.4.2        
+##  [1] Rcpp_1.0.3          knitr_1.27          magrittr_1.5       
+##  [4] MASS_7.3-51.5       R6_2.4.1            rlang_0.4.3        
 ##  [7] stringr_1.4.0       highr_0.8           tools_4.0.0        
-## [10] xfun_0.11           png_0.1-7           htmltools_0.4.0    
+## [10] xfun_0.12           png_0.1-7           htmltools_0.4.0    
 ## [13] yaml_2.2.0          assertthat_0.2.1    digest_0.6.23      
 ## [16] rprojroot_1.3-2     pkgdown_1.4.1       crayon_1.3.4       
-## [19] bookdown_0.16       BiocManager_1.30.10 fs_1.3.1           
-## [22] memoise_1.1.0       evaluate_0.14       rmarkdown_2.0      
-## [25] stringi_1.4.3       compiler_4.0.0      desc_1.2.0         
+## [19] bookdown_0.17       BiocManager_1.30.10 fs_1.3.1           
+## [22] memoise_1.1.0       evaluate_0.14       rmarkdown_2.1      
+## [25] stringi_1.4.5       compiler_4.0.0      desc_1.2.0         
 ## [28] backports_1.1.5</code></pre>
 </div>
   </div>

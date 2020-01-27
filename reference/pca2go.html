@@ -234,14 +234,14 @@ of the main <code><a href='pcaExplorer.html'>pcaExplorer</a></code> function</p>
 <span class='no'>rld_airway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='no'>dds_airway</span>)
 <span class='co'># constructing the annotation object</span>
 <span class='no'>anno_df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>gene_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>dds_airway</span>),
-                      <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+                      <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"AnnotationDbi"</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"org.Hs.eg.db"</span>)
 <span class='no'>anno_df</span>$<span class='no'>gene_name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html'>mapIds</a></span>(<span class='no'>org.Hs.eg.db</span>,
-                            <span class='kw'>keys</span><span class='kw'>=</span><span class='no'>anno_df</span>$<span class='no'>gene_id</span>,
-                            <span class='kw'>column</span><span class='kw'>=</span><span class='st'>"SYMBOL"</span>,
-                            <span class='kw'>keytype</span><span class='kw'>=</span><span class='st'>"ENSEMBL"</span>,
-                            <span class='kw'>multiVals</span><span class='kw'>=</span><span class='st'>"first"</span>)
+                            <span class='kw'>keys</span> <span class='kw'>=</span> <span class='no'>anno_df</span>$<span class='no'>gene_id</span>,
+                            <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"SYMBOL"</span>,
+                            <span class='kw'>keytype</span> <span class='kw'>=</span> <span class='st'>"ENSEMBL"</span>,
+                            <span class='kw'>multiVals</span> <span class='kw'>=</span> <span class='st'>"first"</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>anno_df</span>) <span class='kw'>&lt;-</span> <span class='no'>anno_df</span>$<span class='no'>gene_id</span>
 <span class='no'>bg_ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>dds_airway</span>)[<span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowSums</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/counts.html'>counts</a></span>(<span class='no'>dds_airway</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>]
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>topGO</span>)
