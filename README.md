@@ -39,7 +39,7 @@ for the experienced data analyst.
 
 `pcaExplorer` can be easily installed using `BiocManager::install()`:
 
-```
+``` r
 if (!requireNamespace("BiocManager", quietly=TRUE))
     install.packages("BiocManager")
 BiocManager::install("pcaExplorer")
@@ -47,7 +47,7 @@ BiocManager::install("pcaExplorer")
 
 or, optionally, 
 
-```
+``` r
 BiocManager::install("federicomarini/pcaExplorer")
 # or alternatively...
 devtools::install_github("federicomarini/pcaExplorer")
@@ -57,7 +57,7 @@ devtools::install_github("federicomarini/pcaExplorer")
 
 This command loads the `pcaExplorer` package
 
-```
+``` r
 library("pcaExplorer")
 ```
 
