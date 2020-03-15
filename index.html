@@ -133,19 +133,19 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p><code>pcaExplorer</code> can be easily installed using <code><a href="https://rdrr.io/pkg/BiocManager/man/install.html">BiocManager::install()</a></code>:</p>
-<pre><code>if (!requireNamespace("BiocManager", quietly=TRUE))
-    install.packages("BiocManager")
-BiocManager::install("pcaExplorer")</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly=</span><span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">    <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"pcaExplorer"</span>)</a></code></pre></div>
 <p>or, optionally,</p>
-<pre><code><a href="https://rdrr.io/pkg/BiocManager/man/install.html">BiocManager::install("federicomarini/pcaExplorer")
-# or alternatively...
-devtools::install_github("federicomarini/pcaExplorer")</a></code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"federicomarini/pcaExplorer"</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># or alternatively...</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"federicomarini/pcaExplorer"</span>)</a></code></pre></div>
 </div>
 <div id="quick-start" class="section level2">
 <h2 class="hasAnchor">
 <a href="#quick-start" class="anchor"></a>Quick start</h2>
 <p>This command loads the <code>pcaExplorer</code> package</p>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library("pcaExplorer")</a></code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"pcaExplorer"</span>)</a></code></pre></div>
 <p>The <code>pcaExplorer</code> app can be launched in different modes:</p>
 <ul>
 <li><p><code><a href="reference/pcaExplorer.html">pcaExplorer(dds = dds, dst = dst)</a></code>, where <code>dds</code> is a <code>DESeqDataSet</code> object and <code>dst</code> is a <code>DESeqTransform</code> object, which were created during an existing session for the analysis of an RNA-seq dataset with the <code>DESeq2</code> package</p></li>
