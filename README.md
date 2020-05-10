@@ -4,6 +4,8 @@
 
 ## Software status
 
+[![R build status](https://github.com/federicomarini/pcaExplorer/workflows/R-CMD-check/badge.svg)](https://github.com/federicomarini/pcaExplorer/actions)
+
 | Platforms |  OS  | R CMD check |
 |:----------------:|:----------------:|:----------------:|
 | Travis CI | Linux | [![Travis CI build status](https://travis-ci.org/federicomarini/pcaExplorer.svg?branch=master)](https://travis-ci.org/federicomarini/pcaExplorer) |
