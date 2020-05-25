@@ -5,19 +5,21 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Up and running with <em><a href="https://bioconductor.org/packages/3.10/pcaExplorer">pcaExplorer</a></em> • pcaExplorer</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Up and running with &lt;em&gt;&lt;a href=" https:>
-</head>
-<body>
-<p>pcaExplorer" /&gt;
-
-<meta property="og:description" content=""><meta name="twitter:card" content="summary"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+<title>Up and running with `r Biocpkg("pcaExplorer")`
+ • pcaExplorer</title>
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Up and running with `r Biocpkg(" pcaexplorer>
+<meta property="og:description" content="pcaExplorer">
+<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--></p>
+<![endif]-->
+</head>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -30,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.15.0</span>
       </span>
     </div>
 
@@ -81,10 +83,11 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Up and running with <em><a href="https://bioconductor.org/packages/3.10/pcaExplorer">pcaExplorer</a></em>
+      <h1 data-toc-skip>Up and running with <em><a href="https://bioconductor.org/packages/3.12/pcaExplorer">pcaExplorer</a></em>
 </h1>
                         <h4 class="author">Federico Marini</h4>
             <address class="author_afil">
@@ -92,7 +95,7 @@
       </address>
                               <h4 class="author">Harald Binder</h4>
             <address class="author_afil">
-      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">9 August 2019</h4>
+      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">26 May 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/federicomarini/pcaExplorer/blob/master/vignettes/upandrunning.Rmd"><code>vignettes/upandrunning.Rmd</code></a></small>
       <div class="hidden name"><code>upandrunning.Rmd</code></div>
@@ -112,30 +115,31 @@
 <!-- - replace links to imgs with github hosted to provide permanent link -->
 <!-- - enforce width="80%" for all imgs (50% for the smaller screenshot) -->
 <!-- - copy content to inst/extdata/instructions_unr.md -->
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">opts_chunk</a></span>$<span class="fu">set</span>(<span class="kw">crop</span> <span class="kw">=</span> <span class="kw">NULL</span>)</pre></body></html></div>
 <div id="setup" class="section level1">
 <h1 class="hasAnchor">
 <a href="#setup" class="anchor"></a>Setup</h1>
-<p>First things first: install <em><a href="https://bioconductor.org/packages/3.10/pcaExplorer">pcaExplorer</a></em> and load it into your R session. You should receive a message notification if this is completed without errors.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="st">"pcaExplorer"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"pcaExplorer"</span>)</a></code></pre></div>
-<p>This document describes a use case for <em><a href="https://bioconductor.org/packages/3.10/pcaExplorer">pcaExplorer</a></em>, based on the dataset in the <em><a href="https://bioconductor.org/packages/3.10/airway">airway</a></em> package. If this package is not available on your machine, please install it by executing:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="st">"airway"</span>)</a></code></pre></div>
+<p>First things first: install <em><a href="https://bioconductor.org/packages/3.12/pcaExplorer">pcaExplorer</a></em> and load it into your R session. You should receive a message notification if this is completed without errors.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"pcaExplorer"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"pcaExplorer"</span>)</pre></body></html></div>
+<p>This document describes a use case for <em><a href="https://bioconductor.org/packages/3.12/pcaExplorer">pcaExplorer</a></em>, based on the dataset in the <em><a href="https://bioconductor.org/packages/3.12/airway">airway</a></em> package. If this package is not available on your machine, please install it by executing:</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"airway"</span>)</pre></body></html></div>
 <p>This dataset consists of the gene-level expression measurements (as raw read counts) for an experiment where four different human airway smooth muscle cell lines are either treated with dexamethasone or left untreated.</p>
 </div>
 <div id="start-exploring---the-beauty-of-interactivity" class="section level1">
 <h1 class="hasAnchor">
 <a href="#start-exploring---the-beauty-of-interactivity" class="anchor"></a>Start exploring - the beauty of interactivity</h1>
 <p>To start the exploration, you just need the following lines:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"pcaExplorer"</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>()</a></code></pre></div>
-<p>The easiest way to explore the <em><a href="https://bioconductor.org/packages/3.10/airway">airway</a></em> dataset is by clicking on the dedicated button in the <strong>Data Upload</strong> panel. This action will:</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"pcaExplorer"</span>)
+<span class="fu"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span>()</pre></body></html></div>
+<p>The easiest way to explore the <em><a href="https://bioconductor.org/packages/3.12/airway">airway</a></em> dataset is by clicking on the dedicated button in the <strong>Data Upload</strong> panel. This action will:</p>
 <ul>
-<li>load the <em><a href="https://bioconductor.org/packages/3.10/airway">airway</a></em> package</li>
+<li>load the <em><a href="https://bioconductor.org/packages/3.12/airway">airway</a></em> package</li>
 <li>load the count matrix and the experimental metadata</li>
 <li>compose the <code>dds</code> object, normalize the expression values (using the robust method proposed by Anders and Huber in the original DESeq manuscript), and compute the variance stabilizing transformed expression values (stored in the <code>dst</code> object)</li>
-<li>retrieve the gene annotation information via the <em><a href="https://bioconductor.org/packages/3.10/org.Hs.eg.db">org.Hs.eg.db</a></em>, adding gene symbols to the ENSEMBL ids - this step is optional, but recommended for more human-readable identifiers to be used.</li>
+<li>retrieve the gene annotation information via the <em><a href="https://bioconductor.org/packages/3.12/org.Hs.eg.db">org.Hs.eg.db</a></em>, adding gene symbols to the ENSEMBL ids - this step is optional, but recommended for more human-readable identifiers to be used.</li>
 </ul>
-<p>If you want to load your expression data, please refer to the <a href="https://bioconductor.org/packages/3.10/pcaExplorer/vignettes/pcaExplorer.html">User Guide</a>, which contains detailed information on the formats your data have to respect.</p>
+<p>If you want to load your expression data, please refer to the <a href="https://bioconductor.org/packages/3.12/pcaExplorer/vignettes/pcaExplorer.html">User Guide</a>, which contains detailed information on the formats your data have to respect.</p>
 <p>Once the preprocessing of the input is done, you should get a notification in the lower right corner that you’re all set. The whole preprocessing should take around 5-6 seconds (tested on a MacBook Pro, with i7 and 16 Gb RAM). You can check how each component looks like by clicking on its respective button, once they appeared in the lower half of the panel.</p>
 <div class="figure">
 <img src="unr_00_demo_loaded.png" alt="Overview of the Data Upload panel. After clicking on the 'Load the demo airway data' button, all widgets are automatically populated, and each data component (count matrix, experimental data, dds object, annotation) can be previewed in a modal window by clicking on its respective button." width="1543"><p class="caption">
@@ -211,7 +215,7 @@ The Genes View panel. Upper panel: the genes biplot, and its zoomed plot, with g
 The PCA2GO panel. Four tables (2 per dimension, here only 3 are displayed) decorate the PCA plot in the middle, and display the top enriched functional categories in each subset of gene with high loadings.
 </p>
 </div>
-<p>Still, a previous call to <code>pca2go</code> is recommended, as it relies on the algorithm of the <em><a href="https://bioconductor.org/packages/3.10/topGO">topGO</a></em> package: it will require some additional computing time, but it is likely to deliver more precise terms (i.e. in turn more relevant from the point of view of their biological relevance). To do so, you should exit the live session, compute this object, and provide it in the call to <code>pcaExplorer</code> (see more how to do so in <a href="https://bioconductor.org/packages/3.10/pcaExplorer/vignettes/pcaExplorer.html">the main user guide</a>).</p>
+<p>Still, a previous call to <code>pca2go</code> is recommended, as it relies on the algorithm of the <em><a href="https://bioconductor.org/packages/3.12/topGO">topGO</a></em> package: it will require some additional computing time, but it is likely to deliver more precise terms (i.e. in turn more relevant from the point of view of their biological relevance). To do so, you should exit the live session, compute this object, and provide it in the call to <code>pcaExplorer</code> (see more how to do so in <a href="https://bioconductor.org/packages/3.12/pcaExplorer/vignettes/pcaExplorer.html">the main user guide</a>).</p>
 </div>
 <div id="when-youre-done---the-power-of-reproducibility" class="section level1">
 <h1 class="hasAnchor">
@@ -234,19 +238,19 @@ The pcaExplorer task menu. Buttons for saving the session to binary data or to a
 The Report Editor tab. The collapsible elements control general markdown and editor options, which are regarded when the report is compiled. Its content is specified in the Ace editor, integrated in the Shiny app.
 </p>
 </div>
-<p>The functionality to display the report preview is based on <code>knit2html</code>, and some elements such as <code>DataTable</code> objects might not render correctly. To render them correctly, please install the PhantomJS executable before launching the app. This can be done by using the <em><a href="https://CRAN.R-project.org/package=webshot">webshot</a></em> package and calling <code><a href="https://www.rdocumentation.org/packages/webshot/topics/install_phantomjs">webshot::install_phantomjs()</a></code> - HTML widgets will be rendered automatically as screenshots. Keep in mind that the fully rendered report (the one you can obtain with the “Generate &amp; Save” button) is not affected by this, since it uses <code><a href="https://www.rdocumentation.org/packages/rmarkdown/topics/render">rmarkdown::render()</a></code>.</p>
+<p>The functionality to display the report preview is based on <code>knit2html</code>, and some elements such as <code>DataTable</code> objects might not render correctly. To render them correctly, please install the PhantomJS executable before launching the app. This can be done by using the <em><a href="https://CRAN.R-project.org/package=webshot">webshot</a></em> package and calling <code><a href="https://rdrr.io/pkg/webshot/man/install_phantomjs.html">webshot::install_phantomjs()</a></code> - HTML widgets will be rendered automatically as screenshots. Keep in mind that the fully rendered report (the one you can obtain with the “Generate &amp; Save” button) is not affected by this, since it uses <code><a href="https://rdrr.io/pkg/rmarkdown/man/render.html">rmarkdown::render()</a></code>.</p>
 </div>
 <div id="session-info" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
-<pre><code>## R version 3.6.0 (2019-04-26)
-## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS Sierra 10.12.6
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</pre></body></html></div>
+<pre><code>## R version 4.0.0 (2020-04-24)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Mojave 10.14.6
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -255,37 +259,30 @@ The Report Editor tab. The collapsible elements control general markdown and edi
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] BiocStyle_2.13.2
+## [1] BiocStyle_2.17.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.2         rstudioapi_0.10    knitr_1.24        
-##  [4] xml2_1.2.1         magrittr_1.5       roxygen2_6.1.1    
-##  [7] MASS_7.3-51.4      R6_2.4.0           rlang_0.4.0       
-## [10] highr_0.8          stringr_1.4.0      tools_3.6.0       
-## [13] xfun_0.8           png_0.1-7          htmltools_0.3.6   
-## [16] commonmark_1.7     yaml_2.2.0         digest_0.6.20     
-## [19] assertthat_0.2.1   rprojroot_1.3-2    bookdown_0.12     
-## [22] pkgdown_1.3.0      crayon_1.3.4       BiocManager_1.30.4
-## [25] fs_1.3.1           memoise_1.1.0      evaluate_0.14     
-## [28] rmarkdown_1.14     stringi_1.4.3      compiler_3.6.0    
-## [31] desc_1.2.0         backports_1.1.4</code></pre>
+##  [1] Rcpp_1.0.4.6        rstudioapi_0.11     knitr_1.28         
+##  [4] magrittr_1.5        MASS_7.3-51.6       R6_2.4.1           
+##  [7] rlang_0.4.6         highr_0.8           stringr_1.4.0      
+## [10] tools_4.0.0         xfun_0.14           png_0.1-7          
+## [13] htmltools_0.4.0     yaml_2.2.1          assertthat_0.2.1   
+## [16] digest_0.6.25       rprojroot_1.3-2     pkgdown_1.5.1      
+## [19] crayon_1.3.4        bookdown_0.18       BiocManager_1.30.10
+## [22] fs_1.4.1            memoise_1.1.0       evaluate_0.14      
+## [25] rmarkdown_2.1       stringi_1.4.6       compiler_4.0.0     
+## [28] desc_1.2.0          backports_1.1.6</code></pre>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#setup">Setup</a></li>
-      <li><a href="#start-exploring---the-beauty-of-interactivity">Start exploring - the beauty of interactivity</a></li>
-      <li><a href="#when-youre-done---the-power-of-reproducibility">When you’re done - the power of reproducibility</a></li>
-      <li><a href="#session-info">Session Info</a></li>
-      </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
+
 
 
       <footer><div class="copyright">
@@ -293,13 +290,14 @@ The Report Editor tab. The collapsible elements control general markdown and edi
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
 </div>
 
   
 
-  
-</body>
+
+  </body>
 </html>
