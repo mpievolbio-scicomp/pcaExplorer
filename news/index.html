@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.15.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.15.1</span>
       </span>
     </div>
 
@@ -130,6 +130,18 @@
       <small>Source: <a href='https://github.com/federicomarini/pcaExplorer/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="pcaexplorer-2160" class="section level1">
+<h1 class="page-header" data-toc-text="2.16.0">
+<a href="#pcaexplorer-2160" class="anchor"></a>pcaExplorer 2.16.0</h1>
+<div id="other-notes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-notes" class="anchor"></a>Other notes</h2>
+<ul>
+<li>Replaced dependency from <code>d3heatmap</code> with the functionality of <code>heatmaply</code>
+</li>
+</ul>
+</div>
+</div>
     <div id="pcaexplorer-2120" class="section level1">
 <h1 class="page-header" data-toc-text="2.12.0">
 <a href="#pcaexplorer-2120" class="anchor"></a>pcaExplorer 2.12.0</h1>
@@ -142,9 +154,9 @@
 <code>topGOtable</code> does not generate rows with NAs if providing a too high number for the categories to report</li>
 </ul>
 </div>
-<div id="other-notes" class="section level2">
+<div id="other-notes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-1" class="anchor"></a>Other notes</h2>
 <ul>
 <li>The type of the columns in the data.frame returned by <code>topGOtable</code> are now correctly referring to the type they contain - e.g. the p values are now stored as numeric values</li>
 <li>Citation now refers to the published manuscript - <a href="https://doi.org/10.1186/s12859-019-2879-1" class="uri">https://doi.org/10.1186/s12859-019-2879-1</a>
@@ -172,9 +184,9 @@
 <li>An additional parameter, <code>annopkg</code>, has been added to <code><a href="../reference/pca2go.html">pca2go()</a></code> to override the behavior with the <code>organism</code> parameter (this is useful when the name of the annotation package is not conform to the classical <code>org.Xx.eg.db</code>, e.g. for Arabidopsis Thaliana); a detailed use case has been added in the main vignette</li>
 </ul>
 </div>
-<div id="other-notes-1" class="section level2">
+<div id="other-notes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-1" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-2" class="anchor"></a>Other notes</h2>
 <ul>
 <li>The computing of the required objects now requires the explicit action on the dedicated button, and the tooltip informs the user on what steps are taken (including normalization)</li>
 <li>An information box has been added to provide detailed information on the required input formats</li>
@@ -204,9 +216,9 @@
 <code>pca2go</code> is now also picking values from the input widgets</li>
 </ul>
 </div>
-<div id="other-notes-2" class="section level2">
+<div id="other-notes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-2" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-3" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Built project website via pkgdown, with customized reference structure</li>
 <li>Correctly adding the resources to shinyBS, loaded via <code>.onLoad</code>, and also better placement for bstooltips</li>
@@ -248,9 +260,9 @@
 <code>theme_bw</code> applied when needed, corrected previous behavior</li>
 </ul>
 </div>
-<div id="other-notes-3" class="section level2">
+<div id="other-notes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-3" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-4" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Updated citation infos</li>
 <li>Slight difference in handling validate/need errors</li>
@@ -274,9 +286,9 @@
 <li>Plots work now without cutting out points when zooming in</li>
 </ul>
 </div>
-<div id="other-notes-4" class="section level2">
+<div id="other-notes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-4" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-5" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Saved reactive values are now exported to dedicate environments (instead of assigning to global)</li>
 </ul>
@@ -285,9 +297,9 @@
     <div id="pcaexplorer-1990" class="section level1">
 <h1 class="page-header" data-toc-text="1.99.0">
 <a href="#pcaexplorer-1990" class="anchor"></a>pcaExplorer 1.99.0</h1>
-<div id="other-notes-5" class="section level2">
+<div id="other-notes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-5" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-6" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Reflecting the major feature added, will trigger a major version number bump. Welcome soon, pcaExplorer 2.0.0!</li>
 </ul>
@@ -320,9 +332,9 @@
 <li>Added option row.names to read.delim for allowing row names when uploading the data</li>
 </ul>
 </div>
-<div id="other-notes-6" class="section level2">
+<div id="other-notes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-6" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-7" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Added extra info in the about section</li>
 <li>Instructions and vignette rewritten to reflect new design of the app</li>
@@ -344,9 +356,9 @@
     <div id="pcaexplorer-100" class="section level1">
 <h1 class="page-header" data-toc-text="1.0.0">
 <a href="#pcaexplorer-100" class="anchor"></a>pcaExplorer 1.0.0</h1>
-<div id="other-notes-7" class="section level2">
+<div id="other-notes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-7" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-8" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Released in Bioconductor 3.3</li>
 </ul>
@@ -355,9 +367,9 @@
     <div id="pcaexplorer-0991" class="section level1">
 <h1 class="page-header" data-toc-text="0.99.1">
 <a href="#pcaexplorer-0991" class="anchor"></a>pcaExplorer 0.99.1</h1>
-<div id="other-notes-8" class="section level2">
+<div id="other-notes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-8" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-9" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Changed format of the NEWS file</li>
 </ul>
@@ -366,9 +378,9 @@
     <div id="pcaexplorer-0990" class="section level1">
 <h1 class="page-header" data-toc-text="0.99.0">
 <a href="#pcaexplorer-0990" class="anchor"></a>pcaExplorer 0.99.0</h1>
-<div id="other-notes-9" class="section level2">
+<div id="other-notes-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-9" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-10" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Ready for submission to Bioconductor</li>
 </ul>
@@ -377,9 +389,9 @@
     <div id="pcaexplorer-090" class="section level1">
 <h1 class="page-header" data-toc-text="0.9.0">
 <a href="#pcaexplorer-090" class="anchor"></a>pcaExplorer 0.9.0</h1>
-<div id="other-notes-10" class="section level2">
+<div id="other-notes-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-10" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-11" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Added TravisCI integration for both branches</li>
 <li>Added appveyor integration - plus badges in the README.md</li>
@@ -406,9 +418,9 @@
 <li>Couple of layout fixes</li>
 </ul>
 </div>
-<div id="other-notes-11" class="section level2">
+<div id="other-notes-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-11" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-12" class="anchor"></a>Other notes</h2>
 <ul>
 <li>MIT license</li>
 <li>Added TravisCI integration</li>
@@ -431,9 +443,9 @@
     <div id="pcaexplorer-064" class="section level1">
 <h1 class="page-header" data-toc-text="0.6.4">
 <a href="#pcaexplorer-064" class="anchor"></a>pcaExplorer 0.6.4</h1>
-<div id="other-notes-12" class="section level2">
+<div id="other-notes-13" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-12" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-13" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Updated NEWS file</li>
 </ul>
@@ -454,9 +466,9 @@
     <div id="pcaexplorer-062" class="section level1">
 <h1 class="page-header" data-toc-text="0.6.2">
 <a href="#pcaexplorer-062" class="anchor"></a>pcaExplorer 0.6.2</h1>
-<div id="other-notes-13" class="section level2">
+<div id="other-notes-14" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-13" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-14" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Corrected wordings for (cor)relations of principal components with covariates</li>
 <li>Added a couple of checks if correct objects are provided</li>
@@ -477,9 +489,9 @@
     <div id="pcaexplorer-060" class="section level1">
 <h1 class="page-header" data-toc-text="0.6.0">
 <a href="#pcaexplorer-060" class="anchor"></a>pcaExplorer 0.6.0</h1>
-<div id="other-notes-14" class="section level2">
+<div id="other-notes-15" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-14" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-15" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Documentation completed</li>
 <li>Examples fully working, cleaned up further a little more.</li>
@@ -489,9 +501,9 @@
     <div id="pcaexplorer-050" class="section level1">
 <h1 class="page-header" data-toc-text="0.5.0">
 <a href="#pcaexplorer-050" class="anchor"></a>pcaExplorer 0.5.0</h1>
-<div id="other-notes-15" class="section level2">
+<div id="other-notes-16" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes-15" class="anchor"></a>Other notes</h2>
+<a href="#other-notes-16" class="anchor"></a>Other notes</h2>
 <ul>
 <li>Further steps in direction of R CMD check</li>
 </ul>
