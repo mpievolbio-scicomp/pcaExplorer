@@ -8,21 +8,29 @@
 
 <title>Changelog • pcaExplorer</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,7 +38,9 @@
 
 
 
+
 <meta property="og:title" content="Changelog" />
+
 
 
 
@@ -44,9 +54,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -60,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.14.1</span>
       </span>
     </div>
 
@@ -95,7 +106,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/federicomarini/pcaExplorer">
@@ -110,23 +120,26 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
+      <h1 data-toc-skip>Changelog <small></small></h1>
       <small>Source: <a href='https://github.com/federicomarini/pcaExplorer/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
     <div id="pcaexplorer-2-12-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="2.12.0">
 <a href="#pcaexplorer-2-12-0" class="anchor"></a>pcaExplorer 2.12.0</h1>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed an error in the initialization of the app due to a new behavior introduced by <code>shinyAce</code> in version &gt;= 0.4.0</li>
+<li>
+<code>topGOtable</code> does not generate rows with NAs if providing a too high number for the categories to report</li>
 </ul>
 </div>
 <div id="other-notes" class="section level2">
@@ -140,7 +153,7 @@
 </div>
 </div>
     <div id="pcaexplorer-2-10-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="2.10.0">
 <a href="#pcaexplorer-2-10-0" class="anchor"></a>pcaExplorer 2.10.0</h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
@@ -175,7 +188,7 @@
 </div>
 </div>
     <div id="pcaexplorer-2-8-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="2.8.0">
 <a href="#pcaexplorer-2-8-0" class="anchor"></a>pcaExplorer 2.8.0</h1>
 <div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
@@ -214,7 +227,7 @@
 </div>
 </div>
     <div id="pcaexplorer-2-6-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="2.6.0">
 <a href="#pcaexplorer-2-6-0" class="anchor"></a>pcaExplorer 2.6.0</h1>
 <div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
@@ -245,7 +258,7 @@
 </div>
 </div>
     <div id="pcaexplorer-2-2-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="2.2.0">
 <a href="#pcaexplorer-2-2-0" class="anchor"></a>pcaExplorer 2.2.0</h1>
 <div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
@@ -270,7 +283,7 @@
 </div>
 </div>
     <div id="pcaexplorer-1-99-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="1.99.0">
 <a href="#pcaexplorer-1-99-0" class="anchor"></a>pcaExplorer 1.99.0</h1>
 <div id="other-notes-5" class="section level2">
 <h2 class="hasAnchor">
@@ -281,7 +294,7 @@
 </div>
 </div>
     <div id="pcaexplorer-1-1-5" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="1.1.5">
 <a href="#pcaexplorer-1-1-5" class="anchor"></a>pcaExplorer 1.1.5</h1>
 <div id="new-features-4" class="section level2">
 <h2 class="hasAnchor">
@@ -317,7 +330,7 @@
 </div>
 </div>
     <div id="pcaexplorer-1-1-3" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="1.1.3">
 <a href="#pcaexplorer-1-1-3" class="anchor"></a>pcaExplorer 1.1.3</h1>
 <div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
@@ -329,7 +342,7 @@
 </div>
 </div>
     <div id="pcaexplorer-1-0-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="1.0.0">
 <a href="#pcaexplorer-1-0-0" class="anchor"></a>pcaExplorer 1.0.0</h1>
 <div id="other-notes-7" class="section level2">
 <h2 class="hasAnchor">
@@ -340,7 +353,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-99-1" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.99.1">
 <a href="#pcaexplorer-0-99-1" class="anchor"></a>pcaExplorer 0.99.1</h1>
 <div id="other-notes-8" class="section level2">
 <h2 class="hasAnchor">
@@ -351,7 +364,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-99-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.99.0">
 <a href="#pcaexplorer-0-99-0" class="anchor"></a>pcaExplorer 0.99.0</h1>
 <div id="other-notes-9" class="section level2">
 <h2 class="hasAnchor">
@@ -362,7 +375,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-9-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.9.0">
 <a href="#pcaexplorer-0-9-0" class="anchor"></a>pcaExplorer 0.9.0</h1>
 <div id="other-notes-10" class="section level2">
 <h2 class="hasAnchor">
@@ -377,7 +390,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-8-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.8.0">
 <a href="#pcaexplorer-0-8-0" class="anchor"></a>pcaExplorer 0.8.0</h1>
 <div id="new-features-5" class="section level2">
 <h2 class="hasAnchor">
@@ -405,7 +418,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-7-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.7.0">
 <a href="#pcaexplorer-0-7-0" class="anchor"></a>pcaExplorer 0.7.0</h1>
 <div id="new-features-6" class="section level2">
 <h2 class="hasAnchor">
@@ -416,7 +429,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-6-4" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.6.4">
 <a href="#pcaexplorer-0-6-4" class="anchor"></a>pcaExplorer 0.6.4</h1>
 <div id="other-notes-12" class="section level2">
 <h2 class="hasAnchor">
@@ -427,7 +440,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-6-3" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.6.3">
 <a href="#pcaexplorer-0-6-3" class="anchor"></a>pcaExplorer 0.6.3</h1>
 <div id="new-features-7" class="section level2">
 <h2 class="hasAnchor">
@@ -439,7 +452,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-6-2" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.6.2">
 <a href="#pcaexplorer-0-6-2" class="anchor"></a>pcaExplorer 0.6.2</h1>
 <div id="other-notes-13" class="section level2">
 <h2 class="hasAnchor">
@@ -451,7 +464,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-6-1" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.6.1">
 <a href="#pcaexplorer-0-6-1" class="anchor"></a>pcaExplorer 0.6.1</h1>
 <div id="new-features-8" class="section level2">
 <h2 class="hasAnchor">
@@ -462,7 +475,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-6-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.6.0">
 <a href="#pcaexplorer-0-6-0" class="anchor"></a>pcaExplorer 0.6.0</h1>
 <div id="other-notes-14" class="section level2">
 <h2 class="hasAnchor">
@@ -474,7 +487,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-5-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.5.0">
 <a href="#pcaexplorer-0-5-0" class="anchor"></a>pcaExplorer 0.5.0</h1>
 <div id="other-notes-15" class="section level2">
 <h2 class="hasAnchor">
@@ -485,7 +498,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-4-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.4.0">
 <a href="#pcaexplorer-0-4-0" class="anchor"></a>pcaExplorer 0.4.0</h1>
 <div id="new-features-9" class="section level2">
 <h2 class="hasAnchor">
@@ -496,7 +509,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-3-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.3.0">
 <a href="#pcaexplorer-0-3-0" class="anchor"></a>pcaExplorer 0.3.0</h1>
 <div id="new-features-10" class="section level2">
 <h2 class="hasAnchor">
@@ -507,7 +520,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-2-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.2.0">
 <a href="#pcaexplorer-0-2-0" class="anchor"></a>pcaExplorer 0.2.0</h1>
 <div id="new-features-11" class="section level2">
 <h2 class="hasAnchor">
@@ -518,7 +531,7 @@
 </div>
 </div>
     <div id="pcaexplorer-0-1-0" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.1.0">
 <a href="#pcaexplorer-0-1-0" class="anchor"></a>pcaExplorer 0.1.0</h1>
 <div id="new-features-12" class="section level2">
 <h2 class="hasAnchor">
@@ -530,39 +543,14 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#pcaexplorer-2-12-0">2.12.0</a></li>
-        <li><a href="#pcaexplorer-2-10-0">2.10.0</a></li>
-        <li><a href="#pcaexplorer-2-8-0">2.8.0</a></li>
-        <li><a href="#pcaexplorer-2-6-0">2.6.0</a></li>
-        <li><a href="#pcaexplorer-2-2-0">2.2.0</a></li>
-        <li><a href="#pcaexplorer-1-99-0">1.99.0</a></li>
-        <li><a href="#pcaexplorer-1-1-5">1.1.5</a></li>
-        <li><a href="#pcaexplorer-1-1-3">1.1.3</a></li>
-        <li><a href="#pcaexplorer-1-0-0">1.0.0</a></li>
-        <li><a href="#pcaexplorer-0-99-1">0.99.1</a></li>
-        <li><a href="#pcaexplorer-0-99-0">0.99.0</a></li>
-        <li><a href="#pcaexplorer-0-9-0">0.9.0</a></li>
-        <li><a href="#pcaexplorer-0-8-0">0.8.0</a></li>
-        <li><a href="#pcaexplorer-0-7-0">0.7.0</a></li>
-        <li><a href="#pcaexplorer-0-6-4">0.6.4</a></li>
-        <li><a href="#pcaexplorer-0-6-3">0.6.3</a></li>
-        <li><a href="#pcaexplorer-0-6-2">0.6.2</a></li>
-        <li><a href="#pcaexplorer-0-6-1">0.6.1</a></li>
-        <li><a href="#pcaexplorer-0-6-0">0.6.0</a></li>
-        <li><a href="#pcaexplorer-0-5-0">0.5.0</a></li>
-        <li><a href="#pcaexplorer-0-4-0">0.4.0</a></li>
-        <li><a href="#pcaexplorer-0-3-0">0.3.0</a></li>
-        <li><a href="#pcaexplorer-0-2-0">0.2.0</a></li>
-        <li><a href="#pcaexplorer-0-1-0">0.1.0</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -570,13 +558,16 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

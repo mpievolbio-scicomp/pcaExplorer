@@ -8,21 +8,29 @@
 
 <title>Extract functional terms enriched in the DE genes, based on topGO — topGOtable • pcaExplorer</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,11 +38,11 @@
 
 
 
-<meta property="og:title" content="Extract functional terms enriched in the DE genes, based on topGO — topGOtable" />
 
+<meta property="og:title" content="Extract functional terms enriched in the DE genes, based on topGO — topGOtable" />
 <meta property="og:description" content="A wrapper for extracting functional GO terms enriched in the DE genes, based on
 the algorithm and the implementation in the topGO package" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -48,9 +56,10 @@ the algorithm and the implementation in the topGO package" />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -64,7 +73,7 @@ the algorithm and the implementation in the topGO package" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.14.1</span>
       </span>
     </div>
 
@@ -99,7 +108,6 @@ the algorithm and the implementation in the topGO package" />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/federicomarini/pcaExplorer">
@@ -114,6 +122,7 @@ the algorithm and the implementation in the topGO package" />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -125,10 +134,8 @@ the algorithm and the implementation in the topGO package" />
     </div>
 
     <div class="ref-description">
-    
     <p>A wrapper for extracting functional GO terms enriched in the DE genes, based on
 the algorithm and the implementation in the topGO package</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>topGOtable</span>(<span class='no'>DEgenes</span>, <span class='no'>BGgenes</span>, <span class='kw'>ontology</span> <span class='kw'>=</span> <span class='st'>"BP"</span>, <span class='kw'>annot</span> <span class='kw'>=</span> <span class='no'>annFUN.org</span>,
@@ -136,7 +143,7 @@ the algorithm and the implementation in the topGO package</p>
   <span class='kw'>fullNamesInRows</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>addGeneToTerms</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plotGraph</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>plotNodes</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>writeOutput</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>outputFile</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='kw'>topGO_method2</span> <span class='kw'>=</span> <span class='st'>"elim"</span>, <span class='kw'>do_padj</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -205,23 +212,21 @@ independent hypotheses is somewhat violated by the intrinsic DAG-structure of th
 Ontology Terms</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A table containing the computed GO Terms and related enrichment scores</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Allowed values assumed by the <code>topGO_method2</code> parameter are one of the
 following: <code>elim</code>, <code>weight</code>, <code>weight01</code>, <code>lea</code>, 
 <code>parentchild</code>. For more details on this, please refer to the original 
 documentation of the <code>topGO</code> package itself</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>airway</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>DESeq2</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>airway</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>airway</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DESeq2</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>airway</span>)
 <span class='no'>airway</span></div><div class='output co'>#&gt; class: RangedSummarizedExperiment 
 #&gt; dim: 64102 8 
 #&gt; metadata(1): ''
@@ -229,54 +234,47 @@ documentation of the <code>topGO</code> package itself</p>
 #&gt; rownames(64102): ENSG00000000003 ENSG00000000005 ... LRG_98 LRG_99
 #&gt; rowData names(0):
 #&gt; colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
-#&gt; colData names(9): SampleName cell ... Sample BioSample</div><div class='input'><span class='no'>dds_airway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSet</a></span>(<span class='no'>airway</span>, <span class='kw'>design</span><span class='kw'>=</span> ~ <span class='no'>cell</span> + <span class='no'>dex</span>)
+#&gt; colData names(9): SampleName cell ... Sample BioSample</div><div class='input'><span class='no'>dds_airway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html'>DESeqDataSet</a></span>(<span class='no'>airway</span>, <span class='kw'>design</span><span class='kw'>=</span> ~ <span class='no'>cell</span> + <span class='no'>dex</span>)
 <span class='co'># Example, performing extraction of enriched functional categories in</span>
-<span class='co'># detected significantly expressed genes</span></div><span class='co'># NOT RUN {</span>
-<span class='no'>dds_airway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds_airway</span>)
-<span class='no'>res_airway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/results'>results</a></span>(<span class='no'>dds_airway</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"AnnotationDbi"</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"org.Hs.eg.db"</span>)
-<span class='no'>res_airway</span>$<span class='no'>symbol</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/AnnotationDbi/topics/AnnotationDb-class'>mapIds</a></span>(<span class='no'>org.Hs.eg.db</span>,
-                            <span class='kw'>keys</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/row.names'>row.names</a></span>(<span class='no'>res_airway</span>),
+<span class='co'># detected significantly expressed genes</span>
+<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='no'>dds_airway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/DESeq.html'>DESeq</a></span>(<span class='no'>dds_airway</span>)
+<span class='no'>res_airway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/results.html'>results</a></span>(<span class='no'>dds_airway</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"AnnotationDbi"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"org.Hs.eg.db"</span>)
+<span class='no'>res_airway</span>$<span class='no'>symbol</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html'>mapIds</a></span>(<span class='no'>org.Hs.eg.db</span>,
+                            <span class='kw'>keys</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='no'>res_airway</span>),
                             <span class='kw'>column</span><span class='kw'>=</span><span class='st'>"SYMBOL"</span>,
                             <span class='kw'>keytype</span><span class='kw'>=</span><span class='st'>"ENSEMBL"</span>,
                             <span class='kw'>multiVals</span><span class='kw'>=</span><span class='st'>"first"</span>)
-<span class='no'>res_airway</span>$<span class='no'>entrez</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/AnnotationDbi/topics/AnnotationDb-class'>mapIds</a></span>(<span class='no'>org.Hs.eg.db</span>,
-                            <span class='kw'>keys</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/row.names'>row.names</a></span>(<span class='no'>res_airway</span>),
+<span class='no'>res_airway</span>$<span class='no'>entrez</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html'>mapIds</a></span>(<span class='no'>org.Hs.eg.db</span>,
+                            <span class='kw'>keys</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/row.names.html'>row.names</a></span>(<span class='no'>res_airway</span>),
                             <span class='kw'>column</span><span class='kw'>=</span><span class='st'>"ENTREZID"</span>,
                             <span class='kw'>keytype</span><span class='kw'>=</span><span class='st'>"ENSEMBL"</span>,
                             <span class='kw'>multiVals</span><span class='kw'>=</span><span class='st'>"first"</span>)
-<span class='no'>resOrdered</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>as.data.frame</a></span>(<span class='no'>res_airway</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></span>(<span class='no'>res_airway</span>$<span class='no'>padj</span>),])
-<span class='no'>de_df</span> <span class='kw'>&lt;-</span> <span class='no'>resOrdered</span>[<span class='no'>resOrdered</span>$<span class='no'>padj</span> <span class='kw'>&lt;</span> <span class='fl'>.05</span> <span class='kw'>&amp;</span> !<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/NA'>is.na</a></span>(<span class='no'>resOrdered</span>$<span class='no'>padj</span>),]
+<span class='no'>resOrdered</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>res_airway</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='no'>res_airway</span>$<span class='no'>padj</span>),])
+<span class='no'>de_df</span> <span class='kw'>&lt;-</span> <span class='no'>resOrdered</span>[<span class='no'>resOrdered</span>$<span class='no'>padj</span> <span class='kw'>&lt;</span> <span class='fl'>.05</span> <span class='kw'>&amp;</span> !<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>resOrdered</span>$<span class='no'>padj</span>),]
 <span class='no'>de_symbols</span> <span class='kw'>&lt;-</span> <span class='no'>de_df</span>$<span class='no'>symbol</span>
-<span class='no'>bg_ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>rownames</a></span>(<span class='no'>dds_airway</span>)[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colSums'>rowSums</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dds_airway</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>]
-<span class='no'>bg_symbols</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/AnnotationDbi/topics/AnnotationDb-class'>mapIds</a></span>(<span class='no'>org.Hs.eg.db</span>,
+<span class='no'>bg_ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>dds_airway</span>)[<span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowSums</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/counts.html'>counts</a></span>(<span class='no'>dds_airway</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>]
+<span class='no'>bg_symbols</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html'>mapIds</a></span>(<span class='no'>org.Hs.eg.db</span>,
                      <span class='kw'>keys</span><span class='kw'>=</span><span class='no'>bg_ids</span>,
                      <span class='kw'>column</span><span class='kw'>=</span><span class='st'>"SYMBOL"</span>,
                      <span class='kw'>keytype</span><span class='kw'>=</span><span class='st'>"ENSEMBL"</span>,
                      <span class='kw'>multiVals</span><span class='kw'>=</span><span class='st'>"first"</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>topGO</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>topGO</span>)
 <span class='no'>topgoDE_airway</span> <span class='kw'>&lt;-</span> <span class='fu'>topGOtable</span>(<span class='no'>de_symbols</span>, <span class='no'>bg_symbols</span>,
                              <span class='kw'>ontology</span> <span class='kw'>=</span> <span class='st'>"BP"</span>,
                              <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='st'>"org.Hs.eg.db"</span>,
                              <span class='kw'>geneID</span> <span class='kw'>=</span> <span class='st'>"symbol"</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
+}</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -284,13 +282,16 @@ documentation of the <code>topGO</code> package itself</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
