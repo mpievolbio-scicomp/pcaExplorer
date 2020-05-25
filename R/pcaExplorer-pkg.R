@@ -14,7 +14,8 @@
 #' @importFrom IRanges IRanges
 #' @importFrom S4Vectors DataFrame
 #' @importFrom genefilter rowVars
-#' @import d3heatmap
+#' @importFrom heatmaply heatmaply
+#' @importFrom plotly renderPlotly plotlyOutput
 #' @importFrom scales brewer_pal hue_pal
 #' @importFrom NMF aheatmap
 #' @import plyr
