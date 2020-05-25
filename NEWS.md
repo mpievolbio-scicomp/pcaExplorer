@@ -1,3 +1,9 @@
+# pcaExplorer 2.16.0
+
+## Other notes
+
+* Replaced dependency from `d3heatmap` with the functionality of `heatmaply`
+
 # pcaExplorer 2.12.0
 
 ## Bug fixes
