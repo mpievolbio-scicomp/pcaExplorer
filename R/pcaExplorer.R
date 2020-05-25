@@ -524,7 +524,7 @@ pcaExplorer <- function(dds = NULL,
                 width = 6,
                 h4("Zoomed interactive heatmap"),
                 fluidRow(radioButtons("heatmap_colv", "Cluster samples", choices = list("Yes" = TRUE, "No" = FALSE), selected = TRUE)),
-                fluidRow(d3heatmapOutput("heatzoomd3")))),
+                fluidRow(plotlyOutput("heatzoom")))),
             
             hr(),
             box(
@@ -1803,7 +1803,7 @@ pcaExplorer <- function(dds = NULL,
       datatable(curData_click(), options = list(pageLength = 50))
     })
     
-    output$heatzoomd3 <- renderD3heatmap({
+    output$heatzoom <- renderPlotly({
       shiny::validate(
         need(
           !is.null(input$pcagenes_brush),
@@ -1824,7 +1824,7 @@ pcaExplorer <- function(dds = NULL,
       
       mycolss <- c("#313695", "#4575b4", "#74add1", "#abd9e9", "#e0f3f8", "#fee090", "#fdae61", "#f46d43", "#d73027", "#a50026") # to be consistent with red/blue usual coding
       
-      d3heatmap(toplot, Colv = as.logical(input$heatmap_colv), colors = mycolss)
+      heatmaply(toplot, Colv = as.logical(input$heatmap_colv), colors = mycolss)
     })
     
     output$heatzoom <- renderPlot({
