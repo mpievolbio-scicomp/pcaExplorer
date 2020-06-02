@@ -14,10 +14,6 @@
 
 [![codecov.io](https://codecov.io/github/federicomarini/pcaExplorer/coverage.svg?branch=master)](https://codecov.io/github/federicomarini/pcaExplorer?branch=master)
 
-<!-- 
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/federicomarini/pcaExplorer?svg=true)](https://ci.appveyor.com/project/federicomarini/pcaexplorer)
--->
-
 `pcaExplorer` is a Bioconductor package containing a Shiny application for
 analyzing expression data in different conditions and experimental factors. 
 
