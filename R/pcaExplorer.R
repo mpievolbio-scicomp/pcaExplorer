@@ -524,7 +524,7 @@ pcaExplorer <- function(dds = NULL,
                 width = 6,
                 h4("Zoomed interactive heatmap"),
                 fluidRow(radioButtons("heatmap_colv", "Cluster samples", choices = list("Yes" = TRUE, "No" = FALSE), selected = TRUE)),
-                fluidRow(plotlyOutput("heatzoom")))),
+                fluidRow(plotlyOutput("heatzoomly")))),
             
             hr(),
             box(
@@ -1803,7 +1803,7 @@ pcaExplorer <- function(dds = NULL,
       datatable(curData_click(), options = list(pageLength = 50))
     })
     
-    output$heatzoom <- renderPlotly({
+    output$heatzoomly <- renderPlotly({
       shiny::validate(
         need(
           !is.null(input$pcagenes_brush),
