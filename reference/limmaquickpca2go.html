@@ -143,15 +143,15 @@ performs functional enrichment analysis on them using the simple and quick routi
 provided by the <code>limma</code> package</p>
     </div>
 
-    <pre class="usage"><span class='fu'>limmaquickpca2go</span>(
-  <span class='no'>se</span>,
-  <span class='kw'>pca_ngenes</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
-  <span class='kw'>inputType</span> <span class='kw'>=</span> <span class='st'>"ENSEMBL"</span>,
-  <span class='kw'>organism</span> <span class='kw'>=</span> <span class='st'>"Mm"</span>,
-  <span class='kw'>loadings_ngenes</span> <span class='kw'>=</span> <span class='fl'>500</span>,
-  <span class='kw'>background_genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/limmaquickpca2go.html'>limmaquickpca2go</a></span>(
+  <span class='kw'>se</span>,
+  pca_ngenes = <span class='fl'>10000</span>,
+  inputType = <span class='st'>"ENSEMBL"</span>,
+  organism = <span class='st'>"Mm"</span>,
+  loadings_ngenes = <span class='fl'>500</span>,
+  background_genes = <span class='kw'>NULL</span>,
+  scale = <span class='fl'>FALSE</span>,
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -159,9 +159,9 @@ provided by the <code>limma</code> package</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>se</th>
-      <td><p>A <code>DESeqTransform</code> object, with data in <code>assay(se)</code>,
-produced for example by either <code>rlog</code> or
-<code>varianceStabilizingTransformation</code></p></td>
+      <td><p>A <code><a href='https://rdrr.io/pkg/DESeq2/man/DESeqTransform.html'>DESeqTransform</a></code> object, with data in <code>assay(se)</code>,
+produced for example by either <code><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlog</a></code> or
+<code><a href='https://rdrr.io/pkg/DESeq2/man/varianceStabilizingTransformation.html'>varianceStabilizingTransformation</a></code></p></td>
     </tr>
     <tr>
       <th>pca_ngenes</th>
@@ -199,32 +199,33 @@ like it is normally used with the <code>select</code> function of <code>Annotati
 
     <p>A nested list object containing for each principal component the terms enriched
 in each direction. This object is to be thought in combination with the displaying feature
-of the main <code><a href='pcaExplorer.html'>pcaExplorer</a></code> function</p>
+of the main <code><a href='https://rdrr.io/pkg/pcaExplorer/man/pcaExplorer.html'>pcaExplorer</a></code> function</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>airway</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DESeq2</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>limma</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>airway</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/mikelove/DESeq2'>DESeq2</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://bioinf.wehi.edu.au/limma'>limma</a></span>)</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘limma’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:DESeq2’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    plotMA</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:BiocGenerics’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    plotMA</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>airway</span>)
-<span class='no'>airway</span></div><div class='output co'>#&gt; class: RangedSummarizedExperiment 
+#&gt; <span class='message'>    plotMA</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>airway</span>)
+<span class='kw'>airway</span></div><div class='output co'>#&gt; class: RangedSummarizedExperiment 
 #&gt; dim: 64102 8 
 #&gt; metadata(1): ''
 #&gt; assays(1): counts
 #&gt; rownames(64102): ENSG00000000003 ENSG00000000005 ... LRG_98 LRG_99
 #&gt; rowData names(0):
 #&gt; colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
-#&gt; colData names(9): SampleName cell ... Sample BioSample</div><div class='input'><span class='no'>dds_airway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html'>DESeqDataSet</a></span>(<span class='no'>airway</span>, <span class='kw'>design</span> <span class='kw'>=</span> ~ <span class='no'>cell</span> + <span class='no'>dex</span>)
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>rld_airway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='no'>dds_airway</span>)
-<span class='no'>goquick_airway</span> <span class='kw'>&lt;-</span> <span class='fu'>limmaquickpca2go</span>(<span class='no'>rld_airway</span>,
-                                   <span class='kw'>pca_ngenes</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
-                                   <span class='kw'>inputType</span> <span class='kw'>=</span> <span class='st'>"ENSEMBL"</span>,
-                                   <span class='kw'>organism</span> <span class='kw'>=</span> <span class='st'>"Hs"</span>)
-}</div></pre>
+#&gt; colData names(9): SampleName cell ... Sample BioSample</div><div class='input'><span class='kw'>dds_airway</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html'>DESeqDataSet</a></span>(<span class='kw'>airway</span>, design = <span class='op'>~</span> <span class='kw'>cell</span> <span class='op'>+</span> <span class='kw'>dex</span>)
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>rld_airway</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='kw'>dds_airway</span>)
+<span class='kw'>goquick_airway</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/limmaquickpca2go.html'>limmaquickpca2go</a></span>(<span class='kw'>rld_airway</span>,
+                                   pca_ngenes = <span class='fl'>10000</span>,
+                                   inputType = <span class='st'>"ENSEMBL"</span>,
+                                   organism = <span class='st'>"Hs"</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

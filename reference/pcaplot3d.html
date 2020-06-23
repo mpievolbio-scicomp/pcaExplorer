@@ -136,17 +136,17 @@
     <p>Plots the results of PCA on a 3-dimensional space, interactively</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pcaplot3d</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>intgroup</span> <span class='kw'>=</span> <span class='st'>"condition"</span>,
-  <span class='kw'>ntop</span> <span class='kw'>=</span> <span class='fl'>500</span>,
-  <span class='kw'>returnData</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pcX</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>pcY</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>pcZ</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>text_labels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>point_size</span> <span class='kw'>=</span> <span class='fl'>3</span>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/pcaplot3d.html'>pcaplot3d</a></span>(
+  <span class='kw'>x</span>,
+  intgroup = <span class='st'>"condition"</span>,
+  ntop = <span class='fl'>500</span>,
+  returnData = <span class='fl'>FALSE</span>,
+  title = <span class='kw'>NULL</span>,
+  pcX = <span class='fl'>1</span>,
+  pcY = <span class='fl'>2</span>,
+  pcZ = <span class='fl'>3</span>,
+  text_labels = <span class='fl'>TRUE</span>,
+  point_size = <span class='fl'>3</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -154,9 +154,9 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A <code>DESeqTransform</code> object, with data in <code>assay(x)</code>,
-produced for example by either <code>rlog</code> or
-<code>varianceStabilizingTransformation</code></p></td>
+      <td><p>A <code><a href='https://rdrr.io/pkg/DESeq2/man/DESeqTransform.html'>DESeqTransform</a></code> object, with data in <code>assay(x)</code>,
+produced for example by either <code><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlog</a></code> or
+<code><a href='https://rdrr.io/pkg/DESeq2/man/varianceStabilizingTransformation.html'>varianceStabilizingTransformation</a></code></p></td>
     </tr>
     <tr>
       <th>intgroup</th>
@@ -204,9 +204,9 @@ selected principal components and intgroup covariates for custom plotting</p></t
     <p>A html-based visualization of the 3d PCA plot</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(<span class='kw'>betaSD_condition</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>betaSD_tissue</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>rlt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DESeq2</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='no'>dds</span>)
-<span class='fu'>pcaplot3d</span>(<span class='no'>rlt</span>, <span class='kw'>ntop</span> <span class='kw'>=</span> <span class='fl'>200</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(betaSD_condition = <span class='fl'>3</span>, betaSD_tissue = <span class='fl'>1</span>)
+<span class='kw'>rlt</span> <span class='op'>&lt;-</span> <span class='kw'>DESeq2</span>::<span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='kw'>dds</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/pcaplot3d.html'>pcaplot3d</a></span>(<span class='kw'>rlt</span>, ntop = <span class='fl'>200</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
