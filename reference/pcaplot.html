@@ -136,19 +136,19 @@
     <p>Plots the results of PCA on a 2-dimensional space</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/pcaplot.html'>pcaplot</a></span>(
-  <span class='kw'>x</span>,
-  intgroup = <span class='st'>"condition"</span>,
-  ntop = <span class='fl'>500</span>,
-  returnData = <span class='fl'>FALSE</span>,
-  title = <span class='kw'>NULL</span>,
-  pcX = <span class='fl'>1</span>,
-  pcY = <span class='fl'>2</span>,
-  text_labels = <span class='fl'>TRUE</span>,
-  point_size = <span class='fl'>3</span>,
-  ellipse = <span class='fl'>TRUE</span>,
-  ellipse.prob = <span class='fl'>0.95</span>
-)</pre>
+    <pre class="usage"><span class='fu'>pcaplot</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  intgroup <span class='op'>=</span> <span class='st'>"condition"</span>,
+  ntop <span class='op'>=</span> <span class='fl'>500</span>,
+  returnData <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  title <span class='op'>=</span> <span class='cn'>NULL</span>,
+  pcX <span class='op'>=</span> <span class='fl'>1</span>,
+  pcY <span class='op'>=</span> <span class='fl'>2</span>,
+  text_labels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  point_size <span class='op'>=</span> <span class='fl'>3</span>,
+  ellipse <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  ellipse.prob <span class='op'>=</span> <span class='fl'>0.95</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -209,9 +209,11 @@ selected principal components and intgroup covariates for custom plotting</p></t
     <p>An object created by <code>ggplot</code>, which can be assigned and further customized.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(betaSD_condition = <span class='fl'>3</span>, betaSD_tissue = <span class='fl'>1</span>)
-<span class='kw'>rlt</span> <span class='op'>&lt;-</span> <span class='kw'>DESeq2</span>::<span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='kw'>dds</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/pcaplot.html'>pcaplot</a></span>(<span class='kw'>rlt</span>, ntop = <span class='fl'>200</span>)</div><div class='img'><img src='pcaplot-1.png' alt='' width='700' height='433' /></div><div class='input'></div></pre>
+    <pre class="examples"><div class='input'><span class='va'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span><span class='op'>(</span>betaSD_condition <span class='op'>=</span> <span class='fl'>3</span>, betaSD_tissue <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>rlt</span> <span class='op'>&lt;-</span> <span class='fu'>DESeq2</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span><span class='op'>(</span><span class='va'>dds</span><span class='op'>)</span>
+<span class='fu'>pcaplot</span><span class='op'>(</span><span class='va'>rlt</span>, ntop <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
+</div><div class='img'><img src='pcaplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -227,7 +229,7 @@ selected principal components and intgroup covariates for custom plotting</p></t
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -142,7 +142,7 @@ and the <code>cor.test</code> based on Spearman's correlation for continuous
 variables</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/correlatePCs.html'>correlatePCs</a></span>(<span class='kw'>pcaobj</span>, <span class='kw'>coldata</span>, pcs = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>)</pre>
+    <pre class="usage"><span class='fu'>correlatePCs</span><span class='op'>(</span><span class='va'>pcaobj</span>, <span class='va'>coldata</span>, pcs <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,7 +168,8 @@ covariates</p></td>
 and for each principal component</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/mikelove/DESeq2'>DESeq2</a></span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: S4Vectors</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: stats4</span></div><div class='output co'>#&gt; <span class='message'></span>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/mikelove/DESeq2'>DESeq2</a></span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: S4Vectors</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: stats4</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘S4Vectors’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    expand.grid</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: IRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomicRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomeInfoDb</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: SummarizedExperiment</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: DelayedArray</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='message'></span>
@@ -182,14 +183,16 @@ and for each principal component</p>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    aperm, apply, rowsum</span></div><div class='input'><span class='kw'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(betaSD_condition = <span class='fl'>3</span>, betaSD_tissue = <span class='fl'>1</span>)
-<span class='kw'>rlt</span> <span class='op'>&lt;-</span> <span class='kw'>DESeq2</span>::<span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='kw'>dds</span>)
-<span class='kw'>pcaobj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'>assay</span>(<span class='kw'>rlt</span>)))
-<span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/correlatePCs.html'>correlatePCs</a></span>(<span class='kw'>pcaobj</span>, <span class='fu'>colData</span>(<span class='kw'>dds</span>))</div><div class='output co'>#&gt;        condition      tissue
+#&gt; <span class='message'>    aperm, apply, rowsum</span></div><div class='input'><span class='va'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span><span class='op'>(</span>betaSD_condition <span class='op'>=</span> <span class='fl'>3</span>, betaSD_tissue <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>rlt</span> <span class='op'>&lt;-</span> <span class='fu'>DESeq2</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span><span class='op'>(</span><span class='va'>dds</span><span class='op'>)</span>
+<span class='va'>pcaobj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'>assay</span><span class='op'>(</span><span class='va'>rlt</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>correlatePCs</span><span class='op'>(</span><span class='va'>pcaobj</span>, <span class='fu'>colData</span><span class='op'>(</span><span class='va'>dds</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;        condition      tissue
 #&gt; PC_1 0.003947752 0.630954041
 #&gt; PC_2 0.748774042 0.003947752
 #&gt; PC_3 0.748774042 0.748774042
-#&gt; PC_4 0.748774042 0.748774042</div><div class='input'></div></pre>
+#&gt; PC_4 0.748774042 0.748774042</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -205,7 +208,7 @@ and for each principal component</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

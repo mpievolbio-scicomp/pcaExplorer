@@ -140,16 +140,16 @@ The fold changes between the conditions can be adjusted with the <code>betaSD_co
 and the <code>betaSD_tissue</code> arguments.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(
-  n = <span class='fl'>1000</span>,
-  m = <span class='fl'>12</span>,
-  betaSD_condition = <span class='fl'>1</span>,
-  betaSD_tissue = <span class='fl'>3</span>,
-  interceptMean = <span class='fl'>4</span>,
-  interceptSD = <span class='fl'>2</span>,
-  dispMeanRel = <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fl'>4</span><span class='op'>/</span><span class='kw'>x</span> <span class='op'>+</span> <span class='fl'>0.1</span>,
-  sizeFactors = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='kw'>m</span>)
-)</pre>
+    <pre class="usage"><span class='fu'>makeExampleDESeqDataSet_multifac</span><span class='op'>(</span>
+  n <span class='op'>=</span> <span class='fl'>1000</span>,
+  m <span class='op'>=</span> <span class='fl'>12</span>,
+  betaSD_condition <span class='op'>=</span> <span class='fl'>1</span>,
+  betaSD_tissue <span class='op'>=</span> <span class='fl'>3</span>,
+  interceptMean <span class='op'>=</span> <span class='fl'>4</span>,
+  interceptSD <span class='op'>=</span> <span class='fl'>2</span>,
+  dispMeanRel <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fl'>4</span><span class='op'>/</span><span class='va'>x</span> <span class='op'>+</span> <span class='fl'>0.1</span>,
+  sizeFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>m</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -201,8 +201,9 @@ intercept for two factors (condition and tissue) and beta values in the
 to Mike Love for the nice initial implementation</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(betaSD_condition = <span class='fl'>3</span>, betaSD_tissue = <span class='fl'>1</span>)
-<span class='kw'>dds</span></div><div class='output co'>#&gt; class: DESeqDataSet 
+    <pre class="examples"><div class='input'><span class='va'>dds</span> <span class='op'>&lt;-</span> <span class='fu'>makeExampleDESeqDataSet_multifac</span><span class='op'>(</span>betaSD_condition <span class='op'>=</span> <span class='fl'>3</span>, betaSD_tissue <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>dds</span>
+</div><div class='output co'>#&gt; class: DESeqDataSet 
 #&gt; dim: 1000 12 
 #&gt; metadata(1): version
 #&gt; assays(1): counts
@@ -210,8 +211,9 @@ to Mike Love for the nice initial implementation</p>
 #&gt; rowData names(4): trueIntercept trueBeta_condition trueBeta_tissue
 #&gt;   trueDisp
 #&gt; colnames(12): sample1 sample2 ... sample11 sample12
-#&gt; colData names(2): condition tissue</div><div class='input'><span class='kw'>dds2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(betaSD_condition = <span class='fl'>1</span>, betaSD_tissue = <span class='fl'>4</span>)
-<span class='kw'>dds2</span></div><div class='output co'>#&gt; class: DESeqDataSet 
+#&gt; colData names(2): condition tissue</div><div class='input'><span class='va'>dds2</span> <span class='op'>&lt;-</span> <span class='fu'>makeExampleDESeqDataSet_multifac</span><span class='op'>(</span>betaSD_condition <span class='op'>=</span> <span class='fl'>1</span>, betaSD_tissue <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+<span class='va'>dds2</span>
+</div><div class='output co'>#&gt; class: DESeqDataSet 
 #&gt; dim: 1000 12 
 #&gt; metadata(1): version
 #&gt; assays(1): counts
@@ -219,7 +221,8 @@ to Mike Love for the nice initial implementation</p>
 #&gt; rowData names(4): trueIntercept trueBeta_condition trueBeta_tissue
 #&gt;   trueDisp
 #&gt; colnames(12): sample1 sample2 ... sample11 sample12
-#&gt; colData names(2): condition tissue</div><div class='input'></div></pre>
+#&gt; colData names(2): condition tissue</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -235,7 +238,7 @@ to Mike Love for the nice initial implementation</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

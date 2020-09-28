@@ -136,14 +136,14 @@
     <p>Extract genes with highest loadings</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/hi_loadings.html'>hi_loadings</a></span>(
-  <span class='kw'>pcaobj</span>,
-  whichpc = <span class='fl'>1</span>,
-  topN = <span class='fl'>10</span>,
-  exprTable = <span class='kw'>NULL</span>,
-  annotation = <span class='kw'>NULL</span>,
-  title = <span class='st'>"Top/bottom loadings"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>hi_loadings</span><span class='op'>(</span>
+  <span class='va'>pcaobj</span>,
+  whichpc <span class='op'>=</span> <span class='fl'>1</span>,
+  topN <span class='op'>=</span> <span class='fl'>10</span>,
+  exprTable <span class='op'>=</span> <span class='cn'>NULL</span>,
+  annotation <span class='op'>=</span> <span class='cn'>NULL</span>,
+  title <span class='op'>=</span> <span class='st'>"Top/bottom loadings"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -182,10 +182,12 @@ and a column, <code>gene_name</code>, containing e.g. HGNC-based gene symbols</p
     <p>A ggplot2 object, or a <code>matrix</code>, if <code>exprTable</code> is not null</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(betaSD = <span class='fl'>3</span>, betaSD_tissue = <span class='fl'>1</span>)
-<span class='kw'>rlt</span> <span class='op'>&lt;-</span> <span class='kw'>DESeq2</span>::<span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='kw'>dds</span>)
-<span class='kw'>pcaobj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='kw'>SummarizedExperiment</span>::<span class='fu'><a href='https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html'>assay</a></span>(<span class='kw'>rlt</span>)))
-<span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/hi_loadings.html'>hi_loadings</a></span>(<span class='kw'>pcaobj</span>, topN = <span class='fl'>20</span>)</div><div class='img'><img src='hi_loadings-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/hi_loadings.html'>hi_loadings</a></span>(<span class='kw'>pcaobj</span>, topN = <span class='fl'>10</span>, exprTable = <span class='kw'>dds</span>)</div><div class='output co'>#&gt; class: DESeqDataSet 
+    <pre class="examples"><div class='input'><span class='va'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span><span class='op'>(</span>betaSD <span class='op'>=</span> <span class='fl'>3</span>, betaSD_tissue <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>rlt</span> <span class='op'>&lt;-</span> <span class='fu'>DESeq2</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span><span class='op'>(</span><span class='va'>dds</span><span class='op'>)</span>
+<span class='va'>pcaobj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'>SummarizedExperiment</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html'>assay</a></span><span class='op'>(</span><span class='va'>rlt</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>hi_loadings</span><span class='op'>(</span><span class='va'>pcaobj</span>, topN <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
+</div><div class='img'><img src='hi_loadings-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>hi_loadings</span><span class='op'>(</span><span class='va'>pcaobj</span>, topN <span class='op'>=</span> <span class='fl'>10</span>, exprTable <span class='op'>=</span> <span class='va'>dds</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; class: DESeqDataSet 
 #&gt; dim: 20 12 
 #&gt; metadata(1): version
 #&gt; assays(1): counts
@@ -193,7 +195,8 @@ and a column, <code>gene_name</code>, containing e.g. HGNC-based gene symbols</p
 #&gt; rowData names(4): trueIntercept trueBeta_condition trueBeta_tissue
 #&gt;   trueDisp
 #&gt; colnames(12): sample1 sample2 ... sample11 sample12
-#&gt; colData names(2): condition tissue</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/hi_loadings.html'>hi_loadings</a></span>(<span class='kw'>pcaobj</span>, topN = <span class='fl'>10</span>, exprTable = <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/counts.html'>counts</a></span>(<span class='kw'>dds</span>))</div><div class='output co'>#&gt;         sample1 sample2 sample3 sample4 sample5 sample6 sample7 sample8 sample9
+#&gt; colData names(2): condition tissue</div><div class='input'><span class='fu'>hi_loadings</span><span class='op'>(</span><span class='va'>pcaobj</span>, topN <span class='op'>=</span> <span class='fl'>10</span>, exprTable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/counts.html'>counts</a></span><span class='op'>(</span><span class='va'>dds</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;         sample1 sample2 sample3 sample4 sample5 sample6 sample7 sample8 sample9
 #&gt; gene300      16       6      10       2       0       1    1351     526    1211
 #&gt; gene88       30      77      24      46       8      37    8591    6193   11330
 #&gt; gene427      45      64      42      76      60     124    4956    3260    2321
@@ -234,7 +237,8 @@ and a column, <code>gene_name</code>, containing e.g. HGNC-based gene symbols</p
 #&gt; gene54         0        0        0
 #&gt; gene204        0        1        2
 #&gt; gene961        2        1        2
-#&gt; gene444        1        0        1</div><div class='input'></div></pre>
+#&gt; gene444        1        0        1</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -250,7 +254,7 @@ and a column, <code>gene_name</code>, containing e.g. HGNC-based gene symbols</p
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

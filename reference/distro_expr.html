@@ -136,7 +136,7 @@
     <p>Plot distribution of expression values</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/distro_expr.html'>distro_expr</a></span>(<span class='kw'>rld</span>, plot_type = <span class='st'>"density"</span>)</pre>
+    <pre class="usage"><span class='fu'>distro_expr</span><span class='op'>(</span><span class='va'>rld</span>, plot_type <span class='op'>=</span> <span class='st'>"density"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,9 +157,10 @@
     <p>A plot with the distribution of the expression values</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(betaSD_condition = <span class='fl'>3</span>, betaSD_tissue = <span class='fl'>1</span>)
-<span class='kw'>rlt</span> <span class='op'>&lt;-</span> <span class='kw'>DESeq2</span>::<span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='kw'>dds</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/distro_expr.html'>distro_expr</a></span>(<span class='kw'>rlt</span>)</div><div class='img'><img src='distro_expr-1.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='va'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span><span class='op'>(</span>betaSD_condition <span class='op'>=</span> <span class='fl'>3</span>, betaSD_tissue <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>rlt</span> <span class='op'>&lt;-</span> <span class='fu'>DESeq2</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span><span class='op'>(</span><span class='va'>dds</span><span class='op'>)</span>
+<span class='fu'>distro_expr</span><span class='op'>(</span><span class='va'>rlt</span><span class='op'>)</span>
+</div><div class='img'><img src='distro_expr-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -175,7 +176,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

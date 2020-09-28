@@ -138,36 +138,36 @@ the samples as in a typical biplot visualization." />
 the samples as in a typical biplot visualization.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/genespca.html'>genespca</a></span>(
-  <span class='kw'>x</span>,
-  <span class='kw'>ntop</span>,
-  choices = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
-  arrowColors = <span class='st'>"steelblue"</span>,
-  groupNames = <span class='st'>"group"</span>,
-  biplot = <span class='fl'>TRUE</span>,
-  scale = <span class='fl'>1</span>,
-  pc.biplot = <span class='fl'>TRUE</span>,
-  obs.scale = <span class='fl'>1</span> <span class='op'>-</span> <span class='kw'>scale</span>,
-  var.scale = <span class='kw'>scale</span>,
-  groups = <span class='kw'>NULL</span>,
-  ellipse = <span class='fl'>FALSE</span>,
-  ellipse.prob = <span class='fl'>0.68</span>,
-  labels = <span class='kw'>NULL</span>,
-  labels.size = <span class='fl'>3</span>,
-  alpha = <span class='fl'>1</span>,
-  var.axes = <span class='fl'>TRUE</span>,
-  circle = <span class='fl'>FALSE</span>,
-  circle.prob = <span class='fl'>0.69</span>,
-  varname.size = <span class='fl'>4</span>,
-  varname.adjust = <span class='fl'>1.5</span>,
-  varname.abbrev = <span class='fl'>FALSE</span>,
-  returnData = <span class='fl'>FALSE</span>,
-  coordEqual = <span class='fl'>FALSE</span>,
-  scaleArrow = <span class='fl'>1</span>,
-  useRownamesAsLabels = <span class='fl'>TRUE</span>,
-  point_size = <span class='fl'>2</span>,
-  annotation = <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>genespca</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>ntop</span>,
+  choices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+  arrowColors <span class='op'>=</span> <span class='st'>"steelblue"</span>,
+  groupNames <span class='op'>=</span> <span class='st'>"group"</span>,
+  biplot <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  scale <span class='op'>=</span> <span class='fl'>1</span>,
+  pc.biplot <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  obs.scale <span class='op'>=</span> <span class='fl'>1</span> <span class='op'>-</span> <span class='va'>scale</span>,
+  var.scale <span class='op'>=</span> <span class='va'>scale</span>,
+  groups <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ellipse <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  ellipse.prob <span class='op'>=</span> <span class='fl'>0.68</span>,
+  labels <span class='op'>=</span> <span class='cn'>NULL</span>,
+  labels.size <span class='op'>=</span> <span class='fl'>3</span>,
+  alpha <span class='op'>=</span> <span class='fl'>1</span>,
+  var.axes <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  circle <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  circle.prob <span class='op'>=</span> <span class='fl'>0.69</span>,
+  varname.size <span class='op'>=</span> <span class='fl'>4</span>,
+  varname.adjust <span class='op'>=</span> <span class='fl'>1.5</span>,
+  varname.abbrev <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  returnData <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  coordEqual <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  scaleArrow <span class='op'>=</span> <span class='fl'>1</span>,
+  useRownamesAsLabels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  point_size <span class='op'>=</span> <span class='fl'>2</span>,
+  annotation <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -311,17 +311,20 @@ such as the transformed counts of RNA-seq experiments</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/mikelove/DESeq2'>DESeq2</a></span>)
-<span class='kw'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span>(betaSD_condition = <span class='fl'>3</span>, betaSD_tissue = <span class='fl'>1</span>)
-<span class='kw'>rlt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span>(<span class='kw'>dds</span>)
-<span class='kw'>groups</span> <span class='op'>&lt;-</span> <span class='fu'>colData</span>(<span class='kw'>dds</span>)<span class='op'>$</span><span class='kw'>condition</span>
-<span class='kw'>groups</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>groups</span>, levels = <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='kw'>groups</span>))
-<span class='kw'>cols</span> <span class='op'>&lt;-</span> <span class='kw'>scales</span>::<span class='fu'><a href='https://scales.r-lib.org//reference/hue_pal.html'>hue_pal</a></span>()(<span class='fl'>2</span>)[<span class='kw'>groups</span>]
-<span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/genespca.html'>genespca</a></span>(<span class='kw'>rlt</span>, ntop=<span class='fl'>100</span>, arrowColors = <span class='kw'>cols</span>, groupNames = <span class='kw'>groups</span>)</div><div class='img'><img src='genespca-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='kw'>groups_multi</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/interaction.html'>interaction</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='fu'>colData</span>(<span class='kw'>rlt</span>)[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"condition"</span>, <span class='st'>"tissue"</span>)]))
-<span class='kw'>groups_multi</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>groups_multi</span>, levels = <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='kw'>groups_multi</span>))
-<span class='kw'>cols_multi</span> <span class='op'>&lt;-</span> <span class='kw'>scales</span>::<span class='fu'><a href='https://scales.r-lib.org//reference/hue_pal.html'>hue_pal</a></span>()(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='kw'>groups_multi</span>)))[<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>groups_multi</span>)]
-<span class='fu'><a href='https://rdrr.io/pkg/pcaExplorer/man/genespca.html'>genespca</a></span>(<span class='kw'>rlt</span>, ntop = <span class='fl'>100</span>, arrowColors = <span class='kw'>cols_multi</span>, groupNames = <span class='kw'>groups_multi</span>)</div><div class='img'><img src='genespca-2.png' alt='' width='700' height='433' /></div><div class='input'></div></pre>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/mikelove/DESeq2'>DESeq2</a></span><span class='op'>)</span>
+<span class='va'>dds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='makeExampleDESeqDataSet_multifac.html'>makeExampleDESeqDataSet_multifac</a></span><span class='op'>(</span>betaSD_condition <span class='op'>=</span> <span class='fl'>3</span>, betaSD_tissue <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>rlt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/rlog.html'>rlogTransformation</a></span><span class='op'>(</span><span class='va'>dds</span><span class='op'>)</span>
+<span class='va'>groups</span> <span class='op'>&lt;-</span> <span class='fu'>colData</span><span class='op'>(</span><span class='va'>dds</span><span class='op'>)</span><span class='op'>$</span><span class='va'>condition</span>
+<span class='va'>groups</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>groups</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>groups</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/hue_pal.html'>hue_pal</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>[</span><span class='va'>groups</span><span class='op'>]</span>
+<span class='fu'>genespca</span><span class='op'>(</span><span class='va'>rlt</span>, ntop<span class='op'>=</span><span class='fl'>100</span>, arrowColors <span class='op'>=</span> <span class='va'>cols</span>, groupNames <span class='op'>=</span> <span class='va'>groups</span><span class='op'>)</span>
+</div><div class='img'><img src='genespca-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>groups_multi</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/interaction.html'>interaction</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>colData</span><span class='op'>(</span><span class='va'>rlt</span><span class='op'>)</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"condition"</span>, <span class='st'>"tissue"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>groups_multi</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>groups_multi</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>groups_multi</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>cols_multi</span> <span class='op'>&lt;-</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/hue_pal.html'>hue_pal</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>groups_multi</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>groups_multi</span><span class='op'>)</span><span class='op'>]</span>
+<span class='fu'>genespca</span><span class='op'>(</span><span class='va'>rlt</span>, ntop <span class='op'>=</span> <span class='fl'>100</span>, arrowColors <span class='op'>=</span> <span class='va'>cols_multi</span>, groupNames <span class='op'>=</span> <span class='va'>groups_multi</span><span class='op'>)</span>
+</div><div class='img'><img src='genespca-2.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -337,7 +340,7 @@ such as the transformed counts of RNA-seq experiments</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
