@@ -85,19 +85,20 @@
 
       
 
-      </header><link href="pcaExplorer_files/font-awesome-5.1.0/css/all.css" rel="stylesheet">
+      </header><script src="pcaExplorer_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="pcaExplorer_files/font-awesome-5.1.0/css/all.css" rel="stylesheet">
 <link href="pcaExplorer_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>pcaExplorer User Guide</h1>
+      <h1 data-toc-skip></h1>
+<p>pcaExplorer User Guide</p>
                         <h4 class="author">Federico Marini</h4>
             <address class="author_afil">
-      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><a class="author_email" href="mailto:#"></a><a href="mailto:marinif@uni-mainz.de">marinif@uni-mainz.de</a>
+      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><a class="author_email" href="mailto:#"></a><a href="mailto:marinif@uni-mainz.de" class="email">marinif@uni-mainz.de</a>
       </address>
                               <h4 class="author">Harald Binder</h4>
             <address class="author_afil">
-      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">28 September 2020</h4>
+      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">29 September 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/federicomarini/pcaExplorer/blob/master/vignettes/pcaExplorer.Rmd"><code>vignettes/pcaExplorer.Rmd</code></a></small>
       <div class="hidden name"><code>pcaExplorer.Rmd</code></div>
@@ -108,10 +109,10 @@
     
         <div class="abstract">
       <p class="abstract">Abstract</p>
-      <em><a href="https://bioconductor.org/packages/3.12/pcaExplorer">pcaExplorer</a></em> provides functionality for interactive visualization of RNA-seq datasets based on Principal Components Analysis. Such methods allow for quick information extraction and effective data exploration. A Shiny application encapsulates the whole analysis, and is developed to become a practical companion for any RNA-seq dataset. This app supports reproducible research with state saving and automated report generation.
+      <p><em><a href="https://bioconductor.org/packages/3.12/pcaExplorer">pcaExplorer</a></em> provides functionality for interactive visualization of RNA-seq datasets based on Principal Components Analysis. Such methods allow for quick information extraction and effective data exploration. A Shiny application encapsulates the whole analysis, and is developed to become a practical companion for any RNA-seq dataset. This app supports reproducible research with state saving and automated report generation.</p>
     </div>
     
-<p><br><strong>Package</strong>: <em>pcaExplorer</em><br><strong>Authors</strong>: Federico Marini [aut, cre] (<a href="https://orcid.org/0000-0003-3252-7758" class="uri">https://orcid.org/0000-0003-3252-7758</a>)<br><strong>Version</strong>: 2.15.2<br><strong>Compiled date</strong>: 2020-09-28<br><strong>Last edited</strong>: 2019-02-26<br><strong>License</strong>: MIT + file LICENSE<br></p>
+<p><br><strong>Package</strong>: <em>pcaExplorer</em><br><strong>Authors</strong>: Federico Marini [aut, cre] (<a href="https://orcid.org/0000-0003-3252-7758" class="uri">https://orcid.org/0000-0003-3252-7758</a>)<br><strong>Version</strong>: 2.15.2<br><strong>Compiled date</strong>: 2020-09-29<br><strong>Last edited</strong>: 2019-02-26<br><strong>License</strong>: MIT + file LICENSE<br></p>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelector("h1").className = "title";
@@ -834,7 +835,7 @@ colData names(2): condition tissue</code></pre>
 <h1 class="hasAnchor">
 <a href="#further-development" class="anchor"></a>Further development</h1>
 <p>Additional functionality for the <em><a href="https://bioconductor.org/packages/3.12/pcaExplorer">pcaExplorer</a></em> will be added in the future, as it is tightly related to a topic under current development research.</p>
-<p>Improvements, suggestions, bugs, issues and feedback of any type can be sent to <a href="mailto:marinif@uni-mainz.de">marinif@uni-mainz.de</a>.</p>
+<p>Improvements, suggestions, bugs, issues and feedback of any type can be sent to <a href="mailto:marinif@uni-mainz.de" class="email">marinif@uni-mainz.de</a>.</p>
 </div>
 <div id="session-info" class="section level1 unnumbered">
 <h1 class="hasAnchor">
@@ -842,20 +843,15 @@ colData names(2): condition tissue</code></pre>
 <div class="sourceCode" id="cb55"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <pre><code>R version 4.0.2 (2020-06-22)
-Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Ubuntu 16.04.6 LTS
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Catalina 10.15.6
 
 Matrix products: default
-BLAS:   /usr/lib/openblas-base/libblas.so.3
-LAPACK: /usr/lib/libopenblasp-r0.2.18.so
+BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
 
 locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 attached base packages:
 [1] stats4    parallel  stats     graphics  grDevices utils     datasets 
@@ -882,7 +878,7 @@ loaded via a namespace (and not attached):
  [19] viridis_0.5.1          GO.db_3.11.4           magrittr_1.5          
  [22] memoise_1.1.0          cluster_2.1.0          doParallel_1.0.15     
  [25] gclus_1.3.2            limma_3.45.14          annotate_1.67.1       
- [28] askpass_1.1            pkgdown_1.6.1          prettyunits_1.1.1     
+ [28] askpass_1.1            pkgdown_1.6.1.9000     prettyunits_1.1.1     
  [31] colorspace_1.4-1       blob_1.2.1             rappdirs_0.3.1        
  [34] ggrepel_0.8.2          xfun_0.17              dplyr_1.0.2           
  [37] crayon_1.3.4           RCurl_1.98-1.2         jsonlite_1.7.1        
@@ -938,7 +934,7 @@ loaded via a namespace (and not attached):
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
