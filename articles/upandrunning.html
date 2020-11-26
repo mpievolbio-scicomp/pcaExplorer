@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pcaExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.15.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.17.0</span>
       </span>
     </div>
 
@@ -88,14 +88,14 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip></h1>
-<p>Up and running with <em><a href="https://bioconductor.org/packages/3.12/pcaExplorer">pcaExplorer</a></em></p>
+<p>Up and running with <em><a href="https://bioconductor.org/packages/3.13/pcaExplorer">pcaExplorer</a></em></p>
                         <h4 class="author">Federico Marini</h4>
             <address class="author_afil">
       Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><a class="author_email" href="mailto:#"></a><a href="mailto:marinif@uni-mainz.de" class="email">marinif@uni-mainz.de</a>
       </address>
                               <h4 class="author">Harald Binder</h4>
             <address class="author_afil">
-      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">29 September 2020</h4>
+      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><h4 class="date">26 November 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/federicomarini/pcaExplorer/blob/master/vignettes/upandrunning.Rmd"><code>vignettes/upandrunning.Rmd</code></a></small>
       <div class="hidden name"><code>upandrunning.Rmd</code></div>
@@ -115,35 +115,35 @@
 <!-- - replace links to imgs with github hosted to provide permanent link -->
 <!-- - enforce width="80%" for all imgs (50% for the smaller screenshot) -->
 <!-- - copy content to inst/extdata/instructions_unr.md -->
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>crop <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>crop <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
 <div id="setup" class="section level1">
 <h1 class="hasAnchor">
 <a href="#setup" class="anchor"></a>Setup</h1>
-<p>First things first: install <em><a href="https://bioconductor.org/packages/3.12/pcaExplorer">pcaExplorer</a></em> and load it into your R session. You should receive a message notification if this is completed without errors.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"pcaExplorer"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/federicomarini/pcaExplorer">"pcaExplorer"</a></span><span class="op">)</span></pre></div>
-<p>This document describes a use case for <em><a href="https://bioconductor.org/packages/3.12/pcaExplorer">pcaExplorer</a></em>, based on the dataset in the <em><a href="https://bioconductor.org/packages/3.12/airway">airway</a></em> package. If this package is not available on your machine, please install it by executing:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"airway"</span><span class="op">)</span></pre></div>
+<p>First things first: install <em><a href="https://bioconductor.org/packages/3.13/pcaExplorer">pcaExplorer</a></em> and load it into your R session. You should receive a message notification if this is completed without errors.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"pcaExplorer"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/federicomarini/pcaExplorer">"pcaExplorer"</a></span><span class="op">)</span></code></pre></div>
+<p>This document describes a use case for <em><a href="https://bioconductor.org/packages/3.13/pcaExplorer">pcaExplorer</a></em>, based on the dataset in the <em><a href="https://bioconductor.org/packages/3.13/airway">airway</a></em> package. If this package is not available on your machine, please install it by executing:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"airway"</span><span class="op">)</span></code></pre></div>
 <p>This dataset consists of the gene-level expression measurements (as raw read counts) for an experiment where four different human airway smooth muscle cell lines are either treated with dexamethasone or left untreated.</p>
 </div>
 <div id="start-exploring---the-beauty-of-interactivity" class="section level1">
 <h1 class="hasAnchor">
 <a href="#start-exploring---the-beauty-of-interactivity" class="anchor"></a>Start exploring - the beauty of interactivity</h1>
 <p>To start the exploration, you just need the following lines:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/federicomarini/pcaExplorer">"pcaExplorer"</a></span><span class="op">)</span>
-<span class="fu"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span><span class="op">(</span><span class="op">)</span></pre></div>
-<p>The easiest way to explore the <em><a href="https://bioconductor.org/packages/3.12/airway">airway</a></em> dataset is by clicking on the dedicated button in the <strong>Data Upload</strong> panel. This action will:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/federicomarini/pcaExplorer">"pcaExplorer"</a></span><span class="op">)</span>
+<span class="fu"><a href="../reference/pcaExplorer.html">pcaExplorer</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>The easiest way to explore the <em><a href="https://bioconductor.org/packages/3.13/airway">airway</a></em> dataset is by clicking on the dedicated button in the <strong>Data Upload</strong> panel. This action will:</p>
 <ul>
-<li>load the <em><a href="https://bioconductor.org/packages/3.12/airway">airway</a></em> package</li>
+<li>load the <em><a href="https://bioconductor.org/packages/3.13/airway">airway</a></em> package</li>
 <li>load the count matrix and the experimental metadata</li>
 <li>compose the <code>dds</code> object, normalize the expression values (using the robust method proposed by Anders and Huber in the original DESeq manuscript), and compute the variance stabilizing transformed expression values (stored in the <code>dst</code> object)</li>
-<li>retrieve the gene annotation information via the <em><a href="https://bioconductor.org/packages/3.12/org.Hs.eg.db">org.Hs.eg.db</a></em>, adding gene symbols to the ENSEMBL ids - this step is optional, but recommended for more human-readable identifiers to be used.</li>
+<li>retrieve the gene annotation information via the <em><a href="https://bioconductor.org/packages/3.13/org.Hs.eg.db">org.Hs.eg.db</a></em>, adding gene symbols to the ENSEMBL ids - this step is optional, but recommended for more human-readable identifiers to be used.</li>
 </ul>
-<p>If you want to load your expression data, please refer to the <a href="https://bioconductor.org/packages/3.12/pcaExplorer/vignettes/pcaExplorer.html">User Guide</a>, which contains detailed information on the formats your data have to respect.</p>
+<p>If you want to load your expression data, please refer to the <a href="https://bioconductor.org/packages/3.13/pcaExplorer/vignettes/pcaExplorer.html">User Guide</a>, which contains detailed information on the formats your data have to respect.</p>
 <p>Once the preprocessing of the input is done, you should get a notification in the lower right corner that you’re all set. The whole preprocessing should take around 5-6 seconds (tested on a MacBook Pro, with i7 and 16 Gb RAM). You can check how each component looks like by clicking on its respective button, once they appeared in the lower half of the panel.</p>
 <div class="figure">
 <img src="unr_00_demo_loaded.png" alt=""><p class="caption">Overview of the Data Upload panel. After clicking on the ‘Load the demo airway data’ button, all widgets are automatically populated, and each data component (count matrix, experimental data, dds object, annotation) can be previewed in a modal window by clicking on its respective button.</p>
@@ -195,7 +195,7 @@
 <div class="figure">
 <img src="unr_08_pca2go_topgo.png" alt=""><p class="caption">The PCA2GO panel. Four tables (2 per dimension, here only 3 are displayed) decorate the PCA plot in the middle, and display the top enriched functional categories in each subset of gene with high loadings.</p>
 </div>
-<p>Still, a previous call to <code>pca2go</code> is recommended, as it relies on the algorithm of the <em><a href="https://bioconductor.org/packages/3.12/topGO">topGO</a></em> package: it will require some additional computing time, but it is likely to deliver more precise terms (i.e. in turn more relevant from the point of view of their biological relevance). To do so, you should exit the live session, compute this object, and provide it in the call to <code>pcaExplorer</code> (see more how to do so in <a href="https://bioconductor.org/packages/3.12/pcaExplorer/vignettes/pcaExplorer.html">the main user guide</a>).</p>
+<p>Still, a previous call to <code>pca2go</code> is recommended, as it relies on the algorithm of the <em><a href="https://bioconductor.org/packages/3.13/topGO">topGO</a></em> package: it will require some additional computing time, but it is likely to deliver more precise terms (i.e. in turn more relevant from the point of view of their biological relevance). To do so, you should exit the live session, compute this object, and provide it in the call to <code>pcaExplorer</code> (see more how to do so in <a href="https://bioconductor.org/packages/3.13/pcaExplorer/vignettes/pcaExplorer.html">the main user guide</a>).</p>
 </div>
 <div id="when-youre-done---the-power-of-reproducibility" class="section level1">
 <h1 class="hasAnchor">
@@ -221,15 +221,15 @@ The pcaExplorer task menu. Buttons for saving the session to binary data or to a
 <div id="session-info" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></pre></div>
-<pre><code>## R version 4.0.2 (2020-06-22)
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## R Under development (unstable) (2020-11-25 r79505)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
-## Running under: macOS Catalina 10.15.6
+## Running under: macOS Catalina 10.15.7
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -238,19 +238,18 @@ The pcaExplorer task menu. Buttons for saving the session to binary data or to a
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] BiocStyle_2.17.1
+## [1] BiocStyle_2.19.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] bookdown_0.20       digest_0.6.25       crayon_1.3.4       
-##  [4] rprojroot_1.3-2     assertthat_0.2.1    R6_2.4.1           
-##  [7] backports_1.1.10    magrittr_1.5        evaluate_0.14      
-## [10] highr_0.8           stringi_1.5.3       rlang_0.4.7        
-## [13] fs_1.5.0            ragg_0.3.1          rmarkdown_2.3      
-## [16] pkgdown_1.6.1.9000  desc_1.2.0          tools_4.0.2        
-## [19] stringr_1.4.0       yaml_2.2.1          xfun_0.17          
-## [22] compiler_4.0.2      systemfonts_0.3.1   BiocManager_1.30.10
-## [25] cpp11_0.2.1         memoise_1.1.0       htmltools_0.5.0    
-## [28] knitr_1.30</code></pre>
+##  [1] bookdown_0.21       digest_0.6.27       crayon_1.3.4       
+##  [4] rprojroot_2.0.2     assertthat_0.2.1    R6_2.5.0           
+##  [7] magrittr_2.0.1      evaluate_0.14       highr_0.8          
+## [10] stringi_1.5.3       rlang_0.4.9         fs_1.5.0           
+## [13] ragg_0.4.0          rmarkdown_2.5       pkgdown_1.6.1.9000 
+## [16] textshaping_0.2.1   desc_1.2.0          tools_4.1.0        
+## [19] stringr_1.4.0       yaml_2.2.1          xfun_0.19          
+## [22] compiler_4.1.0      systemfonts_0.3.2   BiocManager_1.30.10
+## [25] memoise_1.1.0       htmltools_0.5.0     knitr_1.30</code></pre>
 </div>
   </div>
 
