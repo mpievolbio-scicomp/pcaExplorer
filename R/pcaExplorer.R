@@ -48,7 +48,8 @@ pcaExplorer <- function(dds = NULL,
                         coldata = NULL,
                         pca2go = NULL,
                         annotation = NULL,
-                        runLocal = TRUE) {
+                        runLocal = TRUE,
+                        shiny_app_options=list()) {
   
   if (!requireNamespace("shiny", quietly = TRUE)) {
     stop("pcaExplorer requires 'shiny'. Please install it using
@@ -2659,7 +2660,10 @@ pcaExplorer <- function(dds = NULL,
     )
   }) # end of pcaExplorer(dds,dst,countmatrix,coldata,pca2go,annotation)
   #nocov end
-  shinyApp(ui = pcaexplorer_ui, server = pcaexplorer_server)
+  shinyApp(ui = pcaexplorer_ui,
+           server = pcaexplorer_server,
+           options = shiny_app_options
+           )
 }
 
 footer <- function() {
